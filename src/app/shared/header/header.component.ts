@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +13,13 @@ export class HeaderComponent {
   isMenuOpen = false;
   hideNotice = localStorage.getItem('p2w_region_dismiss') === '1';
 
-    constructor(private authModal: AuthModalService) {}
+  loggedIn$ = this.authService.loggedIn$;
+
+  constructor(
+    private authModal: AuthModalService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
      openLogin() {
     this.closeMenu();
@@ -23,6 +31,15 @@ export class HeaderComponent {
     this.authModal.open('signup');
   }
 
+  openMySpace() {
+    this.closeMenu();
+    this.router.navigate(['/user/profile']);
+  }
+
+  signOut() {
+    this.closeMenu();
+    this.authService.logout();
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;

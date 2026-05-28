@@ -1,6 +1,6 @@
 <div class="region-bar" *ngIf="!hideNotice">
-  <span><strong>NOTICE</strong> · PICK2WIN available in select regions only.</span>
-  <button class="x-dismiss" (click)="dismissNotice()">×</button>
+  <span><strong>NOTICE</strong> - PICK2WIN available in select regions only.</span>
+  <button class="x-dismiss" (click)="dismissNotice()">x</button>
 </div>
 
 <header class="site">
@@ -11,19 +11,32 @@
     </a>
 
     <nav class="primary">
-  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-  <a routerLink="/uctinfo" routerLinkActive="active">UCT Info</a>
-  <a routerLink="/lineouts" routerLinkActive="active">Lineouts</a>
-  <a routerLink="/pricing" routerLinkActive="active">Pricing</a>
-  <a routerLink="/about" routerLinkActive="active">About</a>
-  <a routerLink="/trust" routerLinkActive="active">Trust</a>
-  <a routerLink="/faq" routerLinkActive="active">FAQ</a>
-</nav>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/uctinfo" routerLinkActive="active">UCT Info</a>
+      <a routerLink="/lineouts" routerLinkActive="active">Lineouts</a>
+      <a routerLink="/pricing" routerLinkActive="active">Pricing</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
+      <a routerLink="/trust" routerLinkActive="active">Trust</a>
+      <a routerLink="/faq" routerLinkActive="active">FAQ</a>
+    </nav>
 
-<div class="header-auth">
-  <button type="button" class="btn-signin" (click)="openLogin()">Join PICK2WIN</button>
-  <button type="button" class="header-cta" (click)="openSignup()">Get Started →</button>
-</div>
+    <div class="header-auth" *ngIf="loggedIn$ | async; else desktopGuestActions">
+      <button type="button" class="btn-signin header-profile" (click)="openMySpace()">
+        <span class="icon-user"></span>
+        My Space
+      </button>
+      <button type="button" class="header-cta header-signout" (click)="signOut()">
+        <span class="icon-logout"></span>
+        Signout
+      </button>
+    </div>
+
+    <ng-template #desktopGuestActions>
+      <div class="header-auth">
+        <button type="button" class="btn-signin" (click)="openLogin()">Join PICK2WIN</button>
+        <button type="button" class="header-cta" (click)="openSignup()">Get Started -></button>
+      </div>
+    </ng-template>
 
     <button class="menu-btn" (click)="toggleMenu()" [class.open]="isMenuOpen">
       <span></span><span></span><span></span>
@@ -37,22 +50,35 @@
 <aside class="mobile-drawer" [class.show]="isMenuOpen">
   <div class="drawer-head">
     <img src="assets/logo.png" alt="Pick2Win">
-    <button (click)="closeMenu()">×</button>
+    <button (click)="closeMenu()">x</button>
   </div>
 
-<nav class="drawer-nav">
-  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
-  <a routerLink="/uctinfo" routerLinkActive="active" (click)="closeMenu()">UCT Info</a>
-  <a routerLink="/lineouts" routerLinkActive="active" (click)="closeMenu()">Lineouts</a>
-  <a routerLink="/pricing" routerLinkActive="active" (click)="closeMenu()">Pricing</a>
-  <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
-  <a routerLink="/trust" routerLinkActive="active" (click)="closeMenu()">Trust</a>
-  <a routerLink="/faq" routerLinkActive="active" (click)="closeMenu()">FAQ</a>
-</nav>
+  <nav class="drawer-nav">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
+    <a routerLink="/uctinfo" routerLinkActive="active" (click)="closeMenu()">UCT Info</a>
+    <a routerLink="/lineouts" routerLinkActive="active" (click)="closeMenu()">Lineouts</a>
+    <a routerLink="/pricing" routerLinkActive="active" (click)="closeMenu()">Pricing</a>
+    <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
+    <a routerLink="/trust" routerLinkActive="active" (click)="closeMenu()">Trust</a>
+    <a routerLink="/faq" routerLinkActive="active" (click)="closeMenu()">FAQ</a>
+  </nav>
 
- <div class="drawer-actions">
-  <button type="button" (click)="openLogin()">Join PICK2WIN</button>
-  <button type="button" (click)="openSignup()">Get Started →</button>
- </div>
- 
+  <div class="drawer-actions" *ngIf="loggedIn$ | async; else drawerGuestActions">
+    <button type="button" class="drawer-profile" (click)="openMySpace()">
+      <span class="icon-user"></span>
+      My Space
+    </button>
+    <button type="button" class="drawer-signout" (click)="signOut()">
+      <span class="icon-logout"></span>
+      Signout
+    </button>
+  </div>
+
+  <ng-template #drawerGuestActions>
+    <div class="drawer-actions">
+      <button type="button" (click)="openLogin()">Join PICK2WIN</button>
+      <button type="button" (click)="openSignup()">Get Started -></button>
+    </div>
+  </ng-template>
+
 </aside>

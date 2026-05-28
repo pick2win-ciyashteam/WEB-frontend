@@ -1,5 +1,9 @@
 <div class="login-box">
 
+  <div class="login-toast" *ngIf="toast" [class.success]="toast.type === 'success'" [class.error]="toast.type === 'error'">
+    {{ toast.message }}
+  </div>
+
   <div class="login-logo">
     <img src="assets/logo.png" alt="Pick2Win">
   </div>
@@ -7,12 +11,28 @@
   <h2>WELCOME <em>back.</em></h2>
   <p>Sign in to your PICK2WIN account.</p>
 
-  <form>
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
     <label>Email <span style="color:red">*</span></label>
-    <input type="email" placeholder="you@example.com">
+    <input type="email" formControlName="email" placeholder="you@example.com">
+    <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+      Enter valid email
+    </small>
 
     <label>Password <span style="color:red">*</span> </label>
-    <input type="password" placeholder="Your password">
+    <div class="password-field">
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Your password">
+      <button
+        type="button"
+        class="password-toggle"
+        [class.visible]="showPassword"
+        (click)="showPassword = !showPassword"
+        [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+        <span class="eye-icon"></span>
+      </button>
+    </div>
+    <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+      Password is required
+    </small>
 
     <div class="login-options">
       <label class="remember">
@@ -23,8 +43,8 @@
       <a href="#">Forgot password?</a>
     </div>
 
-    <button type="submit">
-      Sign in →
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Signing in...' : 'Sign in' }}
     </button>
   </form>
 

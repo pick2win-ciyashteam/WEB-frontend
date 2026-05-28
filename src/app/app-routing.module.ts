@@ -14,13 +14,12 @@ const routes: Routes = [
       import('./auth/auth.module').then(m => m.AuthModule)
   },
 
-  // future protected module example
-  // {
-  //   path: 'user',
-  //   canActivate: [authGuard],
-  //   loadChildren: () =>
-  //     import('./user/user.module').then(m => m.UserModule)
-  // },
+  {
+    path: 'user',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./user/user.module').then(m => m.UserModule)
+  },
 
   {
     path: '**',

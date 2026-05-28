@@ -127,6 +127,15 @@
   gap: 10px;
 }
 
+.header-auth button,
+.drawer-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
 .btn-signin {
   font-size: 14px;
   font-weight: 600;
@@ -158,6 +167,64 @@
 .header-cta:hover {
   filter: brightness(1.08);
   transform: translateY(-1px);
+}
+
+.header-signout {
+  background: linear-gradient(135deg, #e11d48, #991b1b);
+  box-shadow: 0 4px 14px rgba(225,29,72,0.28);
+}
+
+.icon-user,
+.icon-logout {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
+.icon-user::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 5px;
+  width: 6px;
+  height: 6px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.icon-user::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  bottom: 0;
+  width: 12px;
+  height: 7px;
+  border: 2px solid currentColor;
+  border-radius: 10px 10px 3px 3px;
+}
+
+.icon-logout::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 3px;
+  width: 8px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-right: 0;
+  border-radius: 2px;
+}
+
+.icon-logout::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 7px;
+  width: 11px;
+  height: 2px;
+  background: currentColor;
+  box-shadow: 4px -4px 0 -2px currentColor, 4px 4px 0 -2px currentColor;
 }
 
 /* Menu Button */
@@ -286,21 +353,25 @@
   padding-bottom: 30px;
 }
 
-.drawer-actions a {
+.drawer-actions button {
   text-align: center;
   padding: 13px;
   border-radius: 100px;
   font-weight: 700;
 }
 
-.drawer-actions a:first-child {
+.drawer-actions button:first-child {
   color: var(--paper);
   border: 1px solid var(--line-2);
 }
 
-.drawer-actions a:last-child {
+.drawer-actions button:last-child {
   color: #fff;
   background: linear-gradient(135deg, var(--acid), var(--acid-deep));
+}
+
+.drawer-actions .drawer-signout {
+  background: linear-gradient(135deg, #e11d48, #991b1b);
 }
 
 /* Responsive */

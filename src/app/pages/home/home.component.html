@@ -62,3 +62,244 @@
 
   </div>
 </section>
+
+<section class="carousel-section">
+  <div class="banner-deck">
+
+    <article class="banner tone-uct" [class.active]="currentBanner === 0">
+      <div>
+        <div class="banner-eyebrow">WHAT IS PICK2WIN</div>
+        <h3 class="banner-h">A fantasy football <em>workflow tool.</em> Not a replacement.</h3>
+        <p class="banner-body">PICK2WIN is a structured team-combination automation engine for fantasy football users who create <b>strictly 20 teams per match</b>. UCT compresses the manual chaos of multi-team creation - captain rotation, exposure balancing, formation hedging - into one 4-step workflow that runs on your strict configuration inputs. <span class="red">Not a fantasy app replacement. Not gambling.</span></p>
+        <a routerLink="/uctinfo" class="banner-cta">What is UCT -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">⚽</span></div>
+    </article>
+
+    <article class="banner tone-uct" [class.active]="currentBanner === 1">
+      <div>
+        <div class="banner-eyebrow">POWERED BY UCT ENGINE</div>
+        <h3 class="banner-h">20 teams per match. <em>From one lineup.</em></h3>
+        <p class="banner-body">UCT is PICK2WIN's signature engine. Splits across formations 4-7 / 5-6 / 6-5 / 7-4. One Goalkeeper, 3-6 Defenders, 2-5 Midfielders, 1-3 Forwards. All within official lineup constraints - pure structure, no luck.</p>
+        <a routerLink="/uctinfo" class="banner-cta">See how UCT works -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">⚡</span></div>
+    </article>
+
+    <article class="banner tone-coverage" [class.active]="currentBanner === 2">
+      <div>
+        <div class="banner-eyebrow">FOUR-STEP WORKFLOW</div>
+        <h3 class="banner-h">Substitute. Mandate. <em>Captaincy.</em> Generate.</h3>
+        <p class="banner-body">After lineups release, a 60-minute window opens. Specify substitutions. Mandate must-include players. Pick Captain and Vice-Captain modes. Tap Generate. Twenty structured teams in seconds.</p>
+        <a routerLink="/uctinfo" class="banner-cta">See full workflow -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">⚙</span></div>
+    </article>
+
+    <article class="banner tone-wc" [class.active]="currentBanner === 3">
+      <div>
+        <div class="banner-eyebrow">TOURNAMENT - STARTS 11 JUNE</div>
+        <h3 class="banner-h">FIFA World Cup 2026 - <em>32 days away.</em></h3>
+        <p class="banner-body">104 matches across USA, Canada, and Mexico. <b>All FIFA WC 2026 matches are covered by any PICK2WIN coin pack</b> - complete World Cup coverage from group stage to final, alongside Premier League and UCL workflow.</p>
+        <a routerLink="/pricing" class="banner-cta">Pre-register for World Cup -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🏆</span></div>
+    </article>
+
+    <article class="banner tone-free" [class.active]="currentBanner === 4">
+      <div>
+        <div class="banner-eyebrow">FREE - NEW USERS</div>
+        <h3 class="banner-h">Your first UCT is <em>on us.</em></h3>
+        <p class="banner-body">Sign up. Verify mobile + email. Generate your first UCT for free - no payment, no card on file. One per verified account, 14-day claim window. From your second match, choose any coin pack.</p>
+        <a routerLink="/pricing" class="banner-cta">See pricing -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🎁</span></div>
+    </article>
+
+    <article class="banner tone-coverage" [class.active]="currentBanner === 5">
+      <div>
+        <div class="banner-eyebrow">COVERAGE - 30 COMPETITIONS</div>
+        <h3 class="banner-h">Premier League to <em>Copa America.</em></h3>
+        <p class="banner-body">Every Tier 1 league. Every UEFA cup. Every major tournament. Thirty hand-picked competitions across UK, Europe, and the Americas - chosen for engagement, not filler.</p>
+        <a routerLink="/lineouts" class="banner-cta">See all series -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🌍</span></div>
+    </article>
+
+    <article class="banner tone-uct" [class.active]="currentBanner === 6">
+      <div>
+        <div class="banner-eyebrow">TRUST AND SAFETY</div>
+        <h3 class="banner-h">Strictly verified. <em>Clean workflow.</em></h3>
+        <p class="banner-body">Dual-verification at signup: mobile OTP and email OTP, both required. Disposable email and VoIP numbers blocked. Multi-account abuse means permanent ban. We do not gamble - anywhere.</p>
+        <a routerLink="/trust" class="banner-cta">Trust details -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🔒</span></div>
+    </article>
+
+    <article class="banner tone-skill" [class.active]="currentBanner === 7">
+      <div>
+        <div class="banner-eyebrow">SKILL OVER LUCK</div>
+        <h3 class="banner-h">Built on <span class="red">skill,</span> not <em>luck.</em></h3>
+        <p class="banner-body">PICK2WIN is not gambling. No wallet, no betting odds, no chance-based outcomes. Pure structured workflow assistance for fantasy football users. Twenty teams per match. Forty thousand possibilities mapped.</p>
+        <a routerLink="/trust" class="banner-cta">Trust and safety -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🎯</span></div>
+    </article>
+  </div>
+
+  <div class="banner-dots">
+    <button type="button" [class.active]="currentBanner === 0" aria-label="What is PICK2WIN" (click)="showBanner(0)"></button>
+    <button type="button" [class.active]="currentBanner === 1" aria-label="UCT Engine" (click)="showBanner(1)"></button>
+    <button type="button" [class.active]="currentBanner === 2" aria-label="How it works" (click)="showBanner(2)"></button>
+    <button type="button" [class.active]="currentBanner === 3" aria-label="FIFA World Cup" (click)="showBanner(3)"></button>
+    <button type="button" [class.active]="currentBanner === 4" aria-label="First match free" (click)="showBanner(4)"></button>
+    <button type="button" [class.active]="currentBanner === 5" aria-label="Coverage" (click)="showBanner(5)"></button>
+    <button type="button" [class.active]="currentBanner === 6" aria-label="Trust" (click)="showBanner(6)"></button>
+    <button type="button" [class.active]="currentBanner === 7" aria-label="Skill over luck" (click)="showBanner(7)"></button>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="home-lineouts-cta">
+    <a routerLink="/lineouts" class="home-lineouts-cta-btn pulsing">
+      <span class="cta-live-dot" aria-hidden="true"></span>
+      Today's Match Lineouts
+      <span class="arrow">-></span>
+    </a>
+    <div class="home-lineouts-cta-sub">Lineups go live 60 minutes before kickoff - don't miss the window</div>
+  </div>
+</section>
+
+<section class="versus-section">
+  <div class="versus-head reveal">
+    <span class="versus-eyebrow">MANUAL FANTASY vs PICK2WIN UCT</span>
+    <h2 class="versus-h">What changes when <em>workflow is structured.</em></h2>
+    <p class="versus-sub">Same lineup, same match, same fantasy contest. What changes is how you get from "lineups out" to "20 teams entered". Here's the concrete breakdown.</p>
+  </div>
+
+  <div class="versus-grid reveal">
+    <div class="versus-side bad">
+      <div class="versus-tag">MANUAL APPROACH</div>
+      <h3 class="versus-title">Guess.<br>Hope.<br>Repeat.</h3>
+      <div class="versus-rows">
+        <div class="versus-row"><div class="versus-row-ic">⏰</div><div><div class="versus-row-label">Time to create 20 teams</div><div class="versus-row-value"><span class="hi-red">45-60+ minutes</span> - most of the pre-match window</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">📋</div><div><div class="versus-row-label">Workflow timing</div><div class="versus-row-value">Often <span class="hi-red">pre-lineup guesses</span>, re-edited after team-sheet release</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">👑</div><div><div class="versus-row-label">Captain rotation</div><div class="versus-row-value">Manual tracking across 20 teams - <span class="hi-red">spreadsheet or memory</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">⚖</div><div><div class="versus-row-label">Player exposure balancing</div><div class="versus-row-value">Mental math - <span class="hi-red">easy to over-stack one player</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">🔀</div><div><div class="versus-row-label">Formation variation</div><div class="versus-row-value">Trial-and-error - <span class="hi-red">usually 1 or 2 shapes</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">⚠</div><div><div class="versus-row-label">Risk under pressure</div><div class="versus-row-value"><span class="hi-red">High</span> - duplicate picks, missed captain swaps, wrong formations</div></div></div>
+      </div>
+    </div>
+
+    <div class="versus-divider"><span class="versus-vs">vs</span></div>
+
+    <div class="versus-side good">
+      <div class="versus-tag">PICK2WIN - UCT</div>
+      <h3 class="versus-title"><em>Configure.</em><br>Structure.<br>Execute.</h3>
+      <div class="versus-rows">
+        <div class="versus-row"><div class="versus-row-ic">⏰</div><div><div class="versus-row-label">Time to create 20 teams</div><div class="versus-row-value"><span class="hi">A few seconds</span> after a 4-step configuration</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">📋</div><div><div class="versus-row-label">Workflow timing</div><div class="versus-row-value"><span class="hi">Post-lineup activation</span> - 60-min UCT window from team-sheet release</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">👑</div><div><div class="versus-row-label">Captain rotation</div><div class="versus-row-value">Automated - <span class="hi">CVC rotation</span> or <span class="hi">C and VC structured</span> modes</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">⚖</div><div><div class="versus-row-label">Player exposure balancing</div><div class="versus-row-value">Engine-balanced across all 20 teams - <span class="hi">Mandate controls</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">🔀</div><div><div class="versus-row-label">Formation variation</div><div class="versus-row-value"><span class="hi">4 fixed splits</span>: 4-7 / 5-6 / 6-5 / 7-4</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic">✅</div><div><div class="versus-row-label">Risk under pressure</div><div class="versus-row-value"><span class="hi">Validated</span> - football-real constraints enforced</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="versus-footer reveal">
+    PICK2WIN doesn't predict football. <em>It turns your reading of the game into structured output</em> - saving the 45 minutes you'd otherwise spend on mechanical work.
+  </div>
+
+  <div class="window-section reveal">
+    <div class="window-card">
+      <div class="window-head">
+        <div class="window-icon">⏱</div>
+        <div>
+          <div class="window-eyebrow">THE 60-75 MINUTE PRE-MATCH WINDOW</div>
+          <h3 class="window-h">Most UK and EU competitions release lineups ~60-75 min before kickoff. <em>Where does that window actually go?</em></h3>
+          <p class="window-sub">The pre-match window is the single most stressful moment in fantasy football. Here's how the two approaches actually use it.</p>
+        </div>
+      </div>
+
+      <div class="window-track">
+        <div class="window-track-line">
+          <div class="window-marker" style="left:0%;"><div class="window-marker-dot"></div><div class="window-marker-label"><b>~75 MIN</b><span>Lineups out</span></div></div>
+          <div class="window-marker" style="left:20%;"><div class="window-marker-dot"></div><div class="window-marker-label"><b>~60 MIN</b><span>Users adjusting</span></div></div>
+          <div class="window-marker" style="left:40%;"><div class="window-marker-dot"></div><div class="window-marker-label"><b>~45 MIN</b><span>Captain rotations</span></div></div>
+          <div class="window-marker late" style="left:60%;"><div class="window-marker-dot"></div><div class="window-marker-label"><b>~30 MIN</b><span>Deadline pressure</span></div></div>
+          <div class="window-marker late" style="left:80%;"><div class="window-marker-dot"></div><div class="window-marker-label"><b>~15 MIN</b><span>Chaos zone</span></div></div>
+          <div class="window-marker late" style="left:100%;"><div class="window-marker-dot"></div><div class="window-marker-label"><b>KICKOFF</b><span>Fantasy lock</span></div></div>
+        </div>
+      </div>
+
+      <div class="window-bars">
+        <div class="window-bar bad">
+          <div class="window-bar-label"><span>MANUAL</span><b>Window burned on mechanical work</b></div>
+          <div class="window-bar-track"><div class="window-bar-fill">~60 MIN MECHANICAL BUILD</div></div>
+          <div class="window-bar-review"><b>~10-15 minutes</b> left for actual review.</div>
+        </div>
+        <div class="window-bar good">
+          <div class="window-bar-label"><span>PICK2WIN UCT</span><b>Window freed for actual analysis</b></div>
+          <div class="window-bar-track"><div class="window-bar-fill">~5 MIN CONFIG</div></div>
+          <div class="window-bar-review"><b>~50 minutes</b> freed for calm review and final captain rethinks.</div>
+        </div>
+      </div>
+
+      <div class="window-foot">
+        <b>Why this matters:</b> the 60-75 minute pre-match window is where serious fantasy users face maximum stress, repetitive work, and lineup pressure. PICK2WIN is engineered for exactly this moment.
+      </div>
+    </div>
+  </div>
+
+  <div class="parallel-section reveal">
+    <div class="parallel-card">
+      <div class="parallel-head">
+        <div class="parallel-icon">🎯</div>
+        <div>
+          <div class="parallel-eyebrow">THE PARALLEL MATCH PROBLEM</div>
+          <h3 class="parallel-h">What if <em>3-4 matches</em> kick off at the same time?</h3>
+          <p class="parallel-sub">Multiple matches release lineups simultaneously and share the same 60-75 minute pre-kickoff window. This is when manual fantasy preparation completely breaks.</p>
+        </div>
+      </div>
+
+      <div class="parallel-matches">
+        <div class="parallel-match"><div class="parallel-match-time">12:00 UTC</div><div class="parallel-match-teams">MCI - ARS</div><div class="parallel-match-league">PREMIER LEAGUE</div><div class="parallel-match-status">LINEUPS OUT</div></div>
+        <div class="parallel-match"><div class="parallel-match-time">12:00 UTC</div><div class="parallel-match-teams">LIV - CHE</div><div class="parallel-match-league">PREMIER LEAGUE</div><div class="parallel-match-status">LINEUPS OUT</div></div>
+        <div class="parallel-match"><div class="parallel-match-time">12:00 UTC</div><div class="parallel-match-teams">NEW - MUN</div><div class="parallel-match-league">PREMIER LEAGUE</div><div class="parallel-match-status">LINEUPS OUT</div></div>
+        <div class="parallel-match"><div class="parallel-match-time">12:00 UTC</div><div class="parallel-match-teams">TOT - AVL</div><div class="parallel-match-league">PREMIER LEAGUE</div><div class="parallel-match-status">LINEUPS OUT</div></div>
+      </div>
+
+      <div class="parallel-alert">4 lineups dropped at the same moment - 1 shared <b>60-75 minute window</b> - 80 teams to build before kickoff</div>
+
+      <div class="parallel-math">
+        <div class="math-card bad">
+          <div class="math-tag">MANUAL APPROACH</div>
+          <p class="math-equation"><b>4 matches</b> x <b>~60 min</b> each = <b>~240 minutes</b> of work needed. But the window is only <b>~60 minutes</b>.</p>
+          <div class="math-result">Mathematically impossible. <em>Users skip matches, rush picks, or submit broken combinations.</em></div>
+        </div>
+        <div class="math-card good">
+          <div class="math-tag">PICK2WIN UCT</div>
+          <p class="math-equation"><b>4 matches</b> x <b>~5 min</b> configuration each + generation in seconds = <b>~20 minutes total</b>.</p>
+          <div class="math-result">Done with ~40 min to spare. <em>80 structured teams ready with time freed for review.</em></div>
+        </div>
+      </div>
+
+      <div class="parallel-hurdle">
+        <div class="parallel-hurdle-icon">!</div>
+        <div>
+          <p class="parallel-hurdle-title">The one hurdle we don't hide</p>
+          <p class="parallel-hurdle-body">Once UCT generates your teams for each match, you still need to replicate them in your fantasy contest app of choice. PICK2WIN compresses the build phase; the contest entry is yours to manage.</p>
+        </div>
+      </div>
+
+      <div class="parallel-hurdle save-warn">
+        <div class="parallel-hurdle-icon">↓</div>
+        <div>
+          <p class="parallel-hurdle-title">Save your teams BEFORE kickoff - every time.</p>
+          <p class="parallel-hurdle-body">Once a match goes live, generated teams disappear from your My Teams view. Always download the CSV export before kickoff and use those structured teams on whichever fantasy platform you play.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

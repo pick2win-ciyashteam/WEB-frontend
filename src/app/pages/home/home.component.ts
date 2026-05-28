@@ -14,8 +14,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   hours = '00';
   minutes = '00';
   seconds = '00';
+  currentBanner = 0;
 
   private timer: any;
+  private bannerTimer: any;
   private launchDate = new Date('2026-06-10T09:00:00Z').getTime();
 
   constructor(private authModal: AuthModalService) {}
@@ -27,10 +29,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.updateCountdown();
     this.timer = setInterval(() => this.updateCountdown(), 1000);
+    this.bannerTimer = setInterval(() => this.nextBanner(), 5000);
   }
 
   ngOnDestroy(): void {
     clearInterval(this.timer);
+    clearInterval(this.bannerTimer);
+  }
+
+  showBanner(index: number): void {
+    this.currentBanner = index;
+  }
+
+  nextBanner(): void {
+    this.currentBanner = (this.currentBanner + 1) % 8;
   }
 
   updateCountdown(): void {
