@@ -1,0 +1,325 @@
+:host {
+  display: block;
+  --paper: #f7fafc;
+  --paper-2: #c8d4df;
+  --paper-3: #8da0b2;
+  --gold: #f4b400;
+  --acid: #d72638;
+  --green: #00d19a;
+  --blue: #5bb0e6;
+  --line: rgba(255, 255, 255, 0.13);
+}
+
+.myteams-toolbar,
+.myteams-match,
+.mt-detail-head,
+.mt-helper-note,
+.mt-team-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(16, 40, 61, 0.94), rgba(5, 18, 31, 0.96));
+}
+
+.myteams-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px;
+}
+
+.myteams-toolbar-title,
+.mt-detail-title {
+  margin: 0;
+  color: var(--paper);
+  font-size: 24px;
+  font-weight: 950;
+}
+
+.myteams-toolbar-sub,
+.profile-teams-datelbl,
+.myteams-match-league,
+.myteams-stat-lbl,
+.mt-detail-league {
+  color: var(--gold);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.profile-teams-datebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-teams-dateinput,
+.profile-teams-datebtn {
+  min-height: 38px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--paper);
+  padding: 0 12px;
+}
+
+.profile-teams-datebtn,
+.myteams-action,
+.mt-back-btn {
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.myteams-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.myteams-match {
+  padding: 22px;
+  border-left: 3px solid var(--paper-3);
+}
+
+.myteams-match.live {
+  border-left-color: var(--green);
+}
+
+.myteams-match.free {
+  border-left-color: var(--blue);
+}
+
+.myteams-match-head,
+.myteams-match-actions,
+.mt-detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.myteams-match-meta {
+  display: grid;
+  gap: 6px;
+}
+
+.myteams-match-time,
+.mt-detail-meta {
+  color: var(--paper-3);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.profile-status-pill {
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.profile-status-pill.gen {
+  color: var(--green);
+  border: 1px solid rgba(0, 209, 154, 0.28);
+  background: rgba(0, 209, 154, 0.09);
+}
+
+.profile-status-pill.free {
+  color: var(--blue);
+  border: 1px solid rgba(91, 176, 230, 0.28);
+  background: rgba(91, 176, 230, 0.09);
+}
+
+.myteams-match-title {
+  margin: 18px 0;
+  color: var(--paper);
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 950;
+}
+
+.vs {
+  color: var(--gold);
+  font-size: 0.5em;
+  text-transform: uppercase;
+}
+
+.myteams-match-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.myteams-stat {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.myteams-stat-val {
+  margin-top: 8px;
+  color: var(--paper);
+  font-size: 19px;
+  font-weight: 950;
+}
+
+.myteams-stat-val.coin {
+  color: var(--acid);
+}
+
+.myteams-stat-val.expiry {
+  color: var(--gold);
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+}
+
+.myteams-action,
+.mt-back-btn {
+  min-height: 40px;
+  padding: 0 15px;
+  border-radius: 999px;
+  color: var(--paper);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.myteams-action.primary {
+  color: #061624;
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.myteams-action:disabled {
+  color: var(--paper-3);
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.myteams-tail {
+  margin-top: 18px;
+  color: var(--paper-3);
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mt-detail-head,
+.mt-helper-note {
+  padding: 20px;
+}
+
+.mt-helper-note {
+  margin: 16px 0;
+  color: var(--paper-2);
+  line-height: 1.6;
+}
+
+.mt-team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mt-team-card {
+  padding: 16px;
+}
+
+.mt-team-top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--paper);
+  font-weight: 950;
+}
+
+.mt-team-top b {
+  color: var(--gold);
+}
+
+.mt-team-line {
+  margin-top: 10px;
+  color: var(--paper-2);
+  font-size: 13px;
+}
+
+.mt-team-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.mt-team-tags span {
+  padding: 5px 7px;
+  border-radius: 999px;
+  color: var(--green);
+  background: rgba(0, 209, 154, 0.08);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .myteams-toolbar,
+  .myteams-match-head,
+  .myteams-match-actions,
+  .mt-detail-head {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .myteams-match-stats,
+  .mt-team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .myteams-toolbar,
+  .myteams-match,
+  .mt-detail-head,
+  .mt-helper-note,
+  .mt-team-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .myteams-toolbar-title,
+  .mt-detail-title {
+    font-size: 21px;
+  }
+
+  .myteams-match-title {
+    margin: 14px 0;
+    font-size: 30px;
+  }
+
+  .myteams-match-stats,
+  .mt-team-grid,
+  .profile-teams-datebar {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .myteams-match-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .myteams-action,
+  .mt-back-btn,
+  .profile-teams-datebtn {
+    width: 100%;
+  }
+
+  .profile-teams-dateinput {
+    width: 100%;
+  }
+}

@@ -41,6 +41,7 @@ export class SignupComponent {
 countries = [
   { name: 'United Kingdom', dial: '+44', min: 10, max: 10 },
   { name: 'Ireland', dial: '+353', min: 9, max: 9 },
+  { name: 'India', dial: '+91', min: 10, max: 10 },
   { name: 'United States', dial: '+1', min: 10, max: 10 },
   { name: 'Canada', dial: '+1', min: 10, max: 10 },
   { name: 'France', dial: '+33', min: 9, max: 9 },
@@ -58,11 +59,12 @@ countries = [
     dial: ['+44', Validators.required],
     mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{7,14}$/)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
     terms: [false, Validators.requiredTrue]
   });
 
   loading = false;
+resending: 'mobile' | 'email' | null = null;
 errorMessage = '';
 successMessage = '';
 
@@ -115,6 +117,8 @@ continueStep1() {
       this.loading = false;
       this.successMessage = res?.message || 'OTP sent successfully';
       this.step = 2;
+      this.mobileOtp = ['', '', '', '', '', ''];
+      this.emailOtp = ['', '', '', '', '', ''];
 
       setTimeout(() => this.focusOtp('mobile'), 100);
     },
@@ -226,21 +230,19 @@ verifyMobile() {
 
   const payload = {
     mobile: this.form.value.mobile || '',
-    mobile_otp: this.mobileOtp.join('')
+    otp: this.mobileOtp.join('')
   };
+
+  console.log('mobile otp:', payload.otp);
 
   this.loading = true;
 
-  this.api.verifySignup(payload).subscribe({
+  this.api.verifyMobileOtp(payload).subscribe({
     next: (res: any) => {
       this.loading = false;
       this.successMessage = res?.message || 'Mobile verified successfully';
-
-      // If backend only verifies mobile, directly show success
-      this.step = 4;
-
-      // If later email OTP API comes, change this to:
-      // this.step = 3;
+      this.step = 3;
+      setTimeout(() => this.focusOtp('email'), 100);
     },
     error: (err) => {
       this.loading = false;
@@ -253,9 +255,68 @@ verifyMobile() {
 }
 
 verifyEmail() {
-  if (this.isOtpComplete('email')) {
-    this.step = 4;
+  this.errorMessage = '';
+  this.successMessage = '';
+
+  if (!this.isOtpComplete('email')) {
+    this.errorMessage = 'Please enter 6 digit OTP';
+    return;
   }
+
+  const payload = {
+    email: this.form.value.email || '',
+    otp: this.emailOtp.join('')
+  };
+
+  console.log('email otp:', payload.otp);
+
+  this.loading = true;
+
+  this.api.verifyEmailOtp(payload).subscribe({
+    next: (res: any) => {
+      this.loading = false;
+      this.successMessage = res?.message || 'Email verified successfully';
+      this.step = 4;
+    },
+    error: (err) => {
+      this.loading = false;
+      this.errorMessage =
+        err?.error?.message ||
+        err?.error?.error ||
+        'Email OTP verification failed. Please try again.';
+    }
+  });
+}
+
+resendOtp(type: 'mobile' | 'email') {
+  this.errorMessage = '';
+  this.successMessage = '';
+  this.resending = type;
+
+  const payload =
+    type === 'mobile'
+      ? { mobile: this.form.value.mobile || '', type }
+      : { email: this.form.value.email || '', type };
+
+  this.api.resendOtp(payload).subscribe({
+    next: (res: any) => {
+      this.resending = null;
+      this.successMessage = res?.message || `${type === 'mobile' ? 'Mobile' : 'Email'} OTP resent successfully`;
+      if (type === 'mobile') {
+        this.mobileOtp = ['', '', '', '', '', ''];
+      } else {
+        this.emailOtp = ['', '', '', '', '', ''];
+      }
+      setTimeout(() => this.focusOtp(type), 100);
+    },
+    error: (err) => {
+      this.resending = null;
+      this.errorMessage =
+        err?.error?.message ||
+        err?.error?.error ||
+        'Unable to resend OTP. Please try again.';
+    }
+  });
 }
 
   otpMove(event: any, index: number, type: 'mobile' | 'email') {

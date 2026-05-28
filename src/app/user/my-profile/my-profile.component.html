@@ -1,1 +1,180 @@
-<p>my-profile works!</p>
+<app-header></app-header>
+
+<main class="profile-page">
+  <div class="wrap">
+    <div class="profile-tabs">
+      <button type="button" [class.active]="activeTab === 'profile'" (click)="setTab('profile')">My Profile</button>
+      <button type="button" [class.active]="activeTab === 'teams'" (click)="setTab('teams')">My Teams</button>
+      <button type="button" [class.active]="activeTab === 'feedback'" (click)="setTab('feedback')">My Feedback</button>
+    </div>
+
+    <section class="profile-section active" *ngIf="activeTab === 'profile'">
+      <div class="profile-hero">
+        <div class="profile-avatar">JD</div>
+        <div class="profile-info-row">
+          <h3 class="profile-name">
+            John Doe
+            <span class="profile-verify">Dual Verified</span>
+          </h3>
+          <div class="profile-meta">
+            <span class="profile-meta-item"><span class="ic">Email</span> <b>john.doe@example.com</b></span>
+            <span class="profile-meta-item"><span class="ic">Phone</span> <b>+44 *** *** 4827</b></span>
+            <span class="profile-meta-item"><span class="ic">Region</span> <b>United Kingdom</b></span>
+            <span class="profile-meta-item"><span class="ic">Since</span> Member since <b>Jun 12, 2026</b></span>
+          </div>
+        </div>
+        <button class="profile-edit-btn" type="button">
+          <span class="edit-icon">Edit</span>
+          Edit Account
+        </button>
+      </div>
+
+      <div class="profile-ledger">
+        <div class="profile-ledger-head">
+          <div class="profile-ledger-eyebrow">Coin Ledger - Your Account Math</div>
+        </div>
+        <div class="profile-ledger-row">
+          <div class="profile-ledger-cell total">
+            <div class="profile-ledger-cell-lbl">Total Coins</div>
+            <div class="profile-ledger-cell-num">111</div>
+            <div class="profile-ledger-cell-sub">110 purchased + 1 free first match</div>
+          </div>
+          <div class="profile-ledger-op">-</div>
+          <div class="profile-ledger-cell used">
+            <div class="profile-ledger-cell-lbl">Coins Used</div>
+            <div class="profile-ledger-cell-num">64</div>
+            <div class="profile-ledger-cell-sub">across 64 match UCTs</div>
+          </div>
+          <div class="profile-ledger-op">=</div>
+          <div class="profile-ledger-cell remaining">
+            <div class="profile-ledger-cell-lbl">Remaining</div>
+            <div class="profile-ledger-cell-num">47</div>
+            <div class="profile-ledger-cell-sub">available for 47 more matches</div>
+          </div>
+        </div>
+        <p class="profile-ledger-foot">Each coin = <b>1 match UCT generation</b>. Each pack is valid for 365 days from purchase. Use them within that window whenever lineups drop for any supported league.</p>
+      </div>
+
+      <div class="coin-lots-wrap">
+        <div class="coin-lots-head">
+          <div>
+            <h4 class="coin-lots-title">Active Coin Lots</h4>
+            <span class="coin-lots-sub">Each pack has its own 365-day clock. Coins are consumed from the lot closest to expiry first.</span>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="coin-lots-table">
+            <thead>
+              <tr>
+                <th>Pack</th>
+                <th>Purchased</th>
+                <th>Coins</th>
+                <th>Used</th>
+                <th>Remaining</th>
+                <th>Expires</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pro Pack</td>
+                <td>Jul 5, 2026</td>
+                <td>100</td>
+                <td>53</td>
+                <td class="col-coins">47</td>
+                <td>Jul 5, 2027</td>
+                <td><span class="profile-status-pill active">Active</span></td>
+              </tr>
+              <tr>
+                <td>Starter Pack</td>
+                <td>Jun 12, 2026</td>
+                <td>10</td>
+                <td>10</td>
+                <td class="col-coins">0</td>
+                <td>Jun 12, 2027</td>
+                <td><span class="profile-status-pill used">Used</span></td>
+              </tr>
+              <tr>
+                <td>Free First Match</td>
+                <td>Jun 12, 2026</td>
+                <td>1</td>
+                <td>1</td>
+                <td class="col-coins">0</td>
+                <td>Jun 26, 2026</td>
+                <td><span class="profile-status-pill used">Used</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="profile-table-wrap">
+        <div class="profile-table-head">
+          <div>
+            <h4 class="profile-table-title">Coin Packs Purchased</h4>
+            <span class="profile-table-count">2 packs - 110 coins added in total</span>
+          </div>
+          <button class="profile-download-btn" type="button">Download full history (CSV)</button>
+        </div>
+
+        <div class="table-scroll">
+          <table class="profile-table">
+            <thead>
+              <tr>
+                <th>Purchase Date</th>
+                <th>Pack</th>
+                <th>Coins Added</th>
+                <th>Payment ID (Stripe)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-date">Jul 5, 2026 - 14:23 UTC</td>
+                <td class="col-match">Pro Pack</td>
+                <td class="col-coins">+100</td>
+                <td class="col-id">pi_3O8K9F2eZ...</td>
+                <td><span class="profile-status-pill paid">Paid</span></td>
+              </tr>
+              <tr>
+                <td class="col-date">Jun 12, 2026 - 10:08 UTC</td>
+                <td class="col-match">Starter Pack</td>
+                <td class="col-coins">+10</td>
+                <td class="col-id">pi_3O2N6A1xR...</td>
+                <td><span class="profile-status-pill paid">Paid</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="profile-table-foot">Full receipts including pricing, tax, and payment details are available in the downloadable CSV above.</p>
+      </div>
+
+      <div class="transaction-note">
+        <b>Transaction transparency:</b>
+        Every coin pack purchase and every match UCT generation is logged here forever. Coin balances reflect remaining coins across all active packs. For any billing question, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with your payment ID.
+      </div>
+
+      <div class="danger-zone">
+        <div class="danger-label">Danger Zone</div>
+        <div class="danger-card">
+          <h4>Delete my account</h4>
+          <p>Permanently delete your PICK2WIN account. <b>This action cannot be reversed.</b> Unused coins will not be refunded, your data will be erased, and your account cannot be reclaimed.</p>
+          <div class="danger-actions">
+            <button type="button">Delete my account permanently</button>
+            <span>A confirmation dialog will appear before deletion is finalized</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-section" *ngIf="activeTab === 'teams'">
+      <app-my-teams></app-my-teams>
+    </section>
+
+    <section class="profile-section" *ngIf="activeTab === 'feedback'">
+      <app-feedback></app-feedback>
+    </section>
+  </div>
+</main>
+
+<app-footer></app-footer>

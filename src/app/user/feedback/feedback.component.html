@@ -1,1 +1,191 @@
-<p>feedback works!</p>
+<div class="fb-hero">
+  <span class="fb-eyebrow">User Voice - Direct Line To The Team</span>
+  <h1>Your feedback shapes the next tuning.</h1>
+  <p>Every suggestion, tuning request, league wish-list, and bug report comes straight to the PICK2WIN team. We read every submission, and the patterns we see drive what gets shipped next.</p>
+</div>
+
+<div class="fb-roadmap-banner">
+  <div class="fb-rb-icon">🚀</div>
+  <div>
+    <div class="fb-rb-eyebrow">A full roadmap is already lined up - your voice decides what ships first</div>
+    <h3>PICK2WIN has many version updates planned. But the best <em>refinements</em> come from you.</h3>
+    <p>Your votes, comments, and bug reports tell us what genuinely saves users time and brings real satisfaction to people using UCT every gameweek.</p>
+  </div>
+</div>
+
+<div class="fb-categories">
+  <article><div>🎯</div><h4>UCT tuning requests</h4><p>Captain variance, formation splits, and engine behavior.</p></article>
+  <article><div>⚙️</div><h4>Feature suggestions</h4><p>Exports, integrations, workflow shortcuts, and presets.</p></article>
+  <article><div>🏆</div><h4>League requests</h4><p>Tell us which competitions matter most to you.</p></article>
+  <article><div>🧪</div><h4>Engine accuracy</h4><p>Missing players, lineup refreshes, and validation issues.</p></article>
+  <article><div>🐛</div><h4>Bug reports</h4><p>UI glitches, payment issues, and account access problems.</p></article>
+  <article><div>❤️</div><h4>What you love</h4><p>Tell us what should be protected in future releases.</p></article>
+</div>
+
+<div class="fb-survey">
+  <div class="fb-survey-h">
+    <span class="fb-eyebrow red">Quick Product Survey - ~30 Seconds</span>
+    <h3>Three feature questions - your vote shapes the next UCT release.</h3>
+    <p>These are the product questions the team is actively debating right now.</p>
+  </div>
+
+  <form class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (submit)="submitSurvey($event)">
+    <div class="fb-q">
+      <div class="fb-q-num">Q1 - Mandatory</div>
+      <div class="fb-q-text">Would you like to hand-pick specific players from both teams before UCT generates your 20 teams?</div>
+      <div class="fb-q-help">Choose the workflow you would prefer during the lineup window.</div>
+      <div class="fb-option-grid two">
+        <label class="fb-opt"><input type="radio" name="q1" required><span><b>Yes - full player-selection control</b><small>I want to manually choose which players appear in my 20 teams.</small></span></label>
+        <label class="fb-opt"><input type="radio" name="q1"><span><b>No - keep UCT auto-selecting</b><small>Filters and mandates are enough. I do not want to manage every player.</small></span></label>
+      </div>
+    </div>
+
+    <div class="fb-q">
+      <div class="fb-q-num">Q2 - Mandatory</div>
+      <div class="fb-q-text">How useful is the existing must-include / must-exclude feature?</div>
+      <div class="fb-q-help">This tells the product team whether to keep, simplify, or remove the current mandate workflow.</div>
+      <div class="fb-option-grid">
+        <label class="fb-opt"><input type="radio" name="q2" required><span><b>Very useful</b><small>I use it every match.</small></span></label>
+        <label class="fb-opt"><input type="radio" name="q2"><span><b>Sometimes useful</b><small>Helpful only for certain matches.</small></span></label>
+        <label class="fb-opt"><input type="radio" name="q2"><span><b>Rarely useful</b><small>UCT defaults are usually fine.</small></span></label>
+        <label class="fb-opt danger"><input type="radio" name="q2"><span><b>Remove it</b><small>I want a simpler workflow.</small></span></label>
+      </div>
+    </div>
+
+    <div class="fb-q">
+      <div class="fb-q-num">Q3 - Mandatory</div>
+      <div class="fb-q-text">How useful is Captain &amp; Vice-Captain mode selection in UCT?</div>
+      <div class="fb-q-help">This decides how much captaincy control should remain in future UCT releases.</div>
+      <div class="fb-option-grid">
+        <label class="fb-opt"><input type="radio" name="q3" required><span><b>Very useful</b><small>Captain rotation is critical to my workflow.</small></span></label>
+        <label class="fb-opt"><input type="radio" name="q3"><span><b>Sometimes useful</b><small>I tune it for important matches.</small></span></label>
+        <label class="fb-opt"><input type="radio" name="q3"><span><b>Rarely useful</b><small>I trust UCT defaults.</small></span></label>
+        <label class="fb-opt danger"><input type="radio" name="q3"><span><b>Remove it</b><small>One automatic strategy is enough.</small></span></label>
+      </div>
+    </div>
+
+    <div class="fb-q">
+      <div class="fb-q-num">Optional context</div>
+      <textarea rows="4" placeholder="Anything you want the product team to know about why you voted this way?"></textarea>
+    </div>
+
+    <div class="fb-submit-row">
+      <button type="submit" class="btn-pri-large">Submit my votes</button>
+      <span>Anonymous - only your selections are stored unless you add a comment</span>
+    </div>
+  </form>
+
+  <ng-template #surveyThanks>
+    <div class="fb-thanks">
+      <div class="fb-thanks-icon">🗳️</div>
+      <h3>Votes recorded - thank you!</h3>
+      <p>Your survey reference: <code>{{ surveyRef }}</code></p>
+      <button type="button" class="btn-ghost-small" (click)="resetSurvey()">Review my votes</button>
+    </div>
+  </ng-template>
+</div>
+
+<div class="fb-form-wrap">
+  <div class="fb-form-card">
+    <div class="fb-form-h">
+      <span class="fb-eyebrow">Submit Feedback</span>
+      <h3>Share your suggestion - we read every submission within 48 hours.</h3>
+    </div>
+
+    <form class="fb-form" *ngIf="!feedbackSubmitted; else feedbackThanks" (submit)="submitFeedback($event)">
+      <div class="fb-row-2">
+        <div class="fb-field">
+          <label>Category</label>
+          <select required>
+            <option value="">Select a category...</option>
+            <option>UCT tuning request</option>
+            <option>Feature suggestion</option>
+            <option>League / coverage request</option>
+            <option>Engine accuracy feedback</option>
+            <option>Bug report</option>
+            <option>What you love</option>
+          </select>
+        </div>
+        <div class="fb-field">
+          <label>How important is this to you?</label>
+          <select>
+            <option>Nice to have</option>
+            <option selected>Would really help my workflow</option>
+            <option>It is stopping me from using PICK2WIN properly</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fb-field">
+        <label>Subject</label>
+        <input type="text" required maxlength="120" placeholder="e.g. Allow 8-3 captain splits for La Liga matches">
+      </div>
+
+      <div class="fb-field">
+        <label>Your suggestion</label>
+        <textarea required rows="7" placeholder="Tell us what you would like to see, why it matters, and how it would improve your workflow."></textarea>
+      </div>
+
+      <div class="fb-row-2">
+        <div class="fb-field">
+          <label>Email (for follow-up)</label>
+          <input type="email" placeholder="you@example.com">
+        </div>
+        <div class="fb-field">
+          <label>Where in PICK2WIN?</label>
+          <select>
+            <option>Anywhere / general</option>
+            <option>UCT configuration step</option>
+            <option>My Teams view</option>
+            <option>Lineouts</option>
+            <option>Pricing / packs</option>
+            <option>Profile / account</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="fb-consent"><input type="checkbox" checked> OK to follow up via email if we need more details.</label>
+
+      <div class="fb-submit-row">
+        <button type="submit" class="btn-pri-large">Send feedback</button>
+        <span>Typical reply within 48 hours - top requests reviewed weekly</span>
+      </div>
+    </form>
+
+    <ng-template #feedbackThanks>
+      <div class="fb-thanks">
+        <div class="fb-thanks-icon">✅</div>
+        <h3>Thank you! Your feedback has been logged.</h3>
+        <p>Reference ID: <code>{{ feedbackRef }}</code></p>
+        <button type="button" class="btn-ghost-small" (click)="resetFeedbackForm()">Submit another</button>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<div class="fb-shipped">
+  <div class="fb-shipped-h">
+    <span class="fb-eyebrow green">Shipped From User Feedback</span>
+    <h3>Recent improvements <em>credited to user submissions.</em></h3>
+    <p>Proof we listen - every item below started as a user suggestion.</p>
+  </div>
+  <div class="fb-shipped-list">
+    <div class="fb-shipped-item"><div class="fb-shipped-date">May 2026</div><div><b>CSV download now uses structured player rows</b><p>Requested by 47 users.</p></div><span>Shipped</span></div>
+    <div class="fb-shipped-item"><div class="fb-shipped-date">May 2026</div><div><b>Mobile menu now opens a proper drawer</b><p>Reported by 12 users.</p></div><span>Shipped</span></div>
+    <div class="fb-shipped-item"><div class="fb-shipped-date">Apr 2026</div><div><b>Added 4 more leagues</b><p>Requested across Japan, Netherlands, Turkey, and US.</p></div><span>Shipped</span></div>
+    <div class="fb-shipped-item upcoming"><div class="fb-shipped-date">Jun 2026</div><div><b>Custom team count</b><p>Planned for the v2.4 engine release.</p></div><span>Planned</span></div>
+  </div>
+</div>
+
+<div class="fb-commitment">
+  <div class="fb-commit-icon">🤝</div>
+  <div>
+    <h3>Our commitment to feedback senders</h3>
+    <ul>
+      <li><b>Every submission is read within 48 hours</b> by a real person.</li>
+      <li><b>Top-voted requests reviewed weekly</b> in the Tuesday product call.</li>
+      <li><b>Status updates go directly to your inbox</b> when we need follow-up.</li>
+      <li><b>No suggestion is too small</b> for product triage.</li>
+    </ul>
+  </div>
+</div>

@@ -1,1 +1,119 @@
-<p>lineups works!</p>
+<app-header></app-header>
+
+<main class="lineouts-page">
+  <ng-container *ngIf="loggedIn$ | async; else guestLineouts">
+    <section class="match-list-section">
+      <div class="wrap">
+        <div class="coin-pill">
+          <span class="coin-dot">🪙</span>
+          <strong>{{ coinBalance }}</strong>
+          <span>coins</span>
+        </div>
+
+        <ng-container *ngIf="visibleMatches.length; else noMatches">
+          <div class="today-section" *ngIf="todayMatches.length">
+            <div class="list-head">
+              <div>
+                <h3>Today's Matches</h3>
+                <p>{{ todayMatches.length }} match{{ todayMatches.length === 1 ? '' : 'es' }} - {{ readyAndNotGeneratedCount }} ready for UCT</p>
+              </div>
+              <span>{{ todayMatches.length }} MATCH{{ todayMatches.length === 1 ? '' : 'ES' }}</span>
+            </div>
+
+            <div class="match-row-list">
+              <article
+                class="match-row"
+                *ngFor="let match of todayMatches; trackBy: trackByMatchId"
+                [class.ready]="match.lineupReady && !isGenerated(match)"
+                [class.generated]="isGenerated(match)">
+                <div class="match-main">
+                  <div class="match-league">{{ match.league }} - {{ match.country }}</div>
+                  <div class="match-teams">
+                    <span class="team-box" [style.background]="match.home.color"></span>
+                    <strong>{{ match.home.code }}</strong>
+                    <small>vs</small>
+                    <span class="team-box" [style.background]="match.away.color"></span>
+                    <strong>{{ match.away.code }}</strong>
+                  </div>
+                  <div class="match-time">Today - {{ formatKickoff(match) }} - {{ match.venue }}</div>
+                </div>
+
+                <div class="match-side">
+                  <span class="lineup-state" [class.ready-state]="match.lineupReady">{{ statusLabel(match) }}</span>
+                  <button class="uct-btn" type="button" [disabled]="!match.lineupReady && !isGenerated(match)" (click)="handleMatchAction(match)">
+                    {{ actionLabel(match) }}
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="upcoming-section" *ngIf="upcomingGroups.length">
+            <div class="list-head">
+              <div>
+                <h3>Upcoming Matches - This Week</h3>
+              </div>
+              <span>{{ upcomingMatchCount }} MATCH{{ upcomingMatchCount === 1 ? '' : 'ES' }}</span>
+            </div>
+
+            <div class="day-group" *ngFor="let group of upcomingGroups; trackBy: trackByGroupLabel">
+              <div class="day-label">{{ group.label }} - in {{ daysUntil(group.date) }} day{{ daysUntil(group.date) === 1 ? '' : 's' }}</div>
+
+              <div class="match-row-list">
+                <article class="match-row" *ngFor="let match of group.matches; trackBy: trackByMatchId">
+                  <div class="match-main">
+                    <div class="match-league">{{ match.league }} - {{ match.country }}</div>
+                    <div class="match-teams">
+                      <span class="team-box" [style.background]="match.home.color"></span>
+                      <strong>{{ match.home.code }}</strong>
+                      <small>vs</small>
+                      <span class="team-box" [style.background]="match.away.color"></span>
+                      <strong>{{ match.away.code }}</strong>
+                    </div>
+                    <div class="match-time">{{ dateStamp(match) }} - {{ formatKickoff(match) }} - Kicks off soon</div>
+                  </div>
+
+                  <div class="match-side">
+                    <span class="lineup-state">Waiting for lineup</span>
+                    <button class="uct-btn locked" type="button" disabled>UCT Locked</button>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </section>
+  </ng-container>
+
+  <ng-template #guestLineouts>
+    <section class="signin-required">
+      <div class="signin-card">
+        <div class="ball-icon">⚽</div>
+        <div class="signin-eyebrow">Sign-in required - Series Manager</div>
+        <h1>Sign in to view <em>today's match list.</em></h1>
+        <p>
+          Series shows all upcoming matches across your 30 supported leagues. Once a club releases its starting lineup, the <b>Run UCT</b>
+          button activates - giving you 60 minutes to produce your 20 structured teams before kick-off. Sign in or create an account to start.
+        </p>
+
+        <div class="signin-actions">
+          <button type="button" class="create-btn" (click)="openSignup()">Create account - free first UCT</button>
+          <button type="button" class="signin-btn" (click)="openLogin()">Sign in</button>
+        </div>
+
+        
+      </div>
+    </section>
+  </ng-template>
+
+  <ng-template #noMatches>
+    <div class="my-teams-empty">
+      <div class="empty-icon">⚽</div>
+      <h3>No matches available</h3>
+      <p>No upcoming matches in our coverage right now. Check back soon - new fixtures load 60 minutes before kickoff.</p>
+    </div>
+  </ng-template>
+</main>
+
+<app-footer></app-footer>

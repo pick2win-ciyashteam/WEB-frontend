@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./my-profile.component.css']
 })
 export class MyProfileComponent {
+  activeTab: 'profile' | 'teams' | 'feedback' = 'profile';
 
+  setTab(tab: 'profile' | 'teams' | 'feedback') {
+    this.activeTab = tab;
+  }
 }

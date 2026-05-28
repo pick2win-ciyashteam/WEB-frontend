@@ -13,6 +13,7 @@ import { TermsComponent } from './terms/terms.component';
 import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
 import { SharedModule } from '../shared/shared.module';
+import { LineoutsModule } from '../lineouts/lineouts.module';
 
 
 @NgModule({
@@ -30,7 +31,9 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    PagesRoutingModule, SharedModule
+    PagesRoutingModule,
+    SharedModule,
+    LineoutsModule
   ]
 })
 export class PagesModule { }

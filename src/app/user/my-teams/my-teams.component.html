@@ -1,1 +1,90 @@
-<p>my-teams works!</p>
+<div class="myteams-view" *ngIf="!selectedMatch; else matchDetail">
+  <div class="myteams-toolbar">
+    <div class="myteams-toolbar-info">
+      <h4 class="myteams-toolbar-title">My Generated Teams</h4>
+      <span class="myteams-toolbar-sub">64 match generations - 1,280 teams total - viewing latest</span>
+    </div>
+    <div class="profile-teams-datebar">
+      <label class="profile-teams-datelbl" for="myTeamsDate">Date</label>
+      <input type="date" id="myTeamsDate" class="profile-teams-dateinput">
+      <button class="profile-teams-datebtn" type="button">Latest</button>
+    </div>
+  </div>
+
+  <div class="myteams-list">
+    <article class="myteams-match" *ngFor="let match of matches" [class.live]="match.live" [class.free]="match.free">
+      <div class="myteams-match-head">
+        <div class="myteams-match-meta">
+          <span class="myteams-match-league">{{ match.league }}</span>
+          <span class="myteams-match-time">{{ match.time }}</span>
+        </div>
+        <span class="profile-status-pill" [class.free]="match.free" [class.gen]="!match.free">
+          {{ match.free ? 'Free first match' : 'Generated' }}
+        </span>
+      </div>
+
+      <div class="myteams-match-title">
+        {{ match.title.split(' vs ')[0] }} <span class="vs">vs</span> {{ match.title.split(' vs ')[1] }}
+      </div>
+
+      <div class="myteams-match-stats">
+        <div class="myteams-stat">
+          <div class="myteams-stat-lbl">Coin Used</div>
+          <div class="myteams-stat-val coin">{{ match.coin }}</div>
+        </div>
+        <div class="myteams-stat">
+          <div class="myteams-stat-lbl">Teams Generated</div>
+          <div class="myteams-stat-val">20</div>
+        </div>
+        <div class="myteams-stat">
+          <div class="myteams-stat-lbl">Generated At</div>
+          <div class="myteams-stat-val mono">{{ match.generatedAt }}</div>
+        </div>
+        <div class="myteams-stat">
+          <div class="myteams-stat-lbl">Expires</div>
+          <div class="myteams-stat-val mono expiry">{{ match.expires }}</div>
+        </div>
+      </div>
+
+      <div class="myteams-match-actions">
+        <button class="myteams-action primary" type="button" *ngIf="match.live" (click)="openMatchTeams(match)">View 20 Teams -></button>
+        <button class="myteams-action" type="button" *ngIf="match.live">Download all (CSV)</button>
+        <button class="myteams-action" type="button" *ngIf="!match.live" disabled>Teams archived - no longer viewable</button>
+      </div>
+    </article>
+  </div>
+
+  <div class="myteams-tail">+ 60 earlier match generations - all teams expired at kickoff</div>
+</div>
+
+<ng-template #matchDetail>
+  <div class="myteams-view">
+    <div class="mt-detail-head">
+      <button class="mt-back-btn" type="button" (click)="backToMatches()">Back to matches</button>
+      <div class="mt-detail-info">
+        <div class="mt-detail-league">{{ selectedMatch?.league }}</div>
+        <h3 class="mt-detail-title">{{ selectedMatch?.title }}</h3>
+        <div class="mt-detail-meta">20 teams generated at {{ selectedMatch?.generatedAt }} - expires {{ selectedMatch?.expires }}</div>
+      </div>
+      <button class="myteams-action primary" type="button">Download all 20 (CSV)</button>
+    </div>
+
+    <div class="mt-helper-note">
+      Tap any team card below to preview the full lineup. Each preview shows all 11 players, formation, captain, and vice-captain.
+    </div>
+
+    <div class="mt-team-grid">
+      <article class="mt-team-card" *ngFor="let team of teamNumbers">
+        <div class="mt-team-top">
+          <span>Team {{ team }}</span>
+          <b>{{ team % 4 === 0 ? '7-4' : team % 3 === 0 ? '6-5' : team % 2 === 0 ? '5-6' : '4-7' }}</b>
+        </div>
+        <div class="mt-team-line">Captain: Haaland</div>
+        <div class="mt-team-line">Vice Captain: Saka</div>
+        <div class="mt-team-tags">
+          <span>1 GK</span><span>4 DEF</span><span>4 MID</span><span>2 FWD</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</ng-template>

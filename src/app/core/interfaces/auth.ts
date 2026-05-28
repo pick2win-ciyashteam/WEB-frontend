@@ -9,5 +9,14 @@ export interface SignupPayload {
 
 export interface VerifySignupPayload {
   mobile: string;
-  mobile_otp: string;
+  otp: string;
 }
+
+export interface VerifyEmailPayload {
+  email: string;
+  otp: string;
+}
+
+export type ResendOtpPayload = 
+  | { mobile: string; type: 'mobile' }
+  | { email: string; type: 'email' };

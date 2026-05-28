@@ -1,1 +1,179 @@
-<p>faq works!</p>
+<app-header></app-header>
+
+<section class="faq-page" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num"><strong>07 /</strong> FAQ</div>
+      <h2 class="section-title">Common <span>questions.</span></h2>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq" open>
+        <summary><span class="idx">/ 01</span><span class="q">Is my first UCT really free?</span><span class="plus"></span></summary>
+        <div class="a">Yes. Every PICK2WIN account gets <strong>one free UCT generation</strong> after you sign up and complete dual verification (mobile SMS OTP + email OTP). No card required to claim. You choose which upcoming match window to use it on - full 20-team generation, no charge. The free claim must be used within <strong>14 days</strong> of verification. From your second match onward, choose any coin pack - Starter (10), Basic (25), Standard (50), or Pro (100). All packs valid for 365 days from purchase, fully your choice.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 02</span><span class="q">Can I open multiple accounts to keep claiming free matches?</span><span class="plus"></span></summary>
+        <div class="a">No. Each account requires <strong>both</strong> a verified mobile number (SMS OTP) <strong>and</strong> a verified email (email OTP) - neither alone is enough. One mobile = one email = one account. We also enforce email normalisation, disposable-email blocking, VoIP/virtual-number blocking, Stripe Radar device fingerprinting, IP velocity caps, and behavioural analysis. Accounts created to exploit the free UCT offer are <strong>permanently banned</strong>.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 03</span><span class="q">Why do you need my mobile number?</span><span class="plus"></span></summary>
+        <div class="a">Two reasons. <strong>One:</strong> to ensure one account per real user. <strong>Two:</strong> to send a one-time SMS code so we can verify you are a real person before activating UCT. We do not call, message, or share your number for marketing.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 04</span><span class="q">Is PICK2WIN a gambling or betting platform?</span><span class="plus"></span></summary>
+        <div class="a"><strong>No.</strong> PICK2WIN is a <strong>workflow assistance platform for fantasy football preparation</strong>. It is not a gambling operator, betting platform, contest host, wallet service, or fantasy contest provider. No prediction. No guaranteed outcomes. <a routerLink="/trust">Read the full PICK2WIN Platform Pledge -></a></div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 05</span><span class="q">When does UCT activate?</span><span class="plus"></span></summary>
+        <div class="a">UCT activates strictly after official football lineups are released for a match. Before lineups, the engine is dormant - there is no guesswork on team-sheets.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 06</span><span class="q">Can I run UCT more than once per match?</span><span class="plus"></span></summary>
+        <div class="a">No. Generation is one-time per match per user. After UCT creates your 20 teams, the match locks and you are redirected to My Teams. Re-generation is blocked.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 07</span><span class="q">Do you refund cancelled or postponed matches?</span><span class="plus"></span></summary>
+        <div class="a">No. PICK2WIN does not refund coin pack purchases or provide match-wise compensation for cancelled, postponed, abandoned, interrupted, or weather-affected matches. <strong>Coins are issued at purchase and are non-refundable.</strong> Each pack is valid for 365 days from purchase, so unused coins remain in your account until that window closes.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 08</span><span class="q">Can I buy multiple coin packs and combine them?</span><span class="plus"></span></summary>
+        <div class="a">Yes. You can purchase as many coin packs as you like and they stack into a single coin balance on your account. Since <strong>each pack is valid for 365 days from purchase</strong>, you can start small and scale up later.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 09</span><span class="q">Is the FIFA World Cup 2026 included in the coin packs?</span><span class="plus"></span></summary>
+        <div class="a">Yes. Every coin pack covers <strong>all 30 PICK2WIN competitions</strong>, including the FIFA World Cup 2026. Each coin = one match UCT generation, and you can spend coins on any match in any covered league. No separate tournament passes or league-specific upgrades.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 10</span><span class="q">Which countries can use PICK2WIN?</span><span class="plus"></span></summary>
+        <div class="a">PICK2WIN is available in the UK, Ireland, most of Western and Northern Europe, the United States, Canada, Australia, and New Zealand. It is geo-blocked in India, China, Russia, Belarus, Pakistan, Bangladesh, Nigeria, Indonesia, Turkey, Cuba, Iran, North Korea, Syria, and OFAC-sanctioned regions.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 11</span><span class="q">How are payments processed?</span><span class="plus"></span></summary>
+        <div class="a">All payments are processed through Stripe with international card support, 3D Secure verification, and Stripe Radar fraud monitoring. We never hold user wallets or balances.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 12</span><span class="q">How long are my generated teams stored?</span><span class="plus"></span></summary>
+        <div class="a">Generated teams are retained for the current day only and automatically cleared at midnight in your local time zone. Download or screenshot teams during the match-day window if you want to keep them.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 13</span><span class="q">Does UCT predict match outcomes or fantasy results?</span><span class="plus"></span></summary>
+        <div class="a">No. UCT does not predict match outcomes, player performance, or fantasy points. It is not an AI prediction engine, not a random generator, and not a betting bot. It generates teams based on your configuration.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 14</span><span class="q">Who is PICK2WIN's payment partner?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Stripe</strong> is PICK2WIN's exclusive payment gateway partner. Every coin-pack transaction runs through Stripe with 3D Secure authentication, Stripe Radar fraud detection, and card fingerprint deduplication. PICK2WIN never stores card numbers.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 15</span><span class="q">Where does PICK2WIN's football data come from?</span><span class="plus"></span></summary>
+        <div class="a"><strong>SportMonks</strong> is PICK2WIN's football API partner. Starting XIs, substitute lists, player metadata, fixture timings, and live match status are sourced from SportMonks. PICK2WIN does not maintain its own lineup database.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 16</span><span class="q">What if PICK2WIN shows a player but my fantasy app doesn't?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Always stick to your fantasy app's player list, not PICK2WIN's.</strong> If a player mismatch appears, adjust your final contest entry to match your fantasy app. This can happen rarely if football API data is delayed or incorrect. If you spot a persistent mismatch, email <a href="mailto:support@pick2win.io">support@pick2win.io</a>.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 17</span><span class="q">What is PICK2WIN's primary responsibility?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Transparency.</strong> We are transparent about partners, how UCT works, pricing, account rules, restricted countries, and what we do not control. If we miss something or get something wrong, we acknowledge it.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 18</span><span class="q">How do coin packs work? Will I be charged automatically after buying?</span><span class="plus"></span></summary>
+        <div class="a"><strong>No auto-renewal. Ever.</strong> Every coin-pack purchase is a one-time, user-initiated payment through Stripe Checkout. There is no recurring billing, no subscription, and no background charge. You control every payment.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 19</span><span class="q">Is the captaincy step mandatory in UCT?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Yes.</strong> Substitute and Mandate are optional, but Captaincy is mandatory. You must pick Captain and Vice-Captain choices to continue because captaincy is structurally fundamental to the 20-team workflow.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 20</span><span class="q">Will PICK2WIN's teams work directly in my fantasy app's contest?</span><span class="plus"></span></summary>
+        <div class="a">PICK2WIN is fantasy-app agnostic. It does not try to match DraftKings salary caps, FPL budgets, FanDuel formats, or another app scoring system. UCT produces structured combinations; you adapt them to whichever fantasy app you play on.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 21</span><span class="q">Who is PICK2WIN built for?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Multi-entry fantasy football users</strong> who create strictly 20 teams per match. If you want structured team variations with captain rotation, hedging, and exposure balancing, PICK2WIN is built for you.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 22</span><span class="q">What's the difference between Mandate-YES and Mandate-NO?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Mandate-YES</strong> means the player appears in every one of your 20 teams. <strong>Mandate-NO</strong> means the player appears in none of your 20 teams and cannot be selected as Captain or Vice-Captain. Both are optional.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 23</span><span class="q">Why doesn't PICK2WIN use coins, salary caps, or budgets like other fantasy apps?</span><span class="plus"></span></summary>
+        <div class="a">Every fantasy platform has its own rules. PICK2WIN intentionally does not copy those systems. UCT works from official playing XI and substitutes, applying only football-real position constraints and formation splits. You adapt the output to your contest app.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 24</span><span class="q">Why does PICK2WIN always generate exactly 20 teams? Why not 10 or 50?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Twenty is the minimum count needed to make UCT structurally meaningful.</strong> Smaller counts cannot fulfil proper Captain rotation, Vice-Captain rotation, formation coverage, or wider exposure. Future versions may add 40-team and 60-team modes.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 25</span><span class="q">What's the difference between CVC mode and C &amp; VC mode in captaincy?</span><span class="plus"></span></summary>
+        <div class="a"><strong>CVC mode</strong> lets 2 to 4 players rotate dynamically as both Captain and Vice-Captain. <strong>C &amp; VC mode</strong> separates Captain and Vice-Captain pools with structured count limits. Both modes assign exactly one Captain and one Vice-Captain per team.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 26</span><span class="q">Does PICK2WIN guarantee favourable outcomes, ranking positions, or contest results?</span><span class="plus"></span></summary>
+        <div class="a"><strong>No.</strong> UCT does not guarantee favourable outcomes, ranking positions, or contest success. PICK2WIN is a workflow tool that supports structured team generation and reduces lineup stress. Final contest decisions remain your responsibility.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 27</span><span class="q">What if 3 or 4 matches release lineups at the same time?</span><span class="plus"></span></summary>
+        <div class="a">This is where PICK2WIN saves the most time. Manually, 4 matches x about 60 minutes each creates about 240 minutes of work in a 60-minute window. With PICK2WIN, 4 matches can be configured and generated in about 20 minutes total.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 28</span><span class="q">Do I still need to enter the teams into my fantasy app myself?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Yes.</strong> PICK2WIN does not host contests, auto-submit entries, or integrate directly with contest apps. Once UCT generates teams, you still need to copy or use the exported team file in your fantasy contest app of choice.</div>
+      </details>
+
+      <details class="faq">
+        <summary><span class="idx">/ 29</span><span class="q">What happens to my generated teams after kickoff?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Once a match goes live, the 20 teams generated for that match disappear from your My Teams view.</strong> Download the CSV before kickoff. Once downloaded, the teams are yours forever, but if you do not download before kickoff, there is no recovery or second generation.</div>
+      </details>
+    </div>
+
+    <div class="signup-nudge">
+      <div class="signup-nudge-icon">🎁</div>
+      <div class="signup-nudge-body">
+        <span class="signup-nudge-eyebrow">Still curious? Try UCT free - no card needed</span>
+        <h3>The best way to understand UCT is to <em>use it once.</em></h3>
+        <p>If you have more questions, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> - we reply within 48 hours.</p>
+      </div>
+
+      <div class="signup-nudge-actions" *ngIf="loggedIn$ | async; else guestFaqActions">
+        <a class="signup-nudge-btn" routerLink="/user/profile" style="color: #fff;">Go to profile</a>
+      </div>
+
+      <ng-template #guestFaqActions>
+        <div class="signup-nudge-actions">
+          <button class="signup-nudge-btn" type="button" (click)="openSignup()">Create free account</button>
+          <button class="signup-nudge-btn-ghost" type="button" (click)="openLogin()">Sign in</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

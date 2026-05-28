@@ -6,6 +6,7 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { MyTeamsComponent } from './my-teams/my-teams.component';
 import { TeamsInfoComponent } from './teams-info/teams-info.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FeedbackComponent } from './feedback/feedback.component';
   ],
   imports: [
     CommonModule,
-    UserRoutingModule
+    UserRoutingModule,
+    SharedModule
   ]
 })
 export class UserModule { }

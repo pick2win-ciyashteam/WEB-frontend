@@ -1,0 +1,668 @@
+:host {
+  display: block;
+  --ink: #061624;
+  --ink-2: #0b2032;
+  --paper: #f7fafc;
+  --paper-2: #c8d4df;
+  --paper-3: #8da0b2;
+  --gold: #f4b400;
+  --acid: #d72638;
+  --green: #00d19a;
+  --blue: #5bb0e6;
+  --line: rgba(255, 255, 255, 0.13);
+}
+
+.profile-page {
+  min-height: 100vh;
+  padding: 38px 0 74px;
+  color: var(--paper);
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(244, 180, 0, 0.1), transparent 30%),
+    radial-gradient(circle at 88% 14%, rgba(0, 209, 154, 0.08), transparent 28%),
+    linear-gradient(180deg, #071c2d 0%, #061624 45%, #04111e 100%);
+}
+
+.wrap {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.profile-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.profile-tabs button,
+.profile-edit-btn,
+.profile-download-btn {
+  min-height: 42px;
+  border-radius: 999px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.profile-tabs button {
+  padding: 0 18px;
+  color: var(--paper-2);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.profile-tabs button.active {
+  color: #061624;
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.profile-hero,
+.profile-ledger,
+.coin-lots-wrap,
+.profile-table-wrap,
+.profile-section:not(.active) {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(244, 180, 0, 0.08), transparent 34%),
+    linear-gradient(135deg, rgba(16, 40, 61, 0.94), rgba(5, 18, 31, 0.96));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+.profile-section:not(.active) {
+  padding: 28px;
+}
+
+.profile-hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 28px;
+  border-color: rgba(244, 180, 0, 0.24);
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  color: #061624;
+  background: linear-gradient(135deg, var(--gold), #ffe189);
+  font-size: 28px;
+  font-weight: 950;
+  box-shadow: 0 18px 42px rgba(244, 180, 0, 0.24);
+}
+
+.profile-name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--paper);
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.05;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.profile-verify,
+.profile-ledger-eyebrow,
+.profile-ledger-cell-lbl,
+.coin-lots-sub,
+.profile-table-count,
+th,
+.profile-status-pill {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.profile-verify {
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: var(--green);
+  background: rgba(0, 209, 154, 0.09);
+  border: 1px solid rgba(0, 209, 154, 0.28);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.profile-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: var(--paper-2);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.profile-meta-item b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ic,
+.edit-icon {
+  color: var(--gold);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile-edit-btn,
+.profile-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  color: var(--paper);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.profile-ledger,
+.coin-lots-wrap,
+.profile-table-wrap {
+  margin-top: 24px;
+  padding: 28px;
+}
+
+.profile-ledger-eyebrow {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.profile-ledger-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.profile-ledger-cell {
+  min-width: 0;
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.profile-ledger-cell.total {
+  border-left: 3px solid var(--gold);
+}
+
+.profile-ledger-cell.used {
+  border-left: 3px solid var(--acid);
+}
+
+.profile-ledger-cell.remaining {
+  border-left: 3px solid var(--green);
+}
+
+.profile-ledger-cell-lbl {
+  color: var(--paper-3);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.profile-ledger-cell-num {
+  margin: 8px 0;
+  color: var(--paper);
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.remaining .profile-ledger-cell-num {
+  color: var(--green);
+}
+
+.used .profile-ledger-cell-num {
+  color: #ff5c6d;
+}
+
+.profile-ledger-cell-sub,
+.profile-ledger-foot,
+.profile-table-foot {
+  color: var(--paper-2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.profile-ledger-op {
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  font-size: 30px;
+  font-weight: 950;
+}
+
+.profile-ledger-foot {
+  margin: 18px 0 0;
+}
+
+.profile-ledger-foot b {
+  color: var(--paper);
+}
+
+.coin-lots-head,
+.profile-table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.coin-lots-title,
+.profile-table-title {
+  margin: 0 0 6px;
+  color: var(--paper);
+  font-size: 22px;
+  font-weight: 950;
+}
+
+.coin-lots-sub,
+.profile-table-count {
+  color: var(--paper-3);
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: rgba(3, 16, 28, 0.58);
+}
+
+th,
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+th {
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+td {
+  color: var(--paper-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.col-coins {
+  color: var(--gold);
+  font-weight: 950;
+}
+
+.col-id {
+  color: var(--paper-3);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.profile-status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.profile-status-pill.paid,
+.profile-status-pill.active {
+  color: var(--green);
+  background: rgba(0, 209, 154, 0.09);
+  border: 1px solid rgba(0, 209, 154, 0.28);
+}
+
+.profile-status-pill.used {
+  color: var(--paper-3);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.profile-download-btn {
+  color: #061624;
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.profile-table-foot {
+  margin: 14px 0 0;
+}
+
+.transaction-note {
+  max-width: 880px;
+  margin: 32px auto 0;
+  padding: 22px 28px;
+  border-radius: 14px;
+  color: var(--paper-2);
+  background: rgba(91, 176, 230, 0.06);
+  border: 1px solid rgba(91, 176, 230, 0.2);
+  border-left: 3px solid var(--blue);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.transaction-note b {
+  color: var(--paper);
+}
+
+.transaction-note a {
+  color: var(--gold);
+  font-weight: 800;
+}
+
+.danger-zone {
+  max-width: 880px;
+  margin: 32px auto 0;
+}
+
+.danger-label {
+  margin-bottom: 14px;
+  color: var(--acid);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.danger-card {
+  padding: 26px 28px;
+  border-radius: 14px;
+  background: rgba(215, 38, 56, 0.05);
+  border: 1px solid rgba(215, 38, 56, 0.28);
+  border-left: 3px solid var(--acid);
+}
+
+.danger-card h4 {
+  margin: 0 0 10px;
+  color: var(--paper);
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.danger-card p {
+  margin: 0 0 18px;
+  color: var(--paper-2);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.danger-card b {
+  color: var(--paper);
+}
+
+.danger-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.danger-actions button {
+  padding: 12px 22px;
+  border-radius: 9px;
+  color: var(--acid);
+  background: transparent;
+  border: 1px solid var(--acid);
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.danger-actions button:hover {
+  color: var(--paper);
+  background: var(--acid);
+}
+
+.danger-actions span {
+  color: var(--paper-3);
+  font-size: 12.5px;
+}
+
+@media (max-width: 900px) {
+  .profile-hero,
+  .profile-ledger-row,
+  .coin-lots-head,
+  .profile-table-head {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hero {
+    justify-items: start;
+  }
+
+  .profile-ledger-row {
+    display: grid;
+  }
+
+  .profile-ledger-op {
+    min-height: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-page {
+    padding: 18px 0 44px;
+  }
+
+  .wrap {
+    width: min(100% - 20px, 1120px);
+  }
+
+  .profile-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-bottom: 16px;
+    padding: 5px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .profile-tabs button {
+    min-height: 42px;
+    width: auto;
+    padding: 0 7px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.1;
+  }
+
+  .profile-hero,
+  .profile-ledger,
+  .coin-lots-wrap,
+  .profile-table-wrap {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .profile-hero {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .profile-avatar {
+    width: 72px;
+    height: 72px;
+    font-size: 24px;
+  }
+
+  .profile-name {
+    justify-content: center;
+    font-size: 30px;
+  }
+
+  .profile-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .profile-meta-item {
+    justify-content: center;
+    border-radius: 12px;
+  }
+
+  .profile-edit-btn,
+  .profile-download-btn {
+    width: 100%;
+  }
+
+  .profile-ledger {
+    margin-top: 16px;
+  }
+
+  .profile-ledger-row {
+    gap: 8px;
+  }
+
+  .profile-ledger-op {
+    display: none;
+  }
+
+  .profile-ledger-cell {
+    padding: 16px;
+  }
+
+  .profile-ledger-cell-num {
+    font-size: 38px;
+  }
+
+  .coin-lots-head,
+  .profile-table-head {
+    display: grid;
+    gap: 12px;
+  }
+
+  .table-scroll {
+    overflow: visible;
+    border: 0;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.045);
+  }
+
+  td {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  td:last-child {
+    border-bottom: 0;
+  }
+
+  td::before {
+    flex: 0 0 auto;
+    color: var(--paper-3);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .coin-lots-table td:nth-child(1)::before { content: "Pack"; }
+  .coin-lots-table td:nth-child(2)::before { content: "Purchased"; }
+  .coin-lots-table td:nth-child(3)::before { content: "Coins"; }
+  .coin-lots-table td:nth-child(4)::before { content: "Used"; }
+  .coin-lots-table td:nth-child(5)::before { content: "Remaining"; }
+  .coin-lots-table td:nth-child(6)::before { content: "Expires"; }
+  .coin-lots-table td:nth-child(7)::before { content: "Status"; }
+
+  .profile-table td:nth-child(1)::before { content: "Purchase Date"; }
+  .profile-table td:nth-child(2)::before { content: "Pack"; }
+  .profile-table td:nth-child(3)::before { content: "Coins Added"; }
+  .profile-table td:nth-child(4)::before { content: "Payment ID"; }
+  .profile-table td:nth-child(5)::before { content: "Status"; }
+
+  .transaction-note,
+  .danger-zone {
+    margin-top: 20px;
+  }
+
+  .transaction-note,
+  .danger-card {
+    padding: 16px;
+  }
+
+  .danger-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .danger-actions button {
+    width: 100%;
+  }
+}

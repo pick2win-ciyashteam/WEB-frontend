@@ -49,8 +49,33 @@ export class AuthService {
   }
 
   logout() {
+    const token = this.tokenService.getToken();
+    const logoutOptions = token
+      ? {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          })
+        }
+      : httpOptions;
+
+    this.clearSession();
+
+    this.http.post(API + 'user-auth/logout', {}, logoutOptions).subscribe({
+      next: (res) => {
+        console.log('logout:', res);
+      },
+      error: (err) => {
+        console.log('logout error:', err);
+      }
+    });
+  }
+
+  private clearSession() {
     this.tokenService.clear();
-    localStorage.clear();
+    localStorage.removeItem('user');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('pick2win_user');
     sessionStorage.clear();
     this.loggedInSubject.next(false);
     this.router.navigate(['/']);

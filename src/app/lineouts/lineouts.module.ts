@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LineoutsRoutingModule } from './lineouts-routing.module';
 import { LineupsComponent } from './lineups/lineups.component';
 import { CreateUctComponent } from './create-uct/create-uct.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -13,7 +14,11 @@ import { CreateUctComponent } from './create-uct/create-uct.component';
   ],
   imports: [
     CommonModule,
-    LineoutsRoutingModule
+    LineoutsRoutingModule,
+    SharedModule
+  ],
+  exports: [
+    LineupsComponent
   ]
 })
 export class LineoutsModule { }

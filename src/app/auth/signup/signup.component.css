@@ -127,10 +127,16 @@ small {
 
 .password-wrap button {
   position: absolute;
-  right: 12px;
+  right: 8px;
   top: 8px;
   height: 36px;
-  width: 36px;
+  min-width: 54px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .strength {
@@ -164,6 +170,10 @@ small {
   accent-color: #ff2746;
 }
 
+.terms span {
+  color: #fff;
+}
+
 .btn-block {
   height: 56px;
   border-radius: 999px;
@@ -191,6 +201,11 @@ small {
   color: #ff2746;
   font-weight: 800;
   border-bottom: 1px solid #ff2746;
+}
+
+.alt-action button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .center-step {
