@@ -1,0 +1,179 @@
+<div class="signup-box">
+
+  <div class="signup-logo">
+    <img src="assets/logo.png" alt="Pick2Win">
+  </div>
+
+  <!-- STEP 1 -->
+  <div *ngIf="step === 1">
+    <h2>Create <em>your</em> account.</h2>
+    <p class="sub">One account per user. Verify mobile + email to unlock your <b>first UCT free</b>. 18+ only.</p>
+
+    <div class="verify-progress">
+      <div class="vp-step active">1 <span>Details</span></div>
+      <div class="vp-step">2 <span>Mobile</span></div>
+      <div class="vp-step">3 <span>Email</span></div>
+      <div class="vp-step">4 <span>Done</span></div>
+    </div>
+
+    <form [formGroup]="form">
+
+      <label>Full name <span>*</span></label>
+      <input type="text" formControlName="name" placeholder="Your full name">
+      <small *ngIf="form.get('name')?.touched && form.get('name')?.invalid">Full name is required</small>
+
+      <label>Country of residence <span>*</span></label>
+      <select formControlName="country" (change)="onCountryChange()">
+        <option value="">Select your country</option>
+        <option *ngFor="let c of countries" [value]="c.name">{{ c.name }}</option>
+      </select>
+
+      <label>Date of birth <span>*</span></label>
+      <input type="date" formControlName="dob">
+      <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('required')">
+        Date of birth is required
+        </small>
+
+        <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('underAge')">
+        You must be 18 or older
+       </small>
+
+      <label>Mobile number <span>*</span></label>
+      <div class="phone-row">
+        <select formControlName="dial">
+          <option *ngFor="let c of countries" [value]="c.dial">{{ c.dial }}</option>
+        </select>
+        <input type="tel" formControlName="mobile" placeholder="Mobile number"
+            [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)" >
+      </div>
+       <small *ngIf="form.get('mobile')?.touched && mobileError">
+        {{ mobileError }}
+        </small>
+      <small *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid">Enter valid mobile number</small>
+
+      <label>Email address <span>*</span></label>
+      <input type="email" formControlName="email" placeholder="you@example.com">
+      <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Enter valid email</small>
+
+      <label>Password <span>*</span></label>
+      <div class="password-wrap">
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="At least 8 characters">
+        <button type="button" (click)="showPassword = !showPassword">👁</button>
+      </div>
+
+      <div class="strength">
+        <div [style.width.%]="passwordStrength * 25"></div>
+      </div>
+      <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+        8+ chars, number and symbol required
+      </small>
+
+      <label class="terms">
+        <input type="checkbox" formControlName="terms">
+        <span style="color: #fff;">I confirm I am 18 or older, this is my only PICK2WIN account, and I agree to
+            <a routerLink="/terms" target="_blank">Terms & Conditions</a>,
+            <a routerLink="/policy" target="_blank">Privacy Policy</a>,
+            and
+            <a routerLink="/refund" target="_blank">Refund Policy</a>.
+        </span>
+      </label>
+
+     <button
+  type="button"
+  class="btn-block"
+  [disabled]="loading || form.invalid || !ageValid || !validateMobileByCountry()"
+  (click)="continueStep1()">
+  {{ loading ? 'Creating account...' : 'Continue →' }}
+</button>
+
+      <p class="alt-action">
+        Already have an account?
+        <button type="button" (click)="openLogin()">Sign in</button>
+      </p>
+
+    </form>
+  </div>
+
+  <!-- STEP 2 -->
+  <div *ngIf="step === 2" class="center-step">
+    <h2>Verify <em>mobile.</em></h2>
+    <p class="sub">We sent a 6-digit SMS code to <b>{{ form.value.dial }} {{ form.value.mobile }}</b></p>
+
+    <div class="otp-row">
+  <input
+    *ngFor="let o of mobileOtp; let i = index"
+    [id]="'mobile-otp-' + i"
+    class="otp-cell"
+    type="text"
+    maxlength="1"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    [value]="mobileOtp[i]"
+    (input)="otpInput($event, i, 'mobile')"
+    (keydown)="otpKeydown($event, i, 'mobile')"
+    (paste)="otpPaste($event, 'mobile')"
+  >
+</div>
+
+<button
+  class="btn-block"
+  type="button"
+  [disabled]="loading || !isOtpComplete('mobile')"
+  (click)="verifyMobile()">
+  {{ loading ? 'Verifying...' : 'Verify mobile →' }}
+</button>
+
+    <p class="alt-action"><button type="button" (click)="step = 1">← Change number</button></p>
+  </div>
+
+  <!-- STEP 3 -->
+  <div *ngIf="step === 3" class="center-step">
+    <h2>Verify <em>email.</em></h2>
+    <p class="sub">We sent a 6-digit code to <b>{{ form.value.email }}</b></p>
+
+        <div class="otp-row">
+  <input
+    *ngFor="let o of emailOtp; let i = index"
+    [id]="'email-otp-' + i"
+    class="otp-cell"
+    type="text"
+    maxlength="1"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    [value]="emailOtp[i]"
+    (input)="otpInput($event, i, 'email')"
+    (keydown)="otpKeydown($event, i, 'email')"
+    (paste)="otpPaste($event, 'email')"
+  >
+</div>
+
+<button
+  class="btn-block"
+  type="button"
+  [disabled]="!isOtpComplete('email')"
+  (click)="verifyEmail()">
+  Verify →
+</button>
+
+    <p class="alt-action"><button type="button" (click)="step = 1">← Change email</button></p>
+  </div>
+
+  <!-- STEP 4 -->
+  <div *ngIf="step === 4" class="center-step">
+    <div class="success-circle">✓</div>
+    <h2>You're <em>in.</em></h2>
+    <p class="sub">Mobile and email verified. Your PICK2WIN account is live.</p>
+
+    <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
+<div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
+
+    <div class="free-claim">
+      <div class="free-tag">UNLOCKED · ONE-TIME</div>
+      <h3>Your <em>first match</em> is free.</h3>
+      <p>Run UCT on the next match window of your choice — full 20-team generation, no charge.</p>
+    </div>
+
+    <button class="btn-block" type="button">Go to my dashboard →</button>
+  </div>
+
+</div>

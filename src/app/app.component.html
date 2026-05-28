@@ -1,0 +1,10 @@
+<router-outlet></router-outlet>
+
+<div class="auth-backdrop" *ngIf="authModal.modal$ | async as modal" (click)="closeAuthModal()">
+  <div class="auth-modal animate-auth" (click)="$event.stopPropagation()">
+    <button class="auth-close" (click)="closeAuthModal()">×</button>
+
+    <app-login *ngIf="modal === 'login'"></app-login>
+    <app-signup *ngIf="modal === 'signup'"></app-signup>
+  </div>
+</div>

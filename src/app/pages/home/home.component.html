@@ -1,0 +1,64 @@
+<app-header></app-header>
+
+<section class="launch-card">
+  <div class="launch-card-inner">
+
+    <div class="launch-eyebrow-row">
+      <span class="launch-pulse">
+        <span class="launch-pulse-dot"></span>
+        <span>{{ launchStatus }}</span>
+      </span>
+
+      <span class="launch-date-tag">📅 JUNE 10, 2026 · 09:00 UTC</span>
+    </div>
+
+    <h2 class="launch-headline">
+      PICK2WIN goes <em>live</em> in
+    </h2>
+
+    <p class="launch-sub">
+      The structured fantasy football <b>workflow tool</b> for users who create strictly
+      20 teams per match. Mark your calendar — <b>first match free</b> for every verified
+      account at launch.
+    </p>
+
+    <div class="launch-counter">
+      <div class="launch-unit">
+        <div class="launch-num">{{ days }}</div>
+        <div class="launch-lbl">Days</div>
+      </div>
+
+      <div class="launch-unit">
+        <div class="launch-num">{{ hours }}</div>
+        <div class="launch-lbl">Hours</div>
+      </div>
+
+      <div class="launch-unit">
+        <div class="launch-num">{{ minutes }}</div>
+        <div class="launch-lbl">Minutes</div>
+      </div>
+
+      <div class="launch-unit">
+        <div class="launch-num">{{ seconds }}</div>
+        <div class="launch-lbl">Seconds</div>
+      </div>
+    </div>
+
+    <div class="launch-meta">
+      <span><span class="ic">⚽</span> <b>30 leagues</b> · Premier League · UCL · La Liga · Serie A · Bundesliga +25 more</span>
+      <span><span class="ic">🌍</span> <b>19 markets</b> · UK · EU · USA · CA · AU · NZ</span>
+      <span><span class="ic">🎁</span> <b>Free first match</b> for verified users at launch</span>
+    </div>
+
+    <div class="launch-cta-row">
+      <button type="button" class="launch-cta" (click)="openSignup()">
+        Reserve Free Match at Launch →
+      </button>
+
+      <a routerLink="/about" class="launch-cta-ghost">
+        Learn about PICK2WIN →
+      </a>
+    </div>
+
+  </div>
+</section>

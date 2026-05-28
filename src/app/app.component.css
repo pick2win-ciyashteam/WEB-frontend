@@ -1,0 +1,47 @@
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: rgba(2, 10, 18, 0.72);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.auth-modal {
+  position: relative;
+  width: min(520px, 94vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 22px;
+  background: #051A2A;
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+}
+
+.auth-close {
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  z-index: 5;
+  color: #fff;
+  font-size: 22px;
+  opacity: 0.75;
+}
+
+.animate-auth {
+  animation: modalPop 0.28s ease;
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
