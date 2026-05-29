@@ -60,20 +60,32 @@
           <span class="selection-pill">{{ selectedSubIds.size }} / {{ maxSubs }} selected</span>
         </div>
 
-        <div class="player-grid">
-          <button
-            class="player-card"
-            type="button"
-            *ngFor="let player of allSubstitutes; trackBy: trackPlayer"
-            [class.selected]="selectedSubIds.has(player.id)"
-            (click)="toggleSubstitute(player)">
-            <span class="avatar">{{ player.teamShort }}</span>
-            <span class="player-main">
-              <b>{{ player.player_name }}</b>
-              <small>{{ player.teamShort }} substitute</small>
-            </span>
-            <span class="pos" [class]="positionClass(player)">{{ player.position }}</span>
-          </button>
+        <div class="team-pool-grid">
+          <article class="team-pool">
+            <div class="team-pool-head">
+              <h3><span class="team-color home"></span>{{ d.home_team.name }}</h3>
+              <b>{{ homeSubstitutes.length }} players</b>
+            </div>
+            <button class="player-row" type="button" *ngFor="let player of homeSubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" (click)="toggleSubstitute(player)">
+              <span class="avatar">{{ initials(player) }}</span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }}</small></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
+            </button>
+          </article>
+
+          <article class="team-pool">
+            <div class="team-pool-head">
+              <h3><span class="team-color away"></span>{{ d.away_team.name }}</h3>
+              <b>{{ awaySubstitutes.length }} players</b>
+            </div>
+            <button class="player-row away" type="button" *ngFor="let player of awaySubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" (click)="toggleSubstitute(player)">
+              <span class="avatar">{{ initials(player) }}</span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }}</small></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
+            </button>
+          </article>
         </div>
       </section>
 
@@ -87,20 +99,21 @@
           <span class="selection-pill">YES {{ mandateYesPlayers.length }}/{{ maxMandateYes }} - NO {{ mandateNoPlayers.length }}/{{ maxMandateNo }}</span>
         </div>
 
-        <div class="mandate-list">
-          <article class="mandate-row" *ngFor="let player of availablePool; trackBy: trackPlayer">
-            <div class="player-id">
-              <span class="avatar">{{ player.teamShort }}</span>
-              <div>
-                <b>{{ player.player_name }}</b>
-                <small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small>
-              </div>
+        <div class="team-pool-grid">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeAvailablePool, cls: 'home'}, {name: d.away_team.name, players: awayAvailablePool, cls: 'away'}]">
+            <div class="team-pool-head">
+              <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
+              <b>{{ side.players.length }} players</b>
             </div>
-            <span class="pos" [class]="positionClass(player)">{{ player.position }}</span>
-            <div class="mandate-actions">
-              <button type="button" [class.active]="mandateOf(player) === 'YES'" (click)="setMandate(player, 'YES')">M-YES</button>
-              <button type="button" [class.active]="mandateOf(player) === 'NO'" (click)="setMandate(player, 'NO')">M-NO</button>
-              <button type="button" [class.active]="mandateOf(player) === 'NA'" (click)="setMandate(player, 'NA')">NA</button>
+            <div class="player-row mandate-row" *ngFor="let player of side.players; trackBy: trackPlayer">
+              <span class="avatar">{{ initials(player) }}</span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="mandate-actions">
+                <button type="button" [class.active]="mandateOf(player) === 'YES'" (click)="setMandate(player, 'YES')">YES</button>
+                <button type="button" [disabled]="!!player.is_substitute" [class.active]="mandateOf(player) === 'NO'" (click)="setMandate(player, 'NO')">NO</button>
+                <button type="button" [class.active]="mandateOf(player) === 'NA'" (click)="setMandate(player, 'NA')">NA</button>
+              </span>
             </div>
           </article>
         </div>
@@ -111,25 +124,55 @@
           <div>
             <span class="panel-kicker required">Step 3 - Mandatory</span>
             <h2>Captain &amp; Vice-Captain</h2>
-            <p>Select 2-4 CVC players. They rotate as Captain and Vice-Captain across the 20 generated teams.</p>
+            <p>Choose CVC mode or C &amp; VC matrix. M-NO players are excluded from captaincy.</p>
           </div>
-          <span class="selection-pill">{{ cvcIds.size }} / {{ maxCvc }} selected</span>
+          <span class="selection-pill">{{ captaincyHint() }}</span>
         </div>
 
-        <div class="player-grid">
-          <button
-            class="player-card"
-            type="button"
-            *ngFor="let player of eligibleCvcPlayers; trackBy: trackPlayer"
-            [class.selected]="cvcIds.has(player.id)"
-            (click)="toggleCvc(player)">
-            <span class="avatar">{{ player.teamShort }}</span>
-            <span class="player-main">
-              <b>{{ player.player_name }}</b>
-              <small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small>
-            </span>
-            <span class="pos" [class]="positionClass(player)">{{ player.position }}</span>
+        <div class="mode-toggle">
+          <button type="button" [class.active]="captainMode === 'CVC'" (click)="setCaptainMode('CVC')">CVC Rotation</button>
+          <button type="button" [class.active]="captainMode === 'C_AND_VC'" (click)="setCaptainMode('C_AND_VC')">C &amp; VC Matrix</button>
+        </div>
+
+        <div class="mode-note" *ngIf="captainMode === 'CVC'">
+          Select 2-4 players. They rotate as both Captain and Vice-Captain across the 20 teams.
+        </div>
+        <div class="mode-note" *ngIf="captainMode === 'C_AND_VC'">
+          Valid matrix: 1 Captain x 2-5 VC, 2 Captains x 2-4 VC, 3 Captains x 2-3 VC, or 4 Captains x 2 VC.
+        </div>
+
+        <div class="team-pool-grid" *ngIf="captainMode === 'CVC'">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeAvailablePool, cls: 'home'}, {name: d.away_team.name, players: awayAvailablePool, cls: 'away'}]">
+            <div class="team-pool-head">
+              <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
+              <b>{{ side.players.length }} players</b>
+            </div>
+          <button class="player-row" type="button" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="mandateOf(player) === 'NO'" (click)="toggleCvc(player)">
+            <span class="avatar">{{ initials(player) }}</span>
+            <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
+            <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+            <span class="row-action">{{ cvcIds.has(player.id) ? 'CVC' : '+' }}</span>
           </button>
+          </article>
+        </div>
+
+        <div class="captain-matrix" *ngIf="captainMode === 'C_AND_VC'">
+          <div>
+            <h3>Captain Pool <span>{{ captainIds.size }}/{{ maxCaptains }}</span></h3>
+            <button class="player-card" type="button" *ngFor="let player of eligibleCvcPlayers; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id)" [class.muted]="viceCaptainIds.has(player.id)" (click)="toggleCaptain(player)">
+              <span class="avatar">{{ player.teamShort }}</span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+            </button>
+          </div>
+          <div>
+            <h3>Vice-Captain Pool <span>{{ viceCaptainIds.size }}/{{ maxViceCaptains }}</span></h3>
+            <button class="player-card" type="button" *ngFor="let player of eligibleCvcPlayers; trackBy: trackPlayer" [class.selected]="viceCaptainIds.has(player.id)" [class.muted]="captainIds.has(player.id)" (click)="toggleViceCaptain(player)">
+              <span class="avatar">{{ player.teamShort }}</span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -159,9 +202,9 @@
             <p>Excluded from all generated teams.</p>
           </div>
           <div class="review-card">
-            <span>CVC Players</span>
-            <b>{{ cvcIds.size }}</b>
-            <p>Captain and Vice-Captain rotation pool.</p>
+            <span>Captaincy</span>
+            <b>{{ captainMode === 'CVC' ? cvcIds.size : captainIds.size + viceCaptainIds.size }}</b>
+            <p>{{ captainMode === 'CVC' ? 'CVC rotation pool.' : 'C & VC matrix pool.' }}</p>
           </div>
         </div>
 

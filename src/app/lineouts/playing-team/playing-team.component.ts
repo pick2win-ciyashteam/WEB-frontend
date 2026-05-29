@@ -144,6 +144,16 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
     return player.logo || 'assets/logo.png';
   }
 
+  initials(player: MatchPlayer): string {
+    return player.player_name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join('')
+      .toUpperCase() || String(player.position || '').slice(0, 2).toUpperCase();
+  }
+
   trackPlayer(_: number, player: MatchPlayer): number {
     return player.id;
   }

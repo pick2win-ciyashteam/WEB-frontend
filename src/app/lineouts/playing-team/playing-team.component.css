@@ -214,16 +214,18 @@
 }
 
 .team-panel {
-  padding: 22px;
-  border-radius: 20px;
+  overflow: hidden;
+  padding: 0;
+  border-radius: 14px;
 }
 
 .team-head {
   display: flex;
   gap: 14px;
   align-items: center;
-  padding-bottom: 18px;
+  padding: 18px;
   border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(11, 60, 93, .9), rgba(9, 31, 48, .86));
 }
 
 .team-head img {
@@ -258,8 +260,11 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  margin: 22px 0 12px;
+  margin: 0;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
   color: var(--pitch-2);
+  background: rgba(0, 15, 30, .24);
 }
 
 .section-title.substitute {
@@ -272,7 +277,7 @@
 
 .players-list {
   display: grid;
-  gap: 9px;
+  gap: 0;
 }
 
 .player-card {
@@ -280,24 +285,33 @@
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 12px;
   align-items: center;
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: rgba(0, 15, 30, 0.34);
+  padding: 13px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: rgba(0, 15, 30, 0.22);
 }
 
 .substitute-card {
   background: rgba(244, 180, 0, 0.045);
 }
 
+.player-avatar,
 .player-card img {
   width: 42px;
   height: 42px;
-  object-fit: contain;
-  padding: 5px;
-  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--paper);
+  background: #6cabdd;
+  font-family: var(--f-display);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.player-avatar.away {
+  background: #ef0107;
 }
 
 .player-card strong {
@@ -316,7 +330,7 @@
   font-size: 12px;
 }
 
-.player-card b {
+.player-card .pos {
   min-width: 46px;
   padding: 5px 8px;
   border-radius: 999px;
@@ -326,10 +340,10 @@
   text-align: center;
 }
 
-.player-card b.gk { background: #fbbf24; }
-.player-card b.def { background: #60a5fa; }
-.player-card b.mid { background: #34d399; }
-.player-card b.fwd { background: #fb7185; }
+.player-card .pos.gk { background: #fbbf24; }
+.player-card .pos.def { background: #60a5fa; }
+.player-card .pos.mid { background: #34d399; }
+.player-card .pos.fwd { background: #fb7185; }
 
 .state-card {
   max-width: 620px;

@@ -235,10 +235,108 @@ h1 em,
 }
 
 .player-grid,
+.team-pool-grid,
 .review-grid,
 .generated-grid {
   display: grid;
   gap: 12px;
+}
+
+.team-pool-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 18px;
+}
+
+.team-pool {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(0, 15, 30, .34);
+}
+
+.team-pool-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(11, 60, 93, .9), rgba(9, 31, 48, .86));
+}
+
+.team-pool-head h3 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-size: 20px;
+  line-height: 1.1;
+}
+
+.team-pool-head b {
+  flex: none;
+  color: var(--paper-2);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.team-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: #6cabdd;
+}
+
+.team-color.away {
+  background: #ef0107;
+}
+
+.player-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: 11px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--paper);
+  background: rgba(0, 15, 30, .22);
+  text-align: left;
+  cursor: pointer;
+}
+
+.player-row:last-child {
+  border-bottom: 0;
+}
+
+.player-row.selected {
+  background: rgba(215, 38, 56, .12);
+}
+
+.player-row:disabled {
+  opacity: .48;
+  cursor: not-allowed;
+}
+
+.row-action {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid rgba(91, 176, 230, .42);
+  border-radius: 7px;
+  color: var(--paper);
+  background: rgba(91, 176, 230, .18);
+  font-weight: 900;
 }
 
 .player-grid {
@@ -268,6 +366,10 @@ h1 em,
 .player-card.selected {
   border-color: rgba(244, 180, 0, .46);
   background: rgba(244, 180, 0, .08);
+}
+
+.player-card.muted {
+  opacity: .52;
 }
 
 .avatar {
@@ -346,6 +448,75 @@ h1 em,
 .mandate-actions button.active {
   color: #071421;
   background: var(--gold);
+}
+
+.mandate-actions button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.mode-toggle {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .04);
+}
+
+.mode-toggle button {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--paper-2);
+  background: transparent;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.mode-toggle button.active {
+  color: #071421;
+  background: var(--gold);
+}
+
+.mode-note {
+  margin: 0 0 16px;
+  padding: 13px 16px;
+  border: 1px solid rgba(91, 176, 230, .25);
+  border-radius: 12px;
+  color: var(--paper-2);
+  background: rgba(91, 176, 230, .07);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.captain-matrix {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.captain-matrix h3 {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 12px;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-size: 20px;
+}
+
+.captain-matrix h3 span {
+  color: var(--gold);
+  font-family: var(--f-mono);
+  font-size: 12px;
+}
+
+.captain-matrix .player-card {
+  width: 100%;
+  margin-bottom: 8px;
 }
 
 .review-grid {
@@ -478,6 +649,14 @@ h1 em,
   .mandate-actions {
     flex-wrap: wrap;
   }
+
+  .captain-matrix {
+    grid-template-columns: 1fr;
+  }
+
+  .team-pool-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -493,6 +672,17 @@ h1 em,
     grid-template-columns: auto minmax(0, 1fr);
   }
 
+  .player-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding: 12px;
+  }
+
+  .player-row .row-action,
+  .player-row .mandate-actions {
+    grid-column: 2 / -1;
+    justify-self: start;
+  }
+
   .player-card .pos {
     grid-column: 2;
     justify-self: start;
@@ -500,5 +690,10 @@ h1 em,
 
   .flow-actions {
     display: grid;
+  }
+
+  .mode-toggle {
+    display: grid;
+    border-radius: 16px;
   }
 }

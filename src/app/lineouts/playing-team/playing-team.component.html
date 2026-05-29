@@ -79,12 +79,12 @@
           </div>
           <div class="players-list">
             <div class="player-card" *ngFor="let player of d.home_team.playing_xi; trackBy: trackPlayer">
-              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <span class="player-avatar">{{ initials(player) }}</span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Starting player</span>
               </div>
-              <b [class]="positionClass(player)">{{ player.position }}</b>
+              <b class="pos {{ positionClass(player) }}">{{ player.position }}</b>
             </div>
           </div>
 
@@ -94,12 +94,12 @@
           </div>
           <div class="players-list substitute-list">
             <div class="player-card substitute-card" *ngFor="let player of d.home_team.substitutes; trackBy: trackPlayer">
-              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <span class="player-avatar">{{ initials(player) }}</span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Substitute player</span>
               </div>
-              <b [class]="positionClass(player)">{{ player.position }}</b>
+              <b class="pos {{ positionClass(player) }}">{{ player.position }}</b>
             </div>
           </div>
         </article>
@@ -120,12 +120,12 @@
           </div>
           <div class="players-list">
             <div class="player-card" *ngFor="let player of d.away_team.playing_xi; trackBy: trackPlayer">
-              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <span class="player-avatar away">{{ initials(player) }}</span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Starting player</span>
               </div>
-              <b [class]="positionClass(player)">{{ player.position }}</b>
+              <b class="pos {{ positionClass(player) }}">{{ player.position }}</b>
             </div>
           </div>
 
@@ -135,12 +135,12 @@
           </div>
           <div class="players-list substitute-list">
             <div class="player-card substitute-card" *ngFor="let player of d.away_team.substitutes; trackBy: trackPlayer">
-              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <span class="player-avatar away">{{ initials(player) }}</span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Substitute player</span>
               </div>
-              <b [class]="positionClass(player)">{{ player.position }}</b>
+              <b class="pos {{ positionClass(player) }}">{{ player.position }}</b>
             </div>
           </div>
         </article>

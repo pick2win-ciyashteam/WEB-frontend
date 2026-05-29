@@ -5,6 +5,7 @@ import { MatchDetail, MatchPlayer } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 
 type Mandate = 'YES' | 'NO' | 'NA';
+type CaptainMode = 'CVC' | 'C_AND_VC';
 
 interface UctPlayer extends MatchPlayer {
   teamSide: 'home' | 'away';
@@ -36,7 +37,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   selectedSubIds = new Set<number>();
   mandates = new Map<number, Mandate>();
+  captainMode: CaptainMode = 'CVC';
   cvcIds = new Set<number>();
+  captainIds = new Set<number>();
+  viceCaptainIds = new Set<number>();
   generatedTeams: GeneratedTeam[] = [];
 
   readonly maxSubs = 3;
@@ -44,6 +48,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   readonly maxMandateNo = 2;
   readonly maxCvc = 4;
   readonly minCvc = 2;
+  readonly maxCaptains = 4;
+  readonly maxViceCaptains = 5;
 
   constructor(
     private api: ApiService,
@@ -101,8 +107,24 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.allSubstitutes.filter(player => this.selectedSubIds.has(player.id));
   }
 
+  get homeSubstitutes(): UctPlayer[] {
+    return this.allSubstitutes.filter(player => player.teamSide === 'home');
+  }
+
+  get awaySubstitutes(): UctPlayer[] {
+    return this.allSubstitutes.filter(player => player.teamSide === 'away');
+  }
+
   get availablePool(): UctPlayer[] {
     return [...this.startingPlayers, ...this.selectedSubstitutes];
+  }
+
+  get homeAvailablePool(): UctPlayer[] {
+    return this.availablePool.filter(player => player.teamSide === 'home');
+  }
+
+  get awayAvailablePool(): UctPlayer[] {
+    return this.availablePool.filter(player => player.teamSide === 'away');
   }
 
   get mandateYesPlayers(): UctPlayer[] {
@@ -117,12 +139,24 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.availablePool.filter(player => this.cvcIds.has(player.id));
   }
 
+  get captainPlayers(): UctPlayer[] {
+    return this.availablePool.filter(player => this.captainIds.has(player.id));
+  }
+
+  get viceCaptainPlayers(): UctPlayer[] {
+    return this.availablePool.filter(player => this.viceCaptainIds.has(player.id));
+  }
+
   get eligibleCvcPlayers(): UctPlayer[] {
     return this.availablePool.filter(player => this.mandates.get(player.id) !== 'NO');
   }
 
   get canReview(): boolean {
-    return this.cvcIds.size >= this.minCvc && this.cvcIds.size <= this.maxCvc;
+    if (this.captainMode === 'CVC') {
+      return this.cvcIds.size >= this.minCvc && this.cvcIds.size <= this.maxCvc;
+    }
+
+    return this.isCandVcMatrixValid();
   }
 
   get canGenerate(): boolean {
@@ -148,7 +182,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   setStep(step: number): void {
-    if (step <= this.step || step <= 4) {
+    if (step <= this.step) {
       this.step = step;
     }
   }
@@ -158,6 +192,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.selectedSubIds.delete(player.id);
       this.mandates.delete(player.id);
       this.cvcIds.delete(player.id);
+      this.captainIds.delete(player.id);
+      this.viceCaptainIds.delete(player.id);
       return;
     }
 
@@ -169,6 +205,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   setMandate(player: UctPlayer, value: Mandate): void {
+    if (player.is_substitute && value === 'NO') {
+      return;
+    }
+
     const current = this.mandates.get(player.id) || 'NA';
 
     if (current === value || value === 'NA') {
@@ -188,6 +228,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (value === 'NO') {
       this.cvcIds.delete(player.id);
+      this.captainIds.delete(player.id);
+      this.viceCaptainIds.delete(player.id);
     }
   }
 
@@ -212,6 +254,62 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.cvcIds.add(player.id);
   }
 
+  setCaptainMode(mode: CaptainMode): void {
+    this.captainMode = mode;
+  }
+
+  toggleCaptain(player: UctPlayer): void {
+    if (this.mandates.get(player.id) === 'NO') return;
+
+    if (this.captainIds.has(player.id)) {
+      this.captainIds.delete(player.id);
+      return;
+    }
+
+    if (this.captainIds.size >= this.maxCaptains) return;
+
+    this.captainIds.add(player.id);
+    this.viceCaptainIds.delete(player.id);
+  }
+
+  toggleViceCaptain(player: UctPlayer): void {
+    if (this.mandates.get(player.id) === 'NO') return;
+
+    if (this.viceCaptainIds.has(player.id)) {
+      this.viceCaptainIds.delete(player.id);
+      return;
+    }
+
+    if (this.viceCaptainIds.size >= this.maxViceCaptains) return;
+
+    this.viceCaptainIds.add(player.id);
+    this.captainIds.delete(player.id);
+  }
+
+  isCandVcMatrixValid(): boolean {
+    const captainCount = this.captainIds.size;
+    const viceCount = this.viceCaptainIds.size;
+
+    if (captainCount === 1) return viceCount >= 2 && viceCount <= 5;
+    if (captainCount === 2) return viceCount >= 2 && viceCount <= 4;
+    if (captainCount === 3) return viceCount >= 2 && viceCount <= 3;
+    if (captainCount === 4) return viceCount === 2;
+
+    return false;
+  }
+
+  captaincyHint(): string {
+    if (this.captainMode === 'CVC') {
+      return this.canReview ? 'CVC pool ready.' : 'Select 2-4 CVC players to continue.';
+    }
+
+    if (this.canReview) {
+      return 'C & VC matrix ready.';
+    }
+
+    return 'Valid matrix: 1C x 2-5VC, 2C x 2-4VC, 3C x 2-3VC, or 4C x 2VC.';
+  }
+
   generateTeams(): void {
     if (!this.canGenerate) {
       return;
@@ -224,15 +322,21 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       const split = splits[Math.floor(i / 5)];
       const [homeCount] = split.split('-').map(Number);
       const players = this.buildTeam(i, homeCount);
-      const captain = this.cvcPlayers[i % this.cvcPlayers.length] || players[0];
-      const viceCaptain = this.cvcPlayers[(i + 1) % this.cvcPlayers.length] || players[1] || players[0];
+      const captainPool = this.captainMode === 'CVC' ? this.cvcPlayers : this.captainPlayers;
+      const vicePool = this.captainMode === 'CVC' ? this.cvcPlayers : this.viceCaptainPlayers;
+      const captain = captainPool[i % captainPool.length] || players[0];
+      const preferredVice = vicePool[(i + 1) % vicePool.length] || players[1] || players[0];
+      const viceCaptain = preferredVice.id === captain.id
+        ? (vicePool.find(player => player.id !== captain.id) || players.find(player => player.id !== captain.id) || captain)
+        : preferredVice;
+      const finalPlayers = this.ensureCaptaincyPlayers(players, captain, viceCaptain);
 
       teams.push({
         index: i + 1,
         split,
-        players,
+        players: finalPlayers,
         captain,
-        viceCaptain: viceCaptain.id === captain.id ? (players.find(player => player.id !== captain.id) || captain) : viceCaptain
+        viceCaptain
       });
     }
 
@@ -242,6 +346,16 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   positionClass(player: UctPlayer): string {
     return String(player.position || '').toLowerCase();
+  }
+
+  initials(player: UctPlayer): string {
+    return player.player_name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join('')
+      .toUpperCase() || player.teamShort.slice(0, 2).toUpperCase();
   }
 
   trackPlayer(_: number, player: UctPlayer): number {
@@ -306,6 +420,33 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       const player = pool.find(item => !selectedIds.has(item.id));
       if (!player) return;
       this.addUnique(team, selectedIds, player);
+    }
+  }
+
+  private ensureCaptaincyPlayers(players: UctPlayer[], captain: UctPlayer, viceCaptain: UctPlayer): UctPlayer[] {
+    const finalPlayers = [...players];
+    this.forcePlayerIntoTeam(finalPlayers, captain);
+    this.forcePlayerIntoTeam(finalPlayers, viceCaptain);
+    return finalPlayers;
+  }
+
+  private forcePlayerIntoTeam(players: UctPlayer[], requiredPlayer: UctPlayer): void {
+    if (players.some(player => player.id === requiredPlayer.id)) {
+      return;
+    }
+
+    const protectedIds = new Set([
+      ...this.mandateYesPlayers.map(player => player.id),
+      ...this.mandateNoPlayers.map(player => player.id)
+    ]);
+    let replaceIndex = players.findIndex(player => !protectedIds.has(player.id) && player.teamSide === requiredPlayer.teamSide && player.position === requiredPlayer.position);
+
+    if (replaceIndex < 0) {
+      replaceIndex = players.findIndex(player => !protectedIds.has(player.id));
+    }
+
+    if (replaceIndex >= 0) {
+      players[replaceIndex] = requiredPlayer;
     }
   }
 
