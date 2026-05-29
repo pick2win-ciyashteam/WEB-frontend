@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Banner } from 'src/app/core/interfaces/content';
+import { ApiService } from 'src/app/core/services/api.service';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 
 @Component({
@@ -15,26 +17,38 @@ export class HomeComponent implements OnInit, OnDestroy {
   minutes = '00';
   seconds = '00';
   currentBanner = 0;
+  banners: Banner[] = [];
+  bannersLoading = true;
+  showSplash = true;
+  showLaunchModal = false;
 
   private timer: any;
   private bannerTimer: any;
+  private splashTimer: any;
   private launchDate = new Date('2026-06-10T09:00:00Z').getTime();
 
-  constructor(private authModal: AuthModalService) {}
+  constructor(
+    private authModal: AuthModalService,
+    private api: ApiService
+  ) {}
 
-   openSignup() {
+  openSignup() {
+    this.showLaunchModal = false;
     this.authModal.open('signup');
   }
 
   ngOnInit(): void {
     this.updateCountdown();
+    this.showLaunchModal = this.shouldShowLaunchModal();
+    this.loadBanners();
     this.timer = setInterval(() => this.updateCountdown(), 1000);
-    this.bannerTimer = setInterval(() => this.nextBanner(), 5000);
+    this.splashTimer = setTimeout(() => this.closeSplash(), 2200);
   }
 
   ngOnDestroy(): void {
     clearInterval(this.timer);
     clearInterval(this.bannerTimer);
+    clearTimeout(this.splashTimer);
   }
 
   showBanner(index: number): void {
@@ -42,7 +56,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   nextBanner(): void {
-    this.currentBanner = (this.currentBanner + 1) % 8;
+    if (!this.banners.length) {
+      return;
+    }
+
+    this.currentBanner = (this.currentBanner + 1) % this.banners.length;
+  }
+
+  openBannerLink(banner: Banner): void {
+    if (banner.link) {
+      window.open(banner.link, '_blank', 'noopener');
+    }
+  }
+
+  trackByBannerId(_: number, banner: Banner): number {
+    return banner.id;
+  }
+
+  closeSplash(): void {
+    this.showSplash = false;
+    clearTimeout(this.splashTimer);
+  }
+
+  closeLaunchModal(): void {
+    this.showLaunchModal = false;
   }
 
   updateCountdown(): void {
@@ -52,6 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (diff <= 0) {
       this.launchStatus = 'LIVE NOW';
       this.days = this.hours = this.minutes = this.seconds = '00';
+      this.showLaunchModal = false;
       clearInterval(this.timer);
       return;
     }
@@ -60,5 +98,35 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
     this.minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
     this.seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+  }
+
+  private loadBanners(): void {
+    this.bannersLoading = true;
+
+    this.api.getBanners().subscribe({
+      next: (res) => {
+        console.log('banners',res)
+        this.banners = res?.success && Array.isArray(res.data) ? res.data : [];
+        this.currentBanner = 0;
+        this.bannersLoading = false;
+        this.startBannerTimer();
+      },
+      error: () => {
+        this.banners = [];
+        this.bannersLoading = false;
+      }
+    });
+  }
+
+  private startBannerTimer(): void {
+    clearInterval(this.bannerTimer);
+
+    if (this.banners.length > 1) {
+      this.bannerTimer = setInterval(() => this.nextBanner(), 5000);
+    }
+  }
+
+  private shouldShowLaunchModal(): boolean {
+    return Date.now() < this.launchDate;
   }
 }

@@ -9,18 +9,18 @@
     </div>
 
     <section class="profile-section active" *ngIf="activeTab === 'profile'">
-      <div class="profile-hero">
-        <div class="profile-avatar">JD</div>
+      <div class="profile-hero" *ngIf="profile$ | async as profile; else profileLoading">
+        <div class="profile-avatar">{{ initials(profile) }}</div>
         <div class="profile-info-row">
           <h3 class="profile-name">
-            John Doe
-            <span class="profile-verify">Dual Verified</span>
+            {{ profile.fullname }}
+            <span class="profile-verify">{{ verifyLabel(profile) }}</span>
           </h3>
           <div class="profile-meta">
-            <span class="profile-meta-item"><span class="ic">Email</span> <b>john.doe@example.com</b></span>
-            <span class="profile-meta-item"><span class="ic">Phone</span> <b>+44 *** *** 4827</b></span>
-            <span class="profile-meta-item"><span class="ic">Region</span> <b>United Kingdom</b></span>
-            <span class="profile-meta-item"><span class="ic">Since</span> Member since <b>Jun 12, 2026</b></span>
+            <span class="profile-meta-item"><span class="ic">Email</span> <b>{{ profile.email }}</b></span>
+            <span class="profile-meta-item"><span class="ic">Phone</span> <b>{{ maskedMobile(profile) }}</b></span>
+            <span class="profile-meta-item"><span class="ic">Region</span> <b>{{ profile.country }}</b></span>
+            <span class="profile-meta-item"><span class="ic">Since</span> Member since <b>{{ memberSince(profile) }}</b></span>
           </div>
         </div>
         <button class="profile-edit-btn" type="button">
@@ -28,6 +28,17 @@
           Edit Account
         </button>
       </div>
+
+      <ng-template #profileLoading>
+        <div class="profile-hero">
+          <div class="profile-info-row">
+            <h3 class="profile-name">{{ (loading$ | async) ? 'Loading profile...' : 'Profile unavailable' }}</h3>
+            <div class="profile-meta">
+              <span class="profile-meta-item"><b>{{ (error$ | async) || 'Please try again later.' }}</b></span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
 
       <div class="profile-ledger">
         <div class="profile-ledger-head">

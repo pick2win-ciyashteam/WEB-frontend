@@ -24,20 +24,21 @@
       <small *ngIf="form.get('name')?.touched && form.get('name')?.invalid">Full name is required</small>
 
       <label>Country of residence <span>*</span></label>
-      <select formControlName="country" (change)="onCountryChange()">
-        <option value="">Select your country</option>
-        <option *ngFor="let c of countries" [value]="c.name">{{ c.name }}</option>
+      <select formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
+        <option value="">{{ countriesLoading ? 'Loading countries...' : 'Select your country' }}</option>
+        <option *ngFor="let c of countries" [value]="c.name">{{ c.flag }} {{ c.name }}</option>
       </select>
 
       <label>Date of birth <span>*</span></label>
       <input type="date" formControlName="dob">
       <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('required')">Date of birth is required</small>
-      <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('underAge')">You must be 18 or older</small>
+      <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('underAge')">You must be +18 or older</small>
 
       <label>Mobile number <span>*</span></label>
       <div class="phone-row">
         <select formControlName="dial">
-          <option *ngFor="let c of countries" [value]="c.dial">{{ c.dial }}</option>
+          <option value="">Code</option>
+          <option *ngFor="let c of countries" [value]="c.dial_code">{{ c.flag }} {{ c.dial_code }}</option>
         </select>
         <input type="tel" formControlName="mobile" placeholder="Mobile number" [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)">
       </div>
@@ -109,7 +110,7 @@
     </div>
 
     <button class="btn-block" type="button" [disabled]="loading || !isOtpComplete('mobile')" (click)="verifyMobile()">
-      {{ loading ? 'Verifying...' : 'Verify mobile ->' }}
+      {{ loading ? 'Verifying...' : 'Verify ->' }}
     </button>
 
     <p class="alt-action">
@@ -144,7 +145,7 @@
     </div>
 
     <button class="btn-block" type="button" [disabled]="loading || !isOtpComplete('email')" (click)="verifyEmail()">
-      {{ loading ? 'Verifying...' : 'Verify email ->' }}
+      {{ loading ? 'Verifying...' : 'Verify ->' }}
     </button>
 
     <p class="alt-action">
@@ -170,7 +171,7 @@
       <p>Run UCT on the next match window of your choice - full 20-team generation, no charge.</p>
     </div>
 
-    <button class="btn-block" type="button" (click)="openLogin()">Sign in now -></button>
+    <button class="btn-block" type="button" (click)="openLogin()">SignIn now -></button>
   </div>
 
 </div>

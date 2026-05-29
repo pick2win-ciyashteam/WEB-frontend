@@ -10,7 +10,13 @@
           <span>coins</span>
         </div>
 
-        <ng-container *ngIf="visibleMatches.length; else noMatches">
+        <div class="my-teams-empty" *ngIf="loadingMatches">
+          <div class="empty-icon">...</div>
+          <h3>Loading matches</h3>
+          <p>Fetching latest series and match data.</p>
+        </div>
+
+        <ng-container *ngIf="!loadingMatches && visibleMatches.length; else noMatches">
           <div class="today-section" *ngIf="todayMatches.length">
             <div class="list-head">
               <div>
@@ -29,10 +35,12 @@
                 <div class="match-main">
                   <div class="match-league">{{ match.league }} - {{ match.country }}</div>
                   <div class="match-teams">
-                    <span class="team-box" [style.background]="match.home.color"></span>
+                    <img class="team-logo" *ngIf="match.home.logo; else homeColorBox" [src]="match.home.logo" [alt]="match.home.name">
+                    <ng-template #homeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
                     <strong>{{ match.home.code }}</strong>
                     <small>vs</small>
-                    <span class="team-box" [style.background]="match.away.color"></span>
+                    <img class="team-logo" *ngIf="match.away.logo; else awayColorBox" [src]="match.away.logo" [alt]="match.away.name">
+                    <ng-template #awayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
                     <strong>{{ match.away.code }}</strong>
                   </div>
                   <div class="match-time">Today - {{ formatKickoff(match) }} - {{ match.venue }}</div>
@@ -64,10 +72,12 @@
                   <div class="match-main">
                     <div class="match-league">{{ match.league }} - {{ match.country }}</div>
                     <div class="match-teams">
-                      <span class="team-box" [style.background]="match.home.color"></span>
+                      <img class="team-logo" *ngIf="match.home.logo; else upcomingHomeColorBox" [src]="match.home.logo" [alt]="match.home.name">
+                      <ng-template #upcomingHomeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
                       <strong>{{ match.home.code }}</strong>
                       <small>vs</small>
-                      <span class="team-box" [style.background]="match.away.color"></span>
+                      <img class="team-logo" *ngIf="match.away.logo; else upcomingAwayColorBox" [src]="match.away.logo" [alt]="match.away.name">
+                      <ng-template #upcomingAwayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
                       <strong>{{ match.away.code }}</strong>
                     </div>
                     <div class="match-time">{{ dateStamp(match) }} - {{ formatKickoff(match) }} - Kicks off soon</div>
@@ -108,10 +118,10 @@
   </ng-template>
 
   <ng-template #noMatches>
-    <div class="my-teams-empty">
+    <div class="my-teams-empty" *ngIf="!loadingMatches">
       <div class="empty-icon">⚽</div>
       <h3>No matches available</h3>
-      <p>No upcoming matches in our coverage right now. Check back soon - new fixtures load 60 minutes before kickoff.</p>
+      <p>{{ matchesError || 'No upcoming matches in our coverage right now. Check back soon - new fixtures load 60 minutes before kickoff.' }}</p>
     </div>
   </ng-template>
 </main>

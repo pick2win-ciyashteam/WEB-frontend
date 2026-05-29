@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
+import { ApiDataResponse, ApiListResponse, Banner, Country, Series, SubscriptionPlan, UserProfile } from '../interfaces/content';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +30,28 @@ export class ApiService {
     return this.http.post(`${this.BASE}/user-auth/resend-otp`, data);
   }
 
-    getSeries(): Observable<any> {
-    return this.http.get(`${this.BASE}/series/available`);
+  getProfile(): Observable<ApiDataResponse<UserProfile>> {
+    return this.http.get<ApiDataResponse<UserProfile>>(`${this.BASE}/user-auth/profile`);
   }
 
-  getaSeries(): Observable<any> {
-    return this.http.get(`${this.BASE}/series/active`);
+  getCountries(): Observable<ApiListResponse<Country>> {
+    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/countries/get-all`);
+  }
+
+  getCountryByName(name: string): Observable<ApiDataResponse<Country>> {
+    return this.http.get<ApiDataResponse<Country>>(`${this.BASE}/countries/${encodeURIComponent(name)}`);
+  }
+
+  getSubscriptionPlans(): Observable<ApiListResponse<SubscriptionPlan>> {
+    return this.http.get<ApiListResponse<SubscriptionPlan>>(`${this.BASE}/plans`);
+  }
+
+  getBanners(): Observable<ApiListResponse<Banner>> {
+    return this.http.get<ApiListResponse<Banner>>(`${this.BASE}/banner`);
+  }
+
+  getSeriesMatches(): Observable<ApiListResponse<Series>> {
+    return this.http.get<ApiListResponse<Series>>(`${this.BASE}/series`);
   }
 
   getSeriesById(id: number): Observable<any> {

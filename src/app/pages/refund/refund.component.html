@@ -1,125 +1,192 @@
-<app-header></app-header>
-
-<main class="legal-page">
+﻿<app-header></app-header>
+<main class="legal-document-page" id="top">
   <section class="legal-hero">
-    <span class="legal-eyebrow">Legal - Policy 3 of 3</span>
-    <h1>Subscription <em>&amp; Refund.</em></h1>
-    <p>PICK2WIN's prepaid coin model, refund rules, technical failure exceptions, chargeback abuse policy, and account deletion coin-balance rules.</p>
-    <div class="legal-meta">
-      <span>Version <b>1.2</b></span>
-      <span>Effective <b>10 June 2026</b></span>
-      <span>Generally non-refundable - <b>prepaid coin model</b></span>
+    <div class="wrap">
+      <div class="hero-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">payments</span> LEGAL · <strong>REFUND DOCUMENT</strong></div>
+      <h1>Refund <em>Policy.</em></h1>
+      <p class="hero-lead">PICK2WIN's prepaid coin model, refund rules, technical failure exceptions, chargeback abuse policy, and account deletion coin-balance rules.</p>
+      <div class="hero-meta">
+        <span>Version <strong>1.0</strong></span>
+        <span>Effective <strong>10 June 2026</strong></span>
+        <span>Jurisdiction <strong>India · Global</strong></span>
+      </div>
     </div>
   </section>
-
-  <section class="draft-notice">
-    <div class="notice-mark">!</div>
-    <div>
-      <h3>Draft v1.0 - pending legal review before publication</h3>
-      <p>This refund policy reflects PICK2WIN's intended prepaid coin model and should be reviewed by qualified legal counsel before final publication.</p>
-    </div>
-  </section>
-
-  <!-- <nav class="legal-tabs">
-    <a routerLink="/terms"><span>01</span> Terms &amp; Conditions</a>
-    <a routerLink="/policy"><span>02</span> Privacy Policy</a>
-    <a routerLink="/refund" class="active"><span>03</span> Subscription &amp; Refund</a>
-  </nav> -->
-
-  <div class="legal-layout">
-    <article class="policy-card">
-      <header class="policy-head">
-        <span class="policy-num">Policy 3 of 3 - Subscription &amp; Refund</span>
-        <h2>Subscription <em>&amp; Refund.</em></h2>
+  <section class="wrap legal-shell">
+    <aside class="legal-sidebar" aria-label="Legal pages">
+      <div class="sidebar-title">3 Policies</div>
+      <nav class="sidebar-nav">
+        <a routerLink="/terms"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">contract</span><span class="sidebar-nav-label">Terms &amp; Conditions<br><span class="sidebar-nav-num">POLICY 1 OF 3</span></span></a>
+        <a routerLink="/policy"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">lock</span><span class="sidebar-nav-label">Privacy Policy<br><span class="sidebar-nav-num">POLICY 2 OF 3</span></span></a>
+        <a routerLink="/refund" class="active"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">payments</span><span class="sidebar-nav-label">Refund Policy<br><span class="sidebar-nav-num">POLICY 3 OF 3</span></span></a>
+      </nav>
+      <div class="sidebar-foot">
+        Questions on any policy? Email<br>
+        <a href="mailto:support@pick2win.io">support@pick2win.io</a><br><br>
+        Response within 48 hours.
+      </div>
+    </aside>
+    <div class="policies">
+<article class="policy" id="refund">
+      <div class="policy-head">
+        <span class="policy-num">💰 POLICY <strong>3 OF 3</strong> · REFUND</span>
+        <h2 class="policy-title">Refund <em>Policy.</em></h2>
         <div class="policy-meta">
-          <span>Version <b>1.2</b></span>
-          <span>Effective <b>10 June 2026</b></span>
-          <span>10 sections - <b>prepaid coin model</b></span>
+          <span>Version <strong>1.0</strong></span>
+          <span>Effective <strong>10 June 2026</strong></span>
+          <span>10 sections · <strong>Generally non-refundable · prepaid coin model</strong></span>
         </div>
-      </header>
+      </div>
 
       <div class="policy-toc">
-        <div>In this policy</div>
+        <div class="policy-toc-title">In this policy</div>
         <ol>
-          <li><a href="#refund-1">General Policy</a></li>
-          <li><a href="#refund-2">Coin-Based Usage Policy</a></li>
-          <li><a href="#refund-3">No Refund Situations</a></li>
-          <li><a href="#refund-4">Successful UCT Usage</a></li>
-          <li><a href="#refund-5">Account Deletion &amp; Coin Balance</a></li>
-          <li><a href="#refund-6">Operational Clarification</a></li>
-          <li><a href="#refund-7">Technical Failure Exception</a></li>
-          <li><a href="#refund-8">Coin Validity</a></li>
-          <li><a href="#refund-9">Chargeback Abuse</a></li>
-          <li><a href="#refund-10">Important Disclaimer</a></li>
+          <li><a href="#refund-1" (click)="scrollToSection($event, 'refund-1')">General Policy</a></li>
+          <li><a href="#refund-2" (click)="scrollToSection($event, 'refund-2')">Coin-Based Usage Policy</a></li>
+          <li><a href="#refund-3" (click)="scrollToSection($event, 'refund-3')">Successful UCT Usage</a></li>
+          <li><a href="#refund-4" (click)="scrollToSection($event, 'refund-4')">No Refund Situations</a></li>
+          <li><a href="#refund-5" (click)="scrollToSection($event, 'refund-5')">Account Deletion &amp; Coin Balance Policy</a></li>
+          <li><a href="#refund-6" (click)="scrollToSection($event, 'refund-6')">Operational Clarification</a></li>
+          <li><a href="#refund-7" (click)="scrollToSection($event, 'refund-7')">Technical Failure Exception</a></li>
+          <li><a href="#refund-8" (click)="scrollToSection($event, 'refund-8')">Coin Validity</a></li>
+          <li><a href="#refund-9" (click)="scrollToSection($event, 'refund-9')">Chargeback Abuse</a></li>
+          <li><a href="#refund-10" (click)="scrollToSection($event, 'refund-10')">Important Platform Disclaimer</a></li>
         </ol>
       </div>
 
-      <h3 id="refund-1">1. General Policy</h3>
+      <h3 id="refund-1">📖 1. General Policy</h3>
       <div class="callout"><strong>All purchases on PICK2WIN are generally non-refundable.</strong></div>
+      <p>PICK2WIN operates using:</p>
+      <ul>
+        <li>prepaid workflow access</li>
+        <li>coin-based football virtual team generation access</li>
+      </ul>
+      <p>By purchasing coin packs, users acknowledge and agree to this policy.</p>
 
-      <h3 id="refund-2">2. Coin-Based Usage Policy</h3>
-      <p>PICK2WIN operates using prepaid digital workflow access and coin-based football virtual team generation access.</p>
-      <div class="callout"><strong>1 Coin = 1 Match UCT Generation.</strong></div>
-      <p>Coins are consumed only when UCT successfully generates teams for a match.</p>
+      <h3 id="refund-2">🪙 2. Coin-Based Usage Policy</h3>
+      <p>PICK2WIN operates using:</p>
+      <ul>
+        <li>prepaid digital workflow access</li>
+        <li>structured football virtual team generation workflows</li>
+      </ul>
+      <div class="callout"><strong>1 Coin = 1 Match UCT Generation</strong></div>
+      <p>Coins are consumed only when UCT successfully generates football virtual teams for a match.</p>
+      <p>Once generation completes successfully:</p>
+      <ul>
+        <li>the associated coin is permanently consumed</li>
+        <li>the workflow is considered completed</li>
+      </ul>
 
-      <h3 id="refund-3">3. No Refund Situations</h3>
-      <p>Refunds are not provided for:</p>
+      <h3 id="refund-3">⚙️ 3. Successful UCT Usage</h3>
+      <p>Once UCT generation completes successfully:</p>
+      <ul>
+        <li>refunds are not applicable</li>
+        <li>regeneration for the same match is blocked</li>
+        <li>"Run UCT" becomes unavailable for that match</li>
+      </ul>
+      <p>PICK2WIN operational responsibility for that match workflow ends once teams are successfully generated and delivered.</p>
+
+      <h3 id="refund-4">🚫 4. No Refund Situations</h3>
+      <p>Refunds are NOT provided for:</p>
       <table>
         <tbody>
           <tr><td class="shade-red">cancelled matches</td></tr>
           <tr><td class="shade-red">postponed matches</td></tr>
           <tr><td class="shade-red">abandoned matches</td></tr>
+          <tr><td class="shade-red">interrupted tournaments</td></tr>
           <tr><td class="shade-red">lineup changes</td></tr>
-          <tr><td class="shade-red">fantasy losses</td></tr>
-          <tr><td class="shade-red">user dissatisfaction</td></tr>
-          <tr><td class="shade-red">unused coins</td></tr>
-          <tr><td class="shade-red">user mistakes</td></tr>
           <tr><td class="shade-red">reduced football schedules</td></tr>
-          <tr><td class="shade-red">tournament interruptions</td></tr>
+          <tr><td class="shade-red">user dissatisfaction</td></tr>
+          <tr><td class="shade-red">user mistakes</td></tr>
+          <tr><td class="shade-red">accidental purchases</td></tr>
+          <tr><td class="shade-red">unused coins</td></tr>
+          <tr><td class="shade-red">partially used balances</td></tr>
+          <tr><td class="shade-red">unsupported user expectations</td></tr>
+          <tr><td class="shade-red">account deletion requests after purchase</td></tr>
+          <tr><td class="shade-red">failure to use coins before expiry</td></tr>
         </tbody>
       </table>
 
-      <h3 id="refund-4">4. Successful UCT Usage</h3>
-      <p>Once UCT generation completes successfully, the usage is considered consumed and refunds are not applicable.</p>
-
-      <h3 id="refund-5">5. Account Deletion &amp; Coin Balance Policy</h3>
-      <div class="callout">
-        If a user voluntarily deletes their PICK2WIN account:
-        <ul>
-          <li>unused coins will not be refunded</li>
-          <li>partial balances will not be returned</li>
-          <li>coin purchases remain non-refundable</li>
-          <li>deleted accounts cannot reclaim previous balances</li>
-        </ul>
-      </div>
-      <p>Users should fully utilize purchased coins and complete intended UCT usage before requesting account deletion. Once account deletion is completed, remaining balances are permanently removed and recovery may not be possible.</p>
-
-      <h3 id="refund-6">6. Operational Clarification</h3>
-      <p>Allowing unrestricted refunds after coin purchases, account deletions, or partial usage could negatively impact platform stability, payment operations, fraud prevention systems, and infrastructure sustainability.</p>
-      <p>This policy exists to reduce abuse, prevent refund exploitation, and maintain fair usage standards.</p>
-
-      <h3 id="refund-7">7. Technical Failure Exception</h3>
-      <p>Refunds or retries may be considered only if payment was successful and UCT completely failed due to a verified technical issue after internal review.</p>
-
-      <h3 id="refund-8">8. Coin Validity</h3>
-      <p><strong>All coin packs are valid for exactly 365 days from the date of purchase.</strong></p>
+      <h3 id="refund-5">🗑️ 5. Account Deletion &amp; Coin Balance Policy</h3>
+      <p>If a user voluntarily deletes their PICK2WIN account:</p>
       <ul>
-        <li>Each pack purchase creates its own 365-day clock.</li>
-        <li>365 days means exactly 365 calendar days.</li>
-        <li>When users have multiple packs, deductions are taken from the pack with the earliest expiry first.</li>
-        <li>Once a pack's 365-day window closes, remaining coins in that pack are forfeited.</li>
-        <li>Expiry of one pack does not affect any other pack the user purchased.</li>
-        <li>No refunds are issued for coins lost to expiry.</li>
+        <li>unused coins will NOT be refunded</li>
+        <li>partial balances will NOT be returned</li>
+        <li>coin purchases remain non-refundable</li>
+        <li>deleted accounts cannot reclaim previous balances</li>
+      </ul>
+      <p>Users should fully utilize purchased coins and complete intended UCT usage before requesting account deletion.</p>
+      <p>Once account deletion is completed:</p>
+      <ul>
+        <li>remaining balances are permanently removed</li>
+        <li>account recovery may not be possible</li>
       </ul>
 
-      <h3 id="refund-9">9. Chargeback Abuse</h3>
-      <p>Fraudulent chargebacks may result in permanent account suspension, payment blocking, and legal escalation if required.</p>
+      <h3 id="refund-6">⚖️ 6. Operational Clarification</h3>
+      <p>PICK2WIN operates using prepaid workflow access and structured football virtual team generation services.</p>
+      <p>Allowing unrestricted refunds after coin purchases, account deletions, or partial usage could negatively impact platform stability, payment operations, fraud-prevention controls, and infrastructure sustainability.</p>
+      <p>This policy exists to reduce abuse, prevent refund exploitation, and maintain fair usage standards.</p>
 
-      <h3 id="refund-10">10. Important Disclaimer</h3>
-      <p>PICK2WIN provides football workflow assistance and structured football virtual team generation. It does not provide betting services, gambling services, wallet balances, withdrawals, or guaranteed winnings.</p>
+      <h3 id="refund-7">🛠️ 7. Technical Failure Exception</h3>
+      <p>Refunds or retries may be considered only if:</p>
+      <ul>
+        <li>payment was successful</li>
+        <li>UCT completely failed due to a verified technical issue</li>
+      </ul>
+      <p>Requests are subject to internal verification and operational review.</p>
+      <p>PICK2WIN reserves the right to approve, reject, retry, or partially resolve technical-failure requests after review.</p>
+
+      <h3 id="refund-8">⏳ 8. Coin Validity</h3>
+      <div class="callout"><strong>All coin packs are valid for exactly 365 days from the latest successful pack purchase date.</strong></div>
+      <p>This applies uniformly to all current packs and all future packs introduced under the same coin system.</p>
+      <p><strong>🔄 Active Pack Merge Rule.</strong> If a user purchases a new coin pack before existing coins expire:</p>
+      <ul>
+        <li>remaining active coins from previous packs are merged into the newly purchased pack</li>
+        <li>the combined balance receives <strong>a fresh 365-day validity period</strong></li>
+      </ul>
+      <p>The refreshed validity period starts from <strong>the latest successful pack purchase date.</strong></p>
+      <p><strong>📌 Validity rules.</strong></p>
+      <ul>
+        <li>each new successful pack purchase refreshes validity for all active remaining coins</li>
+        <li>all active balances merge into a unified coin balance</li>
+        <li>expired coins cannot be restored or merged</li>
+        <li>coins already expired before a new purchase remain permanently forfeited</li>
+        <li>remaining coins automatically expire after the active 365-day validity period ends</li>
+      </ul>
+      <p>Users are responsible for monitoring validity periods and planning UCT usage accordingly.</p>
+      <p><strong>🚫 Expired coins policy.</strong> Once coins expire:</p>
+      <ul>
+        <li>remaining balances are permanently forfeited</li>
+        <li>expired balances cannot be restored</li>
+        <li>refunds are not provided for expired coins</li>
+      </ul>
+
+      <h3 id="refund-9">🚨 9. Chargeback Abuse</h3>
+      <p>Fraudulent chargebacks or payment abuse may result in:</p>
+      <ul>
+        <li>permanent account suspension</li>
+        <li>payment blocking</li>
+        <li>restriction of future purchases</li>
+        <li>legal escalation if required</li>
+      </ul>
+
+      <h3 id="refund-10">📌 10. Important Platform Disclaimer</h3>
+      <p>PICK2WIN provides:</p>
+      <ul>
+        <li>football workflow assistance</li>
+        <li>structured football virtual team generation workflows</li>
+        <li>Captain &amp; Vice-Captain configuration workflows</li>
+        <li>multi-team configuration assistance</li>
+      </ul>
+      <p>PICK2WIN operational responsibility ends once football virtual teams are successfully generated and delivered.</p>
       <p>Users independently utilize generated outputs on third-party fantasy football platforms.</p>
-    </article>
-  </div>
-</main>
 
+      <h3>📩 Support</h3>
+      <p><strong>PICK2WIN Technologies Private Limited</strong><br>📧 <a href="mailto:support@pick2win.io">support@pick2win.io</a></p>
+
+      <div class="back-top"><a href="#top" (click)="scrollToTop($event)">Back to top</a></div>
+    </article>
+    </div>
+  </section>
+</main>
 <app-footer></app-footer>

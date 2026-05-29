@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
+import { ProfileService } from './profile.service';
 
 const API = 'https://pick2win-backend-website.onrender.com/api/user/';
 
@@ -21,7 +22,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private profileService: ProfileService
   ) {
     this.loggedInSubject.next(this.isLoggedIn());
   }
@@ -77,6 +79,7 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('pick2win_user');
     sessionStorage.clear();
+    this.profileService.clearProfile();
     this.loggedInSubject.next(false);
     this.router.navigate(['/']);
   }

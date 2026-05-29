@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { Match, Series } from '../../core/interfaces/content';
+import { ApiService } from '../../core/services/api.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -8,6 +10,7 @@ interface LineoutTeam {
   code: string;
   name: string;
   color: string;
+  logo?: string;
 }
 
 interface LineoutMatch {
@@ -40,10 +43,13 @@ export class LineupsComponent implements OnInit, OnDestroy {
   readonly loggedIn$ = this.authService.loggedIn$;
   isLoggedIn = this.authService.isLoggedIn();
   generatedMatchIds = new Set<string>();
-  matches: LineoutMatch[] = this.createSampleMatches();
+  matches: LineoutMatch[] = [];
+  loadingMatches = true;
+  matchesError = '';
   readonly coinBalance = 47;
 
   constructor(
+    private api: ApiService,
     private authModal: AuthModalService,
     private authService: AuthService,
     private router: Router
@@ -51,6 +57,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.generatedMatchIds = this.readGeneratedMatchIds();
+    this.loadSeriesMatches();
 
     this.loggedIn$
       .pipe(takeUntil(this.destroy$))
@@ -227,93 +234,76 @@ export class LineupsComponent implements OnInit, OnDestroy {
     }).format(date);
   }
 
-  private createSampleMatches(): LineoutMatch[] {
-    return [
-      {
-        id: 'mci-ars',
-        league: 'Premier League',
-        country: 'England',
-        home: { code: 'MCI', name: 'Manchester City', color: '#6CABDD' },
-        away: { code: 'ARS', name: 'Arsenal', color: '#EF0107' },
-        kickoffISO: this.inHours(1),
-        lineupReady: true,
-        lineupJustReleased: true,
-        venue: 'Etihad Stadium'
-      },
-      {
-        id: 'juv-nap',
-        league: 'Serie A',
-        country: 'Italy',
-        home: { code: 'JUV', name: 'Juventus', color: '#f5f5f5' },
-        away: { code: 'NAP', name: 'Napoli', color: '#12A8E0' },
-        kickoffISO: this.inHours(3),
-        lineupReady: true,
-        venue: 'Allianz Stadium'
-      },
-      {
-        id: 'bay-lev',
-        league: 'Bundesliga',
-        country: 'Germany',
-        home: { code: 'BAY', name: 'Bayern Munich', color: '#DC052D' },
-        away: { code: 'LEV', name: 'Leverkusen', color: '#E32221' },
-        kickoffISO: this.inHours(6),
-        lineupReady: false,
-        venue: 'Allianz Arena'
-      },
-      {
-        id: 'rma-fcb',
-        league: 'La Liga',
-        country: 'Spain',
-        home: { code: 'RMA', name: 'Real Madrid', color: '#FEBE10' },
-        away: { code: 'FCB', name: 'Barcelona', color: '#A50044' },
-        kickoffISO: this.daysFromNowAt(1, 20, 30),
-        lineupReady: false,
-        venue: 'Santiago Bernabeu'
-      },
-      {
-        id: 'psg-mar',
-        league: 'Ligue 1',
-        country: 'France',
-        home: { code: 'PSG', name: 'Paris SG', color: '#004170' },
-        away: { code: 'MAR', name: 'Marseille', color: '#00A3E0' },
-        kickoffISO: this.daysFromNowAt(1, 22, 15),
-        lineupReady: false,
-        venue: 'Parc des Princes'
-      },
-      {
-        id: 'ucl-final',
-        league: 'UEFA Champions League',
-        country: 'Europe',
-        home: { code: 'INT', name: 'Inter', color: '#0068A8' },
-        away: { code: 'ATM', name: 'Atletico Madrid', color: '#CB3524' },
-        kickoffISO: this.daysFromNowAt(3, 21, 0),
-        lineupReady: false,
-        venue: 'Neutral Venue'
-      },
-      {
-        id: 'mls-lafc',
-        league: 'MLS',
-        country: 'USA',
-        home: { code: 'LAFC', name: 'Los Angeles FC', color: '#C39E6D' },
-        away: { code: 'SEA', name: 'Seattle Sounders', color: '#5D9731' },
-        kickoffISO: this.daysFromNowAt(4, 2, 30),
-        lineupReady: false,
-        venue: 'BMO Stadium'
-      }
-    ];
+  private loadSeriesMatches(): void {
+    this.loadingMatches = true;
+    this.matchesError = '';
+
+    this.api.getSeriesMatches()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.matches = res?.success && Array.isArray(res.data)
+            ? this.mapSeriesMatches(res.data)
+            : [];
+
+          if (!this.matches.length) {
+            this.matchesError = 'No upcoming matches in our coverage right now.';
+          }
+
+          this.loadingMatches = false;
+        },
+        error: () => {
+          this.matches = [];
+          this.matchesError = 'Unable to load matches. Please try again later.';
+          this.loadingMatches = false;
+        }
+      });
   }
 
-  private inHours(hours: number): string {
-    const date = new Date();
-    date.setHours(date.getHours() + hours);
-    return date.toISOString();
+  private mapSeriesMatches(seriesList: Series[]): LineoutMatch[] {
+    return seriesList
+      .flatMap(series => (series.matches ?? []).map(match => this.mapMatch(series, match)))
+      .filter((match): match is LineoutMatch => !!match)
+      .sort((a, b) => new Date(a.kickoffISO).getTime() - new Date(b.kickoffISO).getTime());
   }
 
-  private daysFromNowAt(days: number, hour: number, minute: number): string {
-    const date = new Date();
-    date.setDate(date.getDate() + days);
-    date.setHours(hour, minute, 0, 0);
-    return date.toISOString();
+  private mapMatch(series: Series, match: Match): LineoutMatch | null {
+    const kickoffISO = match.start_time || match.matchdate;
+
+    if (!kickoffISO || !match.is_active) {
+      return null;
+    }
+
+    return {
+      id: String(match.id || match.provider_match_id),
+      league: series.name,
+      country: series.season || series.status || 'Football',
+      home: this.createTeam(match.home_team_name, match.home_team_logo),
+      away: this.createTeam(match.away_team_name, match.away_team_logo),
+      kickoffISO,
+      lineupReady: match.lineupavailable === 1 || match.lineup_status === 'available',
+      lineupJustReleased: match.lineup_status === 'available',
+      venue: match.status || 'Scheduled'
+    };
+  }
+
+  private createTeam(name: string, logo?: string): LineoutTeam {
+    return {
+      code: this.teamCode(name),
+      name,
+      color: this.teamColor(name),
+      logo
+    };
+  }
+
+  private teamCode(name: string): string {
+    return (name || 'TBD').trim().slice(0, 3).toUpperCase();
+  }
+
+  private teamColor(name: string): string {
+    const palette = ['#6CABDD', '#EF0107', '#FEBE10', '#00A3E0', '#0BCC8E', '#CB3524', '#C39E6D', '#5D9731'];
+    const total = (name || '').split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return palette[total % palette.length];
   }
 
   private readGeneratedMatchIds(): Set<string> {

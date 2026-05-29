@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
+import { Country } from 'src/app/core/interfaces/content';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { ApiService } from 'src/app/core/services/api.service';
+
+interface SignupCountry extends Country {
+  min: number;
+  max: number;
+}
 
 function minimumAgeValidator(minAge: number) {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -38,25 +44,14 @@ export class SignupComponent {
   mobileOtp = ['', '', '', '', '', ''];
   emailOtp = ['', '', '', '', '', ''];
 
-countries = [
-  { name: 'United Kingdom', dial: '+44', min: 10, max: 10 },
-  { name: 'Ireland', dial: '+353', min: 9, max: 9 },
-  { name: 'India', dial: '+91', min: 10, max: 10 },
-  { name: 'United States', dial: '+1', min: 10, max: 10 },
-  { name: 'Canada', dial: '+1', min: 10, max: 10 },
-  { name: 'France', dial: '+33', min: 9, max: 9 },
-  { name: 'Germany', dial: '+49', min: 10, max: 11 },
-  { name: 'Spain', dial: '+34', min: 9, max: 9 },
-  { name: 'Italy', dial: '+39', min: 9, max: 10 },
-  { name: 'Australia', dial: '+61', min: 9, max: 9 },
-  { name: 'New Zealand', dial: '+64', min: 8, max: 10 }
-];
+countries: SignupCountry[] = [];
+countriesLoading = false;
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     country: ['', Validators.required],
     dob: ['', [Validators.required, minimumAgeValidator(18)]],
-    dial: ['+44', Validators.required],
+    dial: ['', Validators.required],
     mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{7,14}$/)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -71,7 +66,9 @@ successMessage = '';
   constructor(
     private fb: FormBuilder,
     private authModal: AuthModalService, private api:ApiService
-  ) {}
+  ) {
+    this.loadCountries();
+  }
 
   openLogin() {
     this.authModal.open('login');
@@ -82,7 +79,7 @@ onCountryChange() {
 
   if (country) {
     this.form.patchValue({
-      dial: country.dial,
+      dial: country.dial_code,
       mobile: ''
     });
   }
@@ -346,7 +343,29 @@ resendOtp(type: 'mobile' | 'email') {
     return score;
   }
 
-  get selectedCountry() {
+private loadCountries(): void {
+  this.countriesLoading = true;
+
+  this.api.getCountries().subscribe({
+    next: (res) => {
+      this.countriesLoading = false;
+      this.countries = res?.success && Array.isArray(res.data)
+        ? res.data.map(country => ({
+            ...country,
+            min: 7,
+            max: 14
+          }))
+        : [];
+    },
+    error: () => {
+      this.countriesLoading = false;
+      this.countries = [];
+      this.errorMessage = 'Unable to load countries. Please try again later.';
+    }
+  });
+}
+
+  get selectedCountry(): SignupCountry | undefined {
   return this.countries.find(c => c.name === this.form.value.country);
 }
 

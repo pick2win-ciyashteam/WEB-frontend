@@ -177,6 +177,14 @@
   border-radius: 2px;
 }
 
+.team-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .match-time {
   margin-top: 12px;
   color: #c3cfda;

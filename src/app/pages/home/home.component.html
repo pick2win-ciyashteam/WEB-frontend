@@ -1,7 +1,25 @@
 <app-header></app-header>
 
-<section class="launch-card">
+<div class="home-splash" *ngIf="showSplash" role="status" aria-live="polite">
+  <button class="splash-skip" type="button" (click)="closeSplash()">Skip</button>
+
+  <div class="splash-content">
+    <div class="splash-mark">
+      <img src="assets/logo.png" alt="PICK2WIN">
+    </div>
+    <div class="splash-eyebrow">PICK2WIN UCT</div>
+    <p>Where skill matters more.</p>
+
+    <div class="splash-progress" aria-hidden="true">
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<div class="launch-modal-backdrop" *ngIf="showLaunchModal">
+<section class="launch-card launch-modal-card" role="dialog" aria-modal="true" aria-labelledby="launchModalTitle">
   <div class="launch-card-inner">
+    <button class="launch-modal-close" type="button" aria-label="Close launch modal" (click)="closeLaunchModal()">x</button>
 
     <div class="launch-eyebrow-row">
       <span class="launch-pulse">
@@ -9,16 +27,16 @@
         <span>{{ launchStatus }}</span>
       </span>
 
-      <span class="launch-date-tag">📅 JUNE 10, 2026 · 09:00 UTC</span>
+      <span class="launch-date-tag">JUNE 10, 2026 - 09:00 UTC</span>
     </div>
 
     <h2 class="launch-headline">
-      PICK2WIN goes <em>live</em> in
+      <span id="launchModalTitle">PICK2WIN goes <em>live</em> in</span>
     </h2>
 
     <p class="launch-sub">
-      The structured fantasy football <b>workflow tool</b> for users who create strictly
-      20 teams per match. Mark your calendar — <b>first match free</b> for every verified
+      The structured virtual team configuration <b>workflow tool</b> for users who create strictly
+      20 teams per match. Mark your calendar - <b>first match free</b> for every verified
       account at launch.
     </p>
 
@@ -45,118 +63,87 @@
     </div>
 
     <div class="launch-meta">
-      <span><span class="ic">⚽</span> <b>30 leagues</b> · Premier League · UCL · La Liga · Serie A · Bundesliga +25 more</span>
-      <span><span class="ic">🌍</span> <b>19 markets</b> · UK · EU · USA · CA · AU · NZ</span>
-      <span><span class="ic">🎁</span> <b>Free first match</b> for verified users at launch</span>
+      <span><span class="ic material-symbols-outlined" aria-hidden="true">sports_soccer</span> <b>30 leagues</b> - Premier League - UCL - La Liga - Serie A - Bundesliga +25 more</span>
+      <span><span class="ic material-symbols-outlined" aria-hidden="true">public</span> <b>19 markets</b> - UK - EU - USA - CA - AU - NZ</span>
+      <span><span class="ic material-symbols-outlined" aria-hidden="true">redeem</span> <b>Free first match</b> for verified users at launch</span>
     </div>
 
     <div class="launch-cta-row">
       <button type="button" class="launch-cta" (click)="openSignup()">
-        Reserve Free Match at Launch →
+        Reserve Free Match at Launch
+        <span class="material-symbols-outlined arrow" aria-hidden="true">arrow_forward</span>
       </button>
 
       <a routerLink="/about" class="launch-cta-ghost">
-        Learn about PICK2WIN →
+        Learn about PICK2WIN
+        <span class="material-symbols-outlined arrow" aria-hidden="true">arrow_forward</span>
       </a>
     </div>
 
   </div>
 </section>
+</div>
 
 <section class="carousel-section">
-  <div class="banner-deck">
-
-    <article class="banner tone-uct" [class.active]="currentBanner === 0">
+  <div class="banner-deck api-banner-deck" *ngIf="bannersLoading">
+    <article class="banner api-banner active">
       <div>
-        <div class="banner-eyebrow">WHAT IS PICK2WIN</div>
-        <h3 class="banner-h">A fantasy football <em>workflow tool.</em> Not a replacement.</h3>
-        <p class="banner-body">PICK2WIN is a structured team-combination automation engine for fantasy football users who create <b>strictly 20 teams per match</b>. UCT compresses the manual chaos of multi-team creation - captain rotation, exposure balancing, formation hedging - into one 4-step workflow that runs on your strict configuration inputs. <span class="red">Not a fantasy app replacement. Not gambling.</span></p>
-        <a routerLink="/uctinfo" class="banner-cta">What is UCT -></a>
+        <div class="banner-eyebrow">LOADING BANNERS</div>
+        <h3 class="banner-h">Latest PICK2WIN updates are loading.</h3>
+        <p class="banner-body">Please wait while we fetch the newest banners from the backend.</p>
       </div>
-      <div class="banner-visual"><span class="emoji-big">⚽</span></div>
-    </article>
-
-    <article class="banner tone-uct" [class.active]="currentBanner === 1">
-      <div>
-        <div class="banner-eyebrow">POWERED BY UCT ENGINE</div>
-        <h3 class="banner-h">20 teams per match. <em>From one lineup.</em></h3>
-        <p class="banner-body">UCT is PICK2WIN's signature engine. Splits across formations 4-7 / 5-6 / 6-5 / 7-4. One Goalkeeper, 3-6 Defenders, 2-5 Midfielders, 1-3 Forwards. All within official lineup constraints - pure structure, no luck.</p>
-        <a routerLink="/uctinfo" class="banner-cta">See how UCT works -></a>
+      <div class="banner-visual banner-loader">
+        <span></span>
       </div>
-      <div class="banner-visual"><span class="emoji-big">⚡</span></div>
-    </article>
-
-    <article class="banner tone-coverage" [class.active]="currentBanner === 2">
-      <div>
-        <div class="banner-eyebrow">FOUR-STEP WORKFLOW</div>
-        <h3 class="banner-h">Substitute. Mandate. <em>Captaincy.</em> Generate.</h3>
-        <p class="banner-body">After lineups release, a 60-minute window opens. Specify substitutions. Mandate must-include players. Pick Captain and Vice-Captain modes. Tap Generate. Twenty structured teams in seconds.</p>
-        <a routerLink="/uctinfo" class="banner-cta">See full workflow -></a>
-      </div>
-      <div class="banner-visual"><span class="emoji-big">⚙</span></div>
-    </article>
-
-    <article class="banner tone-wc" [class.active]="currentBanner === 3">
-      <div>
-        <div class="banner-eyebrow">TOURNAMENT - STARTS 11 JUNE</div>
-        <h3 class="banner-h">FIFA World Cup 2026 - <em>32 days away.</em></h3>
-        <p class="banner-body">104 matches across USA, Canada, and Mexico. <b>All FIFA WC 2026 matches are covered by any PICK2WIN coin pack</b> - complete World Cup coverage from group stage to final, alongside Premier League and UCL workflow.</p>
-        <a routerLink="/pricing" class="banner-cta">Pre-register for World Cup -></a>
-      </div>
-      <div class="banner-visual"><span class="emoji-big">🏆</span></div>
-    </article>
-
-    <article class="banner tone-free" [class.active]="currentBanner === 4">
-      <div>
-        <div class="banner-eyebrow">FREE - NEW USERS</div>
-        <h3 class="banner-h">Your first UCT is <em>on us.</em></h3>
-        <p class="banner-body">Sign up. Verify mobile + email. Generate your first UCT for free - no payment, no card on file. One per verified account, 14-day claim window. From your second match, choose any coin pack.</p>
-        <a routerLink="/pricing" class="banner-cta">See pricing -></a>
-      </div>
-      <div class="banner-visual"><span class="emoji-big">🎁</span></div>
-    </article>
-
-    <article class="banner tone-coverage" [class.active]="currentBanner === 5">
-      <div>
-        <div class="banner-eyebrow">COVERAGE - 30 COMPETITIONS</div>
-        <h3 class="banner-h">Premier League to <em>Copa America.</em></h3>
-        <p class="banner-body">Every Tier 1 league. Every UEFA cup. Every major tournament. Thirty hand-picked competitions across UK, Europe, and the Americas - chosen for engagement, not filler.</p>
-        <a routerLink="/lineouts" class="banner-cta">See all series -></a>
-      </div>
-      <div class="banner-visual"><span class="emoji-big">🌍</span></div>
-    </article>
-
-    <article class="banner tone-uct" [class.active]="currentBanner === 6">
-      <div>
-        <div class="banner-eyebrow">TRUST AND SAFETY</div>
-        <h3 class="banner-h">Strictly verified. <em>Clean workflow.</em></h3>
-        <p class="banner-body">Dual-verification at signup: mobile OTP and email OTP, both required. Disposable email and VoIP numbers blocked. Multi-account abuse means permanent ban. We do not gamble - anywhere.</p>
-        <a routerLink="/trust" class="banner-cta">Trust details -></a>
-      </div>
-      <div class="banner-visual"><span class="emoji-big">🔒</span></div>
-    </article>
-
-    <article class="banner tone-skill" [class.active]="currentBanner === 7">
-      <div>
-        <div class="banner-eyebrow">SKILL OVER LUCK</div>
-        <h3 class="banner-h">Built on <span class="red">skill,</span> not <em>luck.</em></h3>
-        <p class="banner-body">PICK2WIN is not gambling. No wallet, no betting odds, no chance-based outcomes. Pure structured workflow assistance for fantasy football users. Twenty teams per match. Forty thousand possibilities mapped.</p>
-        <a routerLink="/trust" class="banner-cta">Trust and safety -></a>
-      </div>
-      <div class="banner-visual"><span class="emoji-big">🎯</span></div>
     </article>
   </div>
 
-  <div class="banner-dots">
-    <button type="button" [class.active]="currentBanner === 0" aria-label="What is PICK2WIN" (click)="showBanner(0)"></button>
-    <button type="button" [class.active]="currentBanner === 1" aria-label="UCT Engine" (click)="showBanner(1)"></button>
-    <button type="button" [class.active]="currentBanner === 2" aria-label="How it works" (click)="showBanner(2)"></button>
-    <button type="button" [class.active]="currentBanner === 3" aria-label="FIFA World Cup" (click)="showBanner(3)"></button>
-    <button type="button" [class.active]="currentBanner === 4" aria-label="First match free" (click)="showBanner(4)"></button>
-    <button type="button" [class.active]="currentBanner === 5" aria-label="Coverage" (click)="showBanner(5)"></button>
-    <button type="button" [class.active]="currentBanner === 6" aria-label="Trust" (click)="showBanner(6)"></button>
-    <button type="button" [class.active]="currentBanner === 7" aria-label="Skill over luck" (click)="showBanner(7)"></button>
-  </div>
+  <ng-container *ngIf="!bannersLoading && banners.length; else noBanners">
+    <div class="banner-deck api-banner-deck">
+      <article
+        class="banner api-banner tone-uct"
+        *ngFor="let banner of banners; let i = index; trackBy: trackByBannerId"
+        [class.active]="currentBanner === i">
+        <div>
+          <div class="banner-eyebrow">{{ banner.name }}</div>
+          <h3 class="banner-h">{{ banner.name }}</h3>
+          <p class="banner-body">{{ banner.description }}</p>
+          <button
+            class="banner-cta"
+            type="button"
+            *ngIf="banner.link"
+            (click)="openBannerLink(banner)">
+            Click View ->
+          </button>
+        </div>
+        <div class="banner-visual">
+          <div class="banner-image-wrap">
+            <img [src]="banner.image_url" [alt]="banner.name" loading="lazy">
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="banner-dots" *ngIf="banners.length > 1">
+      <button
+        type="button"
+        *ngFor="let banner of banners; let i = index; trackBy: trackByBannerId"
+        [class.active]="currentBanner === i"
+        [attr.aria-label]="banner.name"
+        (click)="showBanner(i)">
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #noBanners>
+    <div class="banner-deck api-banner-deck banner-empty">
+      <div>
+        <div class="banner-eyebrow">NO BANNERS</div>
+        <h3 class="banner-h">No active banners available.</h3>
+        <p class="banner-body">Please check again soon for new PICK2WIN updates.</p>
+      </div>
+    </div>
+  </ng-template>
 </section>
 
 <section class="home-section">
@@ -164,9 +151,9 @@
     <a routerLink="/lineouts" class="home-lineouts-cta-btn pulsing">
       <span class="cta-live-dot" aria-hidden="true"></span>
       Today's Match Lineouts
-      <span class="arrow">-></span>
+      <span class="arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
     </a>
-    <div class="home-lineouts-cta-sub">Lineups go live 60 minutes before kickoff - don't miss the window</div>
+    <div class="home-lineouts-cta-sub">Lineups go live 60 minutes before kickoff - do not miss the window</div>
   </div>
 </section>
 
@@ -174,7 +161,7 @@
   <div class="versus-head reveal">
     <span class="versus-eyebrow">MANUAL FANTASY vs PICK2WIN UCT</span>
     <h2 class="versus-h">What changes when <em>workflow is structured.</em></h2>
-    <p class="versus-sub">Same lineup, same match, same fantasy contest. What changes is how you get from "lineups out" to "20 teams entered". Here's the concrete breakdown.</p>
+    <p class="versus-sub">Same lineup, same match, same fantasy contest. What changes is how you get from "lineups out" to "20 teams entered". Here is the concrete breakdown.</p>
   </div>
 
   <div class="versus-grid reveal">
@@ -182,12 +169,15 @@
       <div class="versus-tag">MANUAL APPROACH</div>
       <h3 class="versus-title">Guess.<br>Hope.<br>Repeat.</h3>
       <div class="versus-rows">
-        <div class="versus-row"><div class="versus-row-ic">⏰</div><div><div class="versus-row-label">Time to create 20 teams</div><div class="versus-row-value"><span class="hi-red">45-60+ minutes</span> - most of the pre-match window</div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">📋</div><div><div class="versus-row-label">Workflow timing</div><div class="versus-row-value">Often <span class="hi-red">pre-lineup guesses</span>, re-edited after team-sheet release</div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">👑</div><div><div class="versus-row-label">Captain rotation</div><div class="versus-row-value">Manual tracking across 20 teams - <span class="hi-red">spreadsheet or memory</span></div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">⚖</div><div><div class="versus-row-label">Player exposure balancing</div><div class="versus-row-value">Mental math - <span class="hi-red">easy to over-stack one player</span></div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">🔀</div><div><div class="versus-row-label">Formation variation</div><div class="versus-row-value">Trial-and-error - <span class="hi-red">usually 1 or 2 shapes</span></div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">⚠</div><div><div class="versus-row-label">Risk under pressure</div><div class="versus-row-value"><span class="hi-red">High</span> - duplicate picks, missed captain swaps, wrong formations</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">schedule</div><div><div class="versus-row-label">Time to create 20 teams</div><div class="versus-row-value"><span class="hi-red">45-60+ minutes</span> - most of the pre-match window</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">fact_check</div><div><div class="versus-row-label">Workflow timing</div><div class="versus-row-value">Often <span class="hi-red">pre-lineup guesses</span>, re-edited after team-sheet release</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">workspace_premium</div><div><div class="versus-row-label">Captain rotation</div><div class="versus-row-value">Manual tracking across 20 teams - <span class="hi-red">spreadsheet or memory</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">balance</div><div><div class="versus-row-label">Player exposure balancing</div><div class="versus-row-value">Mental math - <span class="hi-red">easy to over-stack one player</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">schema</div><div><div class="versus-row-label">Formation variation</div><div class="versus-row-value">Trial-and-error - <span class="hi-red">usually 1 or 2 shapes</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">output</div><div><div class="versus-row-label">Output</div><div class="versus-row-value"><span class="hi-red">One team at a time</span> - build-edit-build cycle</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">warning</div><div><div class="versus-row-label">Risk under pressure</div><div class="versus-row-value"><span class="hi-red">High</span> - duplicate picks, missed captain swaps, wrong formations</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">timer</div><div><div class="versus-row-label">Sweet-spot window utilisation</div><div class="versus-row-value">Most of the <span class="hi-red">60-75 min post-lineup window</span> spent on mechanical team-building</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">rule</div><div><div class="versus-row-label">Football structure validity</div><div class="versus-row-value">Self-checked - <span class="hi-red">easy to break</span> quotas or 7-from-one-team limits</div></div></div>
       </div>
     </div>
 
@@ -197,12 +187,15 @@
       <div class="versus-tag">PICK2WIN - UCT</div>
       <h3 class="versus-title"><em>Configure.</em><br>Structure.<br>Execute.</h3>
       <div class="versus-rows">
-        <div class="versus-row"><div class="versus-row-ic">⏰</div><div><div class="versus-row-label">Time to create 20 teams</div><div class="versus-row-value"><span class="hi">A few seconds</span> after a 4-step configuration</div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">📋</div><div><div class="versus-row-label">Workflow timing</div><div class="versus-row-value"><span class="hi">Post-lineup activation</span> - 60-min UCT window from team-sheet release</div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">👑</div><div><div class="versus-row-label">Captain rotation</div><div class="versus-row-value">Automated - <span class="hi">CVC rotation</span> or <span class="hi">C and VC structured</span> modes</div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">⚖</div><div><div class="versus-row-label">Player exposure balancing</div><div class="versus-row-value">Engine-balanced across all 20 teams - <span class="hi">Mandate controls</span></div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">🔀</div><div><div class="versus-row-label">Formation variation</div><div class="versus-row-value"><span class="hi">4 fixed splits</span>: 4-7 / 5-6 / 6-5 / 7-4</div></div></div>
-        <div class="versus-row"><div class="versus-row-ic">✅</div><div><div class="versus-row-label">Risk under pressure</div><div class="versus-row-value"><span class="hi">Validated</span> - football-real constraints enforced</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">schedule</div><div><div class="versus-row-label">Time to create 20 teams</div><div class="versus-row-value"><span class="hi">A few seconds</span> after a 4-step configuration</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">fact_check</div><div><div class="versus-row-label">Workflow timing</div><div class="versus-row-value"><span class="hi">Post-lineup activation</span> - 60-min UCT window from team-sheet release</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">workspace_premium</div><div><div class="versus-row-label">Captain rotation</div><div class="versus-row-value">Automated - <span class="hi">CVC rotation</span> or <span class="hi">C and VC structured</span> modes</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">balance</div><div><div class="versus-row-label">Player exposure balancing</div><div class="versus-row-value">Engine-balanced across all 20 teams - <span class="hi">Mandate controls</span></div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">schema</div><div><div class="versus-row-label">Formation variation</div><div class="versus-row-value"><span class="hi">4 fixed splits</span>: 4-7 / 5-6 / 6-5 / 7-4</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">output</div><div><div class="versus-row-label">Output</div><div class="versus-row-value"><span class="hi">20 structured teams</span> in one tap - CSV export - use directly or alter personally</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">warning</div><div><div class="versus-row-label">Risk under pressure</div><div class="versus-row-value"><span class="hi">Validated</span> - football-real constraints enforced</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">timer</div><div><div class="versus-row-label">Sweet-spot window utilisation</div><div class="versus-row-value">Engineered for the <span class="hi">60-75 min post-lineup window</span> - configuration takes minutes, generation takes seconds</div></div></div>
+        <div class="versus-row"><div class="versus-row-ic material-symbols-outlined" aria-hidden="true">rule</div><div><div class="versus-row-label">Football structure validity</div><div class="versus-row-value">Engine-enforced - <span class="hi">no broken structures</span> - max 7 per real team</div></div></div>
       </div>
     </div>
   </div>
@@ -214,7 +207,7 @@
   <div class="window-section reveal">
     <div class="window-card">
       <div class="window-head">
-        <div class="window-icon">⏱</div>
+        <div class="window-icon material-symbols-outlined" aria-hidden="true">acute</div>
         <div>
           <div class="window-eyebrow">THE 60-75 MINUTE PRE-MATCH WINDOW</div>
           <h3 class="window-h">Most UK and EU competitions release lineups ~60-75 min before kickoff. <em>Where does that window actually go?</em></h3>
@@ -255,7 +248,7 @@
   <div class="parallel-section reveal">
     <div class="parallel-card">
       <div class="parallel-head">
-        <div class="parallel-icon">🎯</div>
+        <div class="parallel-icon material-symbols-outlined" aria-hidden="true">hub</div>
         <div>
           <div class="parallel-eyebrow">THE PARALLEL MATCH PROBLEM</div>
           <h3 class="parallel-h">What if <em>3-4 matches</em> kick off at the same time?</h3>
@@ -286,7 +279,7 @@
       </div>
 
       <div class="parallel-hurdle">
-        <div class="parallel-hurdle-icon">!</div>
+        <div class="parallel-hurdle-icon material-symbols-outlined" aria-hidden="true">priority_high</div>
         <div>
           <p class="parallel-hurdle-title">The one hurdle we don't hide</p>
           <p class="parallel-hurdle-body">Once UCT generates your teams for each match, you still need to replicate them in your fantasy contest app of choice. PICK2WIN compresses the build phase; the contest entry is yours to manage.</p>
@@ -294,7 +287,7 @@
       </div>
 
       <div class="parallel-hurdle save-warn">
-        <div class="parallel-hurdle-icon">↓</div>
+        <div class="parallel-hurdle-icon material-symbols-outlined" aria-hidden="true">download</div>
         <div>
           <p class="parallel-hurdle-title">Save your teams BEFORE kickoff - every time.</p>
           <p class="parallel-hurdle-body">Once a match goes live, generated teams disappear from your My Teams view. Always download the CSV export before kickoff and use those structured teams on whichever fantasy platform you play.</p>
@@ -305,3 +298,4 @@
 </section>
 
 <app-footer></app-footer>
+
