@@ -1,1 +1,186 @@
-<p>playing-team works!</p>
+<app-header></app-header>
+
+<main class="playing-page">
+  <div class="wrap">
+    <button class="back-btn" type="button" (click)="goBack()">
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+      Back to Lineouts
+    </button>
+
+    <div class="state-card" *ngIf="loading">
+      <span class="material-symbols-outlined" aria-hidden="true">progress_activity</span>
+      <h3>Loading match lineups</h3>
+      <p>Fetching playing XI and substitute data.</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!loading && errorMessage">
+      <span class="material-symbols-outlined" aria-hidden="true">error</span>
+      <h3>Match unavailable</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <ng-container *ngIf="!loading && detail as d">
+      <section class="match-hero">
+        <div class="hero-main">
+          <div class="hero-eyebrow">
+            <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+            {{ d.match.seriesname }}
+          </div>
+
+          <div class="scoreline">
+            <div class="hero-team">
+              <img [src]="d.home_team.logo" [alt]="d.home_team.name">
+              <strong>{{ d.home_team.short_name }}</strong>
+              <span>{{ d.home_team.name }}</span>
+            </div>
+
+            <div class="vs-pill">vs</div>
+
+            <div class="hero-team away">
+              <img [src]="d.away_team.logo" [alt]="d.away_team.name">
+              <strong>{{ d.away_team.short_name }}</strong>
+              <span>{{ d.away_team.name }}</span>
+            </div>
+          </div>
+
+          <div class="hero-meta">
+            <span>
+              <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+              {{ kickoffInfo(d) }} - {{ kickoffTime(d) }}
+            </span>
+            <span [class.ready]="isLineupAvailable(d)">
+              <span class="material-symbols-outlined" aria-hidden="true">{{ isLineupAvailable(d) ? 'verified' : 'lock' }}</span>
+              {{ matchStatus(d) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="count-card">
+          <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+          <b>{{ d.counts.total_players }}</b>
+          <small>Total listed players</small>
+        </div>
+      </section>
+
+      <section class="teams-grid">
+        <article class="team-panel">
+          <div class="team-head">
+            <img [src]="d.home_team.logo" [alt]="d.home_team.name">
+            <div>
+              <span>Home Team</span>
+              <h2>{{ d.home_team.name }}</h2>
+              <p>{{ d.counts.home_playing_xi }} playing XI - {{ d.counts.home_substitutes }} substitutes - {{ teamCount(d.home_team) }} total</p>
+            </div>
+          </div>
+
+          <div class="section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+            Playing XI
+          </div>
+          <div class="players-list">
+            <div class="player-card" *ngFor="let player of d.home_team.playing_xi; trackBy: trackPlayer">
+              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <div>
+                <strong>{{ player.player_name }}</strong>
+                <span>Starting player</span>
+              </div>
+              <b [class]="positionClass(player)">{{ player.position }}</b>
+            </div>
+          </div>
+
+          <div class="section-title substitute">
+            <span class="material-symbols-outlined" aria-hidden="true">sync_alt</span>
+            Substitute Players
+          </div>
+          <div class="players-list substitute-list">
+            <div class="player-card substitute-card" *ngFor="let player of d.home_team.substitutes; trackBy: trackPlayer">
+              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <div>
+                <strong>{{ player.player_name }}</strong>
+                <span>Substitute player</span>
+              </div>
+              <b [class]="positionClass(player)">{{ player.position }}</b>
+            </div>
+          </div>
+        </article>
+
+        <article class="team-panel">
+          <div class="team-head">
+            <img [src]="d.away_team.logo" [alt]="d.away_team.name">
+            <div>
+              <span>Away Team</span>
+              <h2>{{ d.away_team.name }}</h2>
+              <p>{{ d.counts.away_playing_xi }} playing XI - {{ d.counts.away_substitutes }} substitutes - {{ teamCount(d.away_team) }} total</p>
+            </div>
+          </div>
+
+          <div class="section-title">
+            <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+            Playing XI
+          </div>
+          <div class="players-list">
+            <div class="player-card" *ngFor="let player of d.away_team.playing_xi; trackBy: trackPlayer">
+              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <div>
+                <strong>{{ player.player_name }}</strong>
+                <span>Starting player</span>
+              </div>
+              <b [class]="positionClass(player)">{{ player.position }}</b>
+            </div>
+          </div>
+
+          <div class="section-title substitute">
+            <span class="material-symbols-outlined" aria-hidden="true">sync_alt</span>
+            Substitute Players
+          </div>
+          <div class="players-list substitute-list">
+            <div class="player-card substitute-card" *ngFor="let player of d.away_team.substitutes; trackBy: trackPlayer">
+              <img [src]="playerImage(player)" [alt]="player.player_name">
+              <div>
+                <strong>{{ player.player_name }}</strong>
+                <span>Substitute player</span>
+              </div>
+              <b [class]="positionClass(player)">{{ player.position }}</b>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="uct-action-zone">
+        <div class="uct-balance-card">
+          <div class="uct-balance-icon">
+            <span class="material-symbols-outlined" aria-hidden="true">account_balance</span>
+          </div>
+          <div>
+            <div class="uct-balance-label">Your Balance</div>
+            <div class="uct-balance-amount">
+              <strong>{{ coinBalance }}</strong>
+              <span>coins</span>
+            </div>
+            <p>1 coin will be used to generate this UCT - {{ remainingAfterUct() }} remaining after</p>
+          </div>
+        </div>
+
+        <div class="uct-start-card">
+          <p>
+            <b>{{ startingPlayersCount(d) }} players in starting lineups.</b>
+            Tap <b>Start UCT</b> to begin the 4-step workflow.
+          </p>
+
+          <div class="uct-start-actions">
+            <button class="mini-back-btn" type="button" (click)="goBack()">
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+              Back
+            </button>
+            <button class="start-uct-btn" type="button" [disabled]="!isLineupAvailable(d)" (click)="startUct(d)">
+              Start UCT
+              <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+  </div>
+</main>
+
+<app-footer></app-footer>

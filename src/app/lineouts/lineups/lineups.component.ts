@@ -165,6 +165,40 @@ export class LineupsComponent implements OnInit, OnDestroy {
     return this.isLoggedIn ? 'Generate UCT' : 'Sign in to generate';
   }
 
+  kickoffInfo(match: LineoutMatch): string {
+    if (this.isLive(match)) {
+      return `Live now - ${match.venue}`;
+    }
+
+    const kickoffMs = new Date(match.kickoffISO).getTime();
+    const diffMs = kickoffMs - Date.now();
+
+    if (diffMs <= 0) {
+      return `Started - ${match.venue}`;
+    }
+
+    const totalMinutes = Math.ceil(diffMs / 60000);
+    const days = Math.floor(totalMinutes / 1440);
+    const hours = Math.floor((totalMinutes % 1440) / 60);
+    const minutes = totalMinutes % 60;
+
+    let label = '';
+
+    if (days > 0) {
+      label = `Kicks off in ${days}d ${hours}h`;
+    } else if (hours > 0) {
+      label = `Kicks off in ${hours}h ${minutes}m`;
+    } else {
+      label = `Kicks off in ${minutes}m`;
+    }
+
+    return `${label} - ${match.venue}`;
+  }
+
+  openMatch(match: LineoutMatch): void {
+    this.router.navigate(['/lineouts/matches', match.id]);
+  }
+
   handleMatchAction(match: LineoutMatch): void {
     if (this.isGenerated(match)) {
       this.router.navigate(['/user/profile']);
@@ -323,7 +357,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
     const lineupFlag = String(match.lineupavailable).toLowerCase();
     const lineupStatus = String(match.lineup_status || '').toLowerCase();
 
-    return lineupFlag === '1' || lineupFlag === 'true' || lineupStatus === 'available' || lineupStatus === 'released';
+    return lineupFlag === '1' || lineupFlag === 'true' || lineupStatus === 'available' || lineupStatus === 'released' || lineupStatus === 'confirmed';
   }
 
   private createTeam(name: string, logo?: string): LineoutTeam {

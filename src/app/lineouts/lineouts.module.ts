@@ -20,7 +20,9 @@ import { PlayingTeamComponent } from './playing-team/playing-team.component';
     SharedModule
   ],
   exports: [
-    LineupsComponent
+    LineupsComponent,
+    PlayingTeamComponent,
+    CreateUctComponent
   ]
 })
 export class LineoutsModule { }

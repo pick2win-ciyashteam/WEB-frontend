@@ -79,7 +79,12 @@
                 class="match-row"
                 *ngFor="let match of todayMatches; trackBy: trackByMatchId"
                 [class.ready]="match.lineupReady && !isGenerated(match)"
-                [class.generated]="isGenerated(match)">
+                [class.generated]="isGenerated(match)"
+                role="button"
+                tabindex="0"
+                (click)="openMatch(match)"
+                (keydown.enter)="openMatch(match)"
+                (keydown.space)="openMatch(match)">
                 <div class="match-time-block">
                   <strong>{{ formatKickoff(match) }}</strong>
                   <span>{{ isLive(match) ? 'Today · Live' : 'Today' }}</span>
@@ -110,7 +115,7 @@
                   </div>
                   <div class="match-meta">
                     <span class="material-symbols-outlined" aria-hidden="true">event</span>
-                    {{ match.venue }}
+                    {{ kickoffInfo(match) }}
                   </div>
                 </div>
 
@@ -121,7 +126,7 @@
                     </span>
                     {{ statusLabel(match) }}
                   </span>
-                  <button class="uct-btn" type="button" [disabled]="!match.lineupReady && !isGenerated(match)" (click)="handleMatchAction(match)">
+                  <button class="uct-btn" type="button" [disabled]="!match.lineupReady && !isGenerated(match)" (click)="$event.stopPropagation(); handleMatchAction(match)">
                     {{ actionLabel(match) }}
                   </button>
                 </div>
@@ -146,7 +151,14 @@
               </div>
 
               <div class="match-row-list">
-                <article class="match-row upcoming" *ngFor="let match of group.matches; trackBy: trackByMatchId">
+                <article
+                  class="match-row upcoming"
+                  *ngFor="let match of group.matches; trackBy: trackByMatchId"
+                  role="button"
+                  tabindex="0"
+                  (click)="openMatch(match)"
+                  (keydown.enter)="openMatch(match)"
+                  (keydown.space)="openMatch(match)">
                   <div class="match-time-block">
                     <strong>{{ formatKickoff(match) }}</strong>
                     <span>{{ dateStamp(match) }}</span>
@@ -177,7 +189,7 @@
                     </div>
                     <div class="match-meta">
                       <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
-                      Waiting for official lineup release
+                      {{ kickoffInfo(match) }}
                     </div>
                   </div>
 
@@ -186,7 +198,7 @@
                       <span class="material-symbols-outlined" aria-hidden="true">lock</span>
                       Waiting for lineup
                     </span>
-                    <button class="uct-btn locked" type="button" disabled>UCT Locked</button>
+                    <button class="uct-btn locked" type="button" disabled (click)="$event.stopPropagation()">UCT Locked</button>
                   </div>
                 </article>
               </div>

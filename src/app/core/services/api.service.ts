@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
-import { ApiDataResponse, ApiListResponse, Banner, CheckoutSessionPayload, CheckoutSessionResponse, Country, Series, SubscriptionPlan, UserProfile } from '../interfaces/content';
+import { ApiDataResponse, ApiListResponse, Banner, CheckoutSessionPayload, CheckoutSessionResponse, Country, MatchDetail, Series, SubscriptionPlan, UserProfile } from '../interfaces/content';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +56,10 @@ export class ApiService {
 
   getSeriesMatches(): Observable<ApiListResponse<Series>> {
     return this.http.get<ApiListResponse<Series>>(`${this.BASE}/series`);
+  }
+
+  getMatchDetails(matchId: number | string): Observable<ApiDataResponse<MatchDetail>> {
+    return this.http.get<ApiDataResponse<MatchDetail>>(`${this.BASE}/matches/${matchId}`);
   }
 
   getSeriesById(id: number): Observable<any> {

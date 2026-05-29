@@ -91,6 +91,52 @@ export interface Series {
   matches: Match[];
 }
 
+export interface MatchPlayer {
+  id: number;
+  match_id: number;
+  team_id: number;
+  player_name: string;
+  position: 'GK' | 'DEF' | 'MID' | 'FWD' | string;
+  is_playing: number;
+  is_substitute: number;
+  provider_player_id: string | null;
+  logo: string | null;
+  created_at: string;
+}
+
+export interface MatchTeam {
+  id: number;
+  name: string;
+  short_name: string;
+  logo: string;
+  playing_xi: MatchPlayer[];
+  substitutes: MatchPlayer[];
+}
+
+export interface MatchDetail {
+  match: {
+    id: number;
+    provider_match_id: string;
+    series_id: string;
+    seriesname: string;
+    matchdate: string;
+    start_time: string;
+    status: string;
+    is_active: number;
+    lineupavailable: number;
+    lineup_status: string;
+  };
+  home_team: MatchTeam;
+  away_team: MatchTeam;
+  counts: {
+    total_players: number;
+    home_playing_xi: number;
+    away_playing_xi: number;
+    home_substitutes: number;
+    away_substitutes: number;
+  };
+}
+
 export interface UserProfile {
   id: number;
   fullname: string;

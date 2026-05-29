@@ -10,6 +10,8 @@ import { FaqComponent } from './faq/faq.component';
 import { TermsComponent } from './terms/terms.component';
 import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
+import { PlayingTeamComponent } from '../lineouts/playing-team/playing-team.component';
+import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component';
 
 const routes: Routes = [
   {
@@ -23,6 +25,14 @@ const routes: Routes = [
     {
     path: 'lineouts',
     component: LineupsComponent
+  },
+  {
+    path: 'lineouts/matches/:id',
+    component: PlayingTeamComponent
+  },
+  {
+    path: 'lineouts/create-uct/:id',
+    component: CreateUctComponent
   },
     {
     path: 'pricing',

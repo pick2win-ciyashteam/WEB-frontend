@@ -1,1 +1,211 @@
-<p>create-uct works!</p>
+<app-header></app-header>
+
+<main class="uct-flow-page">
+  <div class="wrap">
+    <button class="back-link" type="button" (click)="goBack()">
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+      Back to match
+    </button>
+
+    <div class="state-card" *ngIf="loading">
+      <span class="material-symbols-outlined" aria-hidden="true">progress_activity</span>
+      <h3>Loading UCT workflow</h3>
+      <p>Fetching confirmed lineups and substitutes.</p>
+    </div>
+
+    <div class="state-card error" *ngIf="!loading && errorMessage">
+      <span class="material-symbols-outlined" aria-hidden="true">error</span>
+      <h3>UCT unavailable</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <ng-container *ngIf="!loading && detail as d">
+      <section class="uct-hero">
+        <div>
+          <div class="eyebrow">
+            <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
+            User Configuration Teams
+          </div>
+          <h1>{{ d.home_team.short_name }} vs {{ d.away_team.short_name }} <em>UCT.</em></h1>
+          <p>{{ d.match.seriesname }} - 4-step workflow. Your selections drive every generated team.</p>
+        </div>
+        <div class="hero-stat">
+          <strong>20</strong>
+          <span>Teams generated</span>
+        </div>
+      </section>
+
+      <nav class="stepper" aria-label="UCT workflow steps">
+        <button type="button" [class.active]="step === 1" [class.done]="step > 1" (click)="setStep(1)">
+          <b>01</b><span>Substitute</span>
+        </button>
+        <button type="button" [class.active]="step === 2" [class.done]="step > 2" (click)="setStep(2)">
+          <b>02</b><span>Mandate</span>
+        </button>
+        <button type="button" [class.active]="step === 3" [class.done]="step > 3" (click)="setStep(3)">
+          <b>03</b><span>Captaincy</span>
+        </button>
+        <button type="button" [class.active]="step === 4" [class.done]="step > 4" (click)="setStep(4)">
+          <b>04</b><span>Review</span>
+        </button>
+      </nav>
+
+      <section class="flow-panel" *ngIf="step === 1">
+        <div class="panel-head">
+          <div>
+            <span class="panel-kicker">Step 1 - Optional</span>
+            <h2>Substitute Players</h2>
+            <p>Choose up to 3 substitutes from either team. Leave blank if you want starting XI only.</p>
+          </div>
+          <span class="selection-pill">{{ selectedSubIds.size }} / {{ maxSubs }} selected</span>
+        </div>
+
+        <div class="player-grid">
+          <button
+            class="player-card"
+            type="button"
+            *ngFor="let player of allSubstitutes; trackBy: trackPlayer"
+            [class.selected]="selectedSubIds.has(player.id)"
+            (click)="toggleSubstitute(player)">
+            <span class="avatar">{{ player.teamShort }}</span>
+            <span class="player-main">
+              <b>{{ player.player_name }}</b>
+              <small>{{ player.teamShort }} substitute</small>
+            </span>
+            <span class="pos" [class]="positionClass(player)">{{ player.position }}</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="flow-panel" *ngIf="step === 2">
+        <div class="panel-head">
+          <div>
+            <span class="panel-kicker">Step 2 - Optional</span>
+            <h2>Mandate Players</h2>
+            <p>Use M-YES to force players into all 20 teams. Use M-NO to exclude players completely.</p>
+          </div>
+          <span class="selection-pill">YES {{ mandateYesPlayers.length }}/{{ maxMandateYes }} - NO {{ mandateNoPlayers.length }}/{{ maxMandateNo }}</span>
+        </div>
+
+        <div class="mandate-list">
+          <article class="mandate-row" *ngFor="let player of availablePool; trackBy: trackPlayer">
+            <div class="player-id">
+              <span class="avatar">{{ player.teamShort }}</span>
+              <div>
+                <b>{{ player.player_name }}</b>
+                <small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small>
+              </div>
+            </div>
+            <span class="pos" [class]="positionClass(player)">{{ player.position }}</span>
+            <div class="mandate-actions">
+              <button type="button" [class.active]="mandateOf(player) === 'YES'" (click)="setMandate(player, 'YES')">M-YES</button>
+              <button type="button" [class.active]="mandateOf(player) === 'NO'" (click)="setMandate(player, 'NO')">M-NO</button>
+              <button type="button" [class.active]="mandateOf(player) === 'NA'" (click)="setMandate(player, 'NA')">NA</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="flow-panel" *ngIf="step === 3">
+        <div class="panel-head">
+          <div>
+            <span class="panel-kicker required">Step 3 - Mandatory</span>
+            <h2>Captain &amp; Vice-Captain</h2>
+            <p>Select 2-4 CVC players. They rotate as Captain and Vice-Captain across the 20 generated teams.</p>
+          </div>
+          <span class="selection-pill">{{ cvcIds.size }} / {{ maxCvc }} selected</span>
+        </div>
+
+        <div class="player-grid">
+          <button
+            class="player-card"
+            type="button"
+            *ngFor="let player of eligibleCvcPlayers; trackBy: trackPlayer"
+            [class.selected]="cvcIds.has(player.id)"
+            (click)="toggleCvc(player)">
+            <span class="avatar">{{ player.teamShort }}</span>
+            <span class="player-main">
+              <b>{{ player.player_name }}</b>
+              <small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small>
+            </span>
+            <span class="pos" [class]="positionClass(player)">{{ player.position }}</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="flow-panel review-panel" *ngIf="step === 4">
+        <div class="panel-head">
+          <div>
+            <span class="panel-kicker">Step 4 - Review</span>
+            <h2>Review &amp; Generate</h2>
+            <p>Confirm that the 20 teams will be created strictly from your selected configuration.</p>
+          </div>
+        </div>
+
+        <div class="review-grid">
+          <div class="review-card">
+            <span>Substitutes</span>
+            <b>{{ selectedSubstitutes.length }}</b>
+            <p>{{ selectedSubstitutes.length ? 'Selected substitutes included in pool.' : 'No substitutes selected.' }}</p>
+          </div>
+          <div class="review-card">
+            <span>Mandate YES</span>
+            <b>{{ mandateYesPlayers.length }}</b>
+            <p>Appear in every generated team.</p>
+          </div>
+          <div class="review-card">
+            <span>Mandate NO</span>
+            <b>{{ mandateNoPlayers.length }}</b>
+            <p>Excluded from all generated teams.</p>
+          </div>
+          <div class="review-card">
+            <span>CVC Players</span>
+            <b>{{ cvcIds.size }}</b>
+            <p>Captain and Vice-Captain rotation pool.</p>
+          </div>
+        </div>
+
+        <label class="confirm-box">
+          <input type="checkbox" [checked]="confirmed" (change)="confirmed = !confirmed">
+          <span>I confirm that teams will be generated strictly based on my configuration.</span>
+        </label>
+      </section>
+
+      <section class="flow-panel teams-panel" *ngIf="step === 5">
+        <div class="panel-head">
+          <div>
+            <span class="panel-kicker done">UCT Generated</span>
+            <h2>20 structured teams generated.</h2>
+            <p>Review your generated teams below. Captain and Vice-Captain rotate from your selected CVC pool.</p>
+          </div>
+          <span class="selection-pill success">20 teams</span>
+        </div>
+
+        <div class="generated-grid">
+          <article class="generated-card" *ngFor="let team of generatedTeams; trackBy: trackTeam">
+            <div class="generated-head">
+              <b>Team {{ team.index }}</b>
+              <span>{{ team.split }}</span>
+            </div>
+            <div class="captain-row">
+              <span>C: <b>{{ team.captain.player_name }}</b></span>
+              <span>VC: <b>{{ team.viceCaptain.player_name }}</b></span>
+            </div>
+            <div class="mini-players">
+              <span *ngFor="let player of team.players">{{ player.teamShort }} {{ player.player_name }} <b>{{ player.position }}</b></span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <div class="flow-actions" *ngIf="step < 5">
+        <button class="ghost-btn" type="button" (click)="prevStep()">{{ step === 1 ? 'Back to match' : 'Back' }}</button>
+        <button class="primary-btn" type="button" *ngIf="step < 3" (click)="nextStep()">Next</button>
+        <button class="primary-btn" type="button" *ngIf="step === 3" [disabled]="!canReview" (click)="nextStep()">Next to Review</button>
+        <button class="primary-btn generate" type="button" *ngIf="step === 4" [disabled]="!canGenerate" (click)="generateTeams()">Create 20 Teams</button>
+      </div>
+    </ng-container>
+  </div>
+</main>
+
+<app-footer></app-footer>
