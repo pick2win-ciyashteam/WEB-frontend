@@ -2,72 +2,96 @@
 
 <section class="pricing-page" id="pricing">
   <div class="wrap">
-    <div class="section-head">
-      <div class="section-num"></div>
-      <h1>Flexible <em>coin-based</em> access.</h1>
+    <div class="section-head reveal">
+      <div class="section-num"><strong>03</strong> / Access</div>
+      <h1 class="section-title">
+        <span class="material-symbols-outlined title-icon" aria-hidden="true">payments</span>
+        <span class="section-title-text">Flexible <span class="italic-accent">coin-based</span> access.</span>
+      </h1>
     </div>
 
-    <div class="intro-panel">
-      <span class="eyebrow">PICK2WIN UCT - FLEXIBLE COIN SYSTEM</span>
+    <div class="credit-intro reveal">
+      <span class="eyebrow">PICK2WIN UCT · Flexible Coin System</span>
       <h2>Use UCT only <em>when you actually need it.</em></h2>
-      <p>Football fantasy activity is not the same every day. Some users play only Premier League, others wake up for Champions League nights, others come alive during the World Cup. Fixed monthly subscriptions charge for time you do not use. PICK2WIN is designed differently: <b>1 coin = 1 match UCT generation</b>. Buy a coin pack once, use it whenever you want.</p>
-      <div class="currency-pill" aria-label="Currency">$ All prices in USD · billed in US Dollars</div>
-    </div>
-
-    <div class="equation" aria-label="One coin equals one match">
-      <div><strong>1</strong><span>Coin</span><small>In</small></div>
-      <b>=</b>
-      <div><strong>1</strong><span>Match</span><small>UCT Workflow</small></div>
-    </div>
-
-    <div class="strip">
-      Each coin covers <b>one official lineup workflow</b>, <b>one match UCT generation</b>, <b>20 structured final teams</b>, full review, CSV export, and manual editing flexibility. Coins are only consumed when you actually use UCT for a match.
-    </div>
-
-    <div class="notice free">
-      <div class="notice-icon">OK</div>
-      <div>
-        <span class="eyebrow">FREE FIRST MATCH - EVERY NEW USER</span>
-        <h3>Sign up. Verify mobile + email. <em>Your first UCT is free.</em></h3>
-        <p>Every new PICK2WIN user gets 1 free match UCT generation. No card required upfront. Experience the workflow, test structured team generation, and see the time-saving benefit before buying a coin pack.</p>
+      <p>Football fantasy activity is not the same every day. Some users play only Premier League, others wake up for Champions League nights, others come alive during the World Cup. Fixed monthly subscriptions feel restrictive because they charge for time you do not use. PICK2WIN is designed differently: <b>1 coin = 1 match UCT generation</b>. Buy a coin pack once, use it whenever you want.</p>
+      <div class="currency-pill">
+        <span class="material-symbols-outlined" aria-hidden="true">attach_money</span>
+        USD only · all coin packs are billed in US Dollars
       </div>
-      <button type="button" (click)="openSignup()">Claim Free Match</button>
     </div>
 
-    <div class="notice expiry">
-      <div class="notice-icon">365</div>
+    <div class="credit-explainer reveal" aria-label="One coin equals one match">
+      <div class="credit-eq-side">
+        <div class="credit-eq-big"><span>1</span> Coin</div>
+        <div class="credit-eq-lbl">In</div>
+      </div>
+      <div class="credit-eq-sym">=</div>
+      <div class="credit-eq-side">
+        <div class="credit-eq-big"><span>1</span> Match</div>
+        <div class="credit-eq-lbl">UCT Workflow</div>
+      </div>
+    </div>
+
+    <div class="credit-feature-strip reveal">
+      Each coin covers <b>one official lineup workflow</b> · <b>one match UCT generation</b> · <b>20 structured final teams</b> · full review · CSV export · manual editing flexibility. Coins are only consumed when you actually use UCT for a match.
+    </div>
+
+    <div class="free-banner reveal">
+      <div class="banner-icon material-symbols-outlined" aria-hidden="true">redeem</div>
+      <div class="banner-body">
+        <span class="eyebrow">Free First Match · Every New User</span>
+        <h3>Sign up. Verify mobile + email. <em>Your first UCT is free.</em></h3>
+        <p>Every new PICK2WIN user gets 1 free match UCT generation. No card required upfront. Experience the workflow, test structured team generation, and see the time-saving benefit before buying a coin pack. Multi-account abuse leads to permanent ban.</p>
+      </div>
+      <button class="banner-cta" type="button" (click)="openSignup()">Claim Free Match</button>
+    </div>
+
+    <div class="expiry-banner reveal">
+      <div class="banner-icon material-symbols-outlined" aria-hidden="true">hourglass_top</div>
       <div>
-        <span class="eyebrow">365-DAY VALIDITY - ALL PACKS</span>
+        <span class="eyebrow">365-Day Validity · All Packs</span>
         <h3>Every pack is valid for <em>365 days from purchase.</em></h3>
-        <p>Each pack starts its own 365-day clock from the date of payment. If you own coins from multiple packs, deductions are taken from the pack with the earliest expiry first. This FIFO rule protects newer coin lots.</p>
+        <p>Each pack starts its own 365-day clock from the date of payment. When you have coins from multiple packs at the same time, deductions are taken from the pack with the earliest expiry first, protecting newer coin lots.</p>
       </div>
     </div>
 
     <div class="pack-status" *ngIf="loading">Loading latest coin packs...</div>
     <div class="pack-status error" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
+    <div class="pack-status error" *ngIf="paymentError">{{ paymentError }}</div>
 
-    <div class="packs" *ngIf="!loading && plans.length">
-      <article class="pack" *ngFor="let plan of plans; trackBy: trackPlan" [ngClass]="planClass(plan)">
-        <div class="badge" *ngIf="plan.is_popular">MOST POPULAR</div>
-        <div class="badge" *ngIf="plan.is_pro">PRO TIER</div>
-        <h3>{{ plan.name }}</h3>
-        <p class="sub">{{ plan.subtitle }}</p>
-        <div class="coins"><strong>{{ plan.coins }}</strong><span>coins</span></div>
-        <p><b>{{ plan.matches }} matches</b> of UCT workflow</p>
-        <div class="price"><span>{{ plan.currency_symbol }}</span>{{ plan.price | number:'1.0-2' }}</div>
-        <div class="per">Approx <b>{{ plan.currency_symbol }}{{ plan.price_per_coin | number:'1.2-2' }}</b> per coin</div>
-        <button type="button" (click)="openSignup()">Buy {{ plan.coins }} Coins</button>
-        <small>VALID {{ plan.validity_days }} DAYS - ONE-TIME PAYMENT - NO AUTO-RENEW</small>
+    <div class="credit-packs reveal" *ngIf="!loading && plans.length">
+      <article class="credit-pack" *ngFor="let plan of plans; trackBy: trackPlan" [ngClass]="planClass(plan)">
+        <div class="credit-pack-badge" *ngIf="plan.is_popular">Most Popular</div>
+        <div class="credit-pack-badge" *ngIf="plan.is_pro">Pro Tier</div>
+        <div class="credit-pack-name">{{ plan.name }}</div>
+        <div class="credit-pack-sub">{{ plan.subtitle }}</div>
+        <div class="credit-pack-coins">
+          <span class="credit-pack-num">{{ plan.coins }}</span>
+          <span class="credit-pack-label">coins</span>
+        </div>
+        <p class="credit-pack-matches"><b>{{ plan.matches }} matches</b> of UCT workflow</p>
+        <div class="credit-pack-price">
+          <span class="credit-pack-cur">{{ plan.currency_symbol }}</span>
+          <span class="credit-pack-amount">{{ plan.price | number:'1.0-2' }}</span>
+        </div>
+        <div class="credit-pack-per">Approx <b>{{ plan.currency_symbol }}{{ plan.price_per_coin | number:'1.2-2' }}</b> per coin</div>
+        <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId" (click)="buyPlan(plan)">
+          {{ isPurchasing(plan) ? 'Opening Stripe...' : 'Buy ' + plan.coins + ' Coins' }}
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </button>
+        <div class="credit-pack-foot">Valid {{ plan.validity_days }} days · one-time payment · no auto-renew</div>
       </article>
     </div>
 
-    <div class="table-card" *ngIf="!loading && plans.length">
-      <span class="eyebrow">ALL PACKS - SIDE BY SIDE</span>
-      <h2>Compare every coin pack at a glance</h2>
-      <p>Every pack covers the same UCT workflow. The only differences are coin volume and per-match price. All packs are one-time purchases with no auto-renewal.</p>
+    <div class="pricing-table-wrap reveal" *ngIf="!loading && plans.length">
+      <div class="pricing-table-head">
+        <span class="eyebrow">All Packs · Side by Side</span>
+        <h2>Compare every coin pack at a glance</h2>
+        <p>Every pack covers the same UCT workflow. The only differences are coin volume and per-match price. All packs are valid from purchase, one-time payment, no auto-renewal, payments via Stripe.</p>
+      </div>
 
-      <div class="table-scroll">
-        <table>
+      <div class="pricing-table-scroll">
+        <table class="pricing-table">
           <thead>
             <tr>
               <th>Detail</th>
@@ -77,15 +101,15 @@
           <tbody>
             <tr>
               <td>Coins</td>
-              <td *ngFor="let plan of plans"><b>{{ plan.coins }}</b></td>
+              <td *ngFor="let plan of plans"><span class="pt-price">{{ plan.coins }}</span></td>
             </tr>
             <tr>
               <td>Matches covered</td>
               <td *ngFor="let plan of plans">{{ plan.matches }}</td>
             </tr>
             <tr>
-              <td>Price</td>
-              <td *ngFor="let plan of plans"><b>{{ plan.currency_symbol }}{{ plan.price | number:'1.0-2' }} {{ plan.currency }}</b></td>
+              <td>Price · USD</td>
+              <td *ngFor="let plan of plans"><span class="pt-price">{{ plan.currency_symbol }}{{ plan.price | number:'1.0-2' }}</span></td>
             </tr>
             <tr>
               <td>Per coin</td>
@@ -93,7 +117,7 @@
             </tr>
             <tr>
               <td>Expiry</td>
-              <td *ngFor="let plan of plans"><span class="yes">{{ plan.validity_days }} days</span></td>
+              <td *ngFor="let plan of plans"><span class="pt-yes">{{ plan.validity_days }} days</span></td>
             </tr>
             <tr>
               <td>Leagues included</td>
@@ -101,79 +125,121 @@
             </tr>
             <tr>
               <td>Free first match</td>
-              <td [attr.colspan]="plans.length"><span class="yes">Every new verified user - 1 free match - once per user</span></td>
+              <td [attr.colspan]="plans.length"><span class="pt-yes">Every new verified user · 1 free match · once per user</span></td>
             </tr>
             <tr>
               <td>Auto-renewal</td>
-              <td [attr.colspan]="plans.length"><span class="no">No - one-time purchases only</span></td>
+              <td [attr.colspan]="plans.length"><span class="pt-no">No · one-time purchases only</span></td>
+            </tr>
+            <tr>
+              <td>Refunds</td>
+              <td [attr.colspan]="plans.length"><span class="pt-no">No refunds · once coins are issued they are non-refundable</span></td>
             </tr>
             <tr>
               <td>Payment partner</td>
-              <td [attr.colspan]="plans.length">Stripe - 3D Secure - Radar fraud detection</td>
+              <td [attr.colspan]="plans.length">Stripe · 3D Secure · Radar fraud detection</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <div class="info-grid benefits">
-      <div>
-        <span class="eyebrow">1 COIN = 1 MATCH UCT USAGE</span>
-        <h3>Each pack is valid for 365 days. Use UCT <em>only when you truly need it.</em></h3>
+    <div class="credit-intro philosophy reveal">
+      <span class="eyebrow">User-First Philosophy</span>
+      <h2>You decide <em>when</em> fantasy matters.</h2>
+      <p>PICK2WIN believes fantasy users should decide when they want to play, which matches matter, which leagues they follow, and how frequently they use UCT. The coin-pack system is designed around <b>flexibility and workflow freedom</b>, not subscription cycles or recurring billing pressure. Buy what you need, use it whenever you want.</p>
+    </div>
+
+    <div class="credit-benefits reveal">
+      <div class="credit-benefits-head">
+        <span class="eyebrow">1 Coin = 1 Match UCT Usage</span>
+        <h2>Each pack is valid for 365 days. Use UCT <em>only when you truly need it.</em></h2>
         <p>Strategy stays fully under your control. UCT only helps with structured generation after you have made your configuration choices.</p>
       </div>
-      <ul>
-        <li><b>Complete flexibility</b> - use coins on any supported match, league, or tournament.</li>
-        <li><b>Better spending control</b> - one-time pack purchase, no auto-renewal.</li>
-        <li><b>League freedom</b> - Premier League this week, La Liga next week, your call.</li>
-        <li><b>Structured workflow efficiency</b> - 20 teams per match after lineup release.</li>
-        <li><b>Smarter multi-team preparation</b> - better coverage with less manual effort.</li>
+      <ul class="credit-benefits-list">
+        <li><span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span><span><b>Complete flexibility</b> - use coins on any supported match, league, or tournament.</span></li>
+        <li><span class="material-symbols-outlined" aria-hidden="true">account_balance_wallet</span><span><b>Better spending control</b> - one-time pack purchase, no auto-renewal.</span></li>
+        <li><span class="material-symbols-outlined" aria-hidden="true">emoji_events</span><span><b>League freedom</b> - Premier League this week, La Liga next week, your call.</span></li>
+        <li><span class="material-symbols-outlined" aria-hidden="true">public</span><span><b>Tournament freedom</b> - World Cup, Euros, Champions League, no restrictions.</span></li>
+        <li><span class="material-symbols-outlined" aria-hidden="true">settings</span><span><b>Structured workflow efficiency</b> - 20 teams per match after lineup release.</span></li>
+        <li><span class="material-symbols-outlined" aria-hidden="true">extension</span><span><b>Smarter multi-team preparation</b> - better coverage with less manual effort.</span></li>
       </ul>
     </div>
 
-    <div class="pricing-note">
-      <div class="note-head">
-        <span class="note-icon">i</span>
+    <div class="pricing-note reveal">
+      <div class="pricing-note-h">
+        <span class="pricing-note-icon material-symbols-outlined" aria-hidden="true">contract</span>
         <div>
-          <span class="eyebrow">IMPORTANT PRICING NOTE</span>
-          <h3>Pricing may evolve. Your purchased coins are <em>protected.</em></h3>
+          <span class="eyebrow">Important Pricing Note</span>
+          <h2>Pricing may evolve. Your purchased coins are <em>protected.</em></h2>
         </div>
       </div>
-      <p>PICK2WIN continuously works on improving the UCT platform, backend logic, coverage systems, workflow quality, and upcoming tuned versions designed to provide a better user experience.</p>
-      <p>Based on future improvements, feature enhancements, infrastructure scaling, and user adoption, coin package pricing may be updated in the future with prior notice provided to users.</p>
-      <div class="guarantee"><b>Any coins already purchased remain usable under the exact terms in force at the time of purchase, including the original 365-day expiry window from your purchase date.</b></div>
-    </div>
-
-    <div class="commitments">
-      <span class="eyebrow">OUR PROMISE TO COIN BUYERS</span>
-      <h2>How package changes work - clearly explained.</h2>
-      <p>If PICK2WIN ever retires an old package and launches a new one, existing users keep clear terms. No surprises.</p>
-      <div class="commitment-grid">
-        <div><b>01</b><h4>Your unused coins are always yours</h4><p>Unused coins remain valid until the original 365-day window from your purchase date closes.</p></div>
-        <div><b>02</b><h4>New purchases use current packages</h4><p>When you buy more coins after a package change, you select from the currently listed packages.</p></div>
-        <div><b>03</b><h4>Pricing changes get notice</h4><p>Users receive advance notice and a clear explanation of what is changing and why.</p></div>
-        <div><b>04</b><h4>Higher packs stay better value</h4><p>The more coins you buy in a single pack, the lower the per-coin price should be.</p></div>
+      <p>PICK2WIN continuously works on improving the UCT platform, backend logic, coverage systems, workflow quality, and upcoming tuned versions designed to provide a better user experience and smarter structured generation workflows.</p>
+      <p>Based on future platform improvements, feature enhancements, infrastructure scaling, and growing user adoption, coin package pricing may be updated in the future with prior notice provided to users.</p>
+      <div class="pricing-note-guarantee">
+        <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+        <p><b>Any coins already purchased remain usable under the exact terms in force at the time of purchase, including the original 365-day expiry window from your purchase date.</b> Future pricing changes do not retroactively shorten your existing expiry, raise your per-coin rate, or alter any term of a pack you already paid for.</p>
       </div>
     </div>
 
-    <div class="signup-nudge" *ngIf="loggedIn$ | async; else guestActions">
+    <div class="pricing-commitments reveal">
+      <div class="pricing-commitments-head">
+        <span class="eyebrow">Our Promise to Coin Buyers</span>
+        <h2>How package changes work - clearly explained.</h2>
+        <p>If PICK2WIN ever retires an old package and launches a new one, here is exactly what happens to existing users. No surprises.</p>
+      </div>
+      <div class="pricing-commitments-grid">
+        <article class="commitment-card">
+          <div class="commitment-num">01</div>
+          <span class="material-symbols-outlined commitment-icon" aria-hidden="true">toll</span>
+          <h4>Your unused coins are always yours</h4>
+          <p>If a package is retired or replaced, coins already purchased remain valid until the original 365-day window from your purchase date closes.</p>
+        </article>
+        <article class="commitment-card">
+          <div class="commitment-num">02</div>
+          <span class="material-symbols-outlined commitment-icon" aria-hidden="true">shopping_cart</span>
+          <h4>New purchases use current packages</h4>
+          <p>When you buy more coins after a package change, you select from the currently listed packages at the time of that new purchase.</p>
+        </article>
+        <article class="commitment-card highlight">
+          <div class="commitment-num">03</div>
+          <span class="material-symbols-outlined commitment-icon" aria-hidden="true">trending_down</span>
+          <h4>Pricing changes get notice</h4>
+          <p>Users receive advance notice and a clear explanation of what is changing and why. PICK2WIN designs pricing for stability and predictability.</p>
+        </article>
+        <article class="commitment-card">
+          <div class="commitment-num">04</div>
+          <span class="material-symbols-outlined commitment-icon" aria-hidden="true">bar_chart</span>
+          <h4>Higher packs stay better value</h4>
+          <p>The more coins you buy in a single pack, the lower the per-coin price should be. Bigger packs preserve better economics.</p>
+        </article>
+      </div>
+      <div class="pricing-commitments-foot">
+        <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+        <p>These commitments apply to every PICK2WIN coin pack purchase, past and future. They are part of our published terms, not marketing language.</p>
+      </div>
+    </div>
+
+    <div class="signup-nudge reveal" *ngIf="loggedIn$ | async; else guestActions">
+      <div class="signup-nudge-icon material-symbols-outlined" aria-hidden="true">account_circle</div>
       <div>
-        <span class="eyebrow">ACCOUNT READY</span>
+        <span class="eyebrow">Account Ready</span>
         <h3>Manage your coin packs from My Space.</h3>
       </div>
-      <a routerLink="/user/profile">Go to profile</a>
+      <a class="signup-nudge-btn" routerLink="/user/profile">Go to profile</a>
     </div>
 
     <ng-template #guestActions>
-      <div class="signup-nudge">
-        <div>
-          <span class="eyebrow">SIGN UP BEFORE BUYING - CLAIM YOUR FREE FIRST MATCH</span>
+      <div class="signup-nudge reveal">
+        <div class="signup-nudge-icon material-symbols-outlined" aria-hidden="true">redeem</div>
+        <div class="signup-nudge-body">
+          <span class="eyebrow">Sign Up Before Buying · Claim Your Free First Match</span>
           <h3>Try before you buy. <em>First UCT is on us.</em></h3>
           <p>Every new PICK2WIN account gets one free UCT generation before payment. Sign up takes 60 seconds with mobile and email OTP.</p>
         </div>
-        <div class="actions">
-          <button type="button" (click)="openSignup()">Create free account</button>
-          <button class="ghost" type="button" (click)="openLogin()">Sign in</button>
+        <div class="signup-nudge-actions">
+          <button class="signup-nudge-btn" type="button" (click)="openSignup()">Create free account</button>
+          <button class="signup-nudge-btn-ghost" type="button" (click)="openLogin()">Sign in</button>
         </div>
       </div>
     </ng-template>

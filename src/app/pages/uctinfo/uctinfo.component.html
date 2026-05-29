@@ -1,53 +1,191 @@
 <app-header></app-header>
 
-<section class="uct-page">
+<section class="uct-page" id="top">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="section-num"></div>
-      <h2 class="h-display h2 section-title">User Configuration Teams <span class="italic-accent">UCT.</span></h2>
+      <div class="section-num"><strong>02</strong> / The Engine</div>
+      <h2 class="section-title">
+        <span class="material-symbols-outlined title-icon" aria-hidden="true">settings</span>
+        <span class="section-title-text">
+          User Configuration Teams <span class="italic-accent">UCT.</span>
+        </span>
+      </h2>
     </div>
 
-    <div class="about-hero reveal">
-      <span class="about-eyebrow">THE ENGINE BEHIND PICK2WIN</span>
-      <h1 class="about-h">A structured workflow tool - <em>not a fantasy app.</em></h1>
-      <p class="about-lead">UCT (User Configuration Teams) is a structured combination engine. It activates strictly after official lineups confirm, takes your 4-step configuration, and produces 20 structured football virtual teams in a few seconds. UCT is not a prediction engine, not an AI model, and not a betting bot.</p>
+    <div class="engine-hero reveal">
+      <span class="eyebrow">
+        <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+        The Engine Behind PICK2WIN
+      </span>
+      <h1>A structured football virtual team configuration engine.</h1>
+      <p>
+        UCT helps users create multiple balanced team combinations quickly after official lineups are released.
+        It reduces repetitive manual configuration effort while keeping every decision under user control.
+        Once lineups are available, UCT transforms user-selected configurations into
+        <b>20 structured football virtual teams within a few seconds.</b>
+      </p>
     </div>
 
-    <article class="about-block reveal">
-      <div class="about-block-eyebrow"><span class="num">01</span> - WHAT IS UCT</div>
-      <h2 class="about-block-h">A workflow tool that compresses <em>~60 minutes</em> of manual team-building into seconds.</h2>
-      <div class="about-prose">
-        <p>UCT stands for <b>User Configuration Teams</b>. It is designed for fantasy football users who create <b>strictly 20 teams per match</b>, manually rotate captains, vary formations, balance player exposure, and race the 60-75 minute pre-kickoff window.</p>
-        <p>UCT is not a fantasy app replacement. It does not host contests, track points, or run scoring systems. It produces a CSV-exportable batch of 20 structured teams from your configuration, which you then submit to your fantasy contest app of choice.</p>
+    <article class="info-block reveal">
+      <div class="block-kicker">
+        <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
+        How To Run UCT
+      </div>
+      <h2>Five simple steps from <em>lineup release to 20 teams.</em></h2>
+      <p class="block-lead">
+        Using UCT follows the same structured flow every time. Each status is clearly shown inside the Lineouts page.
+      </p>
+
+      <div class="steps-grid">
+        <div class="step-card gold">
+          <span>Step 1</span>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">format_list_bulleted</span> Open Lineouts</h3>
+          <p>View supported matches, competition details, kickoff times, lineup status, UCT availability, and your coin balance.</p>
+        </div>
+        <div class="step-card blue">
+          <span>Step 2</span>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">schedule</span> Wait for lineups</h3>
+          <p>Before official lineups release, matches remain visible with UCT locked. Generation is unavailable until confirmed team news.</p>
+        </div>
+        <div class="step-card green">
+          <span>Step 3</span>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">verified</span> Lineup released</h3>
+          <p>Once official lineups are available, the Run UCT action opens. Review the playing XI and substitutes before configuration.</p>
+        </div>
+        <div class="step-card gold">
+          <span>Step 4</span>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">paid</span> Check coins</h3>
+          <p><b>1 coin = 1 match UCT generation.</b> Coins are consumed only after successful generation.</p>
+        </div>
+        <div class="step-card green">
+          <span>Step 5</span>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">play_arrow</span> Run UCT</h3>
+          <p>Choose the match, start the four-screen workflow, confirm responsibility, and generate your structured teams.</p>
+        </div>
       </div>
     </article>
 
-    <article class="about-block reveal">
-      <div class="about-block-eyebrow"><span class="num">01b</span> - TEAM COMPOSITION SPEC</div>
-      <h2 class="about-block-h">Each structured team is an <em>11-player squad</em> drawn from both real teams.</h2>
-      <div class="about-prose">
-        <p>Every one of the 20 teams generated by UCT follows football-real composition rules. The engine never invents players and never recommends picks. It uses the official playing XI plus substitute pool, applies category constraints, and generates structurally diverse teams from your selection pool.</p>
+    <article class="info-block reveal">
+      <div class="block-kicker">
+        <span class="material-symbols-outlined" aria-hidden="true">schema</span>
+        UCT Configuration Workflow
       </div>
+      <h2>Four configuration screens, <em>one confirmation, 20 teams.</em></h2>
+      <p class="block-lead">
+        All selections are made entirely by the user. PICK2WIN does not recommend players, alter configurations,
+        or modify selections. UCT simply processes your inputs and produces structured combinations.
+      </p>
+
+      <div class="workflow-strip" aria-label="UCT workflow sequence">
+        <span><b>1</b> Substitute</span>
+        <i class="material-symbols-outlined" aria-hidden="true">arrow_forward</i>
+        <span><b>2</b> Mandate</span>
+        <i class="material-symbols-outlined" aria-hidden="true">arrow_forward</i>
+        <span><b>3</b> CVC / C&amp;VC</span>
+        <i class="material-symbols-outlined" aria-hidden="true">arrow_forward</i>
+        <span><b>4</b> Summary</span>
+        <i class="material-symbols-outlined" aria-hidden="true">arrow_forward</i>
+        <span class="danger">Create</span>
+        <i class="material-symbols-outlined" aria-hidden="true">arrow_forward</i>
+        <span class="success">20 teams</span>
+      </div>
+
+      <div class="screen-grid">
+        <div class="screen-card">
+          <div class="screen-top">
+            <span>Screen 1</span>
+            <strong>Optional</strong>
+          </div>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">person_add</span> Substitute Selection</h3>
+          <p>Users may select up to 3 substitute players, or skip substitute selection entirely.</p>
+          <ul>
+            <li>M-YES: selected substitute appears in all generated teams</li>
+            <li>NA: no forced inclusion</li>
+            <li>M-NO is not allowed for substitutes</li>
+          </ul>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-top">
+            <span>Screen 2</span>
+            <strong>Optional</strong>
+          </div>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">rule</span> Mandate Selection</h3>
+          <p>Mandates allow users to control player inclusion across all 20 teams.</p>
+          <ul>
+            <li>M-YES: 1-2 players appear in every generated team</li>
+            <li>M-NO: 1-2 players appear in zero generated teams</li>
+            <li>NA: no inclusion or exclusion preference</li>
+          </ul>
+        </div>
+
+        <div class="screen-card highlight">
+          <div class="screen-top">
+            <span>Screen 3</span>
+            <strong>Required</strong>
+          </div>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span> Captain &amp; Vice-Captain</h3>
+          <p>This step is mandatory. Without it, team generation cannot continue.</p>
+          <ul>
+            <li>CVC mode: 2-4 players rotate as both Captain and Vice-Captain</li>
+            <li>C&amp;VC mode: separate Captain and Vice-Captain pools</li>
+            <li>M-NO players cannot be Captain or Vice-Captain</li>
+          </ul>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-top">
+            <span>Screen 4</span>
+            <strong>Review</strong>
+          </div>
+          <h3><span class="material-symbols-outlined" aria-hidden="true">fact_check</span> Configuration Summary</h3>
+          <p>Review substitute, mandate, and captaincy selections before generation.</p>
+          <ul>
+            <li>Review configuration</li>
+            <li>Go back and modify selections</li>
+            <li>Create teams after confirmation</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="confirm-card">
+        <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+        <div>
+          <b>User confirmation before generation</b>
+          <p>"I confirm that teams will be generated strictly based on my configuration."</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="info-block reveal">
+      <div class="block-kicker">
+        <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+        Team Composition Spec
+      </div>
+      <h2>Each structured team is an <em>11-player squad</em> drawn from both real teams.</h2>
+      <p class="block-lead">
+        Every generated team follows football-real composition rules. The engine never invents players and never recommends picks.
+      </p>
 
       <div class="summary-grid">
-        <div class="summary-card gold">
-          <div class="summary-label">SQUAD SIZE</div>
-          <div class="summary-value">11 players</div>
+        <div class="summary-card">
+          <span>Squad size</span>
+          <b>11 players</b>
           <p>Total per team, the standard football starting XI.</p>
         </div>
-        <div class="summary-card info">
-          <div class="summary-label">TEAM SOURCE</div>
-          <div class="summary-value">Both teams</div>
-          <p>Players selected from both real clubs playing the match.</p>
+        <div class="summary-card blue">
+          <span>Team source</span>
+          <b>Both teams</b>
+          <p>Players are selected from both real clubs playing the match.</p>
         </div>
         <div class="summary-card green">
-          <div class="summary-label">SUBSTITUTE SUPPORT</div>
-          <div class="summary-value">Configurable</div>
-          <p>Substitute slots filled from your UCT workflow configuration.</p>
+          <span>Substitutes</span>
+          <b>Configurable</b>
+          <p>Substitute slots follow your workflow configuration.</p>
         </div>
       </div>
 
-      <div class="table-label">CATEGORY LIMITS - ENFORCED ON EVERY GENERATED TEAM</div>
+      <div class="table-label">Category limits - enforced on every generated team</div>
       <div class="table-wrap">
         <table>
           <thead>
@@ -59,185 +197,109 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td><span class="p-pos gk">GK</span></td><td>Goalkeeper</td><td>1</td><td>1</td></tr>
-            <tr><td><span class="p-pos def">DEF</span></td><td>Defenders</td><td>3</td><td>6</td></tr>
-            <tr><td><span class="p-pos mid">MID</span></td><td>Midfielders</td><td>2</td><td>5</td></tr>
-            <tr><td><span class="p-pos fwd">FWD</span></td><td>Forwards</td><td>1</td><td>3</td></tr>
+            <tr>
+              <td><span class="pos gk">GK</span></td>
+              <td>Goalkeeper</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td><span class="pos def">DEF</span></td>
+              <td>Defenders</td>
+              <td>3</td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td><span class="pos mid">MID</span></td>
+              <td>Midfielders</td>
+              <td>2</td>
+              <td>5</td>
+            </tr>
+            <tr>
+              <td><span class="pos fwd">FWD</span></td>
+              <td>Forwards</td>
+              <td>1</td>
+              <td>3</td>
+            </tr>
           </tbody>
         </table>
       </div>
 
-      <p class="note"><b>Total always equals 11.</b> With exactly 1 goalkeeper fixed, the remaining 10 outfield slots flex within the min/max bands to produce football-real formations like <b>3-5-2, 4-4-2, 4-3-3, 5-3-2, 3-4-3, 5-4-1, and 4-5-1</b>.</p>
+      <p class="note">
+        <b>Total always equals 11.</b> With exactly 1 goalkeeper fixed, the remaining 10 outfield slots flex within
+        the min/max bands to produce football-real formations such as 3-5-2, 4-4-2, 4-3-3, 5-3-2, 3-4-3, 5-4-1, and 4-5-1.
+      </p>
     </article>
 
-    <article class="about-block reveal">
-      <div class="about-block-eyebrow"><span class="num">02</span> - HOW UCT WORKS - 4-SCREEN WORKFLOW</div>
-      <h2 class="about-block-h">Four configuration screens, <em>one confirmation, 20 teams.</em></h2>
-      <div class="about-prose">
-        <p>The workflow runs after official lineups release. The user moves through Substitute, Mandate, Captaincy, and Configuration Summary screens, confirms responsibility, and the engine generates 20 teams strictly from the user's inputs.</p>
+    <article class="info-block reveal">
+      <div class="block-kicker">
+        <span class="material-symbols-outlined" aria-hidden="true">account_tree</span>
+        The Structure
       </div>
-
-      <div class="flow-strip">
-        <span><b>1.</b> Substitute</span>
-        <i>↓</i>
-        <span><b>2.</b> Mandate</span>
-        <i>↓</i>
-        <span><b>3.</b> CVC / C&amp;VC</span>
-        <i>↓</i>
-        <span><b>4.</b> Summary</span>
-        <i>↓</i>
-        <span class="danger">Create / Submit</span>
-        <i>↓</i>
-        <span class="blue">Confirmation</span>
-        <i>↓</i>
-        <span class="success">20 Teams Generated</span>
-      </div>
-
-      <div class="mockup-heading">SAMPLE UCT SCREENS - WHAT USERS ACTUALLY SEE</div>
-      <p class="mockup-sub">Sample mobile mockups showing the UCT 4-step workflow and confirmation popup. Real lineups populate richer player data and stats.</p>
-
-      <div class="uct-mockup-grid">
-        <div class="uct-mockup-cell">
-          <div class="uct-phone">
-            <div class="phone-top">8:21 <span>FPS</span></div>
-            <div class="phone-title">Sub Selection <em>(optional)</em></div>
-            <div class="phone-sub">Choose up to 3 Substitute players</div>
-            <div class="phone-steps"><b>1</b><span></span><i>2</i><span></span><i>3</i><span></span><i>4</i></div>
-            <div class="player selected">Nathan Collins <span>DEF</span></div>
-            <div class="player selected">Mikkel Damsgaard <span>MID</span></div>
-            <div class="phone-section">SUBSTITUTES</div>
-            <div class="player">Ellery Balcombe <span>GK</span></div>
-            <div class="player">Antoni Milambo <span>MID</span></div>
-            <div class="player">Reiss Nelson <span>FWD</span></div>
-            <div class="phone-actions"><button>Back</button><button>Next</button></div>
-          </div>
-          <div class="uct-mockup-label">SCREEN 1 - OPTIONAL</div>
-          <p>Pick 0-3 substitute players from either team.</p>
-        </div>
-
-        <div class="uct-mockup-cell">
-          <div class="uct-phone">
-            <div class="phone-top">8:22 <span>FPS</span></div>
-            <div class="phone-title">Mandate Selection <em>(optional)</em></div>
-            <div class="phone-sub">Configure player mandates</div>
-            <div class="phone-steps done"><i>1</i><b>2</b><span></span><i>3</i><span></span><i>4</i></div>
-            <div class="mode-row"><button class="active">N/A</button><button>M-YES</button><button>M-NO</button></div>
-            <div class="empty-state">
-              <strong>No Mandatory Players Selected</strong>
-              <span>This is intentional, not missing.</span>
-            </div>
-            <div class="phone-actions"><button>Back</button><button>Next</button></div>
-          </div>
-          <div class="uct-mockup-label">SCREEN 2 - OPTIONAL</div>
-          <p>M-YES, M-NO, or NA. Skipping is valid.</p>
-        </div>
-
-        <div class="uct-mockup-cell">
-          <div class="uct-phone">
-            <div class="phone-top">8:22 <span>FPS</span></div>
-            <div class="phone-title">C, VC Selection <em>(mandatory)</em></div>
-            <div class="phone-sub">Choose your configuration</div>
-            <div class="phone-steps done"><i>1</i><i>2</i><b>3</b><span></span><i>4</i></div>
-            <div class="captain-mode"><button class="active">CVC<br><small>Rotate as both</small></button><button>C &amp; VC<br><small>Assign roles</small></button></div>
-            <div class="player selected">Sepp van den Berg <span>CVC</span></div>
-            <div class="player selected">Dean Henderson <span>CVC</span></div>
-            <div class="player">Igor Thiago <span>FWD</span></div>
-            <div class="player">Cheick Doucoure <span>MID</span></div>
-            <div class="phone-actions"><button>Back</button><button>Next</button></div>
-          </div>
-          <div class="uct-mockup-label">SCREEN 3 - REQUIRED</div>
-          <p>Choose CVC mode or C&amp;VC matrix.</p>
-        </div>
-
-        <div class="uct-mockup-cell">
-          <div class="uct-phone">
-            <div class="phone-top">8:22 <span>FPS</span></div>
-            <div class="phone-title">UCT Preview</div>
-            <div class="phone-sub">Review your config before generating</div>
-            <div class="preview-card"><b>Substitutes</b><span>None</span><p>No substitutes selected</p></div>
-            <div class="preview-card"><b>Mandate</b><span>N/A</span><p>No mandate preference</p></div>
-            <div class="preview-card"><b>C, VC</b><span>CVC Mode</span><p>2 CVC players selected</p></div>
-            <div class="phone-actions"><button>Back</button><button class="create">Create</button></div>
-          </div>
-          <div class="uct-mockup-label">SCREEN 4 - REVIEW</div>
-          <p>Read-only summary, edit or create.</p>
-        </div>
-
-        <div class="uct-mockup-cell">
-          <div class="uct-popup-frame">
-            <div class="uct-popup-card">
-              <div class="uct-popup-shield">!</div>
-              <h3>User Responsibility Notice</h3>
-              <p>The UCT feature operates strictly based on inputs provided by the user. The platform does not influence, recommend, or alter any selection.</p>
-              <label><span></span>I confirm teams will be generated strictly based on my configuration.</label>
-              <div><button>Cancel</button><button>Create</button></div>
-            </div>
-          </div>
-          <div class="uct-mockup-label">CONFIRM POPUP</div>
-          <p>Final acknowledgement before generation.</p>
-        </div>
-      </div>
-
-      <div class="rules-grid">
-        <div class="rule-card gold"><b>SUBSTITUTE RULES</b><p>0-3 players, M-YES or NA only, never M-NO.</p></div>
-        <div class="rule-card green"><b>MANDATE VALID COMBOS</b><p>M-YES only, M-NO only, M-YES + M-NO, or NA only.</p></div>
-        <div class="rule-card red"><b>INVALID</b><p>All three modes at once, NA mixed with M-YES/M-NO, or more than 2 mandate players.</p></div>
-        <div class="rule-card gold"><b>C/VC MANDATORY</b><p>CVC mode or C&amp;VC matrix. M-NO players cannot be C/VC.</p></div>
-      </div>
-
-      <div class="info-callout">
-        <b>NO IN-MATCH BUDGETS - NO SALARY CAPS - NO APP-SPECIFIC SCORING</b>
-        <p>UCT does not impose salary caps or app-specific scoring rules. All in-match constraints stay with your fantasy contest app. UCT only enforces football validity and structured output.</p>
-      </div>
-    </article>
-
-    <article class="about-block reveal">
-      <div class="about-block-eyebrow"><span class="num">03</span> - THE STRUCTURE</div>
-      <h2 class="about-block-h">Football-real constraints, <em>structured splits.</em></h2>
-      <p class="note">Every team UCT generates passes through non-negotiable constraints enforced by the engine.</p>
+      <h2>Football-real constraints, <em>structured splits.</em></h2>
+      <p class="block-lead">Every team UCT generates passes through non-negotiable constraints enforced by the engine.</p>
 
       <div class="constraint-grid">
-        <div><span>GOALKEEPER</span><b>1 GK</b><p>Exactly one</p></div>
-        <div><span>DEFENDERS</span><b>3-6 DEF</b><p>Range allowed</p></div>
-        <div><span>MIDFIELDERS</span><b>2-5 MID</b><p>Range allowed</p></div>
-        <div><span>FORWARDS</span><b>1-3 FWD</b><p>Range allowed</p></div>
-        <div class="red"><span>MAX PER TEAM</span><b>7 max</b><p>From any one real team</p></div>
+        <div><span>Goalkeeper</span><b>1 GK</b><p>Exactly one</p></div>
+        <div><span>Defenders</span><b>3-6 DEF</b><p>Range allowed</p></div>
+        <div><span>Midfielders</span><b>2-5 MID</b><p>Range allowed</p></div>
+        <div><span>Forwards</span><b>1-3 FWD</b><p>Range allowed</p></div>
+        <div class="danger"><span>Max per team</span><b>7 max</b><p>From any one real team</p></div>
       </div>
 
       <div class="split-grid">
-        <div><b>4-7</b><span>SPLIT A - 5 TEAMS</span><p>4 home-team players, 7 away</p></div>
-        <div><b>5-6</b><span>SPLIT B - 5 TEAMS</span><p>5 home, 6 away</p></div>
-        <div><b>6-5</b><span>SPLIT C - 5 TEAMS</span><p>6 home, 5 away</p></div>
-        <div><b>7-4</b><span>SPLIT D - 5 TEAMS</span><p>7 home, 4 away</p></div>
+        <div><b>4-7</b><span>Split A - 5 teams</span><p>4 home-team players, 7 away</p></div>
+        <div><b>5-6</b><span>Split B - 5 teams</span><p>5 home, 6 away</p></div>
+        <div><b>6-5</b><span>Split C - 5 teams</span><p>6 home, 5 away</p></div>
+        <div><b>7-4</b><span>Split D - 5 teams</span><p>7 home, 4 away</p></div>
       </div>
     </article>
 
-    <article class="about-block reveal">
-      <div class="about-block-eyebrow"><span class="num">04</span> - WHY MINIMUM 20 TEAMS</div>
-      <h2 class="about-block-h">Wider structured coverage - <em>captaincy depth.</em></h2>
-      <div class="feature-grid">
-        <div class="feat-card gold">
-          <div class="feat-icon">↻</div>
-          <h4>CVC Mode - Captain &amp; Vice-Captain Rotation</h4>
-          <p>2-4 players rotate as both C and VC across the 20 teams, distributing assignments across your chosen rotation pool.</p>
-          <div class="feat-foot">SIMPLE - BALANCED</div>
+    <article class="info-block reveal">
+      <div class="block-kicker">
+        <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+        Why 20 Teams
+      </div>
+      <h2>UCT currently generates <em>exactly 20 structured football virtual teams.</em></h2>
+      <p class="block-lead">
+        20 teams is the minimum structured generation model used by UCT. It supports broader player coverage,
+        balanced team variation, Captain and Vice-Captain distribution, and multiple valid split structures.
+      </p>
+
+      <div class="mode-grid">
+        <div class="mode-card">
+          <span class="material-symbols-outlined" aria-hidden="true">sync</span>
+          <h3>CVC Mode</h3>
+          <p>2-4 players rotate as both Captain and Vice-Captain across the 20 teams.</p>
+          <b>Simple - balanced</b>
         </div>
-        <div class="feat-card">
-          <div class="feat-icon">◎</div>
-          <h4>C&amp;VC Mode - Structured Configuration</h4>
-          <p>Separate captain pool and VC pool with structured allocation for power users who want precise captaincy distribution.</p>
-          <div class="feat-foot">PRECISE - MATRIX</div>
+        <div class="mode-card">
+          <span class="material-symbols-outlined" aria-hidden="true">hub</span>
+          <h3>C&amp;VC Mode</h3>
+          <p>Separate Captain and Vice-Captain pools for users who want more precise captaincy control.</p>
+          <b>Precise - matrix</b>
         </div>
       </div>
-      <p class="note boxed">Future versions may add 40-team and 60-team modes. For launch, 20 is the standard covering the workflow problem UCT was built to solve.</p>
+
+      <div class="locked-card">
+        <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+        <p>
+          Each match supports one successful UCT generation per user. Once generation completes,
+          1 coin is consumed, regeneration is blocked, and the workflow is considered completed for that match.
+        </p>
+      </div>
     </article>
 
-    <article class="about-block reveal">
-      <div class="about-block-eyebrow"><span class="num">05</span> - WHAT MAKES UCT DIFFERENT</div>
-      <h2 class="about-block-h">A workflow tool - <em>not a prediction engine.</em></h2>
+    <article class="info-block reveal">
+      <div class="block-kicker">
+        <span class="material-symbols-outlined" aria-hidden="true">compare_arrows</span>
+        What Makes UCT Different
+      </div>
+      <h2>A workflow tool, <em>not a prediction engine.</em></h2>
+
       <div class="comparison-grid">
         <div class="compare-card bad">
-          <h4>MANUAL APPROACH</h4>
+          <h3>Manual Approach</h3>
           <ul>
             <li>45-60 minutes per match of mechanical work</li>
             <li>Captain rotation by spreadsheet or memory</li>
@@ -246,9 +308,9 @@
           </ul>
         </div>
         <div class="compare-card good">
-          <h4>PICK2WIN UCT</h4>
+          <h3>PICK2WIN UCT</h3>
           <ul>
-            <li>~5 min config + few seconds generation</li>
+            <li>Short configuration plus few-seconds generation</li>
             <li>Automated captaincy via CVC / C&amp;VC modes</li>
             <li>Engine-balanced exposure with mandates</li>
             <li>Validated football-real constraints</li>
@@ -257,31 +319,39 @@
       </div>
     </article>
 
-    <article class="about-block reveal">
-      <div class="about-block-eyebrow"><span class="num">06</span> - NOT GAMBLING - NO GUARANTEES</div>
-      <h2 class="about-block-h">PICK2WIN is a workflow platform. <em>Outcomes are yours.</em></h2>
-      <div class="about-prose">
-        <p>UCT is not a prediction engine, not an AI optimiser, and not a betting bot. The 20 teams it produces are structured combinations based strictly on your configuration inputs. No guarantees are made or implied about contest results, ranking positions, points scored, or financial outcomes.</p>
-        <p>PICK2WIN does not host contests, operate as a gambling platform, act as a wallet service, or serve as a fantasy contest provider. We compress the workflow of preparing 20 structured teams; what you do with those teams is fully your responsibility. <a routerLink="/trust">Read the full PICK2WIN Platform Pledge -></a></p>
+    <article class="pledge-card reveal">
+      <span class="material-symbols-outlined" aria-hidden="true">gpp_maybe</span>
+      <div>
+        <div class="block-kicker">Not Gambling - No Guarantees</div>
+        <h2>PICK2WIN is a workflow platform. <em>Outcomes are yours.</em></h2>
+        <p>
+          UCT is not a prediction engine, not an AI optimiser, and not a betting bot. The 20 teams it produces are
+          structured combinations based strictly on your configuration inputs. No guarantees are made or implied about
+          contest results, ranking positions, points scored, or financial outcomes.
+          <a routerLink="/trust">Read the full PICK2WIN Platform Pledge.</a>
+        </p>
       </div>
     </article>
 
     <div class="signup-nudge reveal">
-      <div class="signup-nudge-icon">★</div>
-      <div class="signup-nudge-body">
-        <span class="signup-nudge-eyebrow">FREE FIRST MATCH - NO CARD NEEDED</span>
-        <h3 class="signup-nudge-h">Ready to skip the manual chaos? <em>Try UCT free.</em></h3>
-        <p class="signup-nudge-sub">Every new account gets 1 free UCT generation on signup after mobile + email verification.</p>
+      <div class="signup-nudge-icon">
+        <span class="material-symbols-outlined" aria-hidden="true">redeem</span>
       </div>
+      <div class="signup-nudge-body">
+        <span class="signup-nudge-eyebrow">Free First Match - No Card Needed</span>
+        <h3>Ready to skip the manual chaos? <em>Try UCT free.</em></h3>
+        <p>Every new account gets 1 free UCT generation after mobile and email verification.</p>
+      </div>
+
       <div class="signup-nudge-actions" *ngIf="loggedIn$ | async; else guestNudgeActions">
-        <a class="signup-nudge-btn" routerLink="/user/profile">Go to profile</a>
+        <a class="primary-btn" routerLink="/user/profile">Go to profile</a>
       </div>
 
       <ng-template #guestNudgeActions>
-      <div class="signup-nudge-actions">
-        <button class="signup-nudge-btn" type="button" (click)="openSignup()">Create free account</button>
-        <button class="signup-nudge-btn-ghost" type="button" (click)="openLogin()">Sign in</button>
-      </div>
+        <div class="signup-nudge-actions">
+          <button class="primary-btn" type="button" (click)="openSignup()">Create free account</button>
+          <button class="ghost-btn" type="button" (click)="openLogin()">Sign in</button>
+        </div>
       </ng-template>
     </div>
   </div>

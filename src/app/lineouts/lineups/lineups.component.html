@@ -2,28 +2,76 @@
 
 <main class="lineouts-page">
   <ng-container *ngIf="loggedIn$ | async; else guestLineouts">
-    <section class="match-list-section">
+    <section class="lineouts-shell">
       <div class="wrap">
-        <div class="coin-pill">
-          <span class="coin-dot">🪙</span>
-          <strong>{{ coinBalance }}</strong>
-          <span>coins</span>
+        <div class="lineouts-hero">
+          <div class="hero-copy">
+            <div class="hero-eyebrow">
+              <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+              Series · Official Lineouts
+            </div>
+            <h1>Pick a match. Wait for lineups. <em>Run UCT.</em></h1>
+            <p>
+              Series shows upcoming supported football matches from the backend. Once official lineups release,
+              UCT unlocks and you can generate your 20 structured teams before kickoff.
+            </p>
+            <div class="timezone-note">
+              <span class="material-symbols-outlined" aria-hidden="true">public</span>
+              Match times are converted from backend UTC start_time to {{ timezoneLabel }}.
+            </div>
+          </div>
+
+          <a class="balance-card" routerLink="/pricing" title="Your coin balance">
+            <div class="balance-icon">
+              <span class="material-symbols-outlined" aria-hidden="true">paid</span>
+            </div>
+            <div class="balance-body">
+              <div class="balance-label">My Balance</div>
+              <div class="balance-amount">
+                <strong>{{ coinBalance }}</strong>
+                <span>Coins</span>
+              </div>
+              <div class="balance-hint">1 coin = 1 UCT match</div>
+            </div>
+            <span class="balance-cta">Top up</span>
+          </a>
         </div>
 
-        <div class="my-teams-empty" *ngIf="loadingMatches">
-          <div class="empty-icon">...</div>
+        <div class="status-strip">
+          <div>
+            <span class="material-symbols-outlined" aria-hidden="true">lock_clock</span>
+            <b>Before lineups</b>
+            <small>UCT locked</small>
+          </div>
+          <div>
+            <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+            <b>Lineups released</b>
+            <small>Run UCT opens</small>
+          </div>
+          <div>
+            <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+            <b>After generation</b>
+            <small>20 teams saved</small>
+          </div>
+        </div>
+
+        <div class="empty-state" *ngIf="loadingMatches">
+          <div class="empty-icon">
+            <span class="material-symbols-outlined" aria-hidden="true">progress_activity</span>
+          </div>
           <h3>Loading matches</h3>
           <p>Fetching latest series and match data.</p>
         </div>
 
         <ng-container *ngIf="!loadingMatches && visibleMatches.length; else noMatches">
-          <div class="today-section" *ngIf="todayMatches.length">
-            <div class="list-head">
+          <section class="matches-panel" *ngIf="todayMatches.length">
+            <div class="panel-head">
               <div>
-                <h3>Today's Matches</h3>
-                <p>{{ todayMatches.length }} match{{ todayMatches.length === 1 ? '' : 'es' }} - {{ readyAndNotGeneratedCount }} ready for UCT</p>
+                <span class="panel-kicker">Today</span>
+                <h2>Today's Matches</h2>
+                <p>{{ todayMatches.length }} match{{ todayMatches.length === 1 ? '' : 'es' }} · {{ readyAndNotGeneratedCount }} ready for UCT</p>
               </div>
-              <span>{{ todayMatches.length }} MATCH{{ todayMatches.length === 1 ? '' : 'ES' }}</span>
+              <span class="match-count">{{ todayMatches.length }} match{{ todayMatches.length === 1 ? '' : 'es' }}</span>
             </div>
 
             <div class="match-row-list">
@@ -32,65 +80,118 @@
                 *ngFor="let match of todayMatches; trackBy: trackByMatchId"
                 [class.ready]="match.lineupReady && !isGenerated(match)"
                 [class.generated]="isGenerated(match)">
+                <div class="match-time-block">
+                  <strong>{{ formatKickoff(match) }}</strong>
+                  <span>{{ isLive(match) ? 'Today · Live' : 'Today' }}</span>
+                </div>
+
                 <div class="match-main">
-                  <div class="match-league">{{ match.league }} - {{ match.country }}</div>
+                  <div class="match-league">{{ match.league }} · {{ match.country }}</div>
                   <div class="match-teams">
-                    <img class="team-logo" *ngIf="match.home.logo; else homeColorBox" [src]="match.home.logo" [alt]="match.home.name">
-                    <ng-template #homeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
-                    <strong>{{ match.home.code }}</strong>
+                    <div class="team-side">
+                      <img class="team-logo" *ngIf="match.home.logo; else homeColorBox" [src]="match.home.logo" [alt]="match.home.name">
+                      <ng-template #homeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
+                      <div>
+                        <strong>{{ match.home.code }}</strong>
+                        <span>{{ match.home.name }}</span>
+                      </div>
+                    </div>
+
                     <small>vs</small>
-                    <img class="team-logo" *ngIf="match.away.logo; else awayColorBox" [src]="match.away.logo" [alt]="match.away.name">
-                    <ng-template #awayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
-                    <strong>{{ match.away.code }}</strong>
+
+                    <div class="team-side away">
+                      <img class="team-logo" *ngIf="match.away.logo; else awayColorBox" [src]="match.away.logo" [alt]="match.away.name">
+                      <ng-template #awayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
+                      <div>
+                        <strong>{{ match.away.code }}</strong>
+                        <span>{{ match.away.name }}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="match-time">Today - {{ formatKickoff(match) }} - {{ match.venue }}</div>
+                  <div class="match-meta">
+                    <span class="material-symbols-outlined" aria-hidden="true">event</span>
+                    {{ match.venue }}
+                  </div>
                 </div>
 
                 <div class="match-side">
-                  <span class="lineup-state" [class.ready-state]="match.lineupReady">{{ statusLabel(match) }}</span>
+                  <span class="lineup-state" [class.ready-state]="match.lineupReady" [class.generated-state]="isGenerated(match)">
+                    <span class="material-symbols-outlined" aria-hidden="true">
+                      {{ isGenerated(match) ? 'task_alt' : isLive(match) ? 'radio_button_checked' : match.lineupReady ? 'bolt' : 'lock' }}
+                    </span>
+                    {{ statusLabel(match) }}
+                  </span>
                   <button class="uct-btn" type="button" [disabled]="!match.lineupReady && !isGenerated(match)" (click)="handleMatchAction(match)">
                     {{ actionLabel(match) }}
                   </button>
                 </div>
               </article>
             </div>
-          </div>
+          </section>
 
-          <div class="upcoming-section" *ngIf="upcomingGroups.length">
-            <div class="list-head">
+          <section class="matches-panel" *ngIf="upcomingGroups.length">
+            <div class="panel-head">
               <div>
-                <h3>Upcoming Matches - This Week</h3>
+                <span class="panel-kicker">Upcoming</span>
+                <h2>Upcoming Matches · This Week</h2>
+                <p>Lineups usually unlock close to kickoff. UCT stays locked until official team news appears.</p>
               </div>
-              <span>{{ upcomingMatchCount }} MATCH{{ upcomingMatchCount === 1 ? '' : 'ES' }}</span>
+              <span class="match-count">{{ upcomingMatchCount }} match{{ upcomingMatchCount === 1 ? '' : 'es' }}</span>
             </div>
 
             <div class="day-group" *ngFor="let group of upcomingGroups; trackBy: trackByGroupLabel">
-              <div class="day-label">{{ group.label }} - in {{ daysUntil(group.date) }} day{{ daysUntil(group.date) === 1 ? '' : 's' }}</div>
+              <div class="day-label">
+                <span>{{ group.label }}</span>
+                <small>in {{ daysUntil(group.date) }} day{{ daysUntil(group.date) === 1 ? '' : 's' }}</small>
+              </div>
 
               <div class="match-row-list">
-                <article class="match-row" *ngFor="let match of group.matches; trackBy: trackByMatchId">
+                <article class="match-row upcoming" *ngFor="let match of group.matches; trackBy: trackByMatchId">
+                  <div class="match-time-block">
+                    <strong>{{ formatKickoff(match) }}</strong>
+                    <span>{{ dateStamp(match) }}</span>
+                  </div>
+
                   <div class="match-main">
-                    <div class="match-league">{{ match.league }} - {{ match.country }}</div>
+                    <div class="match-league">{{ match.league }} · {{ match.country }}</div>
                     <div class="match-teams">
-                      <img class="team-logo" *ngIf="match.home.logo; else upcomingHomeColorBox" [src]="match.home.logo" [alt]="match.home.name">
-                      <ng-template #upcomingHomeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
-                      <strong>{{ match.home.code }}</strong>
+                      <div class="team-side">
+                        <img class="team-logo" *ngIf="match.home.logo; else upcomingHomeColorBox" [src]="match.home.logo" [alt]="match.home.name">
+                        <ng-template #upcomingHomeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
+                        <div>
+                          <strong>{{ match.home.code }}</strong>
+                          <span>{{ match.home.name }}</span>
+                        </div>
+                      </div>
+
                       <small>vs</small>
-                      <img class="team-logo" *ngIf="match.away.logo; else upcomingAwayColorBox" [src]="match.away.logo" [alt]="match.away.name">
-                      <ng-template #upcomingAwayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
-                      <strong>{{ match.away.code }}</strong>
+
+                      <div class="team-side away">
+                        <img class="team-logo" *ngIf="match.away.logo; else upcomingAwayColorBox" [src]="match.away.logo" [alt]="match.away.name">
+                        <ng-template #upcomingAwayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
+                        <div>
+                          <strong>{{ match.away.code }}</strong>
+                          <span>{{ match.away.name }}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="match-time">{{ dateStamp(match) }} - {{ formatKickoff(match) }} - Kicks off soon</div>
+                    <div class="match-meta">
+                      <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+                      Waiting for official lineup release
+                    </div>
                   </div>
 
                   <div class="match-side">
-                    <span class="lineup-state">Waiting for lineup</span>
+                    <span class="lineup-state">
+                      <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+                      Waiting for lineup
+                    </span>
                     <button class="uct-btn locked" type="button" disabled>UCT Locked</button>
                   </div>
                 </article>
               </div>
             </div>
-          </div>
+          </section>
         </ng-container>
       </div>
     </section>
@@ -99,29 +200,31 @@
   <ng-template #guestLineouts>
     <section class="signin-required">
       <div class="signin-card">
-        <div class="ball-icon">⚽</div>
-        <div class="signin-eyebrow">Sign-in required - Series Manager</div>
+        <div class="signin-icon">
+          <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+        </div>
+        <div class="signin-eyebrow">Sign-in required · Series Manager</div>
         <h1>Sign in to view <em>today's match list.</em></h1>
         <p>
-          Series shows all upcoming matches across your 30 supported leagues. Once a club releases its starting lineup, the <b>Run UCT</b>
-          button activates - giving you 60 minutes to produce your 20 structured teams before kick-off. Sign in or create an account to start.
+          Series shows upcoming supported matches across PICK2WIN coverage. Once a club releases its starting lineup,
+          the Run UCT button activates and the four-step workflow opens.
         </p>
 
         <div class="signin-actions">
-          <button type="button" class="create-btn" (click)="openSignup()">Create account - free first UCT</button>
+          <button type="button" class="create-btn" (click)="openSignup()">Create account · free first UCT</button>
           <button type="button" class="signin-btn" (click)="openLogin()">Sign in</button>
         </div>
-
-        
       </div>
     </section>
   </ng-template>
 
   <ng-template #noMatches>
-    <div class="my-teams-empty" *ngIf="!loadingMatches">
-      <div class="empty-icon">⚽</div>
+    <div class="empty-state" *ngIf="!loadingMatches">
+      <div class="empty-icon">
+        <span class="material-symbols-outlined" aria-hidden="true">event_busy</span>
+      </div>
       <h3>No matches available</h3>
-      <p>{{ matchesError || 'No upcoming matches in our coverage right now. Check back soon - new fixtures load 60 minutes before kickoff.' }}</p>
+      <p>{{ matchesError || 'No upcoming matches in our coverage right now. Check back soon - new fixtures load after backend updates.' }}</p>
     </div>
   </ng-template>
 </main>

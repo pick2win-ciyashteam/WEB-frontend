@@ -13,6 +13,8 @@ export class PricingComponent implements OnInit {
   loggedIn$ = this.authService.loggedIn$;
   loading = true;
   errorMessage = '';
+  paymentError = '';
+  purchasingPlanId: number | null = null;
   plans: SubscriptionPlan[] = [];
 
   constructor(
@@ -48,6 +50,48 @@ export class PricingComponent implements OnInit {
     this.authModal.open('login');
   }
 
+  buyPlan(plan: SubscriptionPlan): void {
+    this.paymentError = '';
+
+    if (!this.authService.isLoggedIn()) {
+      this.authModal.open('login');
+      return;
+    }
+
+    this.purchasingPlanId = plan.id;
+
+    this.api.createCheckoutSession({
+      plan_id: plan.id,
+      success_url: `${window.location.origin}/user/profile?payment=success&plan=${plan.id}`,
+      cancel_url: `${window.location.origin}/pricing?payment=cancelled&plan=${plan.id}`
+    }).subscribe({
+      next: (res) => {
+        const checkoutUrl =
+          res?.url ||
+          res?.checkout_url ||
+          res?.session_url ||
+          res?.data?.url ||
+          res?.data?.checkout_url ||
+          res?.data?.session_url;
+
+        if (res?.success !== false && checkoutUrl) {
+          window.location.href = checkoutUrl;
+          return;
+        }
+
+        this.purchasingPlanId = null;
+        this.paymentError = res?.message || 'Unable to start Stripe checkout. Please try again.';
+      },
+      error: (err) => {
+        this.purchasingPlanId = null;
+        this.paymentError =
+          err?.error?.message ||
+          err?.error?.error ||
+          'Unable to start Stripe checkout. Please try again.';
+      }
+    });
+  }
+
   planClass(plan: SubscriptionPlan): string {
     if (plan.is_popular) {
       return 'popular';
@@ -62,5 +106,9 @@ export class PricingComponent implements OnInit {
 
   trackPlan(_: number, plan: SubscriptionPlan): number {
     return plan.id;
+  }
+
+  isPurchasing(plan: SubscriptionPlan): boolean {
+    return this.purchasingPlanId === plan.id;
   }
 }

@@ -33,6 +33,26 @@ export interface SubscriptionPlan {
   sort_order: number;
 }
 
+export interface CheckoutSessionPayload {
+  plan_id: number;
+  success_url: string;
+  cancel_url: string;
+}
+
+export interface CheckoutSessionResponse {
+  success: boolean;
+  message?: string;
+  url?: string;
+  checkout_url?: string;
+  session_url?: string;
+  data?: {
+    url?: string;
+    checkout_url?: string;
+    session_url?: string;
+    id?: string;
+  };
+}
+
 export interface Banner {
   id: number;
   name: string;
@@ -82,4 +102,5 @@ export interface UserProfile {
   mobile_verify: number;
   account_status: string;
   created_at: string;
+  coins?: number;
 }

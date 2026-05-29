@@ -15,20 +15,59 @@
   width: min(520px, 94vw);
   max-height: 92vh;
   overflow-y: auto;
-  border-radius: 22px;
-  background: #051A2A;
-  border: 1px solid rgba(255,255,255,0.14);
-  box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  border-radius: 24px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.auth-modal::-webkit-scrollbar {
+  display: none;
 }
 
 .auth-close {
   position: absolute;
-  right: 18px;
-  top: 16px;
+  right: 14px;
+  top: 14px;
   z-index: 5;
-  color: #fff;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 50%;
+  color: #c8d6e0;
+  background: rgba(2,10,18,0.44);
   font-size: 22px;
-  opacity: 0.75;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  font-variation-settings: "FILL" 0, "wght" 650, "GRAD" 0, "opsz" 24;
+}
+
+.auth-close:hover {
+  color: #f4b400;
+  background: rgba(244,180,0,0.1);
+  transform: rotate(90deg);
+}
+
+@media (min-width: 521px) {
+  .auth-modal {
+    width: auto;
+    max-width: 94vw;
+  }
+
+  .auth-modal app-login {
+    display: block;
+    width: min(460px, 94vw);
+  }
+
+  .auth-modal app-signup {
+    display: block;
+    width: min(620px, 94vw);
+  }
 }
 
 .animate-auth {

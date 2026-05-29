@@ -5,6 +5,7 @@ import { Match, Series } from '../../core/interfaces/content';
 import { ApiService } from '../../core/services/api.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ProfileService } from '../../core/services/profile.service';
 
 interface LineoutTeam {
   code: string;
@@ -23,6 +24,7 @@ interface LineoutMatch {
   lineupReady: boolean;
   lineupJustReleased?: boolean;
   venue: string;
+  status: string;
 }
 
 interface MatchDayGroup {
@@ -46,12 +48,13 @@ export class LineupsComponent implements OnInit, OnDestroy {
   matches: LineoutMatch[] = [];
   loadingMatches = true;
   matchesError = '';
-  readonly coinBalance = 47;
+  coinBalance = 0;
 
   constructor(
     private api: ApiService,
     private authModal: AuthModalService,
     private authService: AuthService,
+    private profileService: ProfileService,
     private router: Router
   ) {}
 
@@ -63,6 +66,18 @@ export class LineupsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(isLoggedIn => {
         this.isLoggedIn = isLoggedIn;
+
+        if (isLoggedIn) {
+          this.profileService.loadProfile().pipe(takeUntil(this.destroy$)).subscribe();
+        } else {
+          this.coinBalance = 0;
+        }
+      });
+
+    this.profileService.profile$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(profile => {
+        this.coinBalance = Number(profile?.coins ?? 0);
       });
   }
 
@@ -73,26 +88,26 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   get visibleMatches(): LineoutMatch[] {
     const nowMs = Date.now();
-    return this.matches.filter(match => new Date(match.kickoffISO).getTime() > nowMs);
+    return this.matches.filter(match => this.isLive(match) || new Date(match.kickoffISO).getTime() > nowMs);
   }
 
   get todayMatches(): LineoutMatch[] {
-    const todayStr = new Date().toDateString();
+    const todayStr = this.localDateKey(new Date());
     return this.visibleMatches
-      .filter(match => new Date(match.kickoffISO).toDateString() === todayStr)
+      .filter(match => this.isLive(match) || this.localDateKey(match.kickoffISO) === todayStr)
       .sort((a, b) => this.sortTodayMatches(a, b));
   }
 
   get upcomingGroups(): MatchDayGroup[] {
-    const todayStr = new Date().toDateString();
+    const todayStr = this.localDateKey(new Date());
     const groups = new Map<string, MatchDayGroup>();
 
     this.visibleMatches
-      .filter(match => new Date(match.kickoffISO).toDateString() !== todayStr)
+      .filter(match => !this.isLive(match) && this.localDateKey(match.kickoffISO) !== todayStr)
       .sort((a, b) => new Date(a.kickoffISO).getTime() - new Date(b.kickoffISO).getTime())
       .forEach(match => {
         const date = new Date(match.kickoffISO);
-        const key = date.toDateString();
+        const key = this.localDateKey(date);
         const group = groups.get(key) ?? {
           label: this.dayLabel(date),
           date,
@@ -114,6 +129,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
     return this.upcomingGroups.reduce((total, group) => total + group.matches.length, 0);
   }
 
+  get timezoneLabel(): string {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'your local timezone';
+  }
+
   isGenerated(match: LineoutMatch): boolean {
     return this.generatedMatchIds.has(match.id);
   }
@@ -121,6 +140,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
   statusLabel(match: LineoutMatch): string {
     if (this.isGenerated(match)) {
       return 'UCT Generated';
+    }
+
+    if (this.isLive(match)) {
+      return match.lineupReady ? 'Live - lineups released' : 'Live';
     }
 
     if (match.lineupReady) {
@@ -178,6 +201,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   formatKickoff(match: LineoutMatch): string {
+    if (this.isLive(match)) {
+      return 'LIVE';
+    }
+
     return new Intl.DateTimeFormat('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
@@ -223,7 +250,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
 
-    if (date.toDateString() === tomorrow.toDateString()) {
+    if (this.localDateKey(date) === this.localDateKey(tomorrow)) {
       return 'Tomorrow';
     }
 
@@ -281,10 +308,22 @@ export class LineupsComponent implements OnInit, OnDestroy {
       home: this.createTeam(match.home_team_name, match.home_team_logo),
       away: this.createTeam(match.away_team_name, match.away_team_logo),
       kickoffISO,
-      lineupReady: match.lineupavailable === 1 || match.lineup_status === 'available',
-      lineupJustReleased: match.lineup_status === 'available',
-      venue: match.status || 'Scheduled'
+      lineupReady: this.isLineupAvailable(match),
+      lineupJustReleased: this.isLineupAvailable(match),
+      venue: match.status || 'Scheduled',
+      status: match.status || 'Scheduled'
     };
+  }
+
+  isLive(match: LineoutMatch): boolean {
+    return String(match.status || '').toUpperCase() === 'LIVE';
+  }
+
+  private isLineupAvailable(match: Match): boolean {
+    const lineupFlag = String(match.lineupavailable).toLowerCase();
+    const lineupStatus = String(match.lineup_status || '').toLowerCase();
+
+    return lineupFlag === '1' || lineupFlag === 'true' || lineupStatus === 'available' || lineupStatus === 'released';
   }
 
   private createTeam(name: string, logo?: string): LineoutTeam {
@@ -318,6 +357,15 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   private saveGeneratedMatchIds(): void {
     localStorage.setItem(this.generatedStorageKey, JSON.stringify(Array.from(this.generatedMatchIds)));
+  }
+
+  private localDateKey(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
 }

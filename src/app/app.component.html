@@ -2,7 +2,7 @@
 
 <div class="auth-backdrop" *ngIf="authModal.modal$ | async as modal" (click)="closeAuthModal()">
   <div class="auth-modal animate-auth" (click)="$event.stopPropagation()">
-    <button class="auth-close" (click)="closeAuthModal()">×</button>
+    <button class="auth-close material-symbols-outlined" type="button" aria-label="Close" (click)="closeAuthModal()">close</button>
 
     <app-login *ngIf="modal === 'login'"></app-login>
     <app-signup *ngIf="modal === 'signup'"></app-signup>

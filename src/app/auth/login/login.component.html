@@ -12,13 +12,13 @@
   <p>Sign in to your PICK2WIN account.</p>
 
   <form [formGroup]="loginForm" (ngSubmit)="login()">
-    <label>Email <span style="color:red">*</span></label>
+    <label>Email <span>*</span></label>
     <input type="email" formControlName="email" placeholder="you@example.com">
     <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
       Enter valid email
     </small>
 
-    <label>Password <span style="color:red">*</span> </label>
+    <label>Password <span>*</span></label>
     <div class="password-field">
       <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Your password">
       <button
@@ -27,7 +27,7 @@
         [class.visible]="showPassword"
         (click)="showPassword = !showPassword"
         [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-        <span class="eye-icon"></span>
+        <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
       </button>
     </div>
     <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">

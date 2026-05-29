@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
-import { ApiDataResponse, ApiListResponse, Banner, Country, Series, SubscriptionPlan, UserProfile } from '../interfaces/content';
+import { ApiDataResponse, ApiListResponse, Banner, CheckoutSessionPayload, CheckoutSessionResponse, Country, Series, SubscriptionPlan, UserProfile } from '../interfaces/content';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +44,10 @@ export class ApiService {
 
   getSubscriptionPlans(): Observable<ApiListResponse<SubscriptionPlan>> {
     return this.http.get<ApiListResponse<SubscriptionPlan>>(`${this.BASE}/plans`);
+  }
+
+  createCheckoutSession(data: CheckoutSessionPayload): Observable<CheckoutSessionResponse> {
+    return this.http.post<CheckoutSessionResponse>(`${this.BASE}/payments/create-checkout-session`, data);
   }
 
   getBanners(): Observable<ApiListResponse<Banner>> {
