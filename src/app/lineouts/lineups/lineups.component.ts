@@ -78,7 +78,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
     this.profileService.profile$
       .pipe(takeUntil(this.destroy$))
       .subscribe(profile => {
-        this.coinBalance = Number(profile?.coins ?? 0);
+        this.coinBalance = Number(profile?.coins?.coins ?? 0);
       });
   }
 
@@ -160,7 +160,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
     }
 
     if (!match.lineupReady) {
-      return 'Waiting for lineups';
+      return 'UCT Locked';
     }
 
     return this.isLoggedIn ? 'Generate UCT' : 'Sign in to generate';
@@ -197,7 +197,15 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   openMatch(match: LineoutMatch): void {
+    if (!this.canOpenMatch(match)) {
+      return;
+    }
+
     this.router.navigate(['/lineouts/matches', match.id]);
+  }
+
+  canOpenMatch(match: LineoutMatch): boolean {
+    return match.lineupReady;
   }
 
   handleMatchAction(match: LineoutMatch): void {

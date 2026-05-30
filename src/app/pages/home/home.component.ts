@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   bannersLoading = true;
   showSplash = true;
   showLaunchModal = false;
+  showTodayLineupsCta = false;
 
   private timer: any;
   private bannerTimer: any;
@@ -41,6 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.updateCountdown();
     this.showLaunchModal = this.shouldShowLaunchModal();
     this.loadBanners();
+    this.loadTodayLineupsCta();
     this.timer = setInterval(() => this.updateCountdown(), 1000);
     this.splashTimer = setTimeout(() => this.closeSplash(), 2200);
   }
@@ -114,6 +116,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       error: () => {
         this.banners = [];
         this.bannersLoading = false;
+      }
+    });
+  }
+
+  private loadTodayLineupsCta(): void {
+    this.api.getTodayLineups().subscribe({
+      next: (res) => {
+        this.showTodayLineupsCta = !!res?.success && !!res.any_lineup_today;
+      },
+      error: () => {
+        this.showTodayLineupsCta = false;
       }
     });
   }

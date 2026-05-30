@@ -45,12 +45,75 @@ export interface CheckoutSessionResponse {
   url?: string;
   checkout_url?: string;
   session_url?: string;
+  payment_url?: string;
+  redirect_url?: string;
+  session_id?: string;
+  sessionId?: string;
+  id?: string;
+  publishableKey?: string;
+  publishable_key?: string;
+  public_key?: string;
+  stripe_publishable_key?: string;
   data?: {
     url?: string;
     checkout_url?: string;
     session_url?: string;
+    payment_url?: string;
+    redirect_url?: string;
+    session_id?: string;
+    sessionId?: string;
     id?: string;
+    publishableKey?: string;
+    publishable_key?: string;
+    public_key?: string;
+    stripe_publishable_key?: string;
   };
+}
+
+export interface StripeConfigResponse {
+  success: boolean;
+  message?: string;
+  publishableKey?: string;
+  publishable_key?: string;
+  public_key?: string;
+  stripe_publishable_key?: string;
+  data?: {
+    publishableKey?: string;
+    publishable_key?: string;
+    public_key?: string;
+    stripe_publishable_key?: string;
+  };
+}
+
+export interface BuyCoinsPayload {
+  plan_id: number;
+  amount: number;
+  coins: number;
+}
+
+export interface BuyCoinsResponse {
+  success: boolean;
+  message?: string;
+  data?: unknown;  
+  clientSecret?: string;
+}
+
+export interface UctGeneratePayload {
+  match_id: number | string;
+  substitute_player_ids: number[];
+  mandate_yes_player_ids: number[];
+  mandate_no_player_ids: number[];
+  captain_mode: 'CVC' | 'C_AND_VC';
+  cvc_player_ids: number[];
+  captain_player_ids: number[];
+  vice_captain_player_ids: number[];
+  selected_player_ids: number[];
+}
+
+export interface UctGenerateResponse {
+  success: boolean;
+  message?: string;
+  data?: unknown;
 }
 
 export interface Banner {
@@ -137,6 +200,31 @@ export interface MatchDetail {
   };
 }
 
+export interface TodayLineupsResponse {
+  success: boolean;
+  date: string;
+  any_lineup_today: boolean;
+  data: unknown[];
+}
+
+export interface UserCoins {
+  total_coins: number;
+  used_coins: number;
+  coins: number;
+}
+
+export interface UserSubscription {
+  plan_id: number;
+  plan_name: string;
+  matches_allowed: number;
+  matches_used: number;
+  matches_remaining: number;
+  amount: string;
+  start_date: string;
+  expiry_date: string;
+  status: string;
+}
+
 export interface UserProfile {
   id: number;
   fullname: string;
@@ -148,5 +236,6 @@ export interface UserProfile {
   mobile_verify: number;
   account_status: string;
   created_at: string;
-  coins?: number;
+  coins?: UserCoins;
+  subscription?: UserSubscription | null;
 }

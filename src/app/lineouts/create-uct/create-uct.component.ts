@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, switchMap, takeUntil } from 'rxjs';
-import { MatchDetail, MatchPlayer } from 'src/app/core/interfaces/content';
+import { MatchDetail, MatchPlayer, UctGeneratePayload } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 
 type Mandate = 'YES' | 'NO' | 'NA';
@@ -27,6 +27,7 @@ interface GeneratedTeam {
 })
 export class CreateUctComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
+  private generatingStatusTimer: ReturnType<typeof setInterval> | null = null;
 
   matchId = '';
   loading = true;
@@ -34,6 +35,15 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   detail: MatchDetail | null = null;
   step = 1;
   confirmed = false;
+  submitting = false;
+  submitError = '';
+  generationStatus = 'Resolving constraints - applying mandates - computing splits';
+  readonly generationMessages = [
+    'Resolving constraints - applying mandates - computing splits',
+    'Building formation distributions - 4-7 - 5-6 - 6-5 - 7-4',
+    'Optimising captaincy - validating position counts',
+    'Finalising 20 structured lineups...'
+  ];
 
   selectedSubIds = new Set<number>();
   mandates = new Map<number, Mandate>();
@@ -83,6 +93,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.stopGeneratingStatus();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -315,6 +326,46 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.submitUctConfiguration();
+  }
+
+  submitUctConfiguration(): void {
+    if (!this.canGenerate || this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
+    this.submitError = '';
+    this.step = 6;
+    this.startGeneratingStatus();
+
+    this.api.createUctTeams(this.buildSubmitPayload())
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.stopGeneratingStatus();
+          this.submitting = false;
+
+          if (res?.success !== false) {
+            this.router.navigate(['/user/myteams'], { queryParams: { match: this.matchId, generated: 'success' } });
+            return;
+          }
+
+          this.resetAfterSubmitFailure(res?.message || 'Unable to generate UCT teams. Please try again.');
+        },
+        error: (err) => {
+          this.stopGeneratingStatus();
+          this.submitting = false;
+          this.resetAfterSubmitFailure(err?.error?.message || err?.error?.error || 'Unable to generate UCT teams. Please try again.');
+        }
+      });
+  }
+
+  generatePreviewTeams(): void {
+    if (!this.canGenerate) {
+      return;
+    }
+
     const splits = ['4-7', '5-6', '6-5', '7-4'];
     const teams: GeneratedTeam[] = [];
 
@@ -364,6 +415,44 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   trackTeam(_: number, team: GeneratedTeam): number {
     return team.index;
+  }
+
+  private buildSubmitPayload(): UctGeneratePayload {
+    return {
+      match_id: this.matchId,
+      substitute_player_ids: Array.from(this.selectedSubIds),
+      mandate_yes_player_ids: this.mandateYesPlayers.map(player => player.id),
+      mandate_no_player_ids: this.mandateNoPlayers.map(player => player.id),
+      captain_mode: this.captainMode,
+      cvc_player_ids: Array.from(this.cvcIds),
+      captain_player_ids: Array.from(this.captainIds),
+      vice_captain_player_ids: Array.from(this.viceCaptainIds),
+      selected_player_ids: this.availablePool.map(player => player.id)
+    };
+  }
+
+  private resetAfterSubmitFailure(message: string): void {
+    this.submitError = message;
+    this.step = 1;
+    this.confirmed = false;
+    this.generatedTeams = [];
+  }
+
+  private startGeneratingStatus(): void {
+    this.stopGeneratingStatus();
+    let index = 0;
+    this.generationStatus = this.generationMessages[index];
+    this.generatingStatusTimer = setInterval(() => {
+      index = (index + 1) % this.generationMessages.length;
+      this.generationStatus = this.generationMessages[index];
+    }, 750);
+  }
+
+  private stopGeneratingStatus(): void {
+    if (this.generatingStatusTimer) {
+      clearInterval(this.generatingStatusTimer);
+      this.generatingStatusTimer = null;
+    }
   }
 
   private buildTeam(seed: number, targetHomeCount: number): UctPlayer[] {

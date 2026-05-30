@@ -89,26 +89,68 @@
     </div>
 
     <div class="mt-team-grid">
-      <article class="mt-team-card" *ngFor="let team of teamNumbers">
+      <article class="mt-team-card" *ngFor="let team of previewTeams" (click)="openTeamPreview(team.id)" tabindex="0" role="button" (keyup.enter)="openTeamPreview(team.id)">
         <div class="mt-team-card-head">
-          <span class="mt-team-num">Team {{ team }}</span>
-          <b class="mt-team-split">{{ team % 4 === 0 ? '7-4' : team % 3 === 0 ? '6-5' : team % 2 === 0 ? '5-6' : '4-7' }}</b>
+          <span class="mt-team-num">Team {{ team.id }}</span>
+          <b class="mt-team-split">{{ team.split }}</b>
         </div>
         <div class="mt-team-cv">
           <div class="mt-team-cv-cell">
             <span class="mt-team-cv-badge">C</span>
-            <span class="mt-team-cv-name">Haaland</span>
+            <span class="mt-team-cv-name">{{ team.captain.name }}</span>
           </div>
           <div class="mt-team-cv-cell">
             <span class="mt-team-cv-badge vc">VC</span>
-            <span class="mt-team-cv-name">Saka</span>
+            <span class="mt-team-cv-name">{{ team.viceCaptain.name }}</span>
           </div>
         </div>
         <div class="mt-team-tags">
-          <span>1 GK</span><span>4 DEF</span><span>4 MID</span><span>2 FWD</span>
+          <span>{{ team.counts.GK }} GK</span><span>{{ team.counts.DEF }} DEF</span><span>{{ team.counts.MID }} MID</span><span>{{ team.counts.FWD }} FWD</span>
         </div>
         <div class="mt-team-tap">Tap to preview</div>
       </article>
     </div>
   </div>
 </ng-template>
+
+<div class="preview-overlay open" *ngIf="previewTeam" (click)="closePreview()">
+  <div class="preview-modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle" (click)="$event.stopPropagation()">
+    <div class="preview-h">
+      <h3 id="previewTitle">Team T{{ previewTeam.id }} - {{ previewTeam.split }} split</h3>
+      <button class="preview-close" type="button" aria-label="Close preview" (click)="closePreview()">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <div class="preview-pitch">
+      <div class="preview-row" *ngFor="let position of positionRows">
+        <div
+          class="pp-card"
+          *ngFor="let player of playersByPosition(position)"
+          [class.captain]="isCaptain(player)"
+          [class.vice]="isViceCaptain(player)">
+          <div class="pp-cap-badge" *ngIf="isCaptain(player)">C</div>
+          <div class="pp-cap-badge vc" *ngIf="isViceCaptain(player)">VC</div>
+          <div class="pp-avatar" [style.background]="teamColor(player.team)">{{ playerInitials(player) }}</div>
+          <div class="pp-name">{{ player.name }}</div>
+          <div class="pp-meta">{{ teamCode(player.team) }} - {{ player.pos }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-foot">
+      <div class="preview-stats">
+        <span>GK<b>{{ previewTeam.counts.GK }}</b></span>
+        <span>DEF<b>{{ previewTeam.counts.DEF }}</b></span>
+        <span>MID<b>{{ previewTeam.counts.MID }}</b></span>
+        <span>FWD<b>{{ previewTeam.counts.FWD }}</b></span>
+        <span>{{ teamCode('home') }}<b>{{ previewTeam.homeCount }}</b></span>
+        <span>{{ teamCode('away') }}<b>{{ previewTeam.awayCount }}</b></span>
+      </div>
+      <div class="preview-nav">
+        <button type="button" (click)="navPreview(-1)">Prev</button>
+        <button type="button" (click)="navPreview(1)">Next</button>
+      </div>
+    </div>
+  </div>
+</div>

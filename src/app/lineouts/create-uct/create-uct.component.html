@@ -35,6 +35,14 @@
         </div>
       </section>
 
+      <div class="submit-error" *ngIf="submitError">
+        <span class="material-symbols-outlined" aria-hidden="true">error</span>
+        <div>
+          <b>UCT generation failed.</b>
+          <p>{{ submitError }} Start again from substitute selection and resubmit your configuration.</p>
+        </div>
+      </div>
+
       <nav class="stepper" aria-label="UCT workflow steps">
         <button type="button" [class.active]="step === 1" [class.done]="step > 1" (click)="setStep(1)">
           <b>01</b><span>Substitute</span>
@@ -241,11 +249,19 @@
         </div>
       </section>
 
+      <section class="flow-panel generating-panel" *ngIf="step === 6">
+        <div class="gen-loader">
+          <div class="gen-spinner"></div>
+          <div class="gen-title">Generating 20 structured teams...</div>
+          <div class="gen-sub">{{ generationStatus }}</div>
+        </div>
+      </section>
+
       <div class="flow-actions" *ngIf="step < 5">
         <button class="ghost-btn" type="button" (click)="prevStep()">{{ step === 1 ? 'Back to match' : 'Back' }}</button>
         <button class="primary-btn" type="button" *ngIf="step < 3" (click)="nextStep()">Next</button>
         <button class="primary-btn" type="button" *ngIf="step === 3" [disabled]="!canReview" (click)="nextStep()">Next to Review</button>
-        <button class="primary-btn generate" type="button" *ngIf="step === 4" [disabled]="!canGenerate" (click)="generateTeams()">Create 20 Teams</button>
+        <button class="primary-btn generate" type="button" *ngIf="step === 4" [disabled]="!canGenerate || submitting" (click)="generateTeams()">Create / Submit</button>
       </div>
     </ng-container>
   </div>

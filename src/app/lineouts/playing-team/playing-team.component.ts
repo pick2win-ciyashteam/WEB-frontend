@@ -53,7 +53,7 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
     this.profileService.profile$
       .pipe(takeUntil(this.destroy$))
       .subscribe(profile => {
-        this.coinBalance = Number(profile?.coins ?? 0);
+        this.coinBalance = Number(profile?.coins?.coins ?? 0);
       });
 
     this.profileService.loadProfile().pipe(takeUntil(this.destroy$)).subscribe();

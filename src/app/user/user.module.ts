@@ -7,6 +7,7 @@ import { MyTeamsComponent } from './my-teams/my-teams.component';
 import { TeamsInfoComponent } from './teams-info/teams-info.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SharedModule } from '../shared/shared.module';
+import { PurchaseHistoryComponent } from './purchase-history/purchase-history.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { SharedModule } from '../shared/shared.module';
     MyProfileComponent,
     MyTeamsComponent,
     TeamsInfoComponent,
-    FeedbackComponent
+    FeedbackComponent,
+    PurchaseHistoryComponent
   ],
   imports: [
     CommonModule,

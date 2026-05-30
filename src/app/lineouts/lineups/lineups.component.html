@@ -80,8 +80,9 @@
                 *ngFor="let match of todayMatches; trackBy: trackByMatchId"
                 [class.ready]="match.lineupReady && !isGenerated(match)"
                 [class.generated]="isGenerated(match)"
-                role="button"
-                tabindex="0"
+                [class.clickable]="canOpenMatch(match)"
+                [attr.role]="canOpenMatch(match) ? 'button' : null"
+                [attr.tabindex]="canOpenMatch(match) ? 0 : null"
                 (click)="openMatch(match)"
                 (keydown.enter)="openMatch(match)"
                 (keydown.space)="openMatch(match)">
@@ -154,8 +155,9 @@
                 <article
                   class="match-row upcoming"
                   *ngFor="let match of group.matches; trackBy: trackByMatchId"
-                  role="button"
-                  tabindex="0"
+                  [class.clickable]="canOpenMatch(match)"
+                  [attr.role]="canOpenMatch(match) ? 'button' : null"
+                  [attr.tabindex]="canOpenMatch(match) ? 0 : null"
                   (click)="openMatch(match)"
                   (keydown.enter)="openMatch(match)"
                   (keydown.space)="openMatch(match)">

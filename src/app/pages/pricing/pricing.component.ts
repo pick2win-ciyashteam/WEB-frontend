@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { SubscriptionPlan } from 'src/app/core/interfaces/content';
+import { loadStripe } from '@stripe/stripe-js';
+import { firstValueFrom } from 'rxjs';
+import { CheckoutSessionResponse, StripeConfigResponse, SubscriptionPlan } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -15,17 +18,33 @@ export class PricingComponent implements OnInit {
   loading = true;
   errorMessage = '';
   paymentError = '';
+  paymentMessage = '';
+  creditingCoins = false;
   purchasingPlanId: number | null = null;
   plans: SubscriptionPlan[] = [];
+  private stripePublishableKey = '';
+
+  stripe: any;
+elements: any;
+paymentElement: any;
+
+clientSecret = '';
+selectedPlan: SubscriptionPlan | null = null;
+checkoutOpen = false;
+paymentProcessing = false;
+paymentSucceeded = false;
 
   constructor(
     private api: ApiService,
     private authModal: AuthModalService,
     private authService: AuthService,
+    private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.handleStripeReturn();
+
     this.api.getSubscriptionPlans().subscribe({
       next: (res) => {
         console.log('subscription plans:', res);
@@ -61,47 +80,128 @@ export class PricingComponent implements OnInit {
     this.authModal.open('login');
   }
 
-  buyPlan(plan: SubscriptionPlan): void {
-    this.paymentError = '';
+  async buyPlan(plan: SubscriptionPlan): Promise<void> {
+  this.paymentError = '';
+  this.paymentMessage = '';
 
-    if (!this.authService.isLoggedIn()) {
-      this.authModal.open('login');
+  if (!this.authService.isLoggedIn()) {
+    this.authModal.open('login');
+    return;
+  }
+
+  this.purchasingPlanId = plan.id;
+  this.paymentSucceeded = false;
+
+  try {
+    const config = await firstValueFrom(this.api.getStripeConfig());
+    const publishableKey = this.stripeConfigKeyFrom(config);
+
+    if (!publishableKey) {
+      this.paymentError = 'Stripe publishable key missing.';
+      this.purchasingPlanId = null;
       return;
     }
 
-    this.purchasingPlanId = plan.id;
-
-    this.api.createCheckoutSession({
+    const res = await firstValueFrom(this.api.buyCoins({
       plan_id: plan.id,
-      success_url: `${window.location.origin}/user/profile?payment=success&plan=${plan.id}`,
-      cancel_url: `${window.location.origin}/pricing?payment=cancelled&plan=${plan.id}`
-    }).subscribe({
-      next: (res) => {
-        const checkoutUrl =
-          res?.url ||
-          res?.checkout_url ||
-          res?.session_url ||
-          res?.data?.url ||
-          res?.data?.checkout_url ||
-          res?.data?.session_url;
+      amount: Number(plan.price),
+      coins: Number(plan.coins)
+    }));
 
-        if (res?.success !== false && checkoutUrl) {
-          window.location.href = checkoutUrl;
-          return;
-        }
+    if (!res?.success || !res.clientSecret) {
+      this.paymentError = res?.message || 'Client secret not received.';
+      this.purchasingPlanId = null;
+      return;
+    }
 
-        this.purchasingPlanId = null;
-        this.paymentError = res?.message || 'Unable to start Stripe checkout. Please try again.';
-      },
-      error: (err) => {
-        this.purchasingPlanId = null;
-        this.paymentError =
-          err?.error?.message ||
-          err?.error?.error ||
-          'Unable to start Stripe checkout. Please try again.';
+    this.clientSecret = res.clientSecret;
+    this.selectedPlan = plan;
+    this.checkoutOpen = true;
+
+    this.stripe = await loadStripe(publishableKey);
+
+    this.elements = this.stripe.elements({
+      clientSecret: this.clientSecret,
+      appearance: {
+        theme: 'night'
       }
     });
+
+    setTimeout(() => {
+      this.paymentElement = this.elements.create('payment');
+      this.paymentElement.mount('#payment-element');
+    });
+
+  } catch (err: any) {
+    this.paymentError =
+      err?.error?.message ||
+      err?.error?.error ||
+      'Unable to start payment.';
   }
+
+  this.purchasingPlanId = null;
+}
+
+async confirmPayment(): Promise<void> {
+  if (!this.stripe || !this.elements) return;
+
+  this.paymentProcessing = true;
+  this.paymentError = '';
+
+  const submitResult = await this.elements.submit();
+
+  if (submitResult.error) {
+    this.paymentError = submitResult.error.message;
+    this.paymentProcessing = false;
+    return;
+  }
+
+  const { error, paymentIntent } = await this.stripe.confirmPayment({
+    elements: this.elements,
+    redirect: 'if_required'
+  });
+
+  if (error) {
+    this.paymentError = error.message || 'Payment failed.';
+  } else if (paymentIntent?.status === 'succeeded') {
+    this.paymentSucceeded = true;
+    this.paymentMessage = 'Payment successful. Coins added successfully.';
+    this.clientSecret = '';
+
+    if (this.paymentElement) {
+      this.paymentElement.unmount();
+      this.paymentElement = null;
+    }
+
+    // coins/profile refresh
+    this.api.getProfile().subscribe();
+
+    setTimeout(() => {
+      this.checkoutOpen = false;
+      this.selectedPlan = null;
+      this.paymentSucceeded = false;
+      this.router.navigate(['/user/profile']);
+    }, 1800);
+  }
+
+  this.paymentProcessing = false;
+}
+
+closeCheckout(): void {
+  if (this.paymentProcessing) {
+    return;
+  }
+
+  this.checkoutOpen = false;
+  this.clientSecret = '';
+  this.selectedPlan = null;
+  this.paymentSucceeded = false;
+
+  if (this.paymentElement) {
+    this.paymentElement.unmount();
+    this.paymentElement = null;
+  }
+}
 
   planClass(plan: SubscriptionPlan): string {
     if (plan.is_popular) {
@@ -121,5 +221,173 @@ export class PricingComponent implements OnInit {
 
   isPurchasing(plan: SubscriptionPlan): boolean {
     return this.purchasingPlanId === plan.id;
+  }
+
+  private handleStripeReturn(): void {
+    const params = this.route.snapshot.queryParamMap;
+    const payment = params.get('payment');
+
+    if (payment === 'cancelled') {
+      this.paymentError = 'Payment cancelled. No coins were added.';
+      return;
+    }
+
+    if (payment !== 'success') {
+      return;
+    }
+
+    const planId = Number(params.get('plan_id') || params.get('plan'));
+    const amount = Number(params.get('amount'));
+    const coins = Number(params.get('coins'));
+    const creditRef = params.get('credit_ref') || `${planId}_${amount}_${coins}`;
+    const creditKey = `pick2win_coin_credit_${creditRef}`;
+
+    if (!planId || !amount || !coins) {
+      this.paymentError = 'Payment succeeded, but coin pack details are missing. Please contact support.';
+      return;
+    }
+
+    if (sessionStorage.getItem(creditKey)) {
+      this.paymentMessage = 'Payment already processed. Coins should be available in your account.';
+      return;
+    }
+
+    this.creditingCoins = true;
+    this.paymentMessage = 'Payment successful. Adding coins to your account...';
+
+    this.api.buyCoins({ plan_id: planId, amount, coins }).subscribe({
+      next: (res) => {
+        this.creditingCoins = false;
+
+        if (res?.success !== false) {
+          sessionStorage.setItem(creditKey, '1');
+          this.paymentMessage = res?.message || `${coins} coins added successfully.`;
+          this.router.navigate(['/pricing'], { replaceUrl: true });
+          return;
+        }
+
+        this.paymentError = res?.message || 'Payment succeeded, but coins could not be added. Please contact support.';
+        this.paymentMessage = '';
+      },
+      error: (err) => {
+        this.creditingCoins = false;
+        this.paymentMessage = '';
+        this.paymentError =
+          err?.error?.message ||
+          err?.error?.error ||
+          'Payment succeeded, but coins could not be added. Please contact support.';
+      }
+    });
+  }
+
+  private async openStripeCheckout(res: CheckoutSessionResponse): Promise<void> {
+    const checkoutUrl = this.checkoutUrlFrom(res);
+
+    if (res?.success !== false && checkoutUrl) {
+      window.location.href = checkoutUrl;
+      return;
+    }
+
+    const sessionId = this.checkoutSessionIdFrom(res);
+    const publishableKey = this.stripePublishableKeyFrom(res) || await this.loadStripePublishableKey();
+
+    if (res?.success !== false && sessionId && publishableKey) {
+      const stripe = await loadStripe(publishableKey);
+
+      if (!stripe) {
+        this.purchasingPlanId = null;
+        this.paymentError = 'Stripe could not be loaded. Please try again.';
+        return;
+      }
+
+      const stripeCheckout = stripe as unknown as {
+        redirectToCheckout?: (options: { sessionId: string }) => Promise<{ error?: { message?: string } }>;
+      };
+
+      if (!stripeCheckout.redirectToCheckout) {
+        this.purchasingPlanId = null;
+        this.paymentError = 'Stripe checkout redirect is not available. Backend should return checkout_url for hosted checkout.';
+        return;
+      }
+
+      const result = await stripeCheckout.redirectToCheckout({ sessionId });
+
+      this.purchasingPlanId = null;
+      this.paymentError = result.error?.message || 'Unable to redirect to Stripe checkout. Please try again.';
+      return;
+    }
+
+    this.purchasingPlanId = null;
+    this.paymentError = res?.message || 'Stripe checkout session was not returned by backend. Please try again.';
+  }
+
+  private checkoutUrlFrom(res: CheckoutSessionResponse): string {
+    return (
+      res?.url ||
+      res?.checkout_url ||
+      res?.session_url ||
+      res?.payment_url ||
+      res?.redirect_url ||
+      res?.data?.url ||
+      res?.data?.checkout_url ||
+      res?.data?.session_url ||
+      res?.data?.payment_url ||
+      res?.data?.redirect_url ||
+      ''
+    );
+  }
+
+  private checkoutSessionIdFrom(res: CheckoutSessionResponse): string {
+    return (
+      res?.session_id ||
+      res?.sessionId ||
+      res?.id ||
+      res?.data?.session_id ||
+      res?.data?.sessionId ||
+      res?.data?.id ||
+      ''
+    );
+  }
+
+  private stripePublishableKeyFrom(res: CheckoutSessionResponse): string {
+    return (
+      res?.publishableKey ||
+      res?.publishable_key ||
+      res?.public_key ||
+      res?.stripe_publishable_key ||
+      res?.data?.publishableKey ||
+      res?.data?.publishable_key ||
+      res?.data?.public_key ||
+      res?.data?.stripe_publishable_key ||
+      ''
+    );
+  }
+
+  private async loadStripePublishableKey(): Promise<string> {
+    if (this.stripePublishableKey) {
+      return this.stripePublishableKey;
+    }
+
+    try {
+      const res = await firstValueFrom(this.api.getStripeConfig());
+      this.stripePublishableKey = this.stripeConfigKeyFrom(res);
+      return this.stripePublishableKey;
+    } catch {
+      return '';
+    }
+  }
+
+  private stripeConfigKeyFrom(res: StripeConfigResponse): string {
+    return (
+      res?.publishableKey ||
+      res?.publishable_key ||
+      res?.public_key ||
+      res?.stripe_publishable_key ||
+      res?.data?.publishableKey ||
+      res?.data?.publishable_key ||
+      res?.data?.public_key ||
+      res?.data?.stripe_publishable_key ||
+      ''
+    );
   }
 }

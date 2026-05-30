@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
-import { ApiDataResponse, ApiListResponse, Banner, CheckoutSessionPayload, CheckoutSessionResponse, Country, MatchDetail, Series, SubscriptionPlan, UserProfile } from '../interfaces/content';
+import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, CheckoutSessionPayload, CheckoutSessionResponse, Country, MatchDetail, Series, StripeConfigResponse, SubscriptionPlan, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private BASE = 'https://pick2win-backend-website.onrender.com/api/user';
+  private BASE = 'https://pick2win-backend-website.onrender.com/api/user'
 
   constructor(private http: HttpClient) { }
 
@@ -46,9 +46,14 @@ export class ApiService {
     return this.http.get<ApiListResponse<SubscriptionPlan>>(`${this.BASE}/plans`);
   }
 
-  createCheckoutSession(data: CheckoutSessionPayload): Observable<CheckoutSessionResponse> {
-    return this.http.post<CheckoutSessionResponse>(`${this.BASE}/payments/create-checkout-session`, data);
-  }
+
+getStripeConfig(): Observable<StripeConfigResponse> {
+  return this.http.get<StripeConfigResponse>(`${this.BASE}/deposite/stripe/config`);
+}
+
+buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
+  return this.http.post<BuyCoinsResponse>(`${this.BASE}/deposite/buy-coins`, data);
+}
 
   getBanners(): Observable<ApiListResponse<Banner>> {
     return this.http.get<ApiListResponse<Banner>>(`${this.BASE}/banner`);
@@ -58,8 +63,16 @@ export class ApiService {
     return this.http.get<ApiListResponse<Series>>(`${this.BASE}/series`);
   }
 
+  getTodayLineups(): Observable<TodayLineupsResponse> {
+    return this.http.get<TodayLineupsResponse>(`${this.BASE}/lineup/today-lineups`);
+  }
+
   getMatchDetails(matchId: number | string): Observable<ApiDataResponse<MatchDetail>> {
     return this.http.get<ApiDataResponse<MatchDetail>>(`${this.BASE}/matches/${matchId}`);
+  }
+
+  createUctTeams(data: UctGeneratePayload): Observable<UctGenerateResponse> {
+    return this.http.post<UctGenerateResponse>(`${this.BASE}/uct/generate`, data);
   }
 
   getSeriesById(id: number): Observable<any> {

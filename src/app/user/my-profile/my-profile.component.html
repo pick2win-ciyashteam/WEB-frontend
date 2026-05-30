@@ -7,7 +7,7 @@
       <h1 class="section-title">My <span>Space.</span></h1>
     </div>
 
-    <div class="myspace-top-cta">
+    <div class="myspace-top-cta" *ngIf="showTodayLineupsCta">
       <a routerLink="/lineouts" class="lineouts-teaser-btn primary pulsing">
         <span class="cta-live-dot" aria-hidden="true"></span>
         Today's Match Lineouts
@@ -69,23 +69,23 @@
             Coin Ledger - Your Account Math
           </div>
         </div>
-        <div class="profile-ledger-row">
+        <div class="profile-ledger-row" *ngIf="profile$ | async as profile">
           <div class="profile-ledger-cell total">
             <div class="profile-ledger-cell-lbl">Total Coins</div>
-            <div class="profile-ledger-cell-num">{{ (profile$ | async)?.coins ?? 0 }}</div>
-            <div class="profile-ledger-cell-sub">current wallet balance from your account</div>
+            <div class="profile-ledger-cell-num">{{ totalCoins(profile) }}</div>
+            <div class="profile-ledger-cell-sub">total coins credited to your account</div>
           </div>
           <div class="profile-ledger-op">-</div>
           <div class="profile-ledger-cell used">
             <div class="profile-ledger-cell-lbl">Coins Used</div>
-            <div class="profile-ledger-cell-num">64</div>
-            <div class="profile-ledger-cell-sub">across 64 match UCTs</div>
+            <div class="profile-ledger-cell-num">{{ usedCoins(profile) }}</div>
+            <div class="profile-ledger-cell-sub">across {{ usedCoins(profile) }} match UCTs</div>
           </div>
           <div class="profile-ledger-op">=</div>
           <div class="profile-ledger-cell remaining">
             <div class="profile-ledger-cell-lbl">Remaining</div>
-            <div class="profile-ledger-cell-num">47</div>
-            <div class="profile-ledger-cell-sub">available for 47 more matches</div>
+            <div class="profile-ledger-cell-num">{{ availableCoins(profile) }}</div>
+            <div class="profile-ledger-cell-sub">available for {{ availableCoins(profile) }} more matches</div>
           </div>
         </div>
         <p class="profile-ledger-foot">Each coin = <b>1 match UCT generation</b>. Each pack is valid for 365 days from purchase. Use them within that window whenever lineups drop for any supported league.</p>
@@ -107,41 +107,28 @@
               <tr>
                 <th>Pack</th>
                 <th>Purchased</th>
-                <th>Coins</th>
+                <th>Matches</th>
                 <th>Used</th>
                 <th>Remaining</th>
                 <th>Expires</th>
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Pro Pack</td>
-                <td>Jul 5, 2026</td>
-                <td>100</td>
-                <td>53</td>
-                <td class="col-coins">47</td>
-                <td>Jul 5, 2027</td>
-                <td><span class="profile-status-pill active">Active</span></td>
+            <tbody *ngIf="profile$ | async as profile">
+              <tr *ngIf="profile.subscription; else noActiveSubscription">
+                <td>{{ profile.subscription.plan_name }}</td>
+                <td>{{ subscriptionPurchased(profile) }}</td>
+                <td>{{ profile.subscription.matches_allowed }}</td>
+                <td>{{ profile.subscription.matches_used }}</td>
+                <td class="col-coins">{{ profile.subscription.matches_remaining }}</td>
+                <td>{{ subscriptionExpires(profile) }}</td>
+                <td><span class="profile-status-pill" [ngClass]="subscriptionStatusClass(profile)">{{ subscriptionStatus(profile) }}</span></td>
               </tr>
-              <tr>
-                <td>Starter Pack</td>
-                <td>Jun 12, 2026</td>
-                <td>10</td>
-                <td>10</td>
-                <td class="col-coins">0</td>
-                <td>Jun 12, 2027</td>
-                <td><span class="profile-status-pill used">Used</span></td>
-              </tr>
-              <tr>
-                <td>Free First Match</td>
-                <td>Jun 12, 2026</td>
-                <td>1</td>
-                <td>1</td>
-                <td class="col-coins">0</td>
-                <td>Jun 26, 2026</td>
-                <td><span class="profile-status-pill used">Used</span></td>
-              </tr>
+              <ng-template #noActiveSubscription>
+                <tr>
+                  <td colspan="7">No active subscription found.</td>
+                </tr>
+              </ng-template>
             </tbody>
           </table>
         </div>
@@ -206,7 +193,7 @@
           <h4>Delete my account</h4>
           <p>Permanently delete your PICK2WIN account. <b>This action cannot be reversed.</b> Unused coins will not be refunded, your data will be erased, and your account cannot be reclaimed.</p>
           <div class="danger-actions">
-            <button type="button">
+            <button type="button" (click)="openDeleteModal()">
               <span class="material-symbols-outlined" aria-hidden="true">delete_forever</span>
               Delete my account permanently
             </button>
@@ -225,5 +212,57 @@
     </section>
   </div>
 </main>
+
+<div class="del-modal" *ngIf="deleteModalOpen" role="dialog" aria-modal="true" aria-labelledby="delTitle" (click)="closeDeleteModal()">
+  <div class="del-modal-card" (click)="$event.stopPropagation()">
+    <button class="del-modal-close" type="button" aria-label="Close" (click)="closeDeleteModal()">×</button>
+
+    <div class="del-step" *ngIf="!accountDeleted">
+      <div class="del-icon-wrap">
+        <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+      </div>
+      <h2 id="delTitle" class="del-h">Delete your account?</h2>
+      <p class="del-sub">This action is <strong>permanent</strong> and <strong>cannot be reversed</strong>.</p>
+
+      <div class="del-what">
+        <div class="del-what-title">What will happen</div>
+        <ul class="del-what-list">
+          <li>Your PICK2WIN account access will be removed.</li>
+          <li>Your saved profile data and generated history may no longer be recoverable.</li>
+          <li><b>{{ forfeitedCoins }}</b> remaining coins will be permanently forfeited and not refunded.</li>
+          <li>You cannot reclaim this account after deletion is finalized.</li>
+        </ul>
+      </div>
+
+      <label class="del-checkbox">
+        <input type="checkbox" [checked]="deleteConsent" (change)="deleteConsent = $any($event.target).checked">
+        <span>I understand this is permanent and I want to delete my account.</span>
+      </label>
+
+      <div class="del-actions">
+        <button class="del-btn-cancel" type="button" (click)="closeDeleteModal()">Cancel</button>
+        <button class="del-btn-confirm" type="button" [disabled]="!deleteConsent" (click)="executeDeleteAccount()">Delete my account</button>
+      </div>
+    </div>
+
+    <div class="del-step" *ngIf="accountDeleted">
+      <div class="del-icon-wrap done">
+        <span class="material-symbols-outlined" aria-hidden="true">check</span>
+      </div>
+      <h2 class="del-h">Account deleted.</h2>
+      <p class="del-sub">Your PICK2WIN account deletion request has been completed in this session.</p>
+
+      <div class="del-summary">
+        <div><span>Deleted at</span><b>{{ deletionTimestamp }}</b></div>
+        <div><span>Coins forfeited</span><b>{{ forfeitedCoins }}</b></div>
+        <div><span>Status</span><b>Deleted</b></div>
+      </div>
+
+      <div class="del-actions">
+        <button class="del-btn-cancel close-done" type="button" (click)="closeDeleteModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <app-footer></app-footer>

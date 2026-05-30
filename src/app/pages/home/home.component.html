@@ -146,7 +146,7 @@
   </ng-template>
 </section>
 
-<section class="home-section">
+<section class="home-section" *ngIf="showTodayLineupsCta">
   <div class="home-lineouts-cta">
     <a routerLink="/lineouts" class="home-lineouts-cta-btn pulsing">
       <span class="cta-live-dot" aria-hidden="true"></span>
