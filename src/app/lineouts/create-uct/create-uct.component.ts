@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, switchMap, takeUntil } from 'rxjs';
-import { MatchDetail, MatchPlayer, UctGeneratePayload } from 'src/app/core/interfaces/content';
+import { MatchDetail, MatchPlayer, UctGeneratePayload, UctGeneratePlayer } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 
 type Mandate = 'YES' | 'NO' | 'NA';
@@ -37,6 +37,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   confirmed = false;
   submitting = false;
   submitError = '';
+  showGenerateConfirm = false;
   generationStatus = 'Resolving constraints - applying mandates - computing splits';
   readonly generationMessages = [
     'Resolving constraints - applying mandates - computing splits',
@@ -271,6 +272,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   toggleCaptain(player: UctPlayer): void {
     if (this.mandates.get(player.id) === 'NO') return;
+    if (this.viceCaptainIds.has(player.id)) return;
 
     if (this.captainIds.has(player.id)) {
       this.captainIds.delete(player.id);
@@ -278,35 +280,69 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     if (this.captainIds.size >= this.maxCaptains) return;
+    if (this.viceCaptainIds.size > this.maxViceForCaptainCount(this.captainIds.size + 1)) return;
 
     this.captainIds.add(player.id);
-    this.viceCaptainIds.delete(player.id);
   }
 
   toggleViceCaptain(player: UctPlayer): void {
     if (this.mandates.get(player.id) === 'NO') return;
+    if (this.captainIds.has(player.id)) return;
 
     if (this.viceCaptainIds.has(player.id)) {
       this.viceCaptainIds.delete(player.id);
       return;
     }
 
-    if (this.viceCaptainIds.size >= this.maxViceCaptains) return;
+    if (this.viceCaptainIds.size >= this.maxViceForCurrentCaptains()) return;
 
     this.viceCaptainIds.add(player.id);
-    this.captainIds.delete(player.id);
   }
 
   isCandVcMatrixValid(): boolean {
     const captainCount = this.captainIds.size;
     const viceCount = this.viceCaptainIds.size;
 
-    if (captainCount === 1) return viceCount >= 2 && viceCount <= 5;
-    if (captainCount === 2) return viceCount >= 2 && viceCount <= 4;
-    if (captainCount === 3) return viceCount >= 2 && viceCount <= 3;
-    if (captainCount === 4) return viceCount === 2;
+    return viceCount >= this.minViceForCaptainCount(captainCount)
+      && viceCount <= this.maxViceForCaptainCount(captainCount);
+  }
 
-    return false;
+  canSelectCaptain(player: UctPlayer): boolean {
+    if (this.captainIds.has(player.id)) return true;
+    if (this.mandates.get(player.id) === 'NO') return false;
+    if (this.viceCaptainIds.has(player.id)) return false;
+    if (this.captainIds.size >= this.maxCaptains) return false;
+
+    return this.viceCaptainIds.size <= this.maxViceForCaptainCount(this.captainIds.size + 1);
+  }
+
+  canSelectViceCaptain(player: UctPlayer): boolean {
+    if (this.viceCaptainIds.has(player.id)) return true;
+    if (this.mandates.get(player.id) === 'NO') return false;
+    if (this.captainIds.has(player.id)) return false;
+
+    return this.viceCaptainIds.size < this.maxViceForCurrentCaptains();
+  }
+
+  maxViceForCurrentCaptains(): number {
+    return this.maxViceForCaptainCount(this.captainIds.size);
+  }
+
+  minViceForCurrentCaptains(): number {
+    return this.minViceForCaptainCount(this.captainIds.size);
+  }
+
+  private maxViceForCaptainCount(captainCount: number): number {
+    if (captainCount === 1) return 5;
+    if (captainCount === 2) return 4;
+    if (captainCount === 3) return 3;
+    if (captainCount === 4) return 2;
+
+    return 0;
+  }
+
+  private minViceForCaptainCount(captainCount: number): number {
+    return captainCount >= 1 && captainCount <= 4 ? 2 : 0;
   }
 
   captaincyHint(): string {
@@ -318,7 +354,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return 'C & VC matrix ready.';
     }
 
-    return 'Valid matrix: 1C x 2-5VC, 2C x 2-4VC, 3C x 2-3VC, or 4C x 2VC.';
+    if (!this.captainIds.size) {
+      return 'Select 1-4 Captains first, then choose Vice-Captains.';
+    }
+
+    return `Need ${this.minViceForCurrentCaptains()}-${this.maxViceForCurrentCaptains()} VC for ${this.captainIds.size} Captain(s).`;
   }
 
   generateTeams(): void {
@@ -326,6 +366,23 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.showGenerateConfirm = true;
+  }
+
+  closeGenerateConfirm(): void {
+    if (this.submitting) {
+      return;
+    }
+
+    this.showGenerateConfirm = false;
+  }
+
+  confirmGenerateTeams(): void {
+    if (!this.canGenerate) {
+      return;
+    }
+
+    this.showGenerateConfirm = false;
     this.submitUctConfiguration();
   }
 
@@ -409,6 +466,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       .toUpperCase() || player.teamShort.slice(0, 2).toUpperCase();
   }
 
+  playerImage(player: UctPlayer): string {
+    return player.logo || 'assets/logo.png';
+  }
+
   trackPlayer(_: number, player: UctPlayer): number {
     return player.id;
   }
@@ -420,15 +481,35 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   private buildSubmitPayload(): UctGeneratePayload {
     return {
       match_id: this.matchId,
-      substitute_player_ids: Array.from(this.selectedSubIds),
-      mandate_yes_player_ids: this.mandateYesPlayers.map(player => player.id),
-      mandate_no_player_ids: this.mandateNoPlayers.map(player => player.id),
-      captain_mode: this.captainMode,
-      cvc_player_ids: Array.from(this.cvcIds),
-      captain_player_ids: Array.from(this.captainIds),
-      vice_captain_player_ids: Array.from(this.viceCaptainIds),
-      selected_player_ids: this.availablePool.map(player => player.id)
+      team_a: this.homeAvailablePool.map(player => this.toGeneratePlayer(player)),
+      team_b: this.awayAvailablePool.map(player => this.toGeneratePlayer(player))
     };
+  }
+
+  private toGeneratePlayer(player: UctPlayer): UctGeneratePlayer {
+    const payload: UctGeneratePlayer = {
+      name: player.player_name,
+      role: player.position
+    };
+    const mandate = this.mandates.get(player.id);
+
+    if (mandate === 'YES' || mandate === 'NO') {
+      payload.mandate = mandate;
+    }
+
+    if (this.captainMode === 'CVC' && this.cvcIds.has(player.id)) {
+      payload.captain = 'CVC';
+    }
+
+    if (this.captainMode === 'C_AND_VC' && this.captainIds.has(player.id)) {
+      payload.captain = 'C';
+    }
+
+    if (this.captainMode === 'C_AND_VC' && this.viceCaptainIds.has(player.id)) {
+      payload.captain = 'VC';
+    }
+
+    return payload;
   }
 
   private resetAfterSubmitFailure(message: string): void {

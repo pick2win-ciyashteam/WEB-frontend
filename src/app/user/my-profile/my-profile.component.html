@@ -235,13 +235,20 @@
       </div>
 
       <label class="del-checkbox">
-        <input type="checkbox" [checked]="deleteConsent" (change)="deleteConsent = $any($event.target).checked">
+        <input type="checkbox" [checked]="deleteConsent" [disabled]="deletingAccount" (change)="deleteConsent = $any($event.target).checked">
         <span>I understand this is permanent and I want to delete my account.</span>
       </label>
 
+      <div class="del-error" *ngIf="deleteError">
+        <span class="material-symbols-outlined" aria-hidden="true">error</span>
+        {{ deleteError }}
+      </div>
+
       <div class="del-actions">
-        <button class="del-btn-cancel" type="button" (click)="closeDeleteModal()">Cancel</button>
-        <button class="del-btn-confirm" type="button" [disabled]="!deleteConsent" (click)="executeDeleteAccount()">Delete my account</button>
+        <button class="del-btn-cancel" type="button" [disabled]="deletingAccount" (click)="closeDeleteModal()">Cancel</button>
+        <button class="del-btn-confirm" type="button" [disabled]="!deleteConsent || deletingAccount" (click)="executeDeleteAccount()">
+          {{ deletingAccount ? 'Deleting...' : 'Delete my account' }}
+        </button>
       </div>
     </div>
 

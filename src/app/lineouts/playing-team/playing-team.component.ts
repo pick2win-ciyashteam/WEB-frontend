@@ -12,9 +12,12 @@ import { ProfileService } from 'src/app/core/services/profile.service';
 })
 export class PlayingTeamComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
+  private toastTimer: ReturnType<typeof setTimeout> | null = null;
+  private navigateTimer: ReturnType<typeof setTimeout> | null = null;
 
   loading = true;
   errorMessage = '';
+  toast: { type: 'success' | 'error'; message: string } | null = null;
   detail: MatchDetail | null = null;
   coinBalance = 0;
 
@@ -60,6 +63,13 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.clearToastTimer();
+
+    if (this.navigateTimer) {
+      clearTimeout(this.navigateTimer);
+      this.navigateTimer = null;
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -69,7 +79,25 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
   }
 
   startUct(detail: MatchDetail): void {
-    this.router.navigate(['/lineouts/create-uct', detail.match.id]);
+    this.hideToast();
+
+    if (!this.isLineupAvailable(detail)) {
+      return;
+    }
+
+    if (this.coinBalance <= 0) {
+      this.showToast('error', 'Insufficient coins. Please top up your balance to start UCT.');
+      return;
+    }
+
+    this.showToast('success', 'Balance verified. Starting UCT workflow...');
+    this.navigateTimer = setTimeout(() => {
+      this.router.navigate(['/lineouts/create-uct', detail.match.id]);
+    }, 650);
+  }
+
+  canStartUct(detail: MatchDetail): boolean {
+    return this.isLineupAvailable(detail);
   }
 
   remainingAfterUct(): number {
@@ -160,5 +188,23 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
 
   teamCount(team: MatchTeam): number {
     return (team.playing_xi?.length || 0) + (team.substitutes?.length || 0);
+  }
+
+  private showToast(type: 'success' | 'error', message: string): void {
+    this.toast = { type, message };
+    this.clearToastTimer();
+    this.toastTimer = setTimeout(() => this.hideToast(), 3500);
+  }
+
+  private hideToast(): void {
+    this.toast = null;
+    this.clearToastTimer();
+  }
+
+  private clearToastTimer(): void {
+    if (this.toastTimer) {
+      clearTimeout(this.toastTimer);
+      this.toastTimer = null;
+    }
   }
 }

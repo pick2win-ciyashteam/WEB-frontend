@@ -75,7 +75,9 @@
               <b>{{ homeSubstitutes.length }} players</b>
             </div>
             <button class="player-row" type="button" *ngFor="let player of homeSubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" (click)="toggleSubstitute(player)">
-              <span class="avatar">{{ initials(player) }}</span>
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }}</small></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
@@ -88,7 +90,9 @@
               <b>{{ awaySubstitutes.length }} players</b>
             </div>
             <button class="player-row away" type="button" *ngFor="let player of awaySubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" (click)="toggleSubstitute(player)">
-              <span class="avatar">{{ initials(player) }}</span>
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }}</small></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
@@ -114,7 +118,9 @@
               <b>{{ side.players.length }} players</b>
             </div>
             <div class="player-row mandate-row" *ngFor="let player of side.players; trackBy: trackPlayer">
-              <span class="avatar">{{ initials(player) }}</span>
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="mandate-actions">
@@ -146,7 +152,7 @@
           Select 2-4 players. They rotate as both Captain and Vice-Captain across the 20 teams.
         </div>
         <div class="mode-note" *ngIf="captainMode === 'C_AND_VC'">
-          Valid matrix: 1 Captain x 2-5 VC, 2 Captains x 2-4 VC, 3 Captains x 2-3 VC, or 4 Captains x 2 VC.
+          C &amp; VC mode - Structured Configuration: 1 Captain x 2-5 VC, 2 Captains x 2-4 VC, 3 Captains x 2-3 VC, or 4 Captains x 2 VC.
         </div>
 
         <div class="team-pool-grid" *ngIf="captainMode === 'CVC'">
@@ -156,7 +162,9 @@
               <b>{{ side.players.length }} players</b>
             </div>
           <button class="player-row" type="button" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="mandateOf(player) === 'NO'" (click)="toggleCvc(player)">
-            <span class="avatar">{{ initials(player) }}</span>
+            <span class="avatar image-avatar">
+              <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+            </span>
             <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
             <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             <span class="row-action">{{ cvcIds.has(player.id) ? 'CVC' : '+' }}</span>
@@ -164,23 +172,24 @@
           </article>
         </div>
 
-        <div class="captain-matrix" *ngIf="captainMode === 'C_AND_VC'">
-          <div>
-            <h3>Captain Pool <span>{{ captainIds.size }}/{{ maxCaptains }}</span></h3>
-            <button class="player-card" type="button" *ngFor="let player of eligibleCvcPlayers; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id)" [class.muted]="viceCaptainIds.has(player.id)" (click)="toggleCaptain(player)">
-              <span class="avatar">{{ player.teamShort }}</span>
+        <div class="team-pool-grid captain-matrix-grid" *ngIf="captainMode === 'C_AND_VC'">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeAvailablePool, cls: 'home'}, {name: d.away_team.name, players: awayAvailablePool, cls: 'away'}]">
+            <div class="team-pool-head">
+              <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
+              <b>C {{ captainIds.size }}/{{ maxCaptains }} - VC {{ viceCaptainIds.size }}/{{ maxViceForCurrentCaptains() }}</b>
+            </div>
+            <div class="player-row captain-select-row" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id) || viceCaptainIds.has(player.id)" [class.muted]="mandateOf(player) === 'NO'">
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
-            </button>
-          </div>
-          <div>
-            <h3>Vice-Captain Pool <span>{{ viceCaptainIds.size }}/{{ maxViceCaptains }}</span></h3>
-            <button class="player-card" type="button" *ngFor="let player of eligibleCvcPlayers; trackBy: trackPlayer" [class.selected]="viceCaptainIds.has(player.id)" [class.muted]="captainIds.has(player.id)" (click)="toggleViceCaptain(player)">
-              <span class="avatar">{{ player.teamShort }}</span>
-              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
-              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
-            </button>
-          </div>
+              <span class="captain-actions">
+                <button type="button" [class.active]="captainIds.has(player.id)" [disabled]="!canSelectCaptain(player)" (click)="toggleCaptain(player)">C</button>
+                <button type="button" [class.active]="viceCaptainIds.has(player.id)" [disabled]="!canSelectViceCaptain(player)" (click)="toggleViceCaptain(player)">VC</button>
+              </span>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -266,5 +275,34 @@
     </ng-container>
   </div>
 </main>
+
+<div class="uct-confirm-modal" *ngIf="showGenerateConfirm" role="dialog" aria-modal="true" aria-labelledby="uctConfirmTitle" (click)="closeGenerateConfirm()">
+  <div class="uct-confirm-card" (click)="$event.stopPropagation()">
+    <button class="uct-confirm-close" type="button" aria-label="Close" (click)="closeGenerateConfirm()">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+
+    <div class="uct-confirm-icon">
+      <span class="material-symbols-outlined" aria-hidden="true">task_alt</span>
+    </div>
+
+    <h2 id="uctConfirmTitle">Generate 20 UCT teams?</h2>
+    <p>Your confirmed rules will be sent to the backend. One coin may be used for this match once generation succeeds.</p>
+
+    <div class="uct-confirm-summary">
+      <div><span>Substitutes</span><b>{{ selectedSubstitutes.length }}</b></div>
+      <div><span>Mandate YES</span><b>{{ mandateYesPlayers.length }}</b></div>
+      <div><span>Mandate NO</span><b>{{ mandateNoPlayers.length }}</b></div>
+      <div><span>Captaincy</span><b>{{ captainMode === 'CVC' ? 'CVC' : 'C & VC' }}</b></div>
+    </div>
+
+    <div class="uct-confirm-actions">
+      <button class="ghost-btn" type="button" (click)="closeGenerateConfirm()">Review again</button>
+      <button class="primary-btn generate" type="button" [disabled]="submitting" (click)="confirmGenerateTeams()">
+        {{ submitting ? 'Generating...' : 'Confirm & Generate' }}
+      </button>
+    </div>
+  </div>
+</div>
 
 <app-footer></app-footer>

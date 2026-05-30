@@ -34,6 +34,10 @@ export class ApiService {
     return this.http.get<ApiDataResponse<UserProfile>>(`${this.BASE}/user-auth/profile`);
   }
 
+  deleteAccount(): Observable<any> {
+    return this.http.delete(`${this.BASE}/user-auth/delete`);
+  }
+
   getCountries(): Observable<ApiListResponse<Country>> {
     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/countries/get-all`);
   }
@@ -72,7 +76,7 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
   }
 
   createUctTeams(data: UctGeneratePayload): Observable<UctGenerateResponse> {
-    return this.http.post<UctGenerateResponse>(`${this.BASE}/uct/generate`, data);
+    return this.http.post<UctGenerateResponse>(`${this.BASE}/teams/generate-teams`, data);
   }
 
   getSeriesById(id: number): Observable<any> {

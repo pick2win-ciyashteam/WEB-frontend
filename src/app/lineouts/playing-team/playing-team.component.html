@@ -1,6 +1,10 @@
 <app-header></app-header>
 
 <main class="playing-page">
+  <div class="playing-toast" *ngIf="toast" [class.success]="toast.type === 'success'" [class.error]="toast.type === 'error'">
+    {{ toast.message }}
+  </div>
+
   <div class="wrap">
     <button class="back-btn" type="button" (click)="goBack()">
       <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
@@ -79,7 +83,9 @@
           </div>
           <div class="players-list">
             <div class="player-card" *ngFor="let player of d.home_team.playing_xi; trackBy: trackPlayer">
-              <span class="player-avatar">{{ initials(player) }}</span>
+              <span class="player-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Starting player</span>
@@ -94,7 +100,9 @@
           </div>
           <div class="players-list substitute-list">
             <div class="player-card substitute-card" *ngFor="let player of d.home_team.substitutes; trackBy: trackPlayer">
-              <span class="player-avatar">{{ initials(player) }}</span>
+              <span class="player-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Substitute player</span>
@@ -120,7 +128,9 @@
           </div>
           <div class="players-list">
             <div class="player-card" *ngFor="let player of d.away_team.playing_xi; trackBy: trackPlayer">
-              <span class="player-avatar away">{{ initials(player) }}</span>
+              <span class="player-avatar away">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Starting player</span>
@@ -135,7 +145,9 @@
           </div>
           <div class="players-list substitute-list">
             <div class="player-card substitute-card" *ngFor="let player of d.away_team.substitutes; trackBy: trackPlayer">
-              <span class="player-avatar away">{{ initials(player) }}</span>
+              <span class="player-avatar away">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
               <div>
                 <strong>{{ player.player_name }}</strong>
                 <span>Substitute player</span>
@@ -172,7 +184,7 @@
               <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
               Back
             </button>
-            <button class="start-uct-btn" type="button" [disabled]="!isLineupAvailable(d)" (click)="startUct(d)">
+            <button class="start-uct-btn" type="button" [disabled]="!canStartUct(d)" (click)="startUct(d)">
               Start UCT
               <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
             </button>

@@ -98,16 +98,17 @@ export interface BuyCoinsResponse {
   clientSecret?: string;
 }
 
+export interface UctGeneratePlayer {
+  name: string;
+  role: string;
+  mandate?: 'YES' | 'NO';
+  captain?: 'C' | 'VC' | 'CVC';
+}
+
 export interface UctGeneratePayload {
   match_id: number | string;
-  substitute_player_ids: number[];
-  mandate_yes_player_ids: number[];
-  mandate_no_player_ids: number[];
-  captain_mode: 'CVC' | 'C_AND_VC';
-  cvc_player_ids: number[];
-  captain_player_ids: number[];
-  vice_captain_player_ids: number[];
-  selected_player_ids: number[];
+  team_a: UctGeneratePlayer[];
+  team_b: UctGeneratePlayer[];
 }
 
 export interface UctGenerateResponse {

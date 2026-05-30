@@ -40,11 +40,9 @@ interface MatchDayGroup {
 })
 export class LineupsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
-  private readonly generatedStorageKey = 'pick2win_generated_match_ids';
 
   readonly loggedIn$ = this.authService.loggedIn$;
   isLoggedIn = this.authService.isLoggedIn();
-  generatedMatchIds = new Set<string>();
   matches: LineoutMatch[] = [];
   loadingMatches = true;
   matchesError = '';
@@ -60,7 +58,6 @@ export class LineupsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.generatedMatchIds = this.readGeneratedMatchIds();
     this.loadSeriesMatches();
 
     this.loggedIn$
@@ -135,14 +132,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   isGenerated(match: LineoutMatch): boolean {
-    return this.generatedMatchIds.has(match.id);
+    return false;
   }
 
   statusLabel(match: LineoutMatch): string {
-    if (this.isGenerated(match)) {
-      return 'UCT Generated';
-    }
-
     if (this.isLive(match)) {
       return match.lineupReady ? 'Live - lineups released' : 'Live';
     }
@@ -155,10 +148,6 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   actionLabel(match: LineoutMatch): string {
-    if (this.isGenerated(match)) {
-      return 'See in My Teams';
-    }
-
     if (!match.lineupReady) {
       return 'UCT Locked';
     }
@@ -209,11 +198,6 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   handleMatchAction(match: LineoutMatch): void {
-    if (this.isGenerated(match)) {
-      this.router.navigate(['/user/profile']);
-      return;
-    }
-
     if (!match.lineupReady) {
       return;
     }
@@ -223,8 +207,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.generatedMatchIds.add(match.id);
-    this.saveGeneratedMatchIds();
+    this.router.navigate(['/lineouts/matches', match.id]);
   }
 
   openLogin(): void {
@@ -276,17 +259,11 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   private sortTodayMatches(a: LineoutMatch, b: LineoutMatch): number {
-    const aGenerated = this.isGenerated(a);
-    const bGenerated = this.isGenerated(b);
-    const aActionable = a.lineupReady && !aGenerated;
-    const bActionable = b.lineupReady && !bGenerated;
+    const aActionable = a.lineupReady;
+    const bActionable = b.lineupReady;
 
     if (aActionable !== bActionable) {
       return aActionable ? -1 : 1;
-    }
-
-    if (aGenerated !== bGenerated) {
-      return aGenerated ? 1 : -1;
     }
 
     return new Date(a.kickoffISO).getTime() - new Date(b.kickoffISO).getTime();
@@ -390,20 +367,6 @@ export class LineupsComponent implements OnInit, OnDestroy {
     const palette = ['#6CABDD', '#EF0107', '#FEBE10', '#00A3E0', '#0BCC8E', '#CB3524', '#C39E6D', '#5D9731'];
     const total = (name || '').split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
     return palette[total % palette.length];
-  }
-
-  private readGeneratedMatchIds(): Set<string> {
-    try {
-      const raw = localStorage.getItem(this.generatedStorageKey);
-      const ids = raw ? JSON.parse(raw) : [];
-      return new Set(Array.isArray(ids) ? ids : []);
-    } catch {
-      return new Set<string>();
-    }
-  }
-
-  private saveGeneratedMatchIds(): void {
-    localStorage.setItem(this.generatedStorageKey, JSON.stringify(Array.from(this.generatedMatchIds)));
   }
 
   private localDateKey(value: Date | string): string {

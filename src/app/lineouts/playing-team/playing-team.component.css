@@ -27,6 +27,30 @@
     linear-gradient(180deg, var(--ink), var(--surface-deep));
 }
 
+.playing-toast {
+  position: fixed;
+  top: 84px;
+  left: 50%;
+  z-index: 10000;
+  width: min(420px, calc(100vw - 32px));
+  padding: 13px 16px;
+  border-radius: 12px;
+  color: var(--paper);
+  font-size: 13px;
+  font-weight: 850;
+  text-align: center;
+  transform: translateX(-50%);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
+}
+
+.playing-toast.success {
+  background: #15803d;
+}
+
+.playing-toast.error {
+  background: #dc2626;
+}
+
 .wrap {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
@@ -296,12 +320,13 @@
   background: rgba(244, 180, 0, 0.045);
 }
 
-.player-avatar,
-.player-card img {
+.player-avatar {
   width: 42px;
   height: 42px;
   display: grid;
   place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50%;
   color: var(--paper);
   background: #6cabdd;
@@ -310,8 +335,21 @@
   font-weight: 900;
 }
 
+.player-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .player-avatar.away {
   background: #ef0107;
+}
+
+.player-card .player-avatar {
+  display: grid;
+  margin-top: 0;
+  color: var(--paper);
 }
 
 .player-card strong {

@@ -378,9 +378,22 @@ h1 em,
   width: 42px;
   height: 42px;
   border-radius: 50%;
+  overflow: hidden;
   color: var(--gold);
   background: rgba(244, 180, 0, .12);
   font-weight: 900;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-avatar {
+  border: 1px solid rgba(255, 255, 255, .12);
+  background: rgba(255, 255, 255, .08);
 }
 
 .player-main b,
@@ -492,31 +505,41 @@ h1 em,
   line-height: 1.55;
 }
 
-.captain-matrix {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+.captain-select-row {
+  cursor: default;
 }
 
-.captain-matrix h3 {
+.captain-select-row.muted {
+  opacity: .5;
+}
+
+.captain-actions {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 0 0 12px;
-  color: var(--paper);
-  font-family: var(--f-display);
-  font-size: 20px;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
-.captain-matrix h3 span {
-  color: var(--gold);
-  font-family: var(--f-mono);
-  font-size: 12px;
+.captain-actions button {
+  min-width: 42px;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--paper-2);
+  background: rgba(255, 255, 255, .05);
+  font-weight: 950;
+  cursor: pointer;
 }
 
-.captain-matrix .player-card {
-  width: 100%;
-  margin-bottom: 8px;
+.captain-actions button.active {
+  color: #071421;
+  border-color: rgba(244, 180, 0, .68);
+  background: var(--gold);
+}
+
+.captain-actions button:disabled {
+  opacity: .42;
+  cursor: not-allowed;
 }
 
 .review-grid {
@@ -695,6 +718,120 @@ h1 em,
   color: var(--acid);
 }
 
+.uct-confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(2, 10, 18, 0.78);
+  backdrop-filter: blur(10px);
+}
+
+.uct-confirm-card {
+  position: relative;
+  width: min(560px, 100%);
+  padding: 30px;
+  border: 1px solid rgba(244, 180, 0, 0.28);
+  border-radius: 18px;
+  color: var(--paper);
+  background:
+    radial-gradient(circle at top left, rgba(244, 180, 0, 0.12), transparent 36%),
+    linear-gradient(135deg, rgba(9, 31, 48, 0.98), rgba(2, 10, 18, 0.98));
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+}
+
+.uct-confirm-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--paper-2);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.uct-confirm-close .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.uct-confirm-icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border: 1px solid rgba(11, 204, 142, 0.3);
+  border-radius: 50%;
+  color: var(--green);
+  background: rgba(11, 204, 142, 0.1);
+}
+
+.uct-confirm-icon .material-symbols-outlined {
+  font-size: 34px;
+}
+
+.uct-confirm-card h2 {
+  margin: 18px 0 0;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-size: 30px;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.uct-confirm-card p {
+  margin: 12px 0 0;
+  color: var(--paper-2);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.uct-confirm-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.uct-confirm-summary div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.uct-confirm-summary span {
+  display: block;
+  color: var(--paper-3);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.uct-confirm-summary b {
+  display: block;
+  margin-top: 6px;
+  color: var(--gold);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.uct-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
 @media (max-width: 900px) {
   .uct-hero,
   .stepper,
@@ -713,10 +850,6 @@ h1 em,
 
   .mandate-actions {
     flex-wrap: wrap;
-  }
-
-  .captain-matrix {
-    grid-template-columns: 1fr;
   }
 
   .team-pool-grid {
@@ -743,7 +876,8 @@ h1 em,
   }
 
   .player-row .row-action,
-  .player-row .mandate-actions {
+  .player-row .mandate-actions,
+  .player-row .captain-actions {
     grid-column: 2 / -1;
     justify-self: start;
   }
@@ -760,5 +894,15 @@ h1 em,
   .mode-toggle {
     display: grid;
     border-radius: 16px;
+  }
+
+  .uct-confirm-card {
+    padding: 24px;
+  }
+
+  .uct-confirm-summary,
+  .uct-confirm-actions {
+    grid-template-columns: 1fr;
+    display: grid;
   }
 }

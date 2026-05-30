@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfile } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
 
 @Component({
@@ -16,11 +17,14 @@ export class MyProfileComponent implements OnInit {
   deleteModalOpen = false;
   deleteConsent = false;
   accountDeleted = false;
+  deletingAccount = false;
+  deleteError = '';
   deletionTimestamp = '';
   showTodayLineupsCta = false;
 
   constructor(
     private api: ApiService,
+    private authService: AuthService,
     private profileService: ProfileService
   ) {}
 
@@ -37,20 +41,45 @@ export class MyProfileComponent implements OnInit {
     this.deleteModalOpen = true;
     this.deleteConsent = false;
     this.accountDeleted = false;
+    this.deletingAccount = false;
+    this.deleteError = '';
     this.deletionTimestamp = '';
   }
 
   closeDeleteModal(): void {
+    if (this.deletingAccount) {
+      return;
+    }
+
     this.deleteModalOpen = false;
   }
 
   executeDeleteAccount(): void {
-    if (!this.deleteConsent) {
+    if (!this.deleteConsent || this.deletingAccount) {
       return;
     }
 
-    this.accountDeleted = true;
-    this.deletionTimestamp = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    this.deletingAccount = true;
+    this.deleteError = '';
+
+    this.api.deleteAccount().subscribe({
+      next: (res) => {
+        this.deletingAccount = false;
+
+        if (res?.success === false) {
+          this.deleteError = res?.message || 'Unable to delete account. Please try again.';
+          return;
+        }
+
+        this.accountDeleted = true;
+        this.deletionTimestamp = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+        setTimeout(() => this.authService.logout(), 1400);
+      },
+      error: (err) => {
+        this.deletingAccount = false;
+        this.deleteError = err?.error?.message || err?.error?.error || 'Unable to delete account. Please try again.';
+      }
+    });
   }
 
   private loadTodayLineupsCta(): void {
