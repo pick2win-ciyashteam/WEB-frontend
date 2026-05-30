@@ -7,7 +7,10 @@
     <div class="profile-teams-datebar">
       <label class="profile-teams-datelbl" for="myTeamsDate">Date</label>
       <input type="date" id="myTeamsDate" class="profile-teams-dateinput">
-      <button class="profile-teams-datebtn" type="button">Latest</button>
+      <button class="profile-teams-datebtn" type="button">
+        <span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>
+        Latest
+      </button>
     </div>
   </div>
 
@@ -47,8 +50,14 @@
       </div>
 
       <div class="myteams-match-actions">
-        <button class="myteams-action primary" type="button" *ngIf="match.live" (click)="openMatchTeams(match)">View 20 Teams -></button>
-        <button class="myteams-action" type="button" *ngIf="match.live">Download all (CSV)</button>
+        <button class="myteams-action primary" type="button" *ngIf="match.live" (click)="openMatchTeams(match)">
+          <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+          View 20 Teams
+        </button>
+        <button class="myteams-action" type="button" *ngIf="match.live">
+          <span class="material-symbols-outlined" aria-hidden="true">download</span>
+          Download all (CSV)
+        </button>
         <button class="myteams-action" type="button" *ngIf="!match.live" disabled>Teams archived - no longer viewable</button>
       </div>
     </article>
@@ -60,13 +69,19 @@
 <ng-template #matchDetail>
   <div class="myteams-view">
     <div class="mt-detail-head">
-      <button class="mt-back-btn" type="button" (click)="backToMatches()">Back to matches</button>
+      <button class="mt-back-btn" type="button" (click)="backToMatches()">
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+        Back to matches
+      </button>
       <div class="mt-detail-info">
         <div class="mt-detail-league">{{ selectedMatch?.league }}</div>
         <h3 class="mt-detail-title">{{ selectedMatch?.title }}</h3>
         <div class="mt-detail-meta">20 teams generated at {{ selectedMatch?.generatedAt }} - expires {{ selectedMatch?.expires }}</div>
       </div>
-      <button class="myteams-action primary" type="button">Download all 20 (CSV)</button>
+      <button class="myteams-action primary" type="button">
+        <span class="material-symbols-outlined" aria-hidden="true">download</span>
+        Download all 20 (CSV)
+      </button>
     </div>
 
     <div class="mt-helper-note">
@@ -75,15 +90,24 @@
 
     <div class="mt-team-grid">
       <article class="mt-team-card" *ngFor="let team of teamNumbers">
-        <div class="mt-team-top">
-          <span>Team {{ team }}</span>
-          <b>{{ team % 4 === 0 ? '7-4' : team % 3 === 0 ? '6-5' : team % 2 === 0 ? '5-6' : '4-7' }}</b>
+        <div class="mt-team-card-head">
+          <span class="mt-team-num">Team {{ team }}</span>
+          <b class="mt-team-split">{{ team % 4 === 0 ? '7-4' : team % 3 === 0 ? '6-5' : team % 2 === 0 ? '5-6' : '4-7' }}</b>
         </div>
-        <div class="mt-team-line">Captain: Haaland</div>
-        <div class="mt-team-line">Vice Captain: Saka</div>
+        <div class="mt-team-cv">
+          <div class="mt-team-cv-cell">
+            <span class="mt-team-cv-badge">C</span>
+            <span class="mt-team-cv-name">Haaland</span>
+          </div>
+          <div class="mt-team-cv-cell">
+            <span class="mt-team-cv-badge vc">VC</span>
+            <span class="mt-team-cv-name">Saka</span>
+          </div>
+        </div>
         <div class="mt-team-tags">
           <span>1 GK</span><span>4 DEF</span><span>4 MID</span><span>2 FWD</span>
         </div>
+        <div class="mt-team-tap">Tap to preview</div>
       </article>
     </div>
   </div>

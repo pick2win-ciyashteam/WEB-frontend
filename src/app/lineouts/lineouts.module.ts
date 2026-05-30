@@ -6,13 +6,15 @@ import { LineupsComponent } from './lineups/lineups.component';
 import { CreateUctComponent } from './create-uct/create-uct.component';
 import { SharedModule } from '../shared/shared.module';
 import { PlayingTeamComponent } from './playing-team/playing-team.component';
+import { AllSeriesCoverComponent } from './all-series-cover/all-series-cover.component';
 
 
 @NgModule({
   declarations: [
     LineupsComponent,
     CreateUctComponent,
-    PlayingTeamComponent
+    PlayingTeamComponent,
+    AllSeriesCoverComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import { PlayingTeamComponent } from './playing-team/playing-team.component';
   exports: [
     LineupsComponent,
     PlayingTeamComponent,
-    CreateUctComponent
+    CreateUctComponent,
+    AllSeriesCoverComponent
   ]
 })
 export class LineoutsModule { }

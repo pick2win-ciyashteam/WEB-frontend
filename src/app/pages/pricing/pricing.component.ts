@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SubscriptionPlan } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
@@ -20,7 +21,8 @@ export class PricingComponent implements OnInit {
   constructor(
     private api: ApiService,
     private authModal: AuthModalService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +46,15 @@ export class PricingComponent implements OnInit {
 
   openSignup(): void {
     this.authModal.open('signup');
+  }
+
+  claimFreeMatch(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/lineouts']);
+      return;
+    }
+
+    this.openSignup();
   }
 
   openLogin(): void {

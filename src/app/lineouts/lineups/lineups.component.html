@@ -6,15 +6,15 @@
       <div class="wrap">
         <div class="lineouts-hero">
           <div class="hero-copy">
-            <div class="hero-eyebrow">
+            <!-- <div class="hero-eyebrow">
               <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
               Series · Official Lineouts
             </div>
-            <h1>Pick a match. Wait for lineups. <em>Run UCT.</em></h1>
-            <p>
+            <h1>Pick a match. Wait for lineups. <em>Run UCT.</em></h1> -->
+            <!-- <p>
               Series shows upcoming supported football matches from the backend. Once official lineups release,
               UCT unlocks and you can generate your 20 structured teams before kickoff.
-            </p>
+            </p> -->
             <div class="timezone-note">
               <span class="material-symbols-outlined" aria-hidden="true">public</span>
               Match times are converted from backend UTC start_time to {{ timezoneLabel }}.
@@ -23,7 +23,7 @@
 
           <a class="balance-card" routerLink="/pricing" title="Your coin balance">
             <div class="balance-icon">
-              <span class="material-symbols-outlined" aria-hidden="true">paid</span>
+              <span class="material-symbols-outlined" aria-hidden="true">account_balance</span>
             </div>
             <div class="balance-body">
               <div class="balance-label">My Balance</div>
@@ -239,6 +239,26 @@
       <p>{{ matchesError || 'No upcoming matches in our coverage right now. Check back soon - new fixtures load after backend updates.' }}</p>
     </div>
   </ng-template>
+
+  <section class="series-toggle-section">
+    <button
+      class="series-toggle-btn"
+      type="button"
+      (click)="toggleSeriesCoverage()"
+      [attr.aria-expanded]="showSeriesCoverage"
+      aria-controls="seriesCoveragePanel">
+      <span class="series-toggle-icon material-symbols-outlined" aria-hidden="true">emoji_events</span>
+      <span class="series-toggle-label">
+        {{ showSeriesCoverage ? 'Hide series coverage' : 'View all 30 series PICK2WIN covers' }}
+      </span>
+      <span class="series-toggle-chevron material-symbols-outlined" [class.open]="showSeriesCoverage" aria-hidden="true">expand_more</span>
+    </button>
+    <p class="series-toggle-helper">Or just stay here and pick a match above to generate your UCT.</p>
+  </section>
+
+  <section class="series-coverage-panel" id="seriesCoveragePanel" *ngIf="showSeriesCoverage">
+    <app-all-series-cover [embedded]="true"></app-all-series-cover>
+  </section>
 </main>
 
 <app-footer></app-footer>

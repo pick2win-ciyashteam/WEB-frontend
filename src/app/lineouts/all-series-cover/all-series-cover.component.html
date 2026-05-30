@@ -1,0 +1,97 @@
+<app-header *ngIf="!embedded"></app-header>
+
+<main class="series-cover-page" [class.embedded]="embedded">
+  <section class="series-hero">
+    <div class="wrap">
+      <div class="series-divider">
+        <div class="series-divider-line"></div>
+        <div class="series-divider-label">All Series We Cover</div>
+        <div class="series-divider-line"></div>
+      </div>
+
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="material-symbols-outlined" aria-hidden="true">emoji_events</span>
+            30 Series - 3 Priority Tiers
+          </div>
+          <h1>Every series <em>we cover.</em></h1>
+          <p>
+            Every football competition supported at launch, listed by priority tier with full series name,
+            season window, and match volume. All thirty series are included in every coin pack. Pricing differs
+            by coin volume, never by coverage.
+          </p>
+        </div>
+
+        <div class="hero-panel" aria-label="Coverage summary">
+          <div class="hero-panel-icon material-symbols-outlined" aria-hidden="true">public</div>
+          <h2>One coin works across every covered competition.</h2>
+          <p>Premier League, UCL, La Liga, Serie A, Bundesliga, MLS, FIFA World Cup 2026 and more.</p>
+          <a routerLink="/lineouts" class="hero-panel-link">
+            Open Lineouts
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="coverage-stats">
+        <article *ngFor="let stat of stats">
+          <strong>{{ stat.value }}</strong>
+          <span>{{ stat.label }}</span>
+          <p>{{ stat.detail }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="coverage-section">
+    <div class="wrap">
+      <ng-container *ngFor="let tier of tiers; trackBy: trackTier">
+        <div class="tier-band" [ngClass]="tier.key">
+          <span class="tier-pill">{{ tier.label }}</span>
+          <h2>{{ tier.title }}</h2>
+          <span class="tier-meta">{{ tier.meta }}</span>
+        </div>
+
+        <div class="league-grid">
+          <article class="league-tile" [ngClass]="tier.key" *ngFor="let series of tier.series; trackBy: trackSeries">
+            <div class="tile-mark material-symbols-outlined" aria-hidden="true">
+              {{ tier.key === 't1' ? 'workspace_premium' : tier.key === 't2' ? 'verified' : 'shield' }}
+            </div>
+            <div class="tile-main">
+              <div class="tile-region">{{ series.region }}</div>
+              <h3>{{ series.name }}</h3>
+              <div class="tile-meta">
+                <span>
+                  <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
+                  <b>{{ series.season }}</b>
+                </span>
+                <span>
+                  <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+                  <b>{{ series.matches }}</b> per season
+                </span>
+              </div>
+            </div>
+            <div class="tile-note">{{ series.note }}</div>
+          </article>
+        </div>
+      </ng-container>
+
+      <div class="series-note">
+        <span class="material-symbols-outlined" aria-hidden="true">info</span>
+        <p>
+          <strong>30 leagues at launch - all packs include all tiers.</strong>
+          Every coin pack covers every league across all 3 tiers. Pricing only differs on the volume of coins
+          purchased, never on which leagues you can use them for. Verify your specific match window in Lineouts
+          before purchasing; lineups appear only after official release.
+        </p>
+        <a routerLink="/pricing">
+          See Coin Packs
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer *ngIf="!embedded"></app-footer>

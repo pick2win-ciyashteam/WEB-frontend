@@ -2,10 +2,32 @@
 
 <main class="profile-page">
   <div class="wrap">
-    <div class="profile-tabs">
-      <button type="button" [class.active]="activeTab === 'profile'" (click)="setTab('profile')">My Profile</button>
-      <button type="button" [class.active]="activeTab === 'teams'" (click)="setTab('teams')">My Teams</button>
-      <button type="button" [class.active]="activeTab === 'feedback'" (click)="setTab('feedback')">My Feedback</button>
+    <div class="section-head reveal">
+      <div class="section-num"><strong>--</strong> Account</div>
+      <h1 class="section-title">My <span>Space.</span></h1>
+    </div>
+
+    <div class="myspace-top-cta">
+      <a routerLink="/lineouts" class="lineouts-teaser-btn primary pulsing">
+        <span class="cta-live-dot" aria-hidden="true"></span>
+        Today's Match Lineouts
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </a>
+    </div>
+
+    <div class="profile-tabs reveal" role="tablist">
+      <button class="profile-tab" type="button" [class.active]="activeTab === 'profile'" (click)="setTab('profile')">
+        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+        My Profile
+      </button>
+      <button class="profile-tab" type="button" [class.active]="activeTab === 'teams'" (click)="setTab('teams')">
+        <span class="material-symbols-outlined" aria-hidden="true">emoji_events</span>
+        My Teams
+      </button>
+      <button class="profile-tab" type="button" [class.active]="activeTab === 'feedback'" (click)="setTab('feedback')">
+        <span class="material-symbols-outlined" aria-hidden="true">forum</span>
+        My Feedback
+      </button>
     </div>
 
     <section class="profile-section active" *ngIf="activeTab === 'profile'">
@@ -17,14 +39,14 @@
             <span class="profile-verify">{{ verifyLabel(profile) }}</span>
           </h3>
           <div class="profile-meta">
-            <span class="profile-meta-item"><span class="ic">Email</span> <b>{{ profile.email }}</b></span>
-            <span class="profile-meta-item"><span class="ic">Phone</span> <b>{{ maskedMobile(profile) }}</b></span>
-            <span class="profile-meta-item"><span class="ic">Region</span> <b>{{ profile.country }}</b></span>
-            <span class="profile-meta-item"><span class="ic">Since</span> Member since <b>{{ memberSince(profile) }}</b></span>
+            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">mail</span> <b>{{ profile.email }}</b></span>
+            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">phone_iphone</span> <b>{{ maskedMobile(profile) }}</b></span>
+            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">public</span> <b>{{ profile.country }}</b></span>
+            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span> Member since <b>{{ memberSince(profile) }}</b></span>
           </div>
         </div>
         <button class="profile-edit-btn" type="button">
-          <span class="edit-icon">Edit</span>
+          <span class="material-symbols-outlined" aria-hidden="true">edit</span>
           Edit Account
         </button>
       </div>
@@ -42,13 +64,16 @@
 
       <div class="profile-ledger">
         <div class="profile-ledger-head">
-          <div class="profile-ledger-eyebrow">Coin Ledger - Your Account Math</div>
+          <div class="profile-ledger-eyebrow">
+            <span class="material-symbols-outlined" aria-hidden="true">toll</span>
+            Coin Ledger - Your Account Math
+          </div>
         </div>
         <div class="profile-ledger-row">
           <div class="profile-ledger-cell total">
             <div class="profile-ledger-cell-lbl">Total Coins</div>
-            <div class="profile-ledger-cell-num">111</div>
-            <div class="profile-ledger-cell-sub">110 purchased + 1 free first match</div>
+            <div class="profile-ledger-cell-num">{{ (profile$ | async)?.coins ?? 0 }}</div>
+            <div class="profile-ledger-cell-sub">current wallet balance from your account</div>
           </div>
           <div class="profile-ledger-op">-</div>
           <div class="profile-ledger-cell used">
@@ -69,7 +94,10 @@
       <div class="coin-lots-wrap">
         <div class="coin-lots-head">
           <div>
-            <h4 class="coin-lots-title">Active Coin Lots</h4>
+            <h4 class="coin-lots-title">
+              <span class="material-symbols-outlined" aria-hidden="true">hourglass_top</span>
+              Active Coin Lots
+            </h4>
             <span class="coin-lots-sub">Each pack has its own 365-day clock. Coins are consumed from the lot closest to expiry first.</span>
           </div>
         </div>
@@ -122,10 +150,16 @@
       <div class="profile-table-wrap">
         <div class="profile-table-head">
           <div>
-            <h4 class="profile-table-title">Coin Packs Purchased</h4>
+            <h4 class="profile-table-title">
+              <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+              Coin Packs Purchased
+            </h4>
             <span class="profile-table-count">2 packs - 110 coins added in total</span>
           </div>
-          <button class="profile-download-btn" type="button">Download full history (CSV)</button>
+          <button class="profile-download-btn" type="button">
+            <span class="material-symbols-outlined" aria-hidden="true">download</span>
+            Download full history (CSV)
+          </button>
         </div>
 
         <div class="table-scroll">
@@ -161,6 +195,7 @@
       </div>
 
       <div class="transaction-note">
+        <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
         <b>Transaction transparency:</b>
         Every coin pack purchase and every match UCT generation is logged here forever. Coin balances reflect remaining coins across all active packs. For any billing question, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with your payment ID.
       </div>
@@ -171,7 +206,10 @@
           <h4>Delete my account</h4>
           <p>Permanently delete your PICK2WIN account. <b>This action cannot be reversed.</b> Unused coins will not be refunded, your data will be erased, and your account cannot be reclaimed.</p>
           <div class="danger-actions">
-            <button type="button">Delete my account permanently</button>
+            <button type="button">
+              <span class="material-symbols-outlined" aria-hidden="true">delete_forever</span>
+              Delete my account permanently
+            </button>
             <span>A confirmation dialog will appear before deletion is finalized</span>
           </div>
         </div>

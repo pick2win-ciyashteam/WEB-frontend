@@ -12,6 +12,7 @@ import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
 import { PlayingTeamComponent } from '../lineouts/playing-team/playing-team.component';
 import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component';
+import { AllSeriesCoverComponent } from '../lineouts/all-series-cover/all-series-cover.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: 'lineouts/create-uct/:id',
     component: CreateUctComponent
+  },
+  {
+    path: 'lineouts/all-series-cover',
+    component: AllSeriesCoverComponent
   },
     {
     path: 'pricing',

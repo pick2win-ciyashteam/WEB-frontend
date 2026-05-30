@@ -49,6 +49,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   loadingMatches = true;
   matchesError = '';
   coinBalance = 0;
+  showSeriesCoverage = false;
 
   constructor(
     private api: ApiService,
@@ -224,6 +225,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   openSignup(): void {
     this.authModal.open('signup');
+  }
+
+  toggleSeriesCoverage(): void {
+    this.showSeriesCoverage = !this.showSeriesCoverage;
   }
 
   trackByMatchId(_: number, match: LineoutMatch): string {
