@@ -45,7 +45,7 @@
             <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span> Member since <b>{{ memberSince(profile) }}</b></span>
           </div>
         </div>
-        <button class="profile-edit-btn" type="button">
+        <button class="profile-edit-btn" type="button" (click)="openEditModal(profile)">
           <span class="material-symbols-outlined" aria-hidden="true">edit</span>
           Edit Account
         </button>
@@ -212,6 +212,115 @@
     </section>
   </div>
 </main>
+
+<div class="edit-modal" *ngIf="editModalOpen" role="dialog" aria-modal="true" aria-labelledby="editTitle" (click)="closeEditModal()">
+  <div class="edit-modal-card" (click)="$event.stopPropagation()">
+    <button class="edit-modal-close" type="button" aria-label="Close" (click)="closeEditModal()">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+
+    <div class="edit-modal-head">
+      <div class="edit-icon-wrap">
+        <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
+      </div>
+      <div>
+        <h2 id="editTitle">Edit Account</h2>
+        <p>Update mobile or email with OTP verification. Test OTP/API response is printed in browser console.</p>
+      </div>
+    </div>
+
+    <div class="edit-grid">
+      <section class="edit-card">
+        <div class="edit-card-head">
+          <span class="material-symbols-outlined" aria-hidden="true">phone_iphone</span>
+          <div>
+            <h3>Change Mobile</h3>
+            <p>Enter new mobile, request OTP, then verify.</p>
+          </div>
+        </div>
+
+        <label class="edit-field">
+          <span>New mobile number</span>
+          <input
+            type="tel"
+            inputmode="numeric"
+            [value]="editMobile"
+            [disabled]="mobileChanging"
+            placeholder="9876543200"
+            (input)="editMobile = $any($event.target).value">
+        </label>
+
+        <button class="edit-action-btn" type="button" [disabled]="mobileChanging" (click)="requestMobileChange()">
+          {{ mobileChanging && !mobileOtpSent ? 'Sending OTP...' : 'Send Mobile OTP' }}
+        </button>
+
+        <div class="otp-box" *ngIf="mobileOtpSent">
+          <label class="edit-field">
+            <span>Mobile OTP</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              maxlength="8"
+              [value]="mobileOtp"
+              [disabled]="mobileChanging"
+              placeholder="Enter OTP"
+              (input)="mobileOtp = $any($event.target).value">
+          </label>
+          <button class="edit-action-btn verify" type="button" [disabled]="mobileChanging" (click)="verifyMobileOtp()">
+            {{ mobileChanging ? 'Verifying...' : 'Verify Mobile' }}
+          </button>
+        </div>
+
+        <div class="edit-message success" *ngIf="mobileMessage">{{ mobileMessage }}</div>
+        <div class="edit-message error" *ngIf="mobileError">{{ mobileError }}</div>
+      </section>
+
+      <section class="edit-card">
+        <div class="edit-card-head">
+          <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+          <div>
+            <h3>Change Email</h3>
+            <p>Enter new email, request OTP, then verify.</p>
+          </div>
+        </div>
+
+        <label class="edit-field">
+          <span>New email address</span>
+          <input
+            type="email"
+            [value]="editEmail"
+            [disabled]="emailChanging"
+            placeholder="name@example.com"
+            (input)="editEmail = $any($event.target).value">
+        </label>
+
+        <button class="edit-action-btn" type="button" [disabled]="emailChanging" (click)="requestEmailChange()">
+          {{ emailChanging && !emailOtpSent ? 'Sending OTP...' : 'Send Email OTP' }}
+        </button>
+
+        <div class="otp-box" *ngIf="emailOtpSent">
+          <label class="edit-field">
+            <span>Email OTP</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              maxlength="8"
+              [value]="emailOtp"
+              [disabled]="emailChanging"
+              placeholder="Enter OTP"
+              (input)="emailOtp = $any($event.target).value">
+          </label>
+          <button class="edit-action-btn verify" type="button" [disabled]="emailChanging" (click)="verifyEmailOtp()">
+            {{ emailChanging ? 'Verifying...' : 'Verify Email' }}
+          </button>
+        </div>
+
+        <div class="edit-message success" *ngIf="emailMessage">{{ emailMessage }}</div>
+        <div class="edit-message error" *ngIf="emailError">{{ emailError }}</div>
+      </section>
+    </div>
+  </div>
+</div>
 
 <div class="del-modal" *ngIf="deleteModalOpen" role="dialog" aria-modal="true" aria-labelledby="delTitle" (click)="closeDeleteModal()">
   <div class="del-modal-card" (click)="$event.stopPropagation()">

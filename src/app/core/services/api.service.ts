@@ -38,6 +38,30 @@ export class ApiService {
     return this.http.delete(`${this.BASE}/user-auth/delete`);
   }
 
+  changeMobile(data: { new_mobile: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user-auth/change-mobile`, data);
+  }
+
+  verifyMobileChange(data: { type: 'mobile'; otp: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user-auth/verify-mobile-change`, data);
+  }
+
+  changeEmail(data: { new_email: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user-auth/change-email`, data);
+  }
+
+  verifyEmailChange(data: { type: 'email'; otp: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user-auth/verify-email-change`, data);
+  }
+
+  forgotPassword(data: { email: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user-auth/forgot-password`, data);
+  }
+
+  resetPassword(data: { email: string; password: string; otp: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user-auth/reset-password`, data);
+  }
+
   getCountries(): Observable<ApiListResponse<Country>> {
     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/countries/get-all`);
   }
@@ -79,8 +103,12 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
     return this.http.post<UctGenerateResponse>(`${this.BASE}/teams/generate-teams`, data);
   }
 
-  getSeriesById(id: number): Observable<any> {
-    return this.http.get(`${this.BASE}/getseriesbyid/${id}`);
+  getMyteams(): Observable<ApiListResponse<Country>> {
+    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/countries/get-all`);
   }
+
+  // getSeriesById(id: number): Observable<any> {
+  //   return this.http.get(`${this.BASE}/getseriesbyid/${id}`);
+  // }
 
 }

@@ -82,6 +82,7 @@
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
             </button>
+            <div class="player-empty" *ngIf="!homeSubstitutes.length">No home substitutes received for this match.</div>
           </article>
 
           <article class="team-pool">
@@ -97,6 +98,7 @@
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
             </button>
+            <div class="player-empty" *ngIf="!awaySubstitutes.length">No away substitutes received for this match.</div>
           </article>
         </div>
       </section>
@@ -129,6 +131,7 @@
                 <button type="button" [class.active]="mandateOf(player) === 'NA'" (click)="setMandate(player, 'NA')">NA</button>
               </span>
             </div>
+            <div class="player-empty" *ngIf="!side.players.length">No players received for this team.</div>
           </article>
         </div>
       </section>
@@ -169,6 +172,7 @@
             <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             <span class="row-action">{{ cvcIds.has(player.id) ? 'CVC' : '+' }}</span>
           </button>
+          <div class="player-empty" *ngIf="!side.players.length">No captaincy players received for this team.</div>
           </article>
         </div>
 
@@ -189,6 +193,7 @@
                 <button type="button" [class.active]="viceCaptainIds.has(player.id)" [disabled]="!canSelectViceCaptain(player)" (click)="toggleViceCaptain(player)">VC</button>
               </span>
             </div>
+            <div class="player-empty" *ngIf="!side.players.length">No captaincy players received for this team.</div>
           </article>
         </div>
       </section>

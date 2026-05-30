@@ -40,7 +40,7 @@
         Remember me
       </label>
 
-      <a href="#">Forgot password?</a>
+      <a href="#" (click)="openForgotPassword()">Forgot password?</a>
     </div>
 
     <button type="submit" [disabled]="loading">
@@ -53,4 +53,57 @@
     <a (click)="openSignup()">Join PICK2WIN</a>
   </div>
 
+</div>
+
+<div class="forgot-overlay" *ngIf="forgotModal">
+  <div class="forgot-modal">
+    <button class="forgot-close" type="button" (click)="closeForgotPassword()">×</button>
+
+    <div class="forgot-icon">
+      <span class="material-symbols-outlined">lock_reset</span>
+    </div>
+
+    <h3>Reset Password</h3>
+    <p>Enter your email. We’ll send an OTP to verify your account.</p>
+
+    <form [formGroup]="forgotForm">
+      <label>Email <span>*</span></label>
+      <input type="email" formControlName="email" placeholder="you@example.com">
+
+      <small *ngIf="forgotForm.get('email')?.touched && forgotForm.get('email')?.invalid">
+        Enter valid email
+      </small>
+
+      <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="sendForgotOtp()">
+        {{ forgotLoading ? 'Sending OTP...' : otpSent ? 'Resend OTP' : 'Send OTP' }}
+      </button>
+
+      <div class="otp-area" *ngIf="otpSent">
+        <label>OTP <span>*</span></label>
+        <input type="text" formControlName="otp" placeholder="Enter OTP">
+
+        <label>New Password <span>*</span></label>
+        <div class="password-field">
+          <input
+            [type]="showResetPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Create new password">
+
+          <button
+            type="button"
+            class="password-toggle"
+            [class.visible]="showResetPassword"
+            (click)="showResetPassword = !showResetPassword">
+            <span class="material-symbols-outlined">
+              {{ showResetPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+
+        <button class="forgot-primary" type="button" [disabled]="resetLoading" (click)="resetPassword()">
+          {{ resetLoading ? 'Resetting...' : 'Reset Password' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

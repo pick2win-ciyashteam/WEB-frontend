@@ -84,6 +84,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           this.detail = res?.success ? res.data : null;
           this.loading = false;
           this.errorMessage = this.detail ? '' : 'Unable to load UCT match data.';
+          this.printPlayerPools();
         },
         error: (err) => {
           this.detail = null;
@@ -396,21 +397,26 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.step = 6;
     this.startGeneratingStatus();
 
-    this.api.createUctTeams(this.buildSubmitPayload())
+    const payload = this.buildSubmitPayload();
+    console.log('Generate UCT request payload:', payload);
+
+    this.api.createUctTeams(payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
+          console.log('Generate UCT backend response:', res);
           this.stopGeneratingStatus();
           this.submitting = false;
 
           if (res?.success !== false) {
-            this.router.navigate(['/user/myteams'], { queryParams: { match: this.matchId, generated: 'success' } });
+            this.router.navigate(['/user/profile'], { queryParams: { tab: 'teams', match: this.matchId, generated: 'success' } });
             return;
           }
 
           this.resetAfterSubmitFailure(res?.message || 'Unable to generate UCT teams. Please try again.');
         },
         error: (err) => {
+          console.error('Generate UCT backend error:', err);
           this.stopGeneratingStatus();
           this.submitting = false;
           this.resetAfterSubmitFailure(err?.error?.message || err?.error?.error || 'Unable to generate UCT teams. Please try again.');
@@ -633,11 +639,29 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return [...players.slice(offset), ...players.slice(0, offset)];
   }
 
-  private toUctPlayers(players: MatchPlayer[], side: 'home' | 'away'): UctPlayer[] {
+  private printPlayerPools(): void {
+    if (!this.detail) {
+      return;
+    }
+
+    console.log('Create UCT player pools:', {
+      matchId: this.detail.match.id,
+      homeTeam: this.detail.home_team.name,
+      homePlayingXi: this.detail.home_team.playing_xi,
+      homeSubstitutes: this.detail.home_team.substitutes,
+      homeAvailablePool: this.homeAvailablePool,
+      awayTeam: this.detail.away_team.name,
+      awayPlayingXi: this.detail.away_team.playing_xi,
+      awaySubstitutes: this.detail.away_team.substitutes,
+      awayAvailablePool: this.awayAvailablePool
+    });
+  }
+
+  private toUctPlayers(players: MatchPlayer[] | null | undefined, side: 'home' | 'away'): UctPlayer[] {
     const detail = this.detail;
     const teamShort = side === 'home' ? detail?.home_team.short_name : detail?.away_team.short_name;
 
-    return (players || []).map(player => ({
+    return (Array.isArray(players) ? players : []).map(player => ({
       ...player,
       teamSide: side,
       teamShort: teamShort || side.toUpperCase()

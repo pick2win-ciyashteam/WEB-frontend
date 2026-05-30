@@ -541,9 +541,21 @@
 }
 
 @media (max-width: 900px) {
-  .match-hero,
-  .teams-grid {
+  .match-hero {
     grid-template-columns: 1fr;
+  }
+
+  .teams-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .team-panel {
+    min-width: 280px;
+    scroll-snap-align: start;
   }
 
   .count-card {
@@ -561,28 +573,53 @@
   }
 
   .scoreline {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 10px;
   }
 
   .hero-team.away {
-    justify-content: flex-start;
-    text-align: left;
+    justify-content: flex-end;
+    text-align: right;
   }
 
   .vs-pill {
-    width: auto;
-    height: auto;
-    justify-self: start;
-    padding: 7px 12px;
-    border-radius: 999px;
+    width: 34px;
+    height: 34px;
+    justify-self: center;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .hero-team {
+    gap: 9px;
+  }
+
+  .hero-team img {
+    width: 44px;
+    height: 44px;
+    padding: 5px;
+  }
+
+  .hero-team strong {
+    font-size: 30px;
+  }
+
+  .hero-team span {
+    font-size: 12px;
   }
 
   .hero-meta {
     display: grid;
   }
 
+  .teams-grid {
+    gap: 12px;
+    margin-left: -2px;
+    margin-right: -2px;
+  }
+
   .team-panel {
-    padding: 18px;
+    padding: 0;
   }
 
   .uct-balance-card,
@@ -597,6 +634,32 @@
 
   .team-head {
     align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .team-head img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .team-head h2 {
+    font-size: 22px;
+  }
+
+  .team-head p {
+    font-size: 12px;
+  }
+
+  .player-card {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .player-card .pos {
+    grid-column: 2;
+    justify-self: start;
   }
 
   .player-card strong {

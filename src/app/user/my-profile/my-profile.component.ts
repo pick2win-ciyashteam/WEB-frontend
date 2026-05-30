@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UserProfile } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -14,6 +15,19 @@ export class MyProfileComponent implements OnInit {
   profile$ = this.profileService.profile$;
   loading$ = this.profileService.loading$;
   error$ = this.profileService.error$;
+  editModalOpen = false;
+  editMobile = '';
+  editEmail = '';
+  mobileOtp = '';
+  emailOtp = '';
+  mobileOtpSent = false;
+  emailOtpSent = false;
+  mobileChanging = false;
+  emailChanging = false;
+  mobileMessage = '';
+  emailMessage = '';
+  mobileError = '';
+  emailError = '';
   deleteModalOpen = false;
   deleteConsent = false;
   accountDeleted = false;
@@ -25,16 +39,180 @@ export class MyProfileComponent implements OnInit {
   constructor(
     private api: ApiService,
     private authService: AuthService,
+    private route: ActivatedRoute,
     private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
+    this.applyTabFromRoute();
     this.profileService.loadProfile().subscribe();
     this.loadTodayLineupsCta();
   }
 
   setTab(tab: 'profile' | 'teams' | 'feedback') {
     this.activeTab = tab;
+  }
+
+  openEditModal(profile: UserProfile): void {
+    this.editModalOpen = true;
+    this.editMobile = profile.mobile || '';
+    this.editEmail = profile.email || '';
+    this.mobileOtp = '';
+    this.emailOtp = '';
+    this.mobileOtpSent = false;
+    this.emailOtpSent = false;
+    this.mobileMessage = '';
+    this.emailMessage = '';
+    this.mobileError = '';
+    this.emailError = '';
+  }
+
+  closeEditModal(): void {
+    if (this.mobileChanging || this.emailChanging) {
+      return;
+    }
+
+    this.editModalOpen = false;
+  }
+
+  requestMobileChange(): void {
+    const newMobile = this.editMobile.trim();
+    this.mobileMessage = '';
+    this.mobileError = '';
+
+    if (!/^[0-9]{7,15}$/.test(newMobile)) {
+      this.mobileError = 'Enter a valid mobile number.';
+      return;
+    }
+
+    this.mobileChanging = true;
+    this.api.changeMobile({ new_mobile: newMobile }).subscribe({
+      next: (res) => {
+        console.log('change mobile response / OTP test:', res);
+        this.mobileChanging = false;
+
+        if (res?.success === false) {
+          this.mobileError = res?.message || 'Unable to send mobile OTP.';
+          return;
+        }
+
+        this.mobileOtpSent = true;
+        this.mobileMessage = res?.message || 'OTP sent to the new mobile number.';
+      },
+      error: (err) => {
+        console.error('change mobile error:', err);
+        this.mobileChanging = false;
+        this.mobileError = err?.error?.message || err?.error?.error || 'Unable to send mobile OTP.';
+      }
+    });
+  }
+
+  verifyMobileOtp(): void {
+    const otp = this.mobileOtp.trim();
+    this.mobileMessage = '';
+    this.mobileError = '';
+
+    if (!/^[0-9]{4,8}$/.test(otp)) {
+      this.mobileError = 'Enter the OTP sent to your mobile.';
+      return;
+    }
+
+    this.mobileChanging = true;
+    this.api.verifyMobileChange({ type: 'mobile', otp }).subscribe({
+      next: (res) => {
+        console.log('verify mobile change response:', res);
+        this.mobileChanging = false;
+
+        if (res?.success === false) {
+          this.mobileError = res?.message || 'Mobile OTP verification failed.';
+          return;
+        }
+
+        this.mobileMessage = res?.message || 'Mobile number updated successfully.';
+        this.mobileOtpSent = false;
+        this.mobileOtp = '';
+        this.profileService.loadProfile(true).subscribe();
+      },
+      error: (err) => {
+        console.error('verify mobile change error:', err);
+        this.mobileChanging = false;
+        this.mobileError = err?.error?.message || err?.error?.error || 'Mobile OTP verification failed.';
+      }
+    });
+  }
+
+  requestEmailChange(): void {
+    const newEmail = this.editEmail.trim();
+    this.emailMessage = '';
+    this.emailError = '';
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      this.emailError = 'Enter a valid email address.';
+      return;
+    }
+
+    this.emailChanging = true;
+    this.api.changeEmail({ new_email: newEmail }).subscribe({
+      next: (res) => {
+        console.log('change email response / OTP test:', res);
+        this.emailChanging = false;
+
+        if (res?.success === false) {
+          this.emailError = res?.message || 'Unable to send email OTP.';
+          return;
+        }
+
+        this.emailOtpSent = true;
+        this.emailMessage = res?.message || 'OTP sent to the new email address.';
+      },
+      error: (err) => {
+        console.error('change email error:', err);
+        this.emailChanging = false;
+        this.emailError = err?.error?.message || err?.error?.error || 'Unable to send email OTP.';
+      }
+    });
+  }
+
+  verifyEmailOtp(): void {
+    const otp = this.emailOtp.trim();
+    this.emailMessage = '';
+    this.emailError = '';
+
+    if (!/^[0-9]{4,8}$/.test(otp)) {
+      this.emailError = 'Enter the OTP sent to your email.';
+      return;
+    }
+
+    this.emailChanging = true;
+    this.api.verifyEmailChange({ type: 'email', otp }).subscribe({
+      next: (res) => {
+        console.log('verify email change response:', res);
+        this.emailChanging = false;
+
+        if (res?.success === false) {
+          this.emailError = res?.message || 'Email OTP verification failed.';
+          return;
+        }
+
+        this.emailMessage = res?.message || 'Email address updated successfully.';
+        this.emailOtpSent = false;
+        this.emailOtp = '';
+        this.profileService.loadProfile(true).subscribe();
+      },
+      error: (err) => {
+        console.error('verify email change error:', err);
+        this.emailChanging = false;
+        this.emailError = err?.error?.message || err?.error?.error || 'Email OTP verification failed.';
+      }
+    });
+  }
+
+  private applyTabFromRoute(): void {
+    const tab = this.route.snapshot.queryParamMap.get('tab');
+
+    if (tab === 'teams' || tab === 'feedback' || tab === 'profile') {
+      this.activeTab = tab;
+    }
   }
 
   openDeleteModal(): void {

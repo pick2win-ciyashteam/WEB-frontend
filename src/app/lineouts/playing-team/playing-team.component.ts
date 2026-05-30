@@ -43,6 +43,7 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.detail = res?.success ? res.data : null;
+          this.printPlayers();
           this.errorMessage = this.detail ? '' : 'Unable to load match details.';
           this.loading = false;
         },
@@ -188,6 +189,22 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
 
   teamCount(team: MatchTeam): number {
     return (team.playing_xi?.length || 0) + (team.substitutes?.length || 0);
+  }
+
+  private printPlayers(): void {
+    if (!this.detail) {
+      return;
+    }
+
+    console.log('Playing team players:', {
+      matchId: this.detail.match.id,
+      homeTeam: this.detail.home_team.name,
+      homePlayingXi: this.detail.home_team.playing_xi,
+      homeSubstitutes: this.detail.home_team.substitutes,
+      awayTeam: this.detail.away_team.name,
+      awayPlayingXi: this.detail.away_team.playing_xi,
+      awaySubstitutes: this.detail.away_team.substitutes
+    });
   }
 
   private showToast(type: 'success' | 'error', message: string): void {

@@ -326,6 +326,15 @@ h1 em,
   cursor: not-allowed;
 }
 
+.player-empty {
+  padding: 18px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--paper-3);
+  background: rgba(255, 255, 255, .025);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .row-action {
   display: grid;
   place-items: center;
@@ -399,7 +408,10 @@ h1 em,
 .player-main b,
 .player-id b {
   display: block;
+  overflow: hidden;
   color: var(--paper);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .player-main small,
@@ -429,7 +441,7 @@ h1 em,
 
 .mandate-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   gap: 14px;
   align-items: center;
   padding: 12px;
@@ -834,10 +846,29 @@ h1 em,
 
 @media (max-width: 900px) {
   .uct-hero,
-  .stepper,
   .panel-head,
   .review-grid {
     grid-template-columns: 1fr;
+  }
+
+  .uct-hero {
+    gap: 16px;
+  }
+
+  .hero-stat {
+    min-height: 96px;
+  }
+
+  .stepper {
+    grid-template-columns: repeat(4, minmax(142px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .stepper button {
+    scroll-snap-align: start;
   }
 
   .panel-head {
@@ -845,7 +876,7 @@ h1 em,
   }
 
   .mandate-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
   .mandate-actions {
@@ -853,17 +884,127 @@ h1 em,
   }
 
   .team-pool-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .team-pool {
+    min-width: 280px;
+    scroll-snap-align: start;
   }
 }
 
 @media (max-width: 640px) {
   .uct-flow-page {
-    padding: 68px 0;
+    padding: 64px 0 76px;
   }
 
   .wrap {
     width: min(100% - 24px, 1180px);
+  }
+
+  .back-link {
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .uct-hero {
+    margin-top: 16px;
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  h1 {
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .uct-hero p,
+  .panel-head p {
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .hero-stat {
+    grid-template-columns: auto 1fr;
+    justify-content: start;
+    min-height: 74px;
+    padding: 14px 16px;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .hero-stat strong {
+    font-size: 38px;
+  }
+
+  .stepper {
+    gap: 8px;
+    margin: 16px 0;
+  }
+
+  .stepper button {
+    min-height: 50px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 10px;
+  }
+
+  .flow-panel {
+    padding: 18px 14px;
+    border-radius: 16px;
+  }
+
+  .panel-head {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .panel-head h2 {
+    font-size: 28px;
+  }
+
+  .selection-pill {
+    width: fit-content;
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  .team-pool-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(280px, calc(100vw - 56px));
+    gap: 18px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 0 10px 12px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .team-pool {
+    min-width: 0;
+    border-radius: 12px;
+    scroll-snap-align: start;
+  }
+
+  .team-pool-head {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .team-pool-head h3 {
+    font-size: 18px;
+  }
+
+  .team-pool-head b {
+    font-size: 10px;
+    white-space: normal;
+    text-align: right;
   }
 
   .player-card {
@@ -872,7 +1013,34 @@ h1 em,
 
   .player-row {
     grid-template-columns: auto minmax(0, 1fr) auto;
-    padding: 12px;
+    gap: 10px;
+    min-height: 58px;
+    padding: 11px 12px;
+  }
+
+  .avatar {
+    width: 38px;
+    height: 38px;
+  }
+
+  .player-main b {
+    font-size: 13.5px;
+  }
+
+  .player-main small {
+    font-size: 11.5px;
+  }
+
+  .pos {
+    min-width: 42px;
+    padding: 5px 7px;
+    font-size: 10px;
+  }
+
+  .row-action {
+    min-width: 28px;
+    height: 28px;
+    font-size: 11px;
   }
 
   .player-row .row-action,
@@ -882,6 +1050,10 @@ h1 em,
     justify-self: start;
   }
 
+  .mandate-row .mandate-actions {
+    margin-top: 2px;
+  }
+
   .player-card .pos {
     grid-column: 2;
     justify-self: start;
@@ -889,11 +1061,53 @@ h1 em,
 
   .flow-actions {
     display: grid;
+    gap: 10px;
+  }
+
+  .ghost-btn,
+  .primary-btn {
+    width: 100%;
+    min-height: 46px;
   }
 
   .mode-toggle {
     display: grid;
     border-radius: 16px;
+    width: 100%;
+  }
+
+  .mode-toggle button {
+    min-height: 42px;
+  }
+
+  .mode-note {
+    padding: 12px;
+    font-size: 12.5px;
+  }
+
+  .mandate-actions,
+  .captain-actions {
+    gap: 6px;
+  }
+
+  .mandate-actions button,
+  .captain-actions button {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  .review-grid {
+    gap: 10px;
+  }
+
+  .review-card {
+    padding: 14px;
+  }
+
+  .confirm-box {
+    padding: 14px;
+    font-size: 13.5px;
   }
 
   .uct-confirm-card {
