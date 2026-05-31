@@ -204,3 +204,40 @@ footer.site {
     text-align: center;
   }
 }
+
+.payment-security {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.security-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.security-item i {
+  font-size: 18px;
+}
+
+.security-item.stripe {
+  color: #635bff;
+}
+
+.security-item.ssl {
+  color: #22c55e;
+}
+
+.security-item.more {
+  color: #c8d6e0;
+}

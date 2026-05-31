@@ -1,156 +1,269 @@
 <div class="myteams-view" *ngIf="!selectedMatch; else matchDetail">
+
   <div class="myteams-toolbar">
     <div class="myteams-toolbar-info">
       <h4 class="myteams-toolbar-title">My Generated Teams</h4>
-      <span class="myteams-toolbar-sub">64 match generations - 1,280 teams total - viewing latest</span>
+      <span class="myteams-toolbar-sub">
+        {{ matches.length }} match generations - viewing latest
+      </span>
     </div>
+
     <div class="profile-teams-datebar">
       <label class="profile-teams-datelbl" for="myTeamsDate">Date</label>
-      <input type="date" id="myTeamsDate" class="profile-teams-dateinput">
-      <button class="profile-teams-datebtn" type="button">
-        <span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>
-        Latest
-      </button>
+      <input type="date" id="myTeamsDate"  class="profile-teams-dateinput" [(ngModel)]="selectedDate"
+          (change)="applyDateFilter()">
+
+        <button class="profile-teams-datebtn" type="button" (click)="resetDateFilter()">
+          <span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>
+          Latest
+        </button>
     </div>
   </div>
 
-  <div class="myteams-list">
-    <article class="myteams-match" *ngFor="let match of matches" [class.live]="match.live" [class.free]="match.free">
+  <div class="mt-helper-note" *ngIf="loadingMatches">
+    Loading generated matches...
+  </div>
+
+  <div class="myteams-list" *ngIf="!loadingMatches && filteredMatches.length > 0; else noMatches">
+
+    <article
+      class="myteams-match"
+      *ngFor="let match of filteredMatches"
+      [class.live]="match.live"
+      [class.free]="match.free">
+
       <div class="myteams-match-head">
         <div class="myteams-match-meta">
           <span class="myteams-match-league">{{ match.league }}</span>
           <span class="myteams-match-time">{{ match.time }}</span>
         </div>
+
         <span class="profile-status-pill" [class.free]="match.free" [class.gen]="!match.free">
           {{ match.free ? 'Free first match' : 'Generated' }}
         </span>
       </div>
 
       <div class="myteams-match-title">
-        {{ match.title.split(' vs ')[0] }} <span class="vs">vs</span> {{ match.title.split(' vs ')[1] }}
+        <img
+          *ngIf="match.homeLogo"
+          [src]="match.homeLogo"
+          class="team-mini-logo"
+          alt="Home team">
+
+        {{ match.title.split(' vs ')[0] }}
+
+        <span class="vs">vs</span>
+
+        {{ match.title.split(' vs ')[1] }}
+
+        <img
+          *ngIf="match.awayLogo"
+          [src]="match.awayLogo"
+          class="team-mini-logo"
+          alt="Away team">
       </div>
 
       <div class="myteams-match-stats">
+
         <div class="myteams-stat">
           <div class="myteams-stat-lbl">Coin Used</div>
           <div class="myteams-stat-val coin">{{ match.coin }}</div>
         </div>
+
         <div class="myteams-stat">
           <div class="myteams-stat-lbl">Teams Generated</div>
-          <div class="myteams-stat-val">20</div>
+          <div class="myteams-stat-val">{{ match.teamsGenerated || 0 }}</div>
         </div>
+
         <div class="myteams-stat">
           <div class="myteams-stat-lbl">Generated At</div>
           <div class="myteams-stat-val mono">{{ match.generatedAt }}</div>
         </div>
+
         <div class="myteams-stat">
-          <div class="myteams-stat-lbl">Expires</div>
-          <div class="myteams-stat-val mono expiry">{{ match.expires }}</div>
+          <div class="myteams-stat-lbl">Status</div>
+          <div class="myteams-stat-val mono expiry">{{ match.status || match.expires }}</div>
         </div>
+
       </div>
 
       <div class="myteams-match-actions">
-        <button class="myteams-action primary" type="button" *ngIf="match.live" (click)="openMatchTeams(match)">
+        <button
+          class="myteams-action primary"
+          type="button"
+          *ngIf="match.live"
+          (click)="openMatchTeams(match)">
           <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
-          View 20 Teams
+          View {{ match.teamsGenerated || 0 }} Teams ->
         </button>
-        <button class="myteams-action" type="button" *ngIf="match.live">
+
+        <button
+          class="myteams-action"
+          type="button"
+          *ngIf="match.live"
+          (click)="downloadMatchTeams(match)">
           <span class="material-symbols-outlined" aria-hidden="true">download</span>
           Download all (CSV)
         </button>
-        <button class="myteams-action" type="button" *ngIf="!match.live" disabled>Teams archived - no longer viewable</button>
+
+        <button class="myteams-action" type="button" *ngIf="!match.live" disabled>
+          Teams archived - no longer viewable
+        </button>
       </div>
+
     </article>
   </div>
 
-  <div class="myteams-tail">+ 60 earlier match generations - all teams expired at kickoff</div>
+  <ng-template #noMatches>
+    <div class="mt-helper-note" *ngIf="!loadingMatches">
+      No generated teams found.
+    </div>
+  </ng-template>
+
 </div>
 
 <ng-template #matchDetail>
   <div class="myteams-view">
+
     <div class="mt-detail-head">
       <button class="mt-back-btn" type="button" (click)="backToMatches()">
         <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
         Back to matches
       </button>
+
       <div class="mt-detail-info">
         <div class="mt-detail-league">{{ selectedMatch?.league }}</div>
         <h3 class="mt-detail-title">{{ selectedMatch?.title }}</h3>
-        <div class="mt-detail-meta">20 teams generated at {{ selectedMatch?.generatedAt }} - expires {{ selectedMatch?.expires }}</div>
+        <div class="mt-detail-meta">
+          Teams generated at {{ selectedMatch?.generatedAt }} - {{ selectedMatch?.status }}
+        </div>
       </div>
-      <button class="myteams-action primary" type="button">
-        <span class="material-symbols-outlined" aria-hidden="true">download</span>
-        Download all 20 (CSV)
-      </button>
+
+        <button
+      class="myteams-action primary"
+      type="button"
+      *ngIf="selectedMatch"
+      (click)="downloadMatchTeams(selectedMatch)">
+      <span class="material-symbols-outlined" aria-hidden="true">download</span>
+      Download {{ selectedMatch.teamsGenerated || 0 }} Teams (CSV)
+    </button>
+
     </div>
 
-    <div class="mt-helper-note">
-      Tap any team card below to preview the full lineup. Each preview shows all 11 players, formation, captain, and vice-captain.
+    <div class="mt-helper-note" *ngIf="loadingTeams">
+      Loading generated teams...
     </div>
 
-    <div class="mt-team-grid">
-      <article class="mt-team-card" *ngFor="let team of previewTeams" (click)="openTeamPreview(team.id)" tabindex="0" role="button" (keyup.enter)="openTeamPreview(team.id)">
+    <div class="mt-helper-note" *ngIf="!loadingTeams && previewTeams.length === 0">
+      No teams found for this match.
+    </div>
+
+    <div class="mt-helper-note" *ngIf="!loadingTeams && previewTeams.length > 0">
+      Tap any team card below to preview the full lineup.
+    </div>
+
+    <div class="mt-team-grid" *ngIf="!loadingTeams && previewTeams.length > 0">
+
+      <article
+        class="mt-team-card"
+        *ngFor="let team of previewTeams; let i = index"
+        (click)="openTeamPreview(team.id)"
+        tabindex="0"
+        role="button"
+        (keyup.enter)="openTeamPreview(team.id)">
+
         <div class="mt-team-card-head">
-          <span class="mt-team-num">Team {{ team.id }}</span>
+          <span class="mt-team-num">Team {{ i + 1 }}</span>
           <b class="mt-team-split">{{ team.split }}</b>
         </div>
+
         <div class="mt-team-cv">
           <div class="mt-team-cv-cell">
             <span class="mt-team-cv-badge">C</span>
-            <span class="mt-team-cv-name">{{ team.captain.name }}</span>
+            <span class="mt-team-cv-name">{{ team.captain?.name || 'N/A' }}</span>
           </div>
+
           <div class="mt-team-cv-cell">
             <span class="mt-team-cv-badge vc">VC</span>
-            <span class="mt-team-cv-name">{{ team.viceCaptain.name }}</span>
+            <span class="mt-team-cv-name">{{ team.viceCaptain?.name || 'N/A' }}</span>
           </div>
         </div>
+
         <div class="mt-team-tags">
-          <span>{{ team.counts.GK }} GK</span><span>{{ team.counts.DEF }} DEF</span><span>{{ team.counts.MID }} MID</span><span>{{ team.counts.FWD }} FWD</span>
+          <span>{{ team.counts.GK }} GK</span>
+          <span>{{ team.counts.DEF }} DEF</span>
+          <span>{{ team.counts.MID }} MID</span>
+          <span>{{ team.counts.FWD }} FWD</span>
         </div>
+
         <div class="mt-team-tap">Tap to preview</div>
+
       </article>
+
     </div>
   </div>
 </ng-template>
 
 <div class="preview-overlay open" *ngIf="previewTeam" (click)="closePreview()">
-  <div class="preview-modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle" (click)="$event.stopPropagation()">
+  <div
+    class="preview-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="previewTitle"
+    (click)="$event.stopPropagation()">
+
     <div class="preview-h">
-      <h3 id="previewTitle">Team T{{ previewTeam.id }} - {{ previewTeam.split }} split</h3>
+      <h3 id="previewTitle">
+        Team {{ previewIndex + 1 }} - {{ previewTeam.split }} split
+      </h3>
+
       <button class="preview-close" type="button" aria-label="Close preview" (click)="closePreview()">
         <span class="material-symbols-outlined" aria-hidden="true">close</span>
       </button>
     </div>
 
-    <div class="preview-pitch">
+    <div class="mt-helper-note" *ngIf="loadingPlayers">
+      Loading team players...
+    </div>
+
+    <div class="preview-pitch" *ngIf="!loadingPlayers">
+
       <div class="preview-row" *ngFor="let position of positionRows">
         <div
           class="pp-card"
           *ngFor="let player of playersByPosition(position)"
           [class.captain]="isCaptain(player)"
           [class.vice]="isViceCaptain(player)">
+
           <div class="pp-cap-badge" *ngIf="isCaptain(player)">C</div>
           <div class="pp-cap-badge vc" *ngIf="isViceCaptain(player)">VC</div>
-          <div class="pp-avatar" [style.background]="teamColor(player.team)">{{ playerInitials(player) }}</div>
+
+          <div class="pp-avatar" [style.background]="teamColor(player.team)">
+            {{ playerInitials(player) }}
+          </div>
+
           <div class="pp-name">{{ player.name }}</div>
           <div class="pp-meta">{{ teamCode(player.team) }} - {{ player.pos }}</div>
         </div>
       </div>
+
     </div>
 
-    <div class="preview-foot">
+    <div class="preview-foot" *ngIf="!loadingPlayers">
       <div class="preview-stats">
-        <span>GK<b>{{ previewTeam.counts.GK }}</b></span>
-        <span>DEF<b>{{ previewTeam.counts.DEF }}</b></span>
-        <span>MID<b>{{ previewTeam.counts.MID }}</b></span>
-        <span>FWD<b>{{ previewTeam.counts.FWD }}</b></span>
-        <span>{{ teamCode('home') }}<b>{{ previewTeam.homeCount }}</b></span>
-        <span>{{ teamCode('away') }}<b>{{ previewTeam.awayCount }}</b></span>
+        <span>GK <b>{{ previewTeam.counts.GK }}</b></span>
+        <span>DEF <b>{{ previewTeam.counts.DEF }}</b></span>
+        <span>MID <b>{{ previewTeam.counts.MID }}</b></span>
+        <span>FWD <b>{{ previewTeam.counts.FWD }}</b></span>
+        <span>{{ teamCode('home') }} <b>{{ previewTeam.homeCount }}</b></span>
+        <span>{{ teamCode('away') }} <b>{{ previewTeam.awayCount }}</b></span>
       </div>
+
       <div class="preview-nav">
         <button type="button" (click)="navPreview(-1)">Prev</button>
         <button type="button" (click)="navPreview(1)">Next</button>
       </div>
     </div>
+
   </div>
 </div>

@@ -30,47 +30,42 @@
   </div>
 
   <form class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (submit)="submitSurvey($event)">
-    <div class="fb-q">
-      <div class="fb-q-num">Q1 - Mandatory</div>
-      <div class="fb-q-text">Would you like to hand-pick specific players from both teams before UCT generates your 20 teams?</div>
-      <div class="fb-q-help">Choose the workflow you would prefer during the lineup window.</div>
-      <div class="fb-option-grid two">
-        <label class="fb-opt"><input type="radio" name="q1" required><span><b>Yes - full player-selection control</b><small>I want to manually choose which players appear in my 20 teams.</small></span></label>
-        <label class="fb-opt"><input type="radio" name="q1"><span><b>No - keep UCT auto-selecting</b><small>Filters and mandates are enough. I do not want to manage every player.</small></span></label>
-      </div>
-    </div>
+    <div class="fb-shipped-state" *ngIf="loadingQuestions">Loading survey questions...</div>
+    <div class="fb-shipped-state error" *ngIf="!loadingQuestions && surveyLoadError">{{ surveyLoadError }}</div>
+    <div class="fb-shipped-state" *ngIf="!loadingQuestions && !surveyLoadError && !feedbackQuestions.length">No survey questions available right now.</div>
 
-    <div class="fb-q">
-      <div class="fb-q-num">Q2 - Mandatory</div>
-      <div class="fb-q-text">How useful is the existing must-include / must-exclude feature?</div>
-      <div class="fb-q-help">This tells the product team whether to keep, simplify, or remove the current mandate workflow.</div>
-      <div class="fb-option-grid">
-        <label class="fb-opt"><input type="radio" name="q2" required><span><b>Very useful</b><small>I use it every match.</small></span></label>
-        <label class="fb-opt"><input type="radio" name="q2"><span><b>Sometimes useful</b><small>Helpful only for certain matches.</small></span></label>
-        <label class="fb-opt"><input type="radio" name="q2"><span><b>Rarely useful</b><small>UCT defaults are usually fine.</small></span></label>
-        <label class="fb-opt danger"><input type="radio" name="q2"><span><b>Remove it</b><small>I want a simpler workflow.</small></span></label>
-      </div>
-    </div>
-
-    <div class="fb-q">
-      <div class="fb-q-num">Q3 - Mandatory</div>
-      <div class="fb-q-text">How useful is Captain &amp; Vice-Captain mode selection in UCT?</div>
-      <div class="fb-q-help">This decides how much captaincy control should remain in future UCT releases.</div>
-      <div class="fb-option-grid">
-        <label class="fb-opt"><input type="radio" name="q3" required><span><b>Very useful</b><small>Captain rotation is critical to my workflow.</small></span></label>
-        <label class="fb-opt"><input type="radio" name="q3"><span><b>Sometimes useful</b><small>I tune it for important matches.</small></span></label>
-        <label class="fb-opt"><input type="radio" name="q3"><span><b>Rarely useful</b><small>I trust UCT defaults.</small></span></label>
-        <label class="fb-opt danger"><input type="radio" name="q3"><span><b>Remove it</b><small>One automatic strategy is enough.</small></span></label>
+    <div class="fb-q" *ngFor="let question of feedbackQuestions; let i = index; trackBy: trackQuestion">
+      <div class="fb-q-num">Q{{ i + 1 }} {{ question.is_mandatory ? '- Mandatory' : '- Optional' }}</div>
+      <div class="fb-q-text">{{ question.question }}</div>
+      <div class="fb-q-help">{{ question.hint }}</div>
+      <div class="fb-option-grid" [class.two]="question.options.length <= 2">
+        <label class="fb-opt" *ngFor="let option of question.options; trackBy: trackOption">
+          <input
+            type="radio"
+            [name]="'question_' + question.id"
+            [value]="option.id"
+            [required]="!!question.is_mandatory"
+            [checked]="selectedAnswers[question.id] === option.id"
+            (change)="selectSurveyAnswer(question.id, option.id)">
+          <span>
+            <b><span class="fb-opt-emoji">{{ option.emoji }}</span>{{ option.label }}</b>
+            <small>{{ option.description }}</small>
+          </span>
+        </label>
       </div>
     </div>
 
     <div class="fb-q">
       <div class="fb-q-num">Optional context</div>
-      <textarea rows="4" placeholder="Anything you want the product team to know about why you voted this way?"></textarea>
+      <textarea name="survey_comment" rows="4" placeholder="Anything you want the product team to know about why you voted this way?"></textarea>
     </div>
 
+    <div class="fb-shipped-state error" *ngIf="surveySubmitError">{{ surveySubmitError }}</div>
+
     <div class="fb-submit-row">
-      <button type="submit" class="btn-pri-large">Submit my votes</button>
+      <button type="submit" class="btn-pri-large" [disabled]="submittingSurvey || loadingQuestions || !feedbackQuestions.length">
+        {{ submittingSurvey ? 'Submitting...' : 'Submit my votes' }}
+      </button>
       <span>Anonymous - only your selections are stored unless you add a comment</span>
     </div>
   </form>
@@ -96,58 +91,62 @@
       <div class="fb-row-2">
         <div class="fb-field">
           <label>Category</label>
-          <select required>
+          <select name="category" required>
             <option value="">Select a category...</option>
-            <option>UCT tuning request</option>
-            <option>Feature suggestion</option>
-            <option>League / coverage request</option>
-            <option>Engine accuracy feedback</option>
-            <option>Bug report</option>
-            <option>What you love</option>
+            <option value="uct_tuning_request">UCT tuning request</option>
+            <option value="feature_suggestion">Feature suggestion</option>
+            <option value="league_coverage_request">League / coverage request</option>
+            <option value="engine_accuracy_feedback">Engine accuracy feedback</option>
+            <option value="bug_report">Bug report</option>
+            <option value="what_you_love">What you love</option>
           </select>
         </div>
         <div class="fb-field">
           <label>How important is this to you?</label>
-          <select>
-            <option>Nice to have</option>
-            <option selected>Would really help my workflow</option>
-            <option>It is stopping me from using PICK2WIN properly</option>
+          <select name="importance">
+            <option value="nice_to_have">Nice to have</option>
+            <option value="would_really_help_my_workflow" selected>Would really help my workflow</option>
+            <option value="stopping_me_from_using_pick2win">It is stopping me from using PICK2WIN properly</option>
           </select>
         </div>
       </div>
 
       <div class="fb-field">
         <label>Subject</label>
-        <input type="text" required maxlength="120" placeholder="e.g. Allow 8-3 captain splits for La Liga matches">
+        <input name="subject" type="text" required maxlength="120" placeholder="e.g. Allow 8-3 captain splits for La Liga matches">
       </div>
 
       <div class="fb-field">
         <label>Your suggestion</label>
-        <textarea required rows="7" placeholder="Tell us what you would like to see, why it matters, and how it would improve your workflow."></textarea>
+        <textarea name="description" required rows="7" placeholder="Tell us what you would like to see, why it matters, and how it would improve your workflow."></textarea>
       </div>
 
       <div class="fb-row-2">
         <div class="fb-field">
           <label>Email (for follow-up)</label>
-          <input type="email" placeholder="you@example.com">
+          <input name="email" type="email" placeholder="you@example.com">
         </div>
         <div class="fb-field">
           <label>Where in PICK2WIN?</label>
-          <select>
-            <option>Anywhere / general</option>
-            <option>UCT configuration step</option>
-            <option>My Teams view</option>
-            <option>Lineouts</option>
-            <option>Pricing / packs</option>
-            <option>Profile / account</option>
+          <select name="location">
+            <option value="anywhere_general">Anywhere / general</option>
+            <option value="uct_configuration_step">UCT configuration step</option>
+            <option value="my_teams_view">My Teams view</option>
+            <option value="lineouts">Lineouts</option>
+            <option value="pricing_packs">Pricing / packs</option>
+            <option value="profile_account">Profile / account</option>
           </select>
         </div>
       </div>
 
-      <label class="fb-consent"><input type="checkbox" checked> OK to follow up via email if we need more details.</label>
+      <label class="fb-consent"><input name="email_followup" type="checkbox" value="true" checked> OK to follow up via email if we need more details.</label>
+
+      <div class="fb-shipped-state error" *ngIf="feedbackSubmitError">{{ feedbackSubmitError }}</div>
 
       <div class="fb-submit-row">
-        <button type="submit" class="btn-pri-large">Send feedback</button>
+        <button type="submit" class="btn-pri-large" [disabled]="submittingFeedback">
+          {{ submittingFeedback ? 'Sending...' : 'Send feedback' }}
+        </button>
         <span>Typical reply within 48 hours - top requests reviewed weekly</span>
       </div>
     </form>
@@ -170,10 +169,18 @@
     <p>Proof we listen - every item below started as a user suggestion.</p>
   </div>
   <div class="fb-shipped-list">
-    <div class="fb-shipped-item"><div class="fb-shipped-date">May 2026</div><div><b>CSV download now uses structured player rows</b><p>Requested by 47 users.</p></div><span>Shipped</span></div>
-    <div class="fb-shipped-item"><div class="fb-shipped-date">May 2026</div><div><b>Mobile menu now opens a proper drawer</b><p>Reported by 12 users.</p></div><span>Shipped</span></div>
-    <div class="fb-shipped-item"><div class="fb-shipped-date">Apr 2026</div><div><b>Added 4 more leagues</b><p>Requested across Japan, Netherlands, Turkey, and US.</p></div><span>Shipped</span></div>
-    <div class="fb-shipped-item upcoming"><div class="fb-shipped-date">Jun 2026</div><div><b>Custom team count</b><p>Planned for the v2.4 engine release.</p></div><span>Planned</span></div>
+    <div class="fb-shipped-state" *ngIf="loadingFeedback">Loading recent feedback...</div>
+    <div class="fb-shipped-state error" *ngIf="!loadingFeedback && feedbackLoadError">{{ feedbackLoadError }}</div>
+    <div class="fb-shipped-state" *ngIf="!loadingFeedback && !feedbackLoadError && !feedbackItems.length">No user feedback submissions yet.</div>
+
+    <div class="fb-shipped-item" *ngFor="let item of feedbackItems; trackBy: trackFeedback">
+      <div class="fb-shipped-date">{{ formatFeedbackDate(item.created_at) }}</div>
+      <div>
+        <b>{{ feedbackTitle(item.title) }}</b>
+        <p>{{ item.message }}</p>
+      </div>
+      <span>{{ item.status }}</span>
+    </div>
   </div>
 </div>
 

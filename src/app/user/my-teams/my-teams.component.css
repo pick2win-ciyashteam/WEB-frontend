@@ -783,3 +783,12 @@
     width: 100%;
   }
 }
+
+.team-mini-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px;
+}

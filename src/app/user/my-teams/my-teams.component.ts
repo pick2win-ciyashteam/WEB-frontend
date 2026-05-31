@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/core/services/api.service';
+
+type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
 
 interface GeneratedMatch {
-  id: string;
+  id: number;
   league: string;
   time: string;
   title: string;
@@ -10,23 +13,38 @@ interface GeneratedMatch {
   expires: string;
   live?: boolean;
   free?: boolean;
+  homeLogo?: string;
+  awayLogo?: string;
+  status?: string;
+  teamsGenerated?: number;
+  matchDate?:string;
 }
 
-type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
+interface ApiPlayer {
+  id: number;
+  match_id?: number;
+  team_side: 'team_a' | 'team_b';
+  name: string;
+  role: PlayerPosition;
+  mandate?: string | null;
+  captain?: string | null;
+}
 
 interface PreviewPlayer {
+  id: number;
   name: string;
   short: string;
   pos: PlayerPosition;
   team: 'home' | 'away';
+  captain?: string | null;
 }
 
 interface PreviewTeam {
   id: number;
   split: string;
   players: PreviewPlayer[];
-  captain: PreviewPlayer;
-  viceCaptain: PreviewPlayer;
+  captain: PreviewPlayer | null;
+  viceCaptain: PreviewPlayer | null;
   homeCount: number;
   awayCount: number;
   counts: Record<PlayerPosition, number>;
@@ -37,101 +55,212 @@ interface PreviewTeam {
   templateUrl: './my-teams.component.html',
   styleUrls: ['./my-teams.component.css']
 })
-export class MyTeamsComponent {
+export class MyTeamsComponent implements OnInit {
   selectedMatch: GeneratedMatch | null = null;
   previewTeam: PreviewTeam | null = null;
   previewIndex = 0;
 
-  readonly matches: GeneratedMatch[] = [
-    {
-      id: 'mci-ars',
-      league: 'Premier League',
-      time: 'Jul 20, 2026 - kickoff 16:30 UTC',
-      title: 'MCI vs ARS',
-      coin: '-1',
-      generatedAt: '14:38:04 UTC',
-      expires: 'in 1h 52m',
-      live: true
-    },
-    {
-      id: 'rma-fcb',
-      league: 'La Liga - El Clasico',
-      time: 'Jul 19, 2026 - kickoff 20:00 UTC',
-      title: 'RMA vs FCB',
-      coin: '-1',
-      generatedAt: '19:42:18 UTC',
-      expires: 'match ended'
-    },
-    {
-      id: 'psg-mar',
-      league: 'Ligue 1 - Le Classique',
-      time: 'Jul 16, 2026 - kickoff 20:45 UTC',
-      title: 'PSG vs MAR',
-      coin: '-1',
-      generatedAt: '19:55:02 UTC',
-      expires: 'match ended'
-    },
-    {
-      id: 'tot-avl',
-      league: 'Premier League',
-      time: 'Jun 12, 2026 - kickoff 20:00 UTC',
-      title: 'TOT vs AVL',
-      coin: 'FREE',
-      generatedAt: '19:45:01 UTC',
-      expires: 'match ended',
-      free: true
-    }
-  ];
+  matches: GeneratedMatch[] = [];
+  previewTeams: PreviewTeam[] = [];
 
-  readonly teamNumbers = Array.from({ length: 20 }, (_, index) => index + 1);
   readonly positionRows: PlayerPosition[] = ['FWD', 'MID', 'DEF', 'GK'];
 
-  private readonly playerPool: PreviewPlayer[] = [
-    { name: 'Ederson', short: 'EDE', pos: 'GK', team: 'home' },
-    { name: 'Walker', short: 'WAL', pos: 'DEF', team: 'home' },
-    { name: 'Dias', short: 'DIA', pos: 'DEF', team: 'home' },
-    { name: 'Stones', short: 'STO', pos: 'DEF', team: 'home' },
-    { name: 'Gvardiol', short: 'GVA', pos: 'DEF', team: 'home' },
-    { name: 'Rodri', short: 'ROD', pos: 'MID', team: 'home' },
-    { name: 'De Bruyne', short: 'KDB', pos: 'MID', team: 'home' },
-    { name: 'Foden', short: 'FOD', pos: 'MID', team: 'home' },
-    { name: 'Silva', short: 'SIL', pos: 'MID', team: 'home' },
-    { name: 'Haaland', short: 'HAA', pos: 'FWD', team: 'home' },
-    { name: 'Alvarez', short: 'ALV', pos: 'FWD', team: 'home' },
-    { name: 'Raya', short: 'RAY', pos: 'GK', team: 'away' },
-    { name: 'White', short: 'WHI', pos: 'DEF', team: 'away' },
-    { name: 'Saliba', short: 'SAL', pos: 'DEF', team: 'away' },
-    { name: 'Gabriel', short: 'GAB', pos: 'DEF', team: 'away' },
-    { name: 'Zinchenko', short: 'ZIN', pos: 'DEF', team: 'away' },
-    { name: 'Rice', short: 'RIC', pos: 'MID', team: 'away' },
-    { name: 'Odegaard', short: 'ODE', pos: 'MID', team: 'away' },
-    { name: 'Havertz', short: 'HAV', pos: 'MID', team: 'away' },
-    { name: 'Saka', short: 'SAK', pos: 'FWD', team: 'away' },
-    { name: 'Martinelli', short: 'MAR', pos: 'FWD', team: 'away' },
-    { name: 'Jesus', short: 'JES', pos: 'FWD', team: 'away' }
-  ];
+  loadingMatches = false;
+  loadingTeams = false;
+  loadingPlayers = false;
 
-  get previewTeams(): PreviewTeam[] {
-    return this.teamNumbers.map(teamNumber => this.buildPreviewTeam(teamNumber));
+  selectedDate = '';
+filteredMatches: GeneratedMatch[] = [];
+
+  constructor(private api: ApiService) {}
+
+  ngOnInit(): void {
+    this.loadMatches();
   }
 
-  openMatchTeams(match: GeneratedMatch) {
-    if (!match.live) {
-      return;
-    }
+  loadMatches(): void {
+  this.loadingMatches = true;
 
+  this.api.GetMyTeams().subscribe({
+    next: (res: any) => {
+      console.log(res)
+      const data = Array.isArray(res?.data) ? res.data : [];
+
+      this.matches = data.map((m: any) => ({
+        id: Number(m.match_id),
+        league: m.series_name || 'N/A',
+        time: this.formatMatchTime(m.start_time),
+        title: `${m.home_team || 'HOME'} vs ${m.away_team || 'AWAY'}`,
+        coin: '-1',
+        generatedAt: this.formatTime(m.generated_at),
+        expires: m.status === 'UPCOMING' ? 'upcoming' : 'match ended',
+        live: true,
+        free: false,
+        homeLogo: m.home_logo,
+        awayLogo: m.away_logo,
+        status: m.status,
+        teamsGenerated: Number(m.teams_generated || 0),
+        startDate: m.start_time ? new Date(m.start_time).toISOString().split('T')[0] : ''
+      }));
+
+      this.filteredMatches = [...this.matches];
+      this.loadingMatches = false;
+    },
+    error: () => {
+      this.matches = [];
+      this.filteredMatches = [];
+      this.loadingMatches = false;
+    }
+  });
+}
+
+applyDateFilter() {
+  if (!this.selectedDate) {
+    this.filteredMatches = [...this.matches];
+    return;
+  }
+
+  this.filteredMatches = this.matches.filter(
+    (match: any) => match.startDate === this.selectedDate
+  );
+}
+
+resetDateFilter() {
+  this.selectedDate = '';
+  this.filteredMatches = [...this.matches];
+}
+
+downloadMatchTeams(match: GeneratedMatch) {
+  this.api.MatchByTeams(match.id).subscribe({
+    next: (res: any) => {
+      const teamA = Array.isArray(res?.team_a) ? res.team_a : [];
+      const teamB = Array.isArray(res?.team_b) ? res.team_b : [];
+
+      const allTeams = [...teamA, ...teamB];
+
+      const rows = allTeams.map((team: any, index: number) => {
+        const players = allTeams.filter((p: any) => p.team_side === team.team_side);
+
+        const gk = players.filter((p: any) => p.role === 'GK').map((p: any) => p.name);
+        const def = players.filter((p: any) => p.role === 'DEF').map((p: any) => p.name);
+        const mid = players.filter((p: any) => p.role === 'MID').map((p: any) => p.name);
+        const fwd = players.filter((p: any) => p.role === 'FWD').map((p: any) => p.name);
+
+        const captain = players.find((p: any) => p.captain === 'C' || p.captain === 'CVC')?.name || '';
+        const viceCaptain = players.find((p: any) => p.captain === 'VC')?.name || '';
+
+        const homeCount = players.filter((p: any) => p.team_side === 'team_a').length;
+        const awayCount = players.filter((p: any) => p.team_side === 'team_b').length;
+
+        return {
+          Team: `T${index + 1}`,
+          Split: `${homeCount}-${awayCount}`,
+          'Formation (GK-DEF-MID-FWD)': `${gk.length}-${def.length}-${mid.length}-${fwd.length}`,
+          Captain: captain,
+          'Vice-Captain': viceCaptain,
+          'GK Players': gk.join(' / '),
+          Defenders: def.join(' / '),
+          Midfielders: mid.join(' / '),
+          Forwards: fwd.join(' / '),
+          [`${this.teamCodeFromTitle(match.title, 'home')} Count`]: homeCount,
+          [`${this.teamCodeFromTitle(match.title, 'away')} Count`]: awayCount
+        };
+      });
+
+      const fileName = this.makeTeamFileName(match);
+      this.downloadCSV(rows, fileName);
+    }
+  });
+}
+
+teamCodeFromTitle(title: string, side: 'home' | 'away'): string {
+  const [home, away] = (title || 'HOME vs AWAY').split(' vs ');
+  return side === 'home' ? (home || 'HOME') : (away || 'AWAY');
+}
+
+makeTeamFileName(match: any): string {
+  const companyName = 'Pick2Win-uct';
+
+  const teamsName = (match.title || 'Teams')
+    .replace(/\s+vs\s+/gi, '-vs-')
+    .replace(/[^a-zA-Z0-9-]/g, '');
+
+  const matchDate = match.startDate || new Date().toISOString().split('T')[0];
+
+  return `${companyName}-${teamsName}-${matchDate}.csv`;
+}
+
+downloadCSV(rows: any[], fileName: string) {
+  if (!rows.length) return;
+
+  const headers = Object.keys(rows[0]);
+  const csv = [
+    headers.join(','),
+    ...rows.map(row =>
+      headers.map(header => `"${String(row[header] ?? '').replace(/"/g, '""')}"`).join(',')
+    )
+  ].join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+
+  URL.revokeObjectURL(link.href);
+}
+
+  openMatchTeams(match: GeneratedMatch) {
     this.selectedMatch = match;
     this.previewTeam = null;
+    this.previewTeams = [];
+    this.loadingTeams = true;
+
+    this.api.MatchByTeams(match.id).subscribe({
+      next: (res: any) => {
+        const teamA: ApiPlayer[] = Array.isArray(res?.team_a) ? res.team_a : [];
+        const teamB: ApiPlayer[] = Array.isArray(res?.team_b) ? res.team_b : [];
+
+        const allTeams = [...teamA, ...teamB];
+
+        this.previewTeams = allTeams.map((team, index) =>
+          this.mapTeamCard(team, index + 1)
+        );
+
+        this.loadingTeams = false;
+      },
+      error: () => {
+        this.previewTeams = [];
+        this.loadingTeams = false;
+      }
+    });
   }
 
   backToMatches() {
     this.selectedMatch = null;
     this.previewTeam = null;
+    this.previewTeams = [];
   }
 
-  openTeamPreview(teamNumber: number): void {
-    this.previewIndex = teamNumber - 1;
-    this.previewTeam = this.previewTeams[this.previewIndex];
+  openTeamPreview(teamId: number): void {
+    this.previewIndex = this.previewTeams.findIndex(t => t.id === teamId);
+    if (this.previewIndex < 0) this.previewIndex = 0;
+
+    this.loadingPlayers = true;
+
+    this.api.TeamsByPlayers(teamId).subscribe({
+      next: (res: any) => {
+        const players = Array.isArray(res?.players) ? res.players : [];
+
+        this.previewTeam = this.buildPreviewFromPlayers(teamId, players);
+        this.loadingPlayers = false;
+      },
+      error: () => {
+        this.previewTeam = this.previewTeams[this.previewIndex] || null;
+        this.loadingPlayers = false;
+      }
+    });
   }
 
   closePreview(): void {
@@ -140,8 +269,12 @@ export class MyTeamsComponent {
 
   navPreview(delta: number): void {
     const total = this.previewTeams.length;
+    if (!total) return;
+
     this.previewIndex = (this.previewIndex + delta + total) % total;
-    this.previewTeam = this.previewTeams[this.previewIndex];
+    const team = this.previewTeams[this.previewIndex];
+
+    this.openTeamPreview(team.id);
   }
 
   playersByPosition(position: PlayerPosition): PreviewPlayer[] {
@@ -149,11 +282,11 @@ export class MyTeamsComponent {
   }
 
   isCaptain(player: PreviewPlayer): boolean {
-    return this.previewTeam?.captain.name === player.name;
+    return player.captain === 'C' || player.captain === 'CVC';
   }
 
   isViceCaptain(player: PreviewPlayer): boolean {
-    return this.previewTeam?.viceCaptain.name === player.name;
+    return player.captain === 'VC';
   }
 
   playerInitials(player: PreviewPlayer): string {
@@ -170,78 +303,96 @@ export class MyTeamsComponent {
     return side === 'home' ? '#6cabdd' : '#ef0107';
   }
 
-  private buildPreviewTeam(teamNumber: number): PreviewTeam {
-    const splits = ['4-7', '5-6', '6-5', '7-4'];
-    const split = splits[(teamNumber - 1) % splits.length];
-    const [homeTarget] = split.split('-').map(Number);
-    const awayTarget = 11 - homeTarget;
-    const homePlayers = this.rotate(this.playerPool.filter(player => player.team === 'home'), teamNumber);
-    const awayPlayers = this.rotate(this.playerPool.filter(player => player.team === 'away'), teamNumber + 3);
-    const selected: PreviewPlayer[] = [];
+  private mapTeamCard(team: ApiPlayer, teamNumber: number): PreviewTeam {
+    const side = team.team_side === 'team_a' ? 'home' : 'away';
 
-    this.addByPosition(selected, homePlayers, 'GK', homeTarget > awayTarget ? 1 : 0);
-    this.addByPosition(selected, awayPlayers, 'GK', selected.some(player => player.pos === 'GK') ? 0 : 1);
-    this.fillSide(selected, homePlayers, homeTarget);
-    this.fillSide(selected, awayPlayers, awayTarget);
-    this.fillRemaining(selected, this.rotate(this.playerPool, teamNumber + 7));
-
-    const players = selected.slice(0, 11);
-    const captain = players.find(player => player.name === 'Haaland') || players[teamNumber % players.length];
-    const viceCaptain = players.find(player => player.name === 'Saka' && player.name !== captain.name)
-      || players.find(player => player.name !== captain.name)
-      || captain;
+    const player: PreviewPlayer = {
+      id: team.id,
+      name: team.name,
+      short: this.shortName(team.name),
+      pos: team.role || 'MID',
+      team: side,
+      captain: team.captain
+    };
 
     return {
-      id: teamNumber,
-      split,
-      players,
-      captain,
-      viceCaptain,
-      homeCount: players.filter(player => player.team === 'home').length,
-      awayCount: players.filter(player => player.team === 'away').length,
+      id: team.id,
+      split: side === 'home' ? 'Team A' : 'Team B',
+      players: [player],
+      captain: team.captain ? player : null,
+      viceCaptain: null,
+      homeCount: side === 'home' ? 1 : 0,
+      awayCount: side === 'away' ? 1 : 0,
       counts: {
-        GK: players.filter(player => player.pos === 'GK').length,
-        DEF: players.filter(player => player.pos === 'DEF').length,
-        MID: players.filter(player => player.pos === 'MID').length,
-        FWD: players.filter(player => player.pos === 'FWD').length
+        GK: team.role === 'GK' ? 1 : 0,
+        DEF: team.role === 'DEF' ? 1 : 0,
+        MID: team.role === 'MID' ? 1 : 0,
+        FWD: team.role === 'FWD' ? 1 : 0
       }
     };
   }
 
-  private addByPosition(selected: PreviewPlayer[], pool: PreviewPlayer[], pos: PlayerPosition, count: number): void {
-    pool
-      .filter(player => player.pos === pos)
-      .slice(0, count)
-      .forEach(player => this.addUnique(selected, player));
+  private buildPreviewFromPlayers(teamId: number, apiPlayers: ApiPlayer[]): PreviewTeam {
+    const players: PreviewPlayer[] = apiPlayers.map((p: any) => ({
+      id: p.id,
+      name: p.name,
+      short: this.shortName(p.name),
+      pos: p.role || 'MID',
+      team: p.team_side === 'team_a' ? 'home' : 'away',
+      captain: p.captain
+    }));
+
+    const captain =
+      players.find(p => p.captain === 'C' || p.captain === 'CVC') || null;
+
+    const viceCaptain =
+      players.find(p => p.captain === 'VC') || null;
+
+    return {
+      id: teamId,
+      split: `${players.filter(p => p.team === 'home').length}-${players.filter(p => p.team === 'away').length}`,
+      players,
+      captain,
+      viceCaptain,
+      homeCount: players.filter(p => p.team === 'home').length,
+      awayCount: players.filter(p => p.team === 'away').length,
+      counts: {
+        GK: players.filter(p => p.pos === 'GK').length,
+        DEF: players.filter(p => p.pos === 'DEF').length,
+        MID: players.filter(p => p.pos === 'MID').length,
+        FWD: players.filter(p => p.pos === 'FWD').length
+      }
+    };
   }
 
-  private fillSide(selected: PreviewPlayer[], pool: PreviewPlayer[], target: number): void {
-    const side = pool[0]?.team;
-    while (side && selected.filter(player => player.team === side).length < target && selected.length < 11) {
-      const player = pool.find(item => !selected.some(existing => existing.name === item.name));
-      if (!player) return;
-      this.addUnique(selected, player);
-    }
+  private shortName(name: string): string {
+    return (name || 'NA')
+      .split(' ')
+      .map(x => x[0])
+      .join('')
+      .slice(0, 3)
+      .toUpperCase();
   }
 
-  private fillRemaining(selected: PreviewPlayer[], pool: PreviewPlayer[]): void {
-    while (selected.length < 11) {
-      const player = pool.find(item => !selected.some(existing => existing.name === item.name));
-      if (!player) return;
-      this.addUnique(selected, player);
-    }
+  private formatMatchTime(value: string): string {
+    if (!value) return '-';
+
+    return new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(value));
   }
 
-  private addUnique(selected: PreviewPlayer[], player: PreviewPlayer): void {
-    if (!selected.some(existing => existing.name === player.name)) {
-      selected.push(player);
-    }
-  }
+  private formatTime(value: string): string {
+    if (!value) return '-';
 
-  private rotate(players: PreviewPlayer[], seed: number): PreviewPlayer[] {
-    if (!players.length) return [];
-    const offset = seed % players.length;
-    return [...players.slice(offset), ...players.slice(0, offset)];
+    return new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date(value));
   }
-
 }

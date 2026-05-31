@@ -2,6 +2,25 @@
 
 <main class="uct-flow-page">
   <div class="wrap">
+    <div class="mobile-uct-top" *ngIf="!loading && detail as d">
+      <button class="mobile-back" type="button" (click)="goBack()" aria-label="Back">
+        <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+      </button>
+      <div class="mobile-title">
+        <h2 *ngIf="step === 1">Sub Selection<span>(optional)</span></h2>
+        <h2 *ngIf="step === 2">Mandate Selection <span>(Optional)</span></h2>
+        <h2 *ngIf="step === 3">C, VC Selection <span>(Mandatory)</span></h2>
+        <h2 *ngIf="step === 4">UCT Preview</h2>
+        <h2 *ngIf="step >= 5">UCT Teams</h2>
+        <p *ngIf="step === 1">Choose up to 3 Substitute players</p>
+        <p *ngIf="step === 2">Configure player mandates</p>
+        <p *ngIf="step === 3">Choose your multipliers</p>
+        <p *ngIf="step === 4">Review your <b>CONFIG</b> before generating</p>
+        <p *ngIf="step >= 5">{{ d.home_team.short_name }} vs {{ d.away_team.short_name }}</p>
+      </div>
+    
+    </div>
+
     <button class="back-link" type="button" (click)="goBack()">
       <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
       Back to match
@@ -68,6 +87,50 @@
           <span class="selection-pill">{{ selectedSubIds.size }} / {{ maxSubs }} selected</span>
         </div>
 
+        <div class="substitute-section-title playing-title">
+          <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+          <b>Playing XI</b>
+          <small>Locked players</small>
+        </div>
+
+        <div class="team-pool-grid locked-xi-grid">
+          <article class="team-pool locked-pool">
+            <div class="team-pool-head">
+              <h3><span class="team-color home"></span>{{ d.home_team.name }}</h3>
+              <b>{{ homeStartingPlayers.length }} locked XI</b>
+            </div>
+            <div class="player-row locked-row" *ngFor="let player of homeStartingPlayers; trackBy: trackPlayer">
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="row-action locked">XI</span>
+            </div>
+          </article>
+
+          <article class="team-pool locked-pool">
+            <div class="team-pool-head">
+              <h3><span class="team-color away"></span>{{ d.away_team.name }}</h3>
+              <b>{{ awayStartingPlayers.length }} locked XI</b>
+            </div>
+            <div class="player-row locked-row" *ngFor="let player of awayStartingPlayers; trackBy: trackPlayer">
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="row-action locked">XI</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="substitute-section-title">
+          <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+          <b>Substitutes</b>
+          <small>Optional - select up to {{ maxSubs }}</small>
+        </div>
+
         <div class="team-pool-grid">
           <article class="team-pool">
             <div class="team-pool-head">
@@ -78,7 +141,7 @@
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
-              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }}</small></span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
             </button>
@@ -94,7 +157,7 @@
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
-              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }}</small></span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="row-action">{{ selectedSubIds.has(player.id) ? '✓' : '+' }}</span>
             </button>
@@ -108,31 +171,90 @@
           <div>
             <span class="panel-kicker">Step 2 - Optional</span>
             <h2>Mandate Players</h2>
-            <p>Use M-YES to force players into all 20 teams. Use M-NO to exclude players completely.</p>
+            <p>Select one mandate mode. N/A skips mandates completely. M-NO is available only for Playing XI players.</p>
           </div>
           <span class="selection-pill">YES {{ mandateYesPlayers.length }}/{{ maxMandateYes }} - NO {{ mandateNoPlayers.length }}/{{ maxMandateNo }}</span>
         </div>
 
-        <div class="team-pool-grid">
-          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeAvailablePool, cls: 'home'}, {name: d.away_team.name, players: awayAvailablePool, cls: 'away'}]">
+        <div class="mandate-mode-toggle" role="group" aria-label="Mandate mode">
+          <button type="button" [class.active]="mandateMode === 'YES'" (click)="setMandateMode('YES')">
+            <b>M-YES</b><span>{{ mandateYesPlayers.length }}/{{ maxMandateYes }}</span>
+          </button>
+          <button type="button" [class.active]="mandateMode === 'NO'" (click)="setMandateMode('NO')">
+            <b>M-NO</b><span>{{ mandateNoPlayers.length }}/{{ maxMandateNo }}</span>
+          </button>
+          <button type="button" [class.active]="mandateMode === 'NA'" (click)="setMandateMode('NA')">
+            <b>N/A</b><span>Skip</span>
+          </button>
+        </div>
+
+        <div class="mode-note" *ngIf="mandateMode === 'YES'">
+          Tap Playing XI or your selected substitutes to mark M-YES. Maximum 2 players, and only 1 goalkeeper can be forced into every generated team.
+        </div>
+        <div class="mode-note" *ngIf="mandateMode === 'NO'">
+          Tap Playing XI players to mark M-NO. Selected substitutes and already M-YES players cannot be excluded.
+        </div>
+        <div class="na-card" *ngIf="mandateMode === 'NA'">
+          <span class="material-symbols-outlined" aria-hidden="true">all_inclusive</span>
+          <div>
+            <b>No mandate selected</b>
+            <p>All Playing XI players and selected substitutes remain available for team generation.</p>
+            <small>Tap Next to choose CVC players</small>
+          </div>
+        </div>
+
+        <div class="team-pool-grid" *ngIf="mandateMode !== 'NA'">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeMandateMainPool, cls: 'home'}, {name: d.away_team.name, players: awayMandateMainPool, cls: 'away'}]">
             <div class="team-pool-head">
               <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
               <b>{{ side.players.length }} players</b>
             </div>
-            <div class="player-row mandate-row" *ngFor="let player of side.players; trackBy: trackPlayer">
+            <button
+              class="player-row mandate-row"
+              type="button"
+              *ngFor="let player of side.players; trackBy: trackPlayer"
+              [class.selected]="mandateOf(player) === mandateMode"
+              [disabled]="isMandatePlayerDisabled(player)"
+              (click)="applyMandate(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
-              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
-              <span class="mandate-actions">
-                <button type="button" [class.active]="mandateOf(player) === 'YES'" (click)="setMandate(player, 'YES')">YES</button>
-                <button type="button" [disabled]="!!player.is_substitute" [class.active]="mandateOf(player) === 'NO'" (click)="setMandate(player, 'NO')">NO</button>
-                <button type="button" [class.active]="mandateOf(player) === 'NA'" (click)="setMandate(player, 'NA')">NA</button>
+              <span class="row-action mandate-chip" [class.yes]="mandateOf(player) === 'YES'" [class.no]="mandateOf(player) === 'NO'">
+                {{ mandateOf(player) === mandateMode ? 'M-' + mandateMode : mandateMode }}
               </span>
-            </div>
+            </button>
             <div class="player-empty" *ngIf="!side.players.length">No players received for this team.</div>
           </article>
+        </div>
+
+        <div class="sub-player-section" *ngIf="mandateMode === 'YES' && selectedSubstitutes.length">
+          <div class="sub-player-title">
+            <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+            <div>
+              <b>Selected Substitute Players</b>
+              <small>Substitutes can be selected only as M-YES.</small>
+            </div>
+          </div>
+          <div class="sub-player-grid">
+            <button
+              class="player-row mandate-row"
+              type="button"
+              *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer"
+              [class.selected]="mandateOf(player) === 'YES'"
+              [disabled]="isMandatePlayerDisabled(player)"
+              (click)="setMandate(player, 'YES')">
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="row-action mandate-chip" [class.yes]="mandateOf(player) === 'YES'">
+                {{ mandateOf(player) === 'YES' ? 'M-YES' : 'YES' }}
+              </span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -151,15 +273,21 @@
           <button type="button" [class.active]="captainMode === 'C_AND_VC'" (click)="setCaptainMode('C_AND_VC')">C &amp; VC Matrix</button>
         </div>
 
+        <div class="mobile-team-versus">
+          <span><i class="team-color home"></i>{{ d.home_team.short_name }}</span>
+          <b>VS</b>
+          <span><i class="team-color away"></i>{{ d.away_team.short_name }}</span>
+        </div>
+
         <div class="mode-note" *ngIf="captainMode === 'CVC'">
-          Select 2-4 players. They rotate as both Captain and Vice-Captain across the 20 teams.
+          Select exactly 4 players. M-YES players are automatically included and cannot be removed from CVC.
         </div>
         <div class="mode-note" *ngIf="captainMode === 'C_AND_VC'">
-          C &amp; VC mode - Structured Configuration: 1 Captain x 2-5 VC, 2 Captains x 2-4 VC, 3 Captains x 2-3 VC, or 4 Captains x 2 VC.
+          C &amp; VC mode - M-YES players must be assigned as C or VC first. Then use: 1 Captain x 2-5 VC, 2 Captains x 2-4 VC, 3 Captains x 2-3 VC, or 4 Captains x 2 VC.
         </div>
 
         <div class="team-pool-grid" *ngIf="captainMode === 'CVC'">
-          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeAvailablePool, cls: 'home'}, {name: d.away_team.name, players: awayAvailablePool, cls: 'away'}]">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeStartingPlayers, cls: 'home'}, {name: d.away_team.name, players: awayStartingPlayers, cls: 'away'}]">
             <div class="team-pool-head">
               <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
               <b>{{ side.players.length }} players</b>
@@ -168,7 +296,7 @@
             <span class="avatar image-avatar">
               <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
             </span>
-            <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
+            <span class="player-main"><b>{{ player.player_name }}</b></span>
             <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             <span class="row-action">{{ cvcIds.has(player.id) ? 'CVC' : '+' }}</span>
           </button>
@@ -176,8 +304,28 @@
           </article>
         </div>
 
+        <div class="sub-player-section" *ngIf="captainMode === 'CVC' && selectedSubstitutes.length">
+          <div class="sub-player-title">
+            <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+            <div>
+              <b>Selected Substitute Players</b>
+              <small>Available for CVC only if selected in Step 1.</small>
+            </div>
+          </div>
+          <div class="sub-player-grid">
+            <button class="player-row" type="button" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="mandateOf(player) === 'NO'" (click)="toggleCvc(player)">
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="row-action">{{ cvcIds.has(player.id) ? 'CVC' : '+' }}</span>
+            </button>
+          </div>
+        </div>
+
         <div class="team-pool-grid captain-matrix-grid" *ngIf="captainMode === 'C_AND_VC'">
-          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeAvailablePool, cls: 'home'}, {name: d.away_team.name, players: awayAvailablePool, cls: 'away'}]">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeStartingPlayers, cls: 'home'}, {name: d.away_team.name, players: awayStartingPlayers, cls: 'away'}]">
             <div class="team-pool-head">
               <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
               <b>C {{ captainIds.size }}/{{ maxCaptains }} - VC {{ viceCaptainIds.size }}/{{ maxViceForCurrentCaptains() }}</b>
@@ -186,7 +334,7 @@
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
-              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.is_substitute ? 'Substitute' : 'Playing XI' }}</small></span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
               <span class="captain-actions">
                 <button type="button" [class.active]="captainIds.has(player.id)" [disabled]="!canSelectCaptain(player)" (click)="toggleCaptain(player)">C</button>
@@ -195,6 +343,29 @@
             </div>
             <div class="player-empty" *ngIf="!side.players.length">No captaincy players received for this team.</div>
           </article>
+        </div>
+
+        <div class="sub-player-section" *ngIf="captainMode === 'C_AND_VC' && selectedSubstitutes.length">
+          <div class="sub-player-title">
+            <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+            <div>
+              <b>Selected Substitute Players</b>
+              <small>Assign as C or VC only if required by your configuration.</small>
+            </div>
+          </div>
+          <div class="sub-player-grid">
+            <div class="player-row captain-select-row" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id) || viceCaptainIds.has(player.id)" [class.muted]="mandateOf(player) === 'NO'">
+              <span class="avatar image-avatar">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+              </span>
+              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
+              <span class="captain-actions">
+                <button type="button" [class.active]="captainIds.has(player.id)" [disabled]="!canSelectCaptain(player)" (click)="toggleCaptain(player)">C</button>
+                <button type="button" [class.active]="viceCaptainIds.has(player.id)" [disabled]="!canSelectViceCaptain(player)" (click)="toggleViceCaptain(player)">VC</button>
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -230,10 +401,105 @@
           </div>
         </div>
 
-        <label class="confirm-box">
-          <input type="checkbox" [checked]="confirmed" (change)="confirmed = !confirmed">
-          <span>I confirm that teams will be generated strictly based on my configuration.</span>
-        </label>
+        <div class="uct-preview-stack">
+          <article class="preview-card">
+            <div class="preview-card-head">
+              <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+              <div>
+                <b>Substitute Selection</b>
+                <small>{{ selectedSubstitutes.length }} selected from max {{ maxSubs }}</small>
+              </div>
+            </div>
+            <div class="preview-player-grid" *ngIf="selectedSubstitutes.length; else noSubsPreview">
+              <div class="preview-player" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer">
+                <span class="avatar image-avatar">
+                  <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                </span>
+                <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                <em>SUB</em>
+              </div>
+            </div>
+            <ng-template #noSubsPreview>
+              <p class="preview-empty">No substitutes selected. Starting XI only.</p>
+            </ng-template>
+          </article>
+
+          <article class="preview-card">
+            <div class="preview-card-head">
+              <span class="material-symbols-outlined" aria-hidden="true">flag</span>
+              <div>
+                <b>Mandate Configuration</b>
+                <small>{{ mandateMode === 'NA' ? 'No mandate restriction' : 'M-' + mandateMode + ' mode selected' }}</small>
+              </div>
+            </div>
+            <div class="preview-split">
+              <div>
+                <h4>M-YES</h4>
+                <div class="preview-player" *ngFor="let player of mandateYesPlayers; trackBy: trackPlayer">
+                  <span class="avatar image-avatar">
+                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                  </span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <em class="yes">YES</em>
+                </div>
+                <p class="preview-empty" *ngIf="!mandateYesPlayers.length">No M-YES players.</p>
+              </div>
+              <div>
+                <h4>M-NO</h4>
+                <div class="preview-player" *ngFor="let player of mandateNoPlayers; trackBy: trackPlayer">
+                  <span class="avatar image-avatar">
+                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                  </span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <em class="no">NO</em>
+                </div>
+                <p class="preview-empty" *ngIf="!mandateNoPlayers.length">No M-NO players.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="preview-card">
+            <div class="preview-card-head">
+              <span class="material-symbols-outlined" aria-hidden="true">military_tech</span>
+              <div>
+                <b>Captaincy</b>
+                <small>{{ captainMode === 'CVC' ? 'CVC rotation: 2-4 players' : 'C & VC matrix: structured limits applied' }}</small>
+              </div>
+            </div>
+            <div class="preview-player-grid" *ngIf="captainMode === 'CVC'">
+              <div class="preview-player" *ngFor="let player of cvcPlayers; trackBy: trackPlayer">
+                <span class="avatar image-avatar">
+                  <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                </span>
+                <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                <em>CVC</em>
+              </div>
+            </div>
+            <div class="preview-split" *ngIf="captainMode === 'C_AND_VC'">
+              <div>
+                <h4>Captain</h4>
+                <div class="preview-player" *ngFor="let player of captainPlayers; trackBy: trackPlayer">
+                  <span class="avatar image-avatar">
+                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                  </span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <em>C</em>
+                </div>
+              </div>
+              <div>
+                <h4>Vice-Captain</h4>
+                <div class="preview-player" *ngFor="let player of viceCaptainPlayers; trackBy: trackPlayer">
+                  <span class="avatar image-avatar">
+                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                  </span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <em>VC</em>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
       </section>
 
       <section class="flow-panel teams-panel" *ngIf="step === 5">
@@ -291,23 +557,60 @@
       <span class="material-symbols-outlined" aria-hidden="true">task_alt</span>
     </div>
 
-    <h2 id="uctConfirmTitle">Generate 20 UCT teams?</h2>
-    <p>Your confirmed rules will be sent to the backend. One coin may be used for this match once generation succeeds.</p>
+    <h2 id="uctConfirmTitle">User Responsibility Notice</h2>
+    <p>The User Config Teams feature operates strictly based on the inputs provided by you. PICK2WIN does not influence, recommend, or alter player selections, substitute selections, mandate choices, or Captain/Vice-Captain configuration.</p>
 
-    <div class="uct-confirm-summary">
+    <div class="uct-responsibility-box">
+      <span class="material-symbols-outlined" aria-hidden="true">shield</span>
+      <p>All selections and resulting teams are entirely your responsibility. One coin may be used for this match once generation succeeds.</p>
+    </div>
+
+    <div class="uct-confirm-summary desktop-confirm-summary">
       <div><span>Substitutes</span><b>{{ selectedSubstitutes.length }}</b></div>
       <div><span>Mandate YES</span><b>{{ mandateYesPlayers.length }}</b></div>
       <div><span>Mandate NO</span><b>{{ mandateNoPlayers.length }}</b></div>
       <div><span>Captaincy</span><b>{{ captainMode === 'CVC' ? 'CVC' : 'C & VC' }}</b></div>
     </div>
 
+    <label class="confirm-box modal-confirm">
+      <input type="checkbox" [checked]="generateConsent" (change)="generateConsent = !generateConsent">
+      <span>I confirm that the teams will be generated strictly based on my configuration.</span>
+    </label>
+
     <div class="uct-confirm-actions">
       <button class="ghost-btn" type="button" (click)="closeGenerateConfirm()">Review again</button>
-      <button class="primary-btn generate" type="button" [disabled]="submitting" (click)="confirmGenerateTeams()">
+      <button class="primary-btn generate" type="button" [disabled]="submitting || !generateConsent" (click)="confirmGenerateTeams()">
         {{ submitting ? 'Generating...' : 'Confirm & Generate' }}
       </button>
     </div>
   </div>
+</div>
+
+<div class="uct-confirm-modal" *ngIf="showCaptainModeConfirm" role="dialog" aria-modal="true" aria-labelledby="captainModeTitle" (click)="closeCaptainModeConfirm()">
+  <div class="uct-confirm-card compact" (click)="$event.stopPropagation()">
+    <button class="uct-confirm-close" type="button" aria-label="Close" (click)="closeCaptainModeConfirm()">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+    <div class="uct-confirm-icon warning">
+      <span class="material-symbols-outlined" aria-hidden="true">sync_alt</span>
+    </div>
+    <h2 id="captainModeTitle">Switch captaincy mode?</h2>
+    <p>Existing CVC/C/VC selections will be cleared so the new mode starts cleanly. Mandate choices stay unchanged.</p>
+    <div class="uct-confirm-actions">
+      <button class="ghost-btn" type="button" (click)="closeCaptainModeConfirm()">Keep current</button>
+      <button class="primary-btn generate" type="button" (click)="confirmCaptainModeSwitch()">Switch mode</button>
+    </div>
+  </div>
+</div>
+
+<div class="uct-alert" *ngIf="uctAlert as alert" [class.warning]="alert.type === 'warning'" [class.error]="alert.type === 'error'">
+  <div>
+    <b>{{ alert.title }}</b>
+    <p>{{ alert.message }}</p>
+  </div>
+  <button type="button" aria-label="Close message" (click)="closeAlert()">
+    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+  </button>
 </div>
 
 <app-footer></app-footer>

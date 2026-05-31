@@ -2,113 +2,137 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
-import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, CheckoutSessionPayload, CheckoutSessionResponse, Country, MatchDetail, Series, StripeConfigResponse, SubscriptionPlan, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
+import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, CheckoutSessionPayload, CheckoutSessionResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, Series, StripeConfigResponse, SubscriptionPlan, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private BASE = 'https://pick2win-backend-website.onrender.com/api/user'
+  private BASE = 'https://pick2win-backend-website.onrender.com/api'
 
   constructor(private http: HttpClient) { }
 
 
   signup(data: SignupPayload): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/signup`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/signup`, data);
   }
 
   verifyMobileOtp(data: VerifySignupPayload): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/verify-mobile-otp`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/verify-mobile-otp`, data);
   }
 
   verifyEmailOtp(data: VerifyEmailPayload): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/verify-email-otp`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/verify-email-otp`, data);
   }
 
   resendOtp(data: ResendOtpPayload): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/resend-otp`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/resend-otp`, data);
   }
 
   getProfile(): Observable<ApiDataResponse<UserProfile>> {
-    return this.http.get<ApiDataResponse<UserProfile>>(`${this.BASE}/user-auth/profile`);
+    return this.http.get<ApiDataResponse<UserProfile>>(`${this.BASE}/user/user-auth/profile`);
   }
 
   deleteAccount(): Observable<any> {
-    return this.http.delete(`${this.BASE}/user-auth/delete`);
+    return this.http.delete(`${this.BASE}/user/user-auth/delete`);
   }
 
   changeMobile(data: { new_mobile: string }): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/change-mobile`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/change-mobile`, data);
   }
 
   verifyMobileChange(data: { type: 'mobile'; otp: string }): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/verify-mobile-change`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/verify-mobile-change`, data);
   }
 
   changeEmail(data: { new_email: string }): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/change-email`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/change-email`, data);
   }
 
   verifyEmailChange(data: { type: 'email'; otp: string }): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/verify-email-change`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/verify-email-change`, data);
   }
 
   forgotPassword(data: { email: string }): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/forgot-password`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/forgot-password`, data);
   }
 
   resetPassword(data: { email: string; password: string; otp: string }): Observable<any> {
-    return this.http.post(`${this.BASE}/user-auth/reset-password`, data);
+    return this.http.post(`${this.BASE}/user/user-auth/reset-password`, data);
+  }
+
+  getFeedback(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/feedback/feedback-get`);
+  }
+
+  postFeedback(data: FeedbackPostPayload): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/feedback/user-post`, data);
+  }
+
+  getFeedbackQuestions(): Observable<ApiListResponse<FeedbackQuestion>> {
+    return this.http.get<ApiListResponse<FeedbackQuestion>>(`${this.BASE}/admin/feedback/user-questions`);
+  }
+
+  postFeedbackAnswers(data: FeedbackAnswerPayload): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/feedback/user-answers`, data);
   }
 
   getCountries(): Observable<ApiListResponse<Country>> {
-    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/countries/get-all`);
+    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/countries/get-all`);
   }
 
   getCountryByName(name: string): Observable<ApiDataResponse<Country>> {
-    return this.http.get<ApiDataResponse<Country>>(`${this.BASE}/countries/${encodeURIComponent(name)}`);
+    return this.http.get<ApiDataResponse<Country>>(`${this.BASE}/user/countries/${encodeURIComponent(name)}`);
   }
 
   getSubscriptionPlans(): Observable<ApiListResponse<SubscriptionPlan>> {
-    return this.http.get<ApiListResponse<SubscriptionPlan>>(`${this.BASE}/plans`);
+    return this.http.get<ApiListResponse<SubscriptionPlan>>(`${this.BASE}/user/plans`);
   }
 
 
 getStripeConfig(): Observable<StripeConfigResponse> {
-  return this.http.get<StripeConfigResponse>(`${this.BASE}/deposite/stripe/config`);
+  return this.http.get<StripeConfigResponse>(`${this.BASE}/user/deposite/stripe/config`);
 }
 
 buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
-  return this.http.post<BuyCoinsResponse>(`${this.BASE}/deposite/buy-coins`, data);
+  return this.http.post<BuyCoinsResponse>(`${this.BASE}/user/deposite/buy-coins`, data);
 }
 
   getBanners(): Observable<ApiListResponse<Banner>> {
-    return this.http.get<ApiListResponse<Banner>>(`${this.BASE}/banner`);
+    return this.http.get<ApiListResponse<Banner>>(`${this.BASE}/user/banner`);
   }
 
   getSeriesMatches(): Observable<ApiListResponse<Series>> {
-    return this.http.get<ApiListResponse<Series>>(`${this.BASE}/series`);
+    return this.http.get<ApiListResponse<Series>>(`${this.BASE}/user/series`);
   }
 
   getTodayLineups(): Observable<TodayLineupsResponse> {
-    return this.http.get<TodayLineupsResponse>(`${this.BASE}/lineup/today-lineups`);
+    return this.http.get<TodayLineupsResponse>(`${this.BASE}/user/lineup/today-lineups`);
   }
 
   getMatchDetails(matchId: number | string): Observable<ApiDataResponse<MatchDetail>> {
-    return this.http.get<ApiDataResponse<MatchDetail>>(`${this.BASE}/matches/${matchId}`);
+    return this.http.get<ApiDataResponse<MatchDetail>>(`${this.BASE}/user/matches/${matchId}`);
   }
 
   createUctTeams(data: UctGeneratePayload): Observable<UctGenerateResponse> {
-    return this.http.post<UctGenerateResponse>(`${this.BASE}/teams/generate-teams`, data);
+    return this.http.post<UctGenerateResponse>(`${this.BASE}/user/teams/generate-teams`, data);
   }
 
-  getMyteams(): Observable<ApiListResponse<Country>> {
-    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/countries/get-all`);
+   GetMyTeams(): Observable<ApiListResponse<Country>> {
+    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/teams/generate-matches`);
   }
 
-  // getSeriesById(id: number): Observable<any> {
-  //   return this.http.get(`${this.BASE}/getseriesbyid/${id}`);
-  // }
+  MatchByTeams(id: number): Observable<any> {
+    return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}`);
+  }
+
+  TeamsByPlayers(id: number): Observable<any> {
+    return this.http.get(`${this.BASE}/user/teams/team-players/${id}`);
+  }
+
+   GetPurchaseHistory(): Observable<ApiListResponse<Country>> {
+    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/deposite/my-transactions`);
+  }
 
 }

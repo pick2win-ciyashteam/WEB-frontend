@@ -1,0 +1,242 @@
+:host {
+  display: block;
+  --ink: #051a2a;
+  --ink-2: #091f30;
+  --surface-deep: #020a12;
+  --paper: #ffffff;
+  --paper-2: #c8d6e0;
+  --paper-3: #8da0b5;
+  --line: rgba(255, 255, 255, 0.1);
+  --gold: #f4b400;
+  --green: #0bcc8e;
+  --shadow: 0 24px 56px -18px rgba(0, 0, 0, 0.58);
+  --font-display: Inter, "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.profile-table-wrap {
+  margin-top: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at top left, rgba(244, 180, 0, 0.06), transparent 34%),
+    linear-gradient(135deg, rgba(9, 31, 48, 0.96), rgba(2, 10, 18, 0.94));
+  box-shadow: var(--shadow);
+}
+
+.profile-table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-table-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+  color: var(--paper);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.profile-table-title .material-symbols-outlined {
+  color: var(--gold);
+  font-size: 21px;
+}
+
+.profile-table-count,
+th,
+.profile-status-pill {
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.profile-table-count {
+  display: inline-flex;
+  padding: 4px 11px;
+  border-radius: 999px;
+  color: var(--paper-3);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.profile-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 9px;
+  color: var(--gold);
+  background: rgba(244, 180, 0, 0.06);
+  border: 1px solid rgba(244, 180, 0, 0.34);
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.profile-download-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+th,
+td {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+th {
+  color: var(--paper-3);
+  background: rgba(11, 60, 93, 0.46);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+td {
+  color: var(--paper-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.col-date,
+.col-id {
+  font-family: var(--font-mono);
+}
+
+.col-date,
+.col-match {
+  color: var(--paper);
+}
+
+.col-coins {
+  color: var(--gold);
+  font-weight: 950;
+}
+
+.col-id {
+  color: var(--paper-3);
+}
+
+.profile-status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.profile-status-pill.paid {
+  color: var(--green);
+  background: rgba(11, 204, 142, 0.09);
+  border: 1px solid rgba(11, 204, 142, 0.28);
+}
+
+.profile-table-foot {
+  margin: 0;
+  padding: 14px 22px;
+  border-top: 1px solid var(--line);
+  color: var(--paper-3);
+  font-size: 13px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .profile-table-head {
+    display: grid;
+    padding: 16px;
+  }
+
+  .profile-download-btn {
+    width: 100%;
+  }
+
+  .table-scroll {
+    overflow: visible;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  td {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  td:last-child {
+    border-bottom: 0;
+  }
+
+  td::before {
+    flex: 0 0 auto;
+    color: var(--paper-3);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .profile-table td:nth-child(1)::before { content: "Purchase Date"; }
+  .profile-table td:nth-child(2)::before { content: "Pack"; }
+  .profile-table td:nth-child(3)::before { content: "Coins Added"; }
+  .profile-table td:nth-child(4)::before { content: "Payment ID"; }
+  .profile-table td:nth-child(5)::before { content: "Status"; }
+}

@@ -98,6 +98,41 @@ export interface BuyCoinsResponse {
   clientSecret?: string;
 }
 
+export interface FeedbackPostPayload {
+  category: string;
+  importance: string;
+  subject: string;
+  description: string;
+  email: string;
+  location: string;
+  email_followup: boolean;
+}
+
+export interface FeedbackQuestionOption {
+  id: number;
+  emoji: string;
+  label: string;
+  description: string;
+  sort_order: number;
+}
+
+export interface FeedbackQuestion {
+  id: number;
+  question: string;
+  hint: string;
+  is_mandatory: number;
+  sort_order: number;
+  options: FeedbackQuestionOption[];
+}
+
+export interface FeedbackAnswerPayload {
+  answers: Array<{
+    question_id: number;
+    option_id: number;
+  }>;
+  comment?: string;
+}
+
 export interface UctGeneratePlayer {
   name: string;
   role: string;

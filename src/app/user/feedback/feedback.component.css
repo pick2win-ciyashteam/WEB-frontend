@@ -376,6 +376,21 @@ textarea {
   border-color: rgba(244, 180, 0, 0.28);
 }
 
+.fb-shipped-state {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--paper-2);
+  background: rgba(255, 255, 255, 0.035);
+  font-weight: 750;
+}
+
+.fb-shipped-state.error {
+  color: #ffd5d9;
+  border-color: rgba(215, 38, 56, 0.28);
+  background: rgba(215, 38, 56, 0.08);
+}
+
 .fb-commitment ul {
   margin: 0;
   padding-left: 20px;

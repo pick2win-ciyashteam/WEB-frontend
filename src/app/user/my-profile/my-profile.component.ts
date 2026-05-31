@@ -44,10 +44,10 @@ export class MyProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.applyTabFromRoute();
-    this.profileService.loadProfile().subscribe();
-    this.loadTodayLineupsCta();
-  }
+  this.applyTabFromRoute();
+  this.profileService.loadProfile(true).subscribe();
+  this.loadTodayLineupsCta();
+}
 
   setTab(tab: 'profile' | 'teams' | 'feedback') {
     this.activeTab = tab;

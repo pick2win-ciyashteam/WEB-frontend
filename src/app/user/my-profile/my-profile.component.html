@@ -134,52 +134,7 @@
         </div>
       </div>
 
-      <div class="profile-table-wrap">
-        <div class="profile-table-head">
-          <div>
-            <h4 class="profile-table-title">
-              <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-              Coin Packs Purchased
-            </h4>
-            <span class="profile-table-count">2 packs - 110 coins added in total</span>
-          </div>
-          <button class="profile-download-btn" type="button">
-            <span class="material-symbols-outlined" aria-hidden="true">download</span>
-            Download full history (CSV)
-          </button>
-        </div>
-
-        <div class="table-scroll">
-          <table class="profile-table">
-            <thead>
-              <tr>
-                <th>Purchase Date</th>
-                <th>Pack</th>
-                <th>Coins Added</th>
-                <th>Payment ID (Stripe)</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="col-date">Jul 5, 2026 - 14:23 UTC</td>
-                <td class="col-match">Pro Pack</td>
-                <td class="col-coins">+100</td>
-                <td class="col-id">pi_3O8K9F2eZ...</td>
-                <td><span class="profile-status-pill paid">Paid</span></td>
-              </tr>
-              <tr>
-                <td class="col-date">Jun 12, 2026 - 10:08 UTC</td>
-                <td class="col-match">Starter Pack</td>
-                <td class="col-coins">+10</td>
-                <td class="col-id">pi_3O2N6A1xR...</td>
-                <td><span class="profile-status-pill paid">Paid</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="profile-table-foot">Full receipts including pricing, tax, and payment details are available in the downloadable CSV above.</p>
-      </div>
+     <app-purchase-history></app-purchase-history>
 
       <div class="transaction-note">
         <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>

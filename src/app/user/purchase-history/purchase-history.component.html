@@ -1,1 +1,82 @@
-<p>purchase-history works!</p>
+<div class="profile-table-wrap">
+  <div class="profile-table-head">
+    <div>
+      <h4 class="profile-table-title">
+        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+        Coin Packs Purchased
+      </h4>
+
+      <span class="profile-table-count">
+        {{ totalPacks }} packs - {{ totalCoins }} coins added in total
+      </span>
+    </div>
+
+    <button
+      class="profile-download-btn"
+      type="button"
+      [disabled]="!history.length"
+      (click)="downloadHistoryCSV()">
+      <span class="material-symbols-outlined" aria-hidden="true">download</span>
+      Download full history (CSV)
+    </button>
+  </div>
+
+  <div class="purchase-state" *ngIf="loading">
+    Loading purchase history...
+  </div>
+
+  <div class="purchase-state error" *ngIf="!loading && errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="table-scroll" *ngIf="!loading && history.length > 0">
+    <table class="profile-table">
+      <thead>
+        <tr>
+          <th>Purchase Date</th>
+          <th>Pack</th>
+          <th>Coins Added</th>
+          <th>Amount</th>
+          <th>Opening</th>
+          <th>Closing</th>
+          <th>Payment ID (Stripe)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of history">
+          <td class="col-date">{{ formatDate(item.created_at) }}</td>
+
+          <td class="col-match">
+            {{ item.plan_name }}
+            <small>{{ item.plan_subtitle }}</small>
+          </td>
+
+          <td class="col-coins">+{{ item.coins }}</td>
+          <td class="col-amount">${{ item.amount }}</td>
+          <td>{{ item.opening_coins }}</td>
+          <td>{{ item.closing_coins }}</td>
+
+          <td class="col-id" [title]="item.reference_id">
+            {{ shortPaymentId(item.reference_id) }}
+          </td>
+
+          <td>
+            <span class="profile-status-pill paid">
+              {{ statusLabel(item.status) }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="purchase-state" *ngIf="!loading && !history.length && !errorMessage">
+    No purchase history found.
+  </div>
+
+  <p class="profile-table-foot">
+    Full receipts including pricing, coin balance, and payment details are available in the downloadable CSV above.
+  </p>
+</div>

@@ -8,6 +8,7 @@ import { TeamsInfoComponent } from './teams-info/teams-info.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SharedModule } from '../shared/shared.module';
 import { PurchaseHistoryComponent } from './purchase-history/purchase-history.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { PurchaseHistoryComponent } from './purchase-history/purchase-history.co
   imports: [
     CommonModule,
     UserRoutingModule,
-    SharedModule
+    SharedModule, ReactiveFormsModule, FormsModule
   ]
 })
 export class UserModule { }

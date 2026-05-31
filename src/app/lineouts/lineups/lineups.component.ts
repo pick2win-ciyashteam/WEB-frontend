@@ -137,14 +137,14 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   statusLabel(match: LineoutMatch): string {
     if (this.isLive(match)) {
-      return match.lineupReady ? 'Live - lineups released' : 'Live';
+      return match.lineupReady ? 'Live - lineouts released' : 'Live';
     }
 
     if (match.lineupReady) {
-      return match.lineupJustReleased ? 'Lineups just dropped' : 'Lineups ready';
+      return match.lineupJustReleased ? 'lineouts released' : 'Lineups ready';
     }
 
-    return 'Waiting for lineups';
+    return 'Waiting for lineouts';
   }
 
   actionLabel(match: LineoutMatch): string {
@@ -190,7 +190,12 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.router.navigate(['/lineouts/matches', match.id]);
+    if (!this.isLoggedIn) {
+      this.authModal.open('login');
+      return;
+    }
+
+    this.openCreateUct(match);
   }
 
   canOpenMatch(match: LineoutMatch): boolean {
@@ -207,7 +212,11 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.router.navigate(['/lineouts/matches', match.id]);
+    this.openCreateUct(match);
+  }
+
+  openCreateUct(match: LineoutMatch): void {
+    this.router.navigate(['/lineouts/create-uct', match.id]);
   }
 
   openLogin(): void {

@@ -176,12 +176,16 @@ async confirmPayment(): Promise<void> {
     // coins/profile refresh
     this.api.getProfile().subscribe();
 
-    setTimeout(() => {
-      this.checkoutOpen = false;
-      this.selectedPlan = null;
-      this.paymentSucceeded = false;
-      this.router.navigate(['/user/profile']);
-    }, 1800);
+   setTimeout(() => {
+  this.checkoutOpen = false;
+  this.selectedPlan = null;
+  this.paymentSucceeded = false;
+
+  this.router.navigate(['/user/profile'], {
+    queryParams: { refresh: Date.now() }
+  });
+}, 1800);
+
   }
 
   this.paymentProcessing = false;
