@@ -21,6 +21,17 @@ export interface AdminCountryCreatePayload {
   is_active: number;
 }
 
+export interface AdminCountry {
+  id: number;
+  name: string;
+  code: string;
+  dial_code: string;
+  flag: string;
+  is_active?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface AdminBannerCreatePayload {
   name: string;
   image_url: string;
@@ -28,6 +39,19 @@ export interface AdminBannerCreatePayload {
   link: string;
   button: string;
   sort_order?: number;
+}
+
+export interface AdminBanner {
+  id: number;
+  name: string;
+  image_url: string;
+  description: string;
+  link: string;
+  button?: string;
+  sort_order?: number;
+  is_active?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface AdminSubscriptionCreatePayload {

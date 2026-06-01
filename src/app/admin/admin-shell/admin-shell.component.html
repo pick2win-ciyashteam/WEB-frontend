@@ -2,48 +2,68 @@
   <div class="admin-backdrop" (click)="closeSidebar()"></div>
 
   <aside class="admin-sidebar">
-    <div class="brand">
-      <img src="assets/logo.png" alt="Pick2Win">
-      <div>
-        <span>Pick2Win</span>
-        <b>Admin</b>
+    <div class="sb-brand">
+      <img class="sb-brand-img" src="assets/logo.png" alt="Pick2Win">
+      <div class="sb-name">
+        <span class="n">PICK2WIN</span>
+        <span class="t">ADMIN</span>
       </div>
     </div>
 
-    <nav class="side-nav" aria-label="Admin navigation">
+    <div class="sb-section">Core</div>
+
+    <nav class="sb-nav" aria-label="Admin navigation">
       <a
         *ngFor="let item of navItems"
+        class="sb-link"
         [routerLink]="item.route"
         routerLinkActive="active">
-        <span class="material-symbols-outlined" aria-hidden="true">{{ item.icon }}</span>
+        <span class="material-symbols-outlined sb-icn" aria-hidden="true">{{ item.icon }}</span>
         {{ item.label }}
       </a>
     </nav>
 
-    <button class="logout-side" type="button" (click)="logout()">
-      <span class="material-symbols-outlined" aria-hidden="true">logout</span>
-      <b>Logout</b>
-    </button>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-avatar">AD</div>
+        <div class="sb-user-info">
+          <span class="sb-user-name">Admin User</span>
+          <span class="sb-user-role">Super Admin</span>
+        </div>
+        <button class="sb-logout" type="button" aria-label="Logout" (click)="logout()">
+          <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+        </button>
+      </div>
+    </div>
   </aside>
 
-  <section class="admin-main">
-    <header class="admin-header">
+  <section class="main">
+    <header class="topbar">
       <button class="menu-btn" type="button" aria-label="Open admin menu" (click)="toggleSidebar()">
         <span class="material-symbols-outlined" aria-hidden="true">menu</span>
       </button>
 
-      <div>
-        <span>Admin Console</span>
-        <h1>{{ currentTitle }}</h1>
+      <div class="crumb">
+        <span>PICK2WIN</span>
+        <span class="sep">/</span>
+        <b>{{ currentTitle }}</b>
       </div>
 
-      <button class="logout-top" type="button" (click)="logout()">
-        <span class="material-symbols-outlined" aria-hidden="true">logout</span>
-        <b>Logout</b>
-      </button>
+      <div class="search-wrap">
+        <span class="material-symbols-outlined" aria-hidden="true">search</span>
+        <input class="search-input" type="search" placeholder="Search admin console">
+        <span class="search-kbd">CTRL K</span>
+      </div>
+
+      <div class="top-actions">
+        <span class="env-pill">LIVE</span>
+        <button class="icon-btn" type="button" aria-label="Logout" (click)="logout()">
+          <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+        </button>
+      </div>
     </header>
 
-    <main class="admin-content">
+    <main class="page">
       <router-outlet></router-outlet>
     </main>
   </section>

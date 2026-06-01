@@ -28,8 +28,28 @@ export class AdminService {
     return this.http.post(`${this.BASE}/admin/country/create`, data);
   }
 
+  deleteCountry(id: number | string): Observable<any> {
+    return this.http.delete(`${this.BASE}/user/countries/${id}`);
+  }
+
+  getCountries(): Observable<any> {
+    return this.http.get(`${this.BASE}/user/countries/get`);
+  }
+
   createBanner(data: AdminBannerCreatePayload): Observable<any> {
     return this.http.post(`${this.BASE}/admin/banners`, data);
+  }
+
+  getBanners(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/banners`);
+  }
+
+  updateBanner(id: number | string, data: Partial<AdminBannerCreatePayload>): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/banners/${id}`, data);
+  }
+
+  deleteBanner(id: number | string): Observable<any> {
+    return this.http.delete(`${this.BASE}/admin/banners/${id}`);
   }
 
   createSubscription(data: AdminSubscriptionCreatePayload): Observable<any> {

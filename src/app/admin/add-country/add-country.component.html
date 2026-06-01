@@ -39,6 +39,37 @@
       </select>
     </label>
 
-    <button type="submit" [disabled]="loading">{{ loading ? 'Adding...' : 'Add Country' }}</button>
+    <button class="add-country-submit" type="submit" [disabled]="loading">{{ loading ? 'Adding...' : 'Add Country' }}</button>
   </form>
+</section>
+
+<section class="admin-form-card country-list-card">
+  <div class="list-head">
+    <div>
+      <h2>Existing Countries</h2>
+      <p>Loaded from user countries API.</p>
+    </div>
+    <button type="button" class="refresh-btn" [disabled]="countriesLoading" (click)="loadCountries()">
+      {{ countriesLoading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="country-state" *ngIf="countriesLoading">Loading countries...</div>
+  <div class="country-state" *ngIf="!countriesLoading && !countries.length">No countries found.</div>
+
+  <div class="country-grid" *ngIf="!countriesLoading && countries.length">
+    <article class="country-card" *ngFor="let country of countries">
+      <div class="country-flag">{{ country.flag }}</div>
+      <div class="country-info">
+        <h3>{{ country.name }}</h3>
+        <p>{{ country.code }} · {{ country.dial_code }}</p>
+      </div>
+      <span class="country-status" [class.inactive]="country.is_active === 0">
+        {{ country.is_active === 0 ? 'Inactive' : 'Active' }}
+      </span>
+      <button class="delete-btn" type="button" [disabled]="deletingCountryId === country.id" (click)="deleteCountry(country)">
+        {{ deletingCountryId === country.id ? 'Deleting...' : 'Delete' }}
+      </button>
+    </article>
+  </div>
 </section>

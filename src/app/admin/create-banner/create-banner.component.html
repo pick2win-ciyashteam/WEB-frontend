@@ -3,7 +3,7 @@
     <span class="material-symbols-outlined" aria-hidden="true">image</span>
     <div>
       <h2>Create Banner</h2>
-      <p>Add a website banner with image, link, and button text.</p>
+      <p>{{ editingBannerId ? 'Update selected banner details.' : 'Add a website banner with image, link, and button text.' }}</p>
     </div>
   </div>
 
@@ -33,7 +33,7 @@
 
     <label>
       <span>Button Text</span>
-      <input type="text" formControlName="button" placeholder="Go to UCT">
+      <input type="text" formControlName="button" placeholder="">
     </label>
 
     <label>
@@ -41,6 +41,47 @@
       <input type="number" formControlName="sort_order" min="0" placeholder="Optional">
     </label>
 
-    <button type="submit" [disabled]="loading">{{ loading ? 'Creating...' : 'Create Banner' }}</button>
+    <button type="submit" [disabled]="loading">
+      {{ loading ? (editingBannerId ? 'Updating...' : 'Creating...') : (editingBannerId ? 'Update Banner' : 'Create Banner') }}
+    </button>
+    <button class="btn-muted" type="button" *ngIf="editingBannerId" [disabled]="loading" (click)="cancelEdit()">Cancel Edit</button>
   </form>
+</section>
+
+<section class="admin-form-card banner-list-card">
+  <div class="list-head">
+    <div>
+      <h2>Existing Banners</h2>
+      <p>Manage banner records from backend.</p>
+    </div>
+    <button type="button" class="refresh-btn" [disabled]="bannersLoading" (click)="loadBanners()">
+      {{ bannersLoading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="banner-state" *ngIf="bannersLoading">Loading banners...</div>
+  <div class="banner-state" *ngIf="!bannersLoading && !banners.length">No banners found.</div>
+
+  <div class="banner-grid" *ngIf="!bannersLoading && banners.length">
+    <article class="banner-card" *ngFor="let item of banners">
+      <img [src]="item.image_url" [alt]="item.name" loading="lazy">
+      <div class="banner-info">
+        <div>
+          <h3>{{ item.name }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
+        <div class="banner-meta">
+          <span>{{ item.button || 'No button' }}</span>
+          <span>Order: {{ item.sort_order ?? '-' }}</span>
+        </div>
+        <div class="banner-actions">
+          <a [href]="item.link" target="_blank" rel="noopener">Open Link</a>
+          <button type="button" (click)="editBanner(item)">Edit</button>
+          <button class="danger" type="button" [disabled]="deletingBannerId === item.id" (click)="deleteBanner(item)">
+            {{ deletingBannerId === item.id ? 'Deleting...' : 'Delete' }}
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
 </section>

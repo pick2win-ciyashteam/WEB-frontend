@@ -1,1 +1,109 @@
 @import '../admin-form.css';
+
+.banner-list-card {
+  margin-top: 18px;
+}
+
+.banner-state {
+  padding: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  color: #a8b8c8;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.banner-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.banner-card {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.16);
+  box-shadow: 0 12px 34px -28px rgba(0, 0, 0, 0.8);
+}
+
+.banner-card img {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  background: #020a12;
+}
+
+.banner-info {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.banner-info h3 {
+  margin: 0 0 5px;
+  color: #fff;
+  font-size: 17px;
+}
+
+.banner-info p {
+  margin: 0;
+  color: #c8d6e0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.banner-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.banner-meta span {
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #f4b400;
+  background: rgba(244, 180, 0, 0.1);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.banner-actions a,
+.banner-actions button {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 11.5px;
+  background: #0b3c5d;
+}
+
+.banner-actions .danger {
+  background: #d72638;
+}
+
+.banner-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 780px) {
+  .banner-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .banner-actions a,
+  .banner-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 460px) {
+  .banner-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

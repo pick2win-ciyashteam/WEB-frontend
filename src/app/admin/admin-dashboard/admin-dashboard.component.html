@@ -1,25 +1,164 @@
-<section class="dashboard-grid">
-  <article class="hero-card">
-    <span class="eyebrow">Admin Panel</span>
-    <h2>Dashboard ready</h2>
-    <p>Manage core PICK2WIN data from one console. The sidebar links are ready for banners, countries, and subscriptions.</p>
-  </article>
+<section class="view active">
+  <div class="ph">
+    <div class="ph-title-row">
+      <span class="ph-eyebrow">Operations overview</span>
+      <h1>Admin <em>Dashboard</em></h1>
+      <p class="ph-sub">Dummy snapshot data for PICK2WIN operations. Replace these values with API metrics later.</p>
+    </div>
 
-  <article class="stat-card">
-    <span class="material-symbols-outlined" aria-hidden="true">image</span>
-    <b>Create Banner</b>
-    <p>Add campaign banners for the website.</p>
-  </article>
+    <div class="ph-actions">
+      <button class="btn btn-ghost" type="button">
+        <span class="material-symbols-outlined" aria-hidden="true">download</span>
+        Export
+      </button>
+      <button class="btn btn-acid" type="button">
+        <span class="material-symbols-outlined" aria-hidden="true">sync</span>
+        Refresh
+      </button>
+    </div>
+  </div>
 
-  <article class="stat-card">
-    <span class="material-symbols-outlined" aria-hidden="true">public</span>
-    <b>Add Country</b>
-    <p>Create active countries with dial codes.</p>
-  </article>
+  <div class="kpi-grid">
+    <article class="kpi accent">
+      <div class="kpi-lbl">Total Users</div>
+      <div class="kpi-val">12.8K</div>
+      <div class="kpi-delta up">+18.4%</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">groups</span>
+    </article>
 
-  <article class="stat-card">
-    <span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
-    <b>Add Subscription</b>
-    <p>Create coin packs and validity rules.</p>
-  </article>
+    <article class="kpi green">
+      <div class="kpi-lbl">Coin Revenue</div>
+      <div class="kpi-val"><span class="cur">£</span>42K</div>
+      <div class="kpi-delta up">+9.7%</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">payments</span>
+    </article>
+
+    <article class="kpi amber">
+      <div class="kpi-lbl">UCT Runs</div>
+      <div class="kpi-val">3,421</div>
+      <div class="kpi-delta neutral">Today</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">bolt</span>
+    </article>
+
+    <article class="kpi">
+      <div class="kpi-lbl">Active Matches</div>
+      <div class="kpi-val">28</div>
+      <div class="kpi-delta up">+6 live</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">sports_soccer</span>
+    </article>
+
+    <article class="kpi red">
+      <div class="kpi-lbl">Failed Payments</div>
+      <div class="kpi-val">17</div>
+      <div class="kpi-delta dn">-2.1%</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">warning</span>
+    </article>
+
+    <article class="kpi">
+      <div class="kpi-lbl">Countries</div>
+      <div class="kpi-val">42</div>
+      <div class="kpi-delta neutral">Active</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">public</span>
+    </article>
+  </div>
+
+  <div class="two-col">
+    <article class="card">
+      <div class="card-h">
+        <div>
+          <h3>Weekly UCT Activity</h3>
+          <span class="sub">Last 7 days</span>
+        </div>
+        <button class="btn btn-sm btn-ghost" type="button">View all</button>
+      </div>
+      <div class="card-b">
+        <div class="chart">
+          <div class="bar-col"><div class="bar muted" style="height: 48%"><span class="bar-val">1,042</span></div><span class="bar-lbl">Wed</span></div>
+          <div class="bar-col"><div class="bar muted" style="height: 56%"><span class="bar-val">1,187</span></div><span class="bar-lbl">Thu</span></div>
+          <div class="bar-col"><div class="bar muted" style="height: 64%"><span class="bar-val">1,356</span></div><span class="bar-lbl">Fri</span></div>
+          <div class="bar-col"><div class="bar" style="height: 88%"><span class="bar-val">1,893</span></div><span class="bar-lbl">Sat</span></div>
+          <div class="bar-col"><div class="bar" style="height: 80%"><span class="bar-val">1,721</span></div><span class="bar-lbl">Sun</span></div>
+          <div class="bar-col"><div class="bar muted" style="height: 52%"><span class="bar-val">1,102</span></div><span class="bar-lbl">Mon</span></div>
+          <div class="bar-col"><div class="bar" style="height: 70%"><span class="bar-val">1,234</span></div><span class="bar-lbl">Tue</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-h">
+        <div>
+          <h3>Live Activity</h3>
+          <span class="sub">Dummy stream</span>
+        </div>
+      </div>
+      <div class="card-b">
+        <div class="feed">
+          <div class="feed-row">
+            <span class="feed-dot green"></span>
+            <div><b>Pro Pack purchased</b><small>United Kingdom · £160.00</small></div>
+            <time>2m</time>
+          </div>
+          <div class="feed-row">
+            <span class="feed-dot red"></span>
+            <div><b>Banner updated</b><small>FIFA 2026 hero campaign</small></div>
+            <time>9m</time>
+          </div>
+          <div class="feed-row">
+            <span class="feed-dot amber"></span>
+            <div><b>Match toggled active</b><small>SportMonks fixture batch</small></div>
+            <time>18m</time>
+          </div>
+          <div class="feed-row">
+            <span class="feed-dot"></span>
+            <div><b>Country added</b><small>India · +91 enabled</small></div>
+            <time>31m</time>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="two-col flip">
+    <article class="card">
+      <div class="card-h">
+        <div>
+          <h3>Quick Admin Actions</h3>
+          <span class="sub">Create records</span>
+        </div>
+      </div>
+      <div class="card-b quick-grid">
+        <a class="quick-link" routerLink="/admin/create-banner">
+          <span class="material-symbols-outlined" aria-hidden="true">image</span>
+          <b>Create Banner</b>
+          <small>Add hero or promo banner</small>
+        </a>
+        <a class="quick-link" routerLink="/admin/add-country">
+          <span class="material-symbols-outlined" aria-hidden="true">public</span>
+          <b>Add Country</b>
+          <small>Enable market and dial code</small>
+        </a>
+        <a class="quick-link" routerLink="/admin/add-subscription">
+          <span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
+          <b>Add Subscription</b>
+          <small>Create coin pack pricing</small>
+        </a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-h">
+        <div>
+          <h3>System Health</h3>
+          <span class="sub">Mock status</span>
+        </div>
+        <span class="status-pill">Stable</span>
+      </div>
+      <div class="card-b health-list">
+        <div><span>Backend API</span><b>99.98%</b></div>
+        <div><span>Stripe Checkout</span><b>Operational</b></div>
+        <div><span>SportMonks Sync</span><b>12 jobs queued</b></div>
+        <div><span>OTP Provider</span><b>Healthy</b></div>
+      </div>
+    </article>
+  </div>
 </section>
