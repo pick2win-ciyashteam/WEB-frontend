@@ -86,3 +86,12 @@ img, svg {
   max-width: 100%;
   display: block;
 }
+
+/* Hide Stripe-injected floating badge/button that can remain visible outside checkout. */
+iframe[src*="stripe"][style*="position: fixed"],
+div[class*="stripe"][style*="position: fixed"],
+div[id*="stripe"][style*="position: fixed"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

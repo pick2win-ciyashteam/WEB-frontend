@@ -35,7 +35,11 @@ export class ApiService {
   }
 
   deleteAccount(): Observable<any> {
-    return this.http.delete(`${this.BASE}/user/user-auth/delete`);
+    return this.http.post(`${this.BASE}/user/user-auth/delete-account`, {});
+  }
+
+  confirmDeleteAccount(data: { otp: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user/user-auth/confirm-delete-account`, data);
   }
 
   changeMobile(data: { new_mobile: string }): Observable<any> {

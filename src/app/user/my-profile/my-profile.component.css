@@ -897,6 +897,7 @@ tbody tr:hover {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow-y: auto;
   background: rgba(2, 10, 18, 0.78);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -911,6 +912,10 @@ tbody tr:hover {
 .del-modal-card {
   position: relative;
   width: min(560px, 100%);
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 30px;
   border-radius: 18px;
   color: var(--paper);
@@ -919,6 +924,21 @@ tbody tr:hover {
     linear-gradient(135deg, rgba(9, 31, 48, 0.98), rgba(2, 10, 18, 0.98));
   border: 1px solid rgba(215, 38, 56, 0.28);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(244, 180, 0, 0.5) rgba(255, 255, 255, 0.08);
+}
+
+.del-modal-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.del-modal-card::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(244, 180, 0, 0.5);
+}
+
+.del-modal-card::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .del-modal-close {
@@ -1039,6 +1059,29 @@ tbody tr:hover {
   accent-color: var(--acid);
 }
 
+.del-message {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 11px 13px;
+  border: 1px solid rgba(11, 204, 142, 0.28);
+  border-radius: 10px;
+  color: #c8fff0;
+  background: rgba(11, 204, 142, 0.08);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.del-message .material-symbols-outlined {
+  color: var(--green);
+  font-size: 18px;
+}
+
+.del-otp-box {
+  border-color: rgba(244, 180, 0, 0.28);
+  background: rgba(244, 180, 0, 0.08);
+}
+
 .del-error {
   display: flex;
   gap: 8px;
@@ -1058,10 +1101,15 @@ tbody tr:hover {
 }
 
 .del-actions {
+  position: sticky;
+  bottom: -30px;
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: 10px;
+  margin: 2px -30px -30px;
+  padding: 14px 30px 30px;
+  background: linear-gradient(180deg, rgba(2, 10, 18, 0), rgba(2, 10, 18, 0.96) 26%, rgba(2, 10, 18, 0.98));
 }
 
 .del-btn-cancel,
@@ -1149,6 +1197,73 @@ tbody tr:hover {
 @media (max-width: 640px) {
   .profile-page {
     padding: 38px 0 54px;
+  }
+
+  .del-modal {
+    align-items: flex-end;
+    padding: 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .del-modal-card {
+    width: 100%;
+    max-height: calc(100vh - 20px);
+    max-height: calc(100dvh - 20px);
+    padding: 20px 14px calc(16px + env(safe-area-inset-bottom));
+    border-radius: 18px 18px 14px 14px;
+  }
+
+  .del-modal-close {
+    top: 10px;
+    right: 10px;
+  }
+
+  .del-step {
+    gap: 12px;
+  }
+
+  .del-icon-wrap {
+    width: 48px;
+    height: 48px;
+  }
+
+  .del-icon-wrap .material-symbols-outlined {
+    font-size: 28px;
+  }
+
+  .del-h {
+    padding-right: 38px;
+    font-size: 25px;
+  }
+
+  .del-sub,
+  .del-what-list,
+  .del-checkbox,
+  .del-error,
+  .del-message {
+    font-size: 12.5px;
+  }
+
+  .del-what {
+    padding: 13px;
+  }
+
+  .del-what-list {
+    gap: 6px;
+  }
+
+  .del-actions {
+    bottom: calc(-16px - env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0 -14px calc(-16px - env(safe-area-inset-bottom));
+    padding: 12px 14px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .del-btn-cancel,
+  .del-btn-confirm {
+    width: 100%;
+    min-height: 44px;
   }
 
   .edit-modal {

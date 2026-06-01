@@ -30,8 +30,11 @@ export class MyProfileComponent implements OnInit {
   emailError = '';
   deleteModalOpen = false;
   deleteConsent = false;
+  deleteOtp = '';
+  deleteOtpSent = false;
   accountDeleted = false;
   deletingAccount = false;
+  deleteMessage = '';
   deleteError = '';
   deletionTimestamp = '';
   showTodayLineupsCta = false;
@@ -218,8 +221,11 @@ export class MyProfileComponent implements OnInit {
   openDeleteModal(): void {
     this.deleteModalOpen = true;
     this.deleteConsent = false;
+    this.deleteOtp = '';
+    this.deleteOtpSent = false;
     this.accountDeleted = false;
     this.deletingAccount = false;
+    this.deleteMessage = '';
     this.deleteError = '';
     this.deletionTimestamp = '';
   }
@@ -232,12 +238,13 @@ export class MyProfileComponent implements OnInit {
     this.deleteModalOpen = false;
   }
 
-  executeDeleteAccount(): void {
+  requestDeleteAccountOtp(): void {
     if (!this.deleteConsent || this.deletingAccount) {
       return;
     }
 
     this.deletingAccount = true;
+    this.deleteMessage = '';
     this.deleteError = '';
 
     this.api.deleteAccount().subscribe({
@@ -249,13 +256,48 @@ export class MyProfileComponent implements OnInit {
           return;
         }
 
+        this.deleteOtpSent = true;
+        this.deleteMessage = res?.message || 'Delete account OTP sent. Please enter OTP to confirm.';
+      },
+      error: (err) => {
+        this.deletingAccount = false;
+        this.deleteError = err?.error?.message || err?.error?.error || 'Unable to send delete OTP. Please try again.';
+      }
+    });
+  }
+
+  confirmDeleteAccount(): void {
+    if (!this.deleteConsent || this.deletingAccount) {
+      return;
+    }
+
+    const otp = this.deleteOtp.trim();
+    this.deleteMessage = '';
+    this.deleteError = '';
+
+    if (!/^[0-9]{4,8}$/.test(otp)) {
+      this.deleteError = 'Enter the OTP sent for account deletion.';
+      return;
+    }
+
+    this.deletingAccount = true;
+
+    this.api.confirmDeleteAccount({ otp }).subscribe({
+      next: (res) => {
+        this.deletingAccount = false;
+
+        if (res?.success === false) {
+          this.deleteError = res?.message || 'Delete OTP verification failed.';
+          return;
+        }
+
         this.accountDeleted = true;
         this.deletionTimestamp = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
         setTimeout(() => this.authService.logout(), 1400);
       },
       error: (err) => {
         this.deletingAccount = false;
-        this.deleteError = err?.error?.message || err?.error?.error || 'Unable to delete account. Please try again.';
+        this.deleteError = err?.error?.message || err?.error?.error || 'Delete OTP verification failed.';
       }
     });
   }

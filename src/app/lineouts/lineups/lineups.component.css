@@ -540,16 +540,24 @@
   min-width: 146px;
   min-height: 42px;
   padding: 0 18px;
-  border: 1px solid rgba(11, 204, 142, 0.55);
+  border: 1px solid rgba(244, 180, 0, 0.82);
   border-radius: 999px;
-  color: #03170f;
-  background: var(--pitch-2);
+  color: #07111c;
+  background: linear-gradient(135deg, #ffd451 0%, var(--gold) 44%, #ff7a1a 100%);
+  box-shadow:
+    0 12px 28px rgba(244, 180, 0, 0.28),
+    0 0 0 3px rgba(244, 180, 0, 0.1);
   font-weight: 900;
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
 .uct-btn:hover:not(:disabled) {
-  filter: brightness(1.06);
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 16px 34px rgba(244, 180, 0, 0.36),
+    0 0 0 4px rgba(244, 180, 0, 0.14);
 }
 
 .uct-btn.locked,
@@ -557,6 +565,8 @@
   color: rgba(200, 214, 224, 0.8);
   background: rgba(91, 176, 230, 0.13);
   border-color: rgba(91, 176, 230, 0.32);
+  box-shadow: none;
+  transform: none;
   cursor: not-allowed;
 }
 
@@ -787,7 +797,7 @@
   }
 }
 
-.matches-panel:first-of-type {
+.today-matches-panel {
   position: relative;
   overflow: hidden;
     margin-top: 6px !important;
@@ -801,7 +811,7 @@
     0 0 34px rgba(244, 180, 0, 0.12);
 }
 
-.matches-panel:first-of-type::before {
+.today-matches-panel::before {
   content: "TODAY LIVE";
   position: absolute;
   top: 18px;
@@ -819,14 +829,14 @@
   box-shadow: 0 12px 28px rgba(215, 38, 56, 0.28);
 }
 
-.matches-panel:first-of-type .panel-kicker {
+.today-matches-panel .panel-kicker {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   color: var(--gold);
 }
 
-.matches-panel:first-of-type .panel-kicker::before {
+.today-matches-panel .panel-kicker::before {
   content: "";
   width: 8px;
   height: 8px;
@@ -836,12 +846,12 @@
   animation: pingToday 1.8s infinite;
 }
 
-.matches-panel:first-of-type .panel-head h2 {
+.today-matches-panel .panel-head h2 {
   color: var(--paper);
   text-shadow: 0 0 24px rgba(244, 180, 0, 0.16);
 }
 
-.matches-panel:first-of-type .match-count {
+.today-matches-panel .match-count {
   border-color: rgba(244, 180, 0, 0.38);
   color: var(--gold);
   background: rgba(244, 180, 0, 0.08);
@@ -862,7 +872,7 @@
 }
 
 @media (max-width: 520px) {
-  .matches-panel:first-of-type::before {
+  .today-matches-panel::before {
     top: 14px;
     right: -48px;
     width: 160px;
@@ -1132,9 +1142,15 @@
   .uct-btn {
     min-width: 146px;
     min-height: 42px;
-    color: var(--paper-2);
-    background: rgba(91,176,230,.14);
-    border-color: rgba(91,176,230,.36);
+  }
+
+  .uct-btn:not(.locked):not(:disabled) {
+    color: #07111c;
+    background: linear-gradient(135deg, #ffd451 0%, var(--gold) 44%, #ff7a1a 100%);
+    border-color: rgba(244,180,0,.85);
+    box-shadow:
+      0 12px 26px rgba(244,180,0,.3),
+      0 0 0 3px rgba(244,180,0,.12);
   }
 
   .day-label {

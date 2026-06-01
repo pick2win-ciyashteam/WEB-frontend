@@ -120,7 +120,7 @@
                 <td>{{ subscriptionPurchased(profile) }}</td>
                 <td>{{ profile.subscription.matches_allowed }}</td>
                 <td>{{ profile.subscription.matches_used }}</td>
-                <td class="col-coins">{{ profile.subscription.matches_remaining }}</td>
+                <td class="col-coins">{{ availableCoins(profile) }}</td>
                 <td>{{ subscriptionExpires(profile) }}</td>
                 <td><span class="profile-status-pill" [ngClass]="subscriptionStatusClass(profile)">{{ subscriptionStatus(profile) }}</span></td>
               </tr>
@@ -303,6 +303,25 @@
         <span>I understand this is permanent and I want to delete my account.</span>
       </label>
 
+      <div class="del-message" *ngIf="deleteMessage">
+        <span class="material-symbols-outlined" aria-hidden="true">mark_email_read</span>
+        {{ deleteMessage }}
+      </div>
+
+      <div class="otp-box del-otp-box" *ngIf="deleteOtpSent">
+        <label class="edit-field">
+          <span>Delete OTP</span>
+          <input
+            type="text"
+            inputmode="numeric"
+            maxlength="8"
+            [value]="deleteOtp"
+            [disabled]="deletingAccount"
+            placeholder="Enter OTP"
+            (input)="deleteOtp = $any($event.target).value">
+        </label>
+      </div>
+
       <div class="del-error" *ngIf="deleteError">
         <span class="material-symbols-outlined" aria-hidden="true">error</span>
         {{ deleteError }}
@@ -310,8 +329,21 @@
 
       <div class="del-actions">
         <button class="del-btn-cancel" type="button" [disabled]="deletingAccount" (click)="closeDeleteModal()">Cancel</button>
-        <button class="del-btn-confirm" type="button" [disabled]="!deleteConsent || deletingAccount" (click)="executeDeleteAccount()">
-          {{ deletingAccount ? 'Deleting...' : 'Delete my account' }}
+        <button
+          class="del-btn-confirm"
+          type="button"
+          *ngIf="!deleteOtpSent"
+          [disabled]="!deleteConsent || deletingAccount"
+          (click)="requestDeleteAccountOtp()">
+          {{ deletingAccount ? 'Sending OTP...' : 'Send Delete OTP' }}
+        </button>
+        <button
+          class="del-btn-confirm"
+          type="button"
+          *ngIf="deleteOtpSent"
+          [disabled]="!deleteConsent || deletingAccount || !deleteOtp.trim()"
+          (click)="confirmDeleteAccount()">
+          {{ deletingAccount ? 'Deleting...' : 'Confirm Delete' }}
         </button>
       </div>
     </div>

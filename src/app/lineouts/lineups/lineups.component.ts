@@ -48,6 +48,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   matchesError = '';
   coinBalance = 0;
   showSeriesCoverage = false;
+  readonly showUctButtonForTesting = false;
 
   constructor(
     private api: ApiService,
@@ -148,11 +149,11 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   actionLabel(match: LineoutMatch): string {
-    if (!match.lineupReady) {
+    if (!this.canRunUct(match)) {
       return 'UCT Locked';
     }
 
-    return this.isLoggedIn ? 'Generate UCT' : 'Sign in to generate';
+    return this.isLoggedIn ? 'Run UCT' : 'Sign in to run';
   }
 
   kickoffInfo(match: LineoutMatch): string {
@@ -199,11 +200,15 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   canOpenMatch(match: LineoutMatch): boolean {
-    return match.lineupReady;
+    return this.canRunUct(match);
+  }
+
+  canRunUct(match: LineoutMatch): boolean {
+    return this.showUctButtonForTesting || match.lineupReady;
   }
 
   handleMatchAction(match: LineoutMatch): void {
-    if (!match.lineupReady) {
+    if (!this.canRunUct(match)) {
       return;
     }
 

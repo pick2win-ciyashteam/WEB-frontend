@@ -94,7 +94,7 @@ th,
 
 table {
   width: 100%;
-  min-width: 760px;
+  min-width: 860px;
   border-collapse: collapse;
   background: rgba(0, 0, 0, 0.18);
 }
@@ -128,11 +128,13 @@ tbody tr:hover {
 }
 
 .col-date,
+.col-expiry,
 .col-id {
   font-family: var(--font-mono);
 }
 
 .col-date,
+.col-expiry,
 .col-match {
   color: var(--paper);
 }
@@ -173,17 +175,52 @@ tbody tr:hover {
 }
 
 @media (max-width: 640px) {
+  .profile-table-wrap {
+    margin-top: 16px;
+    border-radius: 12px;
+  }
+
   .profile-table-head {
     display: grid;
+    gap: 14px;
     padding: 16px;
+    align-items: stretch;
+  }
+
+  .profile-table-title {
+    align-items: flex-start;
+    gap: 7px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
+  .profile-table-title .material-symbols-outlined {
+    margin-top: 1px;
+  }
+
+  .profile-table-count {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding: 7px 9px;
+    font-size: 9px;
+    line-height: 1.4;
+    text-align: center;
+    white-space: normal;
   }
 
   .profile-download-btn {
     width: 100%;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 10px;
+    font-size: 13px;
   }
 
   .table-scroll {
     overflow: visible;
+    padding: 12px;
   }
 
   table,
@@ -201,42 +238,130 @@ tbody tr:hover {
   }
 
   tr {
-    margin: 12px;
-    padding: 12px;
+    margin: 0 0 12px;
+    padding: 13px 14px;
     border-radius: 12px;
     border: 1px solid var(--line);
-    background: rgba(255, 255, 255, 0.035);
+    background:
+      radial-gradient(circle at top left, rgba(244, 180, 0, 0.06), transparent 48%),
+      rgba(255, 255, 255, 0.035);
+    box-shadow: 0 12px 28px -22px rgba(0, 0, 0, 0.75);
+  }
+
+  tr:last-child {
+    margin-bottom: 0;
   }
 
   td {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(94px, 38%) minmax(0, 1fr);
     align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 9px 0;
+    gap: 10px;
+    min-height: 34px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--line);
     text-align: right;
     overflow-wrap: anywhere;
+    font-size: 13px;
+    line-height: 1.35;
   }
 
   td:last-child {
     border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  td:first-child {
+    padding-top: 0;
   }
 
   td::before {
-    flex: 0 0 auto;
     color: var(--paper-3);
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 900;
     letter-spacing: 0.1em;
     text-align: left;
     text-transform: uppercase;
+    line-height: 1.45;
+  }
+
+  .col-date,
+  .col-expiry,
+  .col-match,
+  .col-id,
+  .col-amount,
+  .col-coins {
+    min-width: 0;
+  }
+
+  .col-date {
+    font-size: 12px;
+  }
+
+  .col-expiry {
+    font-size: 12px;
+  }
+
+  .col-match {
+    color: var(--paper);
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .col-coins,
+  .col-amount {
+    font-size: 15px;
+    font-weight: 950;
+  }
+
+  .col-amount {
+    color: var(--paper);
+  }
+
+  .col-id {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .profile-status-pill {
+    justify-self: end;
+    min-height: 26px;
+    padding: 0 10px;
+    font-size: 9px;
   }
 
   .profile-table td:nth-child(1)::before { content: "Purchase Date"; }
   .profile-table td:nth-child(2)::before { content: "Pack"; }
-  .profile-table td:nth-child(3)::before { content: "Coins Added"; }
-  .profile-table td:nth-child(4)::before { content: "Payment ID"; }
-  .profile-table td:nth-child(5)::before { content: "Status"; }
+  .profile-table td:nth-child(3)::before { content: "Expiry Date"; }
+  .profile-table td:nth-child(4)::before { content: "Coins Added"; }
+  .profile-table td:nth-child(5)::before { content: "Amount"; }
+  .profile-table td:nth-child(6)::before { content: "Payment ID"; }
+  .profile-table td:nth-child(7)::before { content: "Status"; }
+
+  .profile-table-foot {
+    padding: 13px 16px;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+}
+
+@media (max-width: 380px) {
+  .table-scroll {
+    padding: 10px;
+  }
+
+  tr {
+    padding: 12px;
+  }
+
+  td {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    text-align: left;
+  }
+
+  .profile-status-pill {
+    justify-self: start;
+  }
 }

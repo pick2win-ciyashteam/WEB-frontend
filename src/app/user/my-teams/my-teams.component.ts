@@ -63,7 +63,7 @@ export class MyTeamsComponent implements OnInit {
   matches: GeneratedMatch[] = [];
   previewTeams: PreviewTeam[] = [];
 
-  readonly positionRows: PlayerPosition[] = ['FWD', 'MID', 'DEF', 'GK'];
+  readonly positionRows: PlayerPosition[] = ['GK', 'DEF', 'MID', 'FWD'];
 
   loadingMatches = false;
   loadingTeams = false;
@@ -281,6 +281,43 @@ downloadCSV(rows: any[], fileName: string) {
     return this.previewTeam?.players.filter(player => player.pos === position) ?? [];
   }
 
+  playerRowsByPosition(position: PlayerPosition): PreviewPlayer[][] {
+    const players = this.playersByPosition(position);
+    const rows: PreviewPlayer[][] = [];
+
+    for (let i = 0; i < players.length; i += 4) {
+      rows.push(players.slice(i, i + 4));
+    }
+
+    return rows;
+  }
+
+  roleLabel(position: PlayerPosition): string {
+    const labels: Record<PlayerPosition, string> = {
+      GK: 'GOAL-KEEPER',
+      DEF: 'DEFENDER',
+      MID: 'MID-FIELDER',
+      FWD: 'FORWARD'
+    };
+
+    return labels[position];
+  }
+
+  roleDotColor(position: PlayerPosition): string {
+    const colors: Record<PlayerPosition, string> = {
+      GK: '#f59e0b',
+      DEF: '#3b82f6',
+      MID: '#10b981',
+      FWD: '#ef4444'
+    };
+
+    return colors[position];
+  }
+
+  rowLayoutClass(count: number): string {
+    return `count-${Math.min(Math.max(count, 1), 4)}`;
+  }
+
   isCaptain(player: PreviewPlayer): boolean {
     return player.captain === 'C' || player.captain === 'CVC';
   }
@@ -300,7 +337,7 @@ downloadCSV(rows: any[], fileName: string) {
   }
 
   teamColor(side: 'home' | 'away'): string {
-    return side === 'home' ? '#6cabdd' : '#ef0107';
+    return side === 'home' ? '#b91c1c' : '#1d4ed8';
   }
 
   private mapTeamCard(team: ApiPlayer, teamNumber: number): PreviewTeam {

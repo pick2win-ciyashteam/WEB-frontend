@@ -13,6 +13,13 @@ interface PurchaseHistory {
   transaction_type: string;
   plan_name: string;
   plan_subtitle: string;
+  expiry_date?: string;
+  expires_at?: string;
+  package_expiry_date?: string;
+  plan_expiry_date?: string;
+  subscription_expiry_date?: string;
+  valid_until?: string;
+  [key: string]: any;
 }
 
 @Component({
@@ -41,6 +48,7 @@ export class PurchaseHistoryComponent implements OnInit {
     this.api.GetPurchaseHistory().subscribe({
       next: (res: any) => {
         this.history = Array.isArray(res?.data) ? res.data : [];
+        this.history.forEach(item => this.logMissingExpiryDate(item));
 
         this.totalPacks = this.history.length;
         this.totalCoins = this.history.reduce(
@@ -72,6 +80,18 @@ export class PurchaseHistoryComponent implements OnInit {
     }).format(new Date(value));
   }
 
+  packageExpiryDate(item: PurchaseHistory): string {
+    const expiryDate =
+      item.expiry_date ||
+      item.expires_at ||
+      item.package_expiry_date ||
+      item.plan_expiry_date ||
+      item.subscription_expiry_date ||
+      item.valid_until;
+
+    return expiryDate ? this.formatDate(expiryDate) : '-';
+  }
+
   shortPaymentId(value: string): string {
     if (!value) return '-';
     return value.length > 16 ? `${value.slice(0, 14)}...` : value;
@@ -89,6 +109,7 @@ export class PurchaseHistoryComponent implements OnInit {
       PurchaseDate: this.formatDate(item.created_at),
       Pack: item.plan_name,
       Subtitle: item.plan_subtitle,
+      PackageExpiryDate: this.packageExpiryDate(item),
       CoinsAdded: item.coins,
       AmountUSD: item.amount,
       OpeningCoins: item.opening_coins,
@@ -120,5 +141,13 @@ export class PurchaseHistoryComponent implements OnInit {
     link.click();
 
     URL.revokeObjectURL(link.href);
+  }
+
+  private logMissingExpiryDate(item: PurchaseHistory): void {
+    if (this.packageExpiryDate(item) !== '-') {
+      return;
+    }
+
+    console.log('Purchase history item missing package expiry date:', item);
   }
 }

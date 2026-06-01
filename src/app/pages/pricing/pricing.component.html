@@ -36,7 +36,7 @@
       Each coin covers <b>one official lineup workflow</b> · <b>one match UCT generation</b> · <b>20 structured final teams</b> · full review · CSV export · manual editing flexibility. Coins are only consumed when you actually use UCT for a match.
     </div>
 
-    <div class="free-banner reveal">
+    <div class="free-banner reveal" *ngIf="!(loggedIn$ | async) || showFreeTrialBanner(profile$ | async)">
       <div class="banner-icon material-symbols-outlined" aria-hidden="true">redeem</div>
       <div class="banner-body">
         <span class="eyebrow">Free First Match · Every New User</span>
@@ -267,21 +267,26 @@
     </div>
 
     <ng-template #paymentForm>
-      <div id="payment-element"></div>
+      <div class="checkout-form">
+        <div class="payment-field-card">
+          <div class="payment-field-label">Card / Payment Details</div>
+          <div id="payment-element"></div>
+        </div>
 
-      <p class="pack-status error" *ngIf="paymentError">{{ paymentError }}</p>
+        <p class="pack-status error" *ngIf="paymentError">{{ paymentError }}</p>
 
-      <button
-        class="credit-pack-cta"
-        type="button"
-        [disabled]="paymentProcessing"
-        (click)="confirmPayment()">
-        {{ paymentProcessing ? 'Processing...' : 'Pay Now' }}
-      </button>
+        <button
+          class="credit-pack-cta checkout-pay-btn"
+          type="button"
+          [disabled]="paymentProcessing"
+          (click)="confirmPayment()">
+          {{ paymentProcessing ? 'Processing...' : 'Pay Now' }}
+        </button>
 
-      <button type="button" class="signup-nudge-btn-ghost" [disabled]="paymentProcessing" (click)="closeCheckout()">
-        Cancel
-      </button>
+        <button type="button" class="signup-nudge-btn-ghost checkout-cancel-btn" [disabled]="paymentProcessing" (click)="closeCheckout()">
+          Cancel
+        </button>
+      </div>
     </ng-template>
   </div>
 </div>

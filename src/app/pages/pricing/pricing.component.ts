@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { firstValueFrom } from 'rxjs';
-import { CheckoutSessionResponse, StripeConfigResponse, SubscriptionPlan } from 'src/app/core/interfaces/content';
+import { CheckoutSessionResponse, StripeConfigResponse, SubscriptionPlan, UserProfile } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ProfileService } from 'src/app/core/services/profile.service';
 
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.css']
 })
-export class PricingComponent implements OnInit {
+export class PricingComponent implements OnInit, OnDestroy {
   loggedIn$ = this.authService.loggedIn$;
+  profile$ = this.profileService.profile$;
   loading = true;
   errorMessage = '';
   paymentError = '';
@@ -38,12 +40,17 @@ paymentSucceeded = false;
     private api: ApiService,
     private authModal: AuthModalService,
     private authService: AuthService,
+    private profileService: ProfileService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.handleStripeReturn();
+
+    if (this.authService.isLoggedIn()) {
+      this.profileService.loadProfile(true).subscribe();
+    }
 
     this.api.getSubscriptionPlans().subscribe({
       next: (res) => {
@@ -63,6 +70,16 @@ paymentSucceeded = false;
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.paymentElement) {
+      this.paymentElement.unmount();
+      this.paymentElement = null;
+    }
+
+    this.elements = null;
+    this.stripe = null;
+  }
+
   openSignup(): void {
     this.authModal.open('signup');
   }
@@ -74,6 +91,11 @@ paymentSucceeded = false;
     }
 
     this.openSignup();
+  }
+
+  showFreeTrialBanner(profile: UserProfile | null): boolean {
+    return Number(profile?.free_trial_used) === 0
+      && String(profile?.free_trial_status || '').toLowerCase() === 'available';
   }
 
   openLogin(): void {
@@ -123,7 +145,16 @@ paymentSucceeded = false;
     this.elements = this.stripe.elements({
       clientSecret: this.clientSecret,
       appearance: {
-        theme: 'night'
+        theme: 'stripe',
+        variables: {
+          colorPrimary: '#f4b400',
+          colorBackground: '#ffffff',
+          colorText: '#102235',
+          colorDanger: '#d72638',
+          fontFamily: 'Inter, system-ui, sans-serif',
+          borderRadius: '10px',
+          spacingUnit: '4px'
+        }
       }
     });
 

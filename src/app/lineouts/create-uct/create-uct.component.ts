@@ -212,7 +212,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/lineouts/matches', this.matchId]);
+    this.router.navigate(['/lineouts']);
   }
 
   nextStep(): void {

@@ -272,6 +272,8 @@ export interface UserProfile {
   mobile_verify: number;
   account_status: string;
   created_at: string;
+  free_trial_used?: number | string;
+  free_trial_status?: string;
   coins?: UserCoins;
   subscription?: UserSubscription | null;
 }

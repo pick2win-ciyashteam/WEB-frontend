@@ -10,7 +10,6 @@ import { FaqComponent } from './faq/faq.component';
 import { TermsComponent } from './terms/terms.component';
 import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
-import { PlayingTeamComponent } from '../lineouts/playing-team/playing-team.component';
 import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component';
 import { AllSeriesCoverComponent } from '../lineouts/all-series-cover/all-series-cover.component';
 
@@ -29,7 +28,8 @@ const routes: Routes = [
   },
   {
     path: 'lineouts/matches/:id',
-    component: PlayingTeamComponent
+    redirectTo: 'lineouts',
+    pathMatch: 'full'
   },
   {
     path: 'lineouts/create-uct/:id',

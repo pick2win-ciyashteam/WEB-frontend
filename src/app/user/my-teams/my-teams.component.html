@@ -204,22 +204,42 @@
   </div>
 </ng-template>
 
-<div class="preview-overlay open" *ngIf="previewTeam" (click)="closePreview()">
+<div class="preview-overlay open" *ngIf="previewTeam">
   <div
     class="preview-modal"
     role="dialog"
     aria-modal="true"
-    aria-labelledby="previewTitle"
-    (click)="$event.stopPropagation()">
+    aria-labelledby="previewTitle">
 
     <div class="preview-h">
-      <h3 id="previewTitle">
-        Team {{ previewIndex + 1 }} - {{ previewTeam.split }} split
-      </h3>
+      <div class="preview-h-side">
+        <span class="preview-h-small">Players</span>
+        <strong>{{ previewTeam.players.length }}<span>/11</span></strong>
+      </div>
 
-      <button class="preview-close" type="button" aria-label="Close preview" (click)="closePreview()">
-        <span class="material-symbols-outlined" aria-hidden="true">close</span>
-      </button>
+      <div class="preview-h-center">
+        <div class="preview-score-row">
+          <span class="preview-team-badge home">{{ teamCode('home') }}</span>
+          <b>{{ previewTeam.homeCount }}</b>
+          <span class="preview-score-dash">-</span>
+          <b>{{ previewTeam.awayCount }}</b>
+          <span class="preview-team-badge away">{{ teamCode('away') }}</span>
+        </div>
+        <h3 id="previewTitle">Team {{ previewIndex + 1 }} Preview</h3>
+      </div>
+
+      <div class="preview-h-actions">
+        <button class="preview-icon-btn" type="button" aria-label="Previous team" (click)="navPreview(-1)">
+          <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+        </button>
+        <button class="preview-icon-btn" type="button" aria-label="Next team" (click)="navPreview(1)">
+          <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+        </button>
+
+        <button class="preview-close" type="button" aria-label="Close preview" (click)="closePreview()">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </div>
     </div>
 
     <div class="mt-helper-note" *ngIf="loadingPlayers">
@@ -227,26 +247,50 @@
     </div>
 
     <div class="preview-pitch" *ngIf="!loadingPlayers">
-
-      <div class="preview-row" *ngFor="let position of positionRows">
-        <div
-          class="pp-card"
-          *ngFor="let player of playersByPosition(position)"
-          [class.captain]="isCaptain(player)"
-          [class.vice]="isViceCaptain(player)">
-
-          <div class="pp-cap-badge" *ngIf="isCaptain(player)">C</div>
-          <div class="pp-cap-badge vc" *ngIf="isViceCaptain(player)">VC</div>
-
-          <div class="pp-avatar" [style.background]="teamColor(player.team)">
-            {{ playerInitials(player) }}
-          </div>
-
-          <div class="pp-name">{{ player.name }}</div>
-          <div class="pp-meta">{{ teamCode(player.team) }} - {{ player.pos }}</div>
-        </div>
+      <div class="pitch-grass" aria-hidden="true">
+        <span class="pitch-border"></span>
+        <span class="pitch-half"></span>
+        <span class="pitch-circle"></span>
+        <span class="pitch-dot"></span>
+        <span class="pitch-penalty top"></span>
+        <span class="pitch-penalty bottom"></span>
+        <span class="pitch-goal top"></span>
+        <span class="pitch-goal bottom"></span>
       </div>
 
+      <div class="preview-field">
+        <ng-container *ngFor="let position of positionRows">
+          <div class="preview-role-section" *ngIf="playersByPosition(position).length">
+            <div class="preview-role-pill">
+              <span [style.background]="roleDotColor(position)"></span>
+              {{ roleLabel(position) }}
+            </div>
+
+            <div
+              class="preview-row"
+              *ngFor="let row of playerRowsByPosition(position)"
+              [ngClass]="rowLayoutClass(row.length)">
+              <div
+                class="pp-card"
+                *ngFor="let player of row"
+                [class.captain]="isCaptain(player)"
+                [class.vice]="isViceCaptain(player)">
+
+                <div class="pp-avatar">
+                  <span>{{ playerInitials(player) }}</span>
+                </div>
+
+                <div class="pp-cap-badge" [style.background]="teamColor(player.team)" *ngIf="isCaptain(player)">C</div>
+                <div class="pp-cap-badge vc" [style.background]="teamColor(player.team)" *ngIf="isViceCaptain(player)">VC</div>
+
+                <div class="pp-name" [style.background]="teamColor(player.team)">
+                  {{ player.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
     </div>
 
     <div class="preview-foot" *ngIf="!loadingPlayers">
@@ -255,8 +299,6 @@
         <span>DEF <b>{{ previewTeam.counts.DEF }}</b></span>
         <span>MID <b>{{ previewTeam.counts.MID }}</b></span>
         <span>FWD <b>{{ previewTeam.counts.FWD }}</b></span>
-        <span>{{ teamCode('home') }} <b>{{ previewTeam.homeCount }}</b></span>
-        <span>{{ teamCode('away') }} <b>{{ previewTeam.awayCount }}</b></span>
       </div>
 
       <div class="preview-nav">

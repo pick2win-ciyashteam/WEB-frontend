@@ -64,7 +64,7 @@
         </div>
 
         <ng-container *ngIf="!loadingMatches && visibleMatches.length; else noMatches">
-          <section class="matches-panel" *ngIf="todayMatches.length">
+          <section class="matches-panel today-matches-panel" *ngIf="todayMatches.length">
             <div class="panel-head">
               <div>
                 <span class="panel-kicker">Today</span>
@@ -127,7 +127,7 @@
                     </span>
                     {{ statusLabel(match) }}
                   </span>
-                  <button class="uct-btn" type="button" [disabled]="!match.lineupReady && !isGenerated(match)" (click)="$event.stopPropagation(); handleMatchAction(match)">
+                  <button class="uct-btn" type="button" [disabled]="!canRunUct(match) && !isGenerated(match)" (click)="$event.stopPropagation(); handleMatchAction(match)">
                     {{ actionLabel(match) }}
                   </button>
                 </div>
@@ -200,7 +200,14 @@
                       <span class="material-symbols-outlined" aria-hidden="true">lock</span>
                       Waiting for lineup
                     </span>
-                    <button class="uct-btn locked" type="button" disabled (click)="$event.stopPropagation()">UCT Locked</button>
+                    <button
+                      class="uct-btn"
+                      type="button"
+                      [class.locked]="!canRunUct(match)"
+                      [disabled]="!canRunUct(match)"
+                      (click)="$event.stopPropagation(); handleMatchAction(match)">
+                      {{ actionLabel(match) }}
+                    </button>
                   </div>
                 </article>
               </div>
