@@ -1,0 +1,39 @@
+<main class="admin-login-page">
+  <section class="admin-login-card">
+    <div class="admin-logo">
+      <img src="assets/logo.png" alt="Pick2Win">
+    </div>
+
+    <div class="admin-head">
+      <span>Admin Panel</span>
+      <h1>Sign in</h1>
+      <p>Use your admin credentials to manage matches, countries, banners, and plans.</p>
+    </div>
+
+    <div class="admin-alert success" *ngIf="message">{{ message }}</div>
+    <div class="admin-alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="admin@pick2win.uk">
+      </label>
+      <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">Enter valid admin email.</small>
+
+      <label>
+        <span>Password</span>
+        <div class="password-row">
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Admin password">
+          <button type="button" (click)="showPassword = !showPassword">
+            <span class="material-symbols-outlined" aria-hidden="true">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+          </button>
+        </div>
+      </label>
+      <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">Password is required.</small>
+
+      <button class="admin-submit" type="submit" [disabled]="loading">
+        {{ loading ? 'Signing in...' : 'Admin Sign in' }}
+      </button>
+    </form>
+  </section>
+</main>

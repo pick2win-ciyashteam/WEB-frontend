@@ -1,0 +1,85 @@
+:host {
+  display: block;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hero-card,
+.stat-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 20px 50px -32px rgba(0, 0, 0, 0.8);
+}
+
+.hero-card {
+  grid-column: 1 / -1;
+  padding: 28px;
+  background:
+    radial-gradient(circle at top left, rgba(244, 180, 0, 0.12), transparent 36%),
+    rgba(255, 255, 255, 0.06);
+}
+
+.eyebrow {
+  color: #f4b400;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 8px 0;
+  font-size: 38px;
+  line-height: 1.05;
+}
+
+p {
+  margin: 0;
+  color: #c9d7e2;
+  line-height: 1.6;
+}
+
+.stat-card {
+  display: grid;
+  gap: 10px;
+  padding: 22px;
+}
+
+.stat-card .material-symbols-outlined {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  color: #f4b400;
+  background: rgba(244, 180, 0, 0.1);
+}
+
+.stat-card b {
+  font-size: 18px;
+}
+
+@media (max-width: 760px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card,
+  .stat-card {
+    border-radius: 12px;
+  }
+
+  .hero-card {
+    padding: 22px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+}

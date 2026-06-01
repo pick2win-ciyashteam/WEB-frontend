@@ -1,0 +1,77 @@
+<section class="admin-form-card">
+  <div class="form-head">
+    <span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
+    <div>
+      <h2>Add Subscription</h2>
+      <p>Create a coin pack with match credits, price, currency, and validity.</p>
+    </div>
+  </div>
+
+  <div class="alert success" *ngIf="message">{{ message }}</div>
+  <div class="alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      <span>Name</span>
+      <input type="text" formControlName="name" placeholder="Pro Pack">
+    </label>
+
+    <label>
+      <span>Subtitle</span>
+      <input type="text" formControlName="subtitle" placeholder="HEAVY SEASON-LONG USER">
+    </label>
+
+    <label>
+      <span>Coins</span>
+      <input type="number" formControlName="coins" min="1">
+    </label>
+
+    <label>
+      <span>Matches</span>
+      <input type="number" formControlName="matches" min="1">
+    </label>
+
+    <label>
+      <span>Price</span>
+      <input type="number" formControlName="price" min="0" step="0.01">
+    </label>
+
+    <label>
+      <span>Currency</span>
+      <input type="text" formControlName="currency" placeholder="GBP">
+    </label>
+
+    <label>
+      <span>Currency Symbol</span>
+      <input type="text" formControlName="currency_symbol" placeholder="£">
+    </label>
+
+    <label>
+      <span>Validity Days</span>
+      <input type="number" formControlName="validity_days" min="1">
+    </label>
+
+    <label>
+      <span>Popular</span>
+      <select formControlName="is_popular">
+        <option [ngValue]="0">No</option>
+        <option [ngValue]="1">Yes</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Pro</span>
+      <select formControlName="is_pro">
+        <option [ngValue]="1">Yes</option>
+        <option [ngValue]="0">No</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Sort Order</span>
+      <input type="number" formControlName="sort_order" min="0">
+    </label>
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Adding...' : 'Add Subscription' }}</button>
+  </form>
+</section>

@@ -366,6 +366,28 @@ small {
   border: 1px solid rgba(11, 204, 142, 0.25);
 }
 
+.test-otp-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 4px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  color: var(--paper-2);
+  background: rgba(244, 180, 0, 0.1);
+  border: 1px solid rgba(244, 180, 0, 0.28);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.test-otp-chip b {
+  color: var(--gold);
+  font-family: var(--f-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
 @media (max-width: 560px) {
   .signup-box {
     width: 100%;

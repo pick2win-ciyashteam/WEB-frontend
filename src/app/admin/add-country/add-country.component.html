@@ -1,0 +1,44 @@
+<section class="admin-form-card">
+  <div class="form-head">
+    <span class="material-symbols-outlined" aria-hidden="true">public</span>
+    <div>
+      <h2>Add Country</h2>
+      <p>Create a country entry with ISO code, dial code, flag, and active status.</p>
+    </div>
+  </div>
+
+  <div class="alert success" *ngIf="message">{{ message }}</div>
+  <div class="alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      <span>Name</span>
+      <input type="text" formControlName="name" placeholder="India">
+    </label>
+
+    <label>
+      <span>Code</span>
+      <input type="text" formControlName="code" placeholder="IN" maxlength="3">
+    </label>
+
+    <label>
+      <span>Dial Code</span>
+      <input type="text" formControlName="dial_code" placeholder="+91">
+    </label>
+
+    <label>
+      <span>Flag</span>
+      <input type="text" formControlName="flag" placeholder="IN">
+    </label>
+
+    <label>
+      <span>Status</span>
+      <select formControlName="is_active">
+        <option [ngValue]="1">Active</option>
+        <option [ngValue]="0">Inactive</option>
+      </select>
+    </label>
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Adding...' : 'Add Country' }}</button>
+  </form>
+</section>

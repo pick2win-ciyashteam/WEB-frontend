@@ -101,9 +101,13 @@
     <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
 
+    <div class="test-otp-chip" *ngIf="testMobileOtp">
+      Testing mobile OTP: <b>{{ testMobileOtp }}</b>
+    </div>
+
     <div class="otp-row">
       <input
-        *ngFor="let o of mobileOtp; let i = index"
+        *ngFor="let o of mobileOtp; let i = index; trackBy: trackByIndex"
         [id]="'mobile-otp-' + i"
         [class]="'otp-cell mobile-otp-' + i"
         type="text"
@@ -136,9 +140,13 @@
     <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
 
+    <div class="test-otp-chip" *ngIf="testEmailOtp">
+      Testing email OTP: <b>{{ testEmailOtp }}</b>
+    </div>
+
     <div class="otp-row">
       <input
-        *ngFor="let o of emailOtp; let i = index"
+        *ngFor="let o of emailOtp; let i = index; trackBy: trackByIndex"
         [id]="'email-otp-' + i"
         [class]="'otp-cell email-otp-' + i"
         type="text"

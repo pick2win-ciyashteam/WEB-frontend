@@ -1,0 +1,46 @@
+<section class="admin-form-card">
+  <div class="form-head">
+    <span class="material-symbols-outlined" aria-hidden="true">image</span>
+    <div>
+      <h2>Create Banner</h2>
+      <p>Add a website banner with image, link, and button text.</p>
+    </div>
+  </div>
+
+  <div class="alert success" *ngIf="message">{{ message }}</div>
+  <div class="alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      <span>Name</span>
+      <input type="text" formControlName="name" placeholder="FIFA 2026 Banner">
+    </label>
+
+    <label>
+      <span>Image URL</span>
+      <input type="url" formControlName="image_url" placeholder="https://...">
+    </label>
+
+    <label>
+      <span>Description</span>
+      <textarea formControlName="description" rows="4" placeholder="IPL Season is back!"></textarea>
+    </label>
+
+    <label>
+      <span>Link</span>
+      <input type="url" formControlName="link" placeholder="https://yoursite.com/ipl">
+    </label>
+
+    <label>
+      <span>Button Text</span>
+      <input type="text" formControlName="button" placeholder="Go to UCT">
+    </label>
+
+    <label>
+      <span>Sort Order Optional</span>
+      <input type="number" formControlName="sort_order" min="0" placeholder="Optional">
+    </label>
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Creating...' : 'Create Banner' }}</button>
+  </form>
+</section>

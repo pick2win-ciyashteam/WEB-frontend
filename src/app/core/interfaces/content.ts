@@ -158,6 +158,7 @@ export interface Banner {
   image_url: string;
   description: string;
   link: string;
+  button:string;
 }
 
 export interface Match {

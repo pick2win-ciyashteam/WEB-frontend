@@ -43,6 +43,8 @@ export class SignupComponent {
   showPassword = false;
   mobileOtp = ['', '', '', '', '', ''];
   emailOtp = ['', '', '', '', '', ''];
+  testMobileOtp = '';
+  testEmailOtp = '';
 
 countries: SignupCountry[] = [];
 countriesLoading = false;
@@ -116,6 +118,8 @@ continueStep1() {
       this.step = 2;
       this.mobileOtp = ['', '', '', '', '', ''];
       this.emailOtp = ['', '', '', '', '', ''];
+      this.testMobileOtp = this.extractOtpFromResponse(res, 'mobile');
+      this.testEmailOtp = this.extractOtpFromResponse(res, 'email');
 
       setTimeout(() => this.focusOtp('mobile'), 100);
     },
@@ -134,9 +138,14 @@ focusOtp(type: 'mobile' | 'email') {
   first?.focus();
 }
 
+trackByIndex(index: number): number {
+  return index;
+}
+
 otpInput(event: Event, index: number, type: 'mobile' | 'email') {
   const input = event.target as HTMLInputElement;
-  const value = input.value.replace(/\D/g, '').slice(-1);
+  const digits = input.value.replace(/\D/g, '');
+  const value = digits.slice(0, 1);
 
   if (type === 'mobile') {
     this.mobileOtp[index] = value;
@@ -150,7 +159,6 @@ otpInput(event: Event, index: number, type: 'mobile' | 'email') {
     setTimeout(() => {
       const next = document.getElementById(`${type}-otp-${index + 1}`) as HTMLInputElement;
       next?.focus();
-      next?.select();
     }, 20);
   }
 }
@@ -238,6 +246,7 @@ verifyMobile() {
     next: (res: any) => {
       this.loading = false;
       this.successMessage = res?.message || 'Mobile verified successfully';
+      this.testEmailOtp = this.extractOtpFromResponse(res, 'email') || this.testEmailOtp;
       this.step = 3;
       setTimeout(() => this.focusOtp('email'), 100);
     },
@@ -301,8 +310,10 @@ resendOtp(type: 'mobile' | 'email') {
       this.successMessage = res?.message || `${type === 'mobile' ? 'Mobile' : 'Email'} OTP resent successfully`;
       if (type === 'mobile') {
         this.mobileOtp = ['', '', '', '', '', ''];
+        this.testMobileOtp = this.extractOtpFromResponse(res, 'mobile') || this.testMobileOtp;
       } else {
         this.emailOtp = ['', '', '', '', '', ''];
+        this.testEmailOtp = this.extractOtpFromResponse(res, 'email') || this.testEmailOtp;
       }
       setTimeout(() => this.focusOtp(type), 100);
     },
@@ -410,6 +421,27 @@ onMobileInput(event: any) {
   }
 
   this.form.patchValue({ mobile: value }, { emitEvent: false });
+}
+
+private extractOtpFromResponse(res: any, type: 'mobile' | 'email'): string {
+  const source = res?.data || res || {};
+  const keys = type === 'mobile'
+    ? ['mobile_otp', 'mobileOtp', 'otp_mobile', 'mobileOTP']
+    : ['email_otp', 'emailOtp', 'otp_email', 'emailOTP'];
+
+  for (const key of keys) {
+    const value = source?.[key] ?? res?.[key];
+
+    if (value !== undefined && value !== null && String(value).trim()) {
+      return String(value).trim();
+    }
+  }
+
+  if (source?.otp !== undefined && source?.otp !== null && String(source.otp).trim()) {
+    return String(source.otp).trim();
+  }
+
+  return '';
 }
 
   
