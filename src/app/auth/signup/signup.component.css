@@ -146,6 +146,35 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(244, 180, 0, 0.1);
 }
 
+.date-wrap {
+  position: relative;
+  cursor: pointer;
+}
+
+.date-wrap input {
+  padding-right: 52px;
+  cursor: pointer;
+}
+
+.date-wrap input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.date-wrap .material-symbols-outlined {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  color: var(--gold);
+  font-size: 21px;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
 small {
   color: #ff8a96;
   font-size: 12px;
@@ -156,6 +185,21 @@ small {
   display: grid;
   grid-template-columns: 124px minmax(0, 1fr);
   gap: 10px;
+}
+
+.dial-code-fixed {
+  display: flex;
+  align-items: center;
+  height: 54px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 16px;
+  font-weight: 850;
+  white-space: nowrap;
+  user-select: none;
 }
 
 .password-wrap {

@@ -30,16 +30,18 @@
       </select>
 
       <label>Date of birth <span>*</span></label>
-      <input type="date" formControlName="dob">
+      <div class="date-wrap" (click)="openDatePicker(dobInput)">
+        <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)">
+        <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
+      </div>
       <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('required')">Date of birth is required</small>
       <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('underAge')">You must be +18 or older</small>
 
       <label>Mobile number <span>*</span></label>
       <div class="phone-row">
-        <select formControlName="dial">
-          <option value="">Code</option>
-          <option *ngFor="let c of countries" [value]="c.dial_code">{{ c.flag }} {{ c.dial_code }}</option>
-        </select>
+        <div class="dial-code-fixed">
+          {{ form.value.dial || 'Code' }}
+        </div>
         <input type="tel" formControlName="mobile" placeholder="Mobile number" [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)">
       </div>
       <small *ngIf="form.get('mobile')?.touched && mobileError">{{ mobileError }}</small>

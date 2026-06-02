@@ -45,6 +45,7 @@ export class SignupComponent {
   emailOtp = ['', '', '', '', '', ''];
   testMobileOtp = '';
   testEmailOtp = '';
+  maxDob = this.getMaxDob();
 
 countries: SignupCountry[] = [];
 countriesLoading = false;
@@ -75,6 +76,19 @@ successMessage = '';
   openLogin() {
     this.authModal.open('login');
   }
+
+openDatePicker(input: HTMLInputElement): void {
+  input.focus();
+
+  const pickerInput = input as HTMLInputElement & { showPicker?: () => void };
+  pickerInput.showPicker?.();
+}
+
+private getMaxDob(): string {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - 18);
+  return date.toISOString().slice(0, 10);
+}
 
 onCountryChange() {
   const country = this.selectedCountry;
