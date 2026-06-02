@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private timer: any;
   private bannerTimer: any;
+  private todayLineupsTimer: any;
   private splashTimer: any;
   private launchDate = new Date('2026-06-10T09:00:00Z').getTime();
   private staticHomeBannerCount = 6;
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // this.loadBanners();
     this.startStaticBannerTimer();
     this.loadTodayLineupsCta();
+    this.startTodayLineupsRefresh();
     this.timer = setInterval(() => this.updateCountdown(), 1000);
     this.splashTimer = setTimeout(() => this.closeSplash(), 2200);
   }
@@ -53,6 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     clearInterval(this.timer);
     clearInterval(this.bannerTimer);
+    clearInterval(this.todayLineupsTimer);
     clearTimeout(this.splashTimer);
   }
 
@@ -158,6 +161,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   private startStaticBannerTimer(): void {
     clearInterval(this.bannerTimer);
     this.bannerTimer = setInterval(() => this.nextBanner(), 5000);
+  }
+
+  private startTodayLineupsRefresh(): void {
+    clearInterval(this.todayLineupsTimer);
+    this.todayLineupsTimer = setInterval(() => this.loadTodayLineupsCta(), 60000);
   }
 
   private shouldShowLaunchModal(): boolean {

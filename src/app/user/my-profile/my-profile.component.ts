@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserProfile } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -10,7 +10,7 @@ import { ProfileService } from 'src/app/core/services/profile.service';
   templateUrl: './my-profile.component.html',
   styleUrls: ['./my-profile.component.css']
 })
-export class MyProfileComponent implements OnInit {
+export class MyProfileComponent implements OnInit, OnDestroy {
   activeTab: 'profile' | 'teams' | 'feedback' = 'profile';
   profile$ = this.profileService.profile$;
   loading$ = this.profileService.loading$;
@@ -38,6 +38,7 @@ export class MyProfileComponent implements OnInit {
   deleteError = '';
   deletionTimestamp = '';
   showTodayLineupsCta = false;
+  private todayLineupsTimer: any;
 
   constructor(
     private api: ApiService,
@@ -50,7 +51,12 @@ export class MyProfileComponent implements OnInit {
   this.applyTabFromRoute();
   this.profileService.loadProfile(true).subscribe();
   this.loadTodayLineupsCta();
+  this.startTodayLineupsRefresh();
 }
+
+  ngOnDestroy(): void {
+    clearInterval(this.todayLineupsTimer);
+  }
 
   setTab(tab: 'profile' | 'teams' | 'feedback') {
     this.activeTab = tab;
@@ -311,6 +317,11 @@ export class MyProfileComponent implements OnInit {
         this.showTodayLineupsCta = false;
       }
     });
+  }
+
+  private startTodayLineupsRefresh(): void {
+    clearInterval(this.todayLineupsTimer);
+    this.todayLineupsTimer = setInterval(() => this.loadTodayLineupsCta(), 60000);
   }
 
   get forfeitedCoins(): number {
