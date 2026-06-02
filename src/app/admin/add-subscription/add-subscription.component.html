@@ -3,7 +3,7 @@
     <span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
     <div>
       <h2>Add Subscription</h2>
-      <p>Create a coin pack with match credits, price, currency, and validity.</p>
+      <p>{{ editingSubscriptionId ? 'Update selected coin pack details.' : 'Create a coin pack with match credits, price, currency, and validity.' }}</p>
     </div>
   </div>
 
@@ -72,6 +72,83 @@
       <input type="number" formControlName="sort_order" min="0">
     </label>
 
-    <button type="submit" [disabled]="loading">{{ loading ? 'Adding...' : 'Add Subscription' }}</button>
+    <button type="submit" [disabled]="loading">
+      {{ loading ? (editingSubscriptionId ? 'Updating...' : 'Adding...') : (editingSubscriptionId ? 'Update Subscription' : 'Add Subscription') }}
+    </button>
+    <button class="btn-muted" type="button" *ngIf="editingSubscriptionId" [disabled]="loading" (click)="cancelEdit()">Cancel Edit</button>
   </form>
 </section>
+
+<section class="admin-form-card subscription-list-card">
+  <div class="list-head">
+    <div>
+      <h2>Existing Subscriptions</h2>
+      <p>Manage subscription records from backend.</p>
+    </div>
+    <button type="button" class="refresh-btn" [disabled]="subscriptionsLoading" (click)="loadSubscriptions()">
+      {{ subscriptionsLoading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="subscription-state" *ngIf="subscriptionsLoading">Loading subscriptions...</div>
+  <div class="subscription-state" *ngIf="!subscriptionsLoading && !subscriptions.length">No subscriptions found.</div>
+
+  <div class="table-wrap" *ngIf="!subscriptionsLoading && subscriptions.length">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Subtitle</th>
+          <th>Coins</th>
+          <th>Matches</th>
+          <th>Price</th>
+          <th>Currency</th>
+          <th>Validity</th>
+          <th>Popular</th>
+          <th>Pro</th>
+          <th>Order</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of subscriptions">
+          <td>{{ item.name }}</td>
+          <td>{{ item.subtitle }}</td>
+          <td>{{ item.coins }}</td>
+          <td>{{ item.matches }}</td>
+          <td>{{ item.currency_symbol }}{{ item.price }}</td>
+          <td>{{ item.currency }}</td>
+          <td>{{ item.validity_days }} days</td>
+          <td>{{ item.is_popular ? 'Yes' : 'No' }}</td>
+          <td>{{ item.is_pro ? 'Yes' : 'No' }}</td>
+          <td>{{ item.sort_order }}</td>
+          <td>
+            <div class="row-actions">
+              <button type="button" (click)="editSubscription(item)">Edit</button>
+              <button class="danger" type="button" [disabled]="deletingSubscriptionId === item.id" (click)="deleteSubscription(item)">
+                {{ deletingSubscriptionId === item.id ? 'Deleting...' : 'Delete' }}
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="admin-confirm-overlay" *ngIf="deleteConfirmSubscription" role="dialog" aria-modal="true" aria-labelledby="subscriptionConfirmTitle" (click)="closeDeleteConfirm()">
+  <div class="admin-confirm-modal" (click)="$event.stopPropagation()">
+    <button class="admin-confirm-close" type="button" aria-label="Close confirmation" (click)="closeDeleteConfirm()">×</button>
+    <div class="admin-confirm-icon">
+      <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+    </div>
+    <h3 id="subscriptionConfirmTitle">Delete Subscription</h3>
+    <p>Delete "{{ deleteConfirmSubscription.name }}"? This action cannot be undone.</p>
+    <div class="admin-confirm-actions">
+      <button class="btn-muted" type="button" (click)="closeDeleteConfirm()">Cancel</button>
+      <button class="confirm-danger" type="button" [disabled]="deletingSubscriptionId === deleteConfirmSubscription.id" (click)="confirmDeleteSubscription()">
+        {{ deletingSubscriptionId === deleteConfirmSubscription.id ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>

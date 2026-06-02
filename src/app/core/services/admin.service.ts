@@ -24,16 +24,24 @@ export class AdminService {
     return this.http.post(`${this.BASE}/admin/sportmonks/matches/toggle`, data);
   }
 
+  getActiveSeries(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/sportmonks/series/active`);
+  }
+
   createCountry(data: AdminCountryCreatePayload): Observable<any> {
     return this.http.post(`${this.BASE}/admin/country/create`, data);
   }
 
   deleteCountry(id: number | string): Observable<any> {
-    return this.http.delete(`${this.BASE}/user/countries/${id}`);
+    return this.http.delete(`${this.BASE}/admin/country/${id}`);
+  }
+
+  toggleCountry(id: number | string): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/country/${id}/toggle`, {});
   }
 
   getCountries(): Observable<any> {
-    return this.http.get(`${this.BASE}/user/countries/get`);
+    return this.http.get(`${this.BASE}/admin/country/get`);
   }
 
   createBanner(data: AdminBannerCreatePayload): Observable<any> {
@@ -54,5 +62,33 @@ export class AdminService {
 
   createSubscription(data: AdminSubscriptionCreatePayload): Observable<any> {
     return this.http.post(`${this.BASE}/admin/subscription`, data);
+  }
+
+  getSubscriptions(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/subscription`);
+  }
+
+  updateSubscription(id: number | string, data: Partial<AdminSubscriptionCreatePayload>): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/subscription/${id}`, data);
+  }
+
+  deleteSubscription(id: number | string): Observable<any> {
+    return this.http.delete(`${this.BASE}/admin/subscription/${id}`);
+  }
+
+  getAdminReportsOverview(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/admin-reports/overview`);
+  }
+
+  getAdminReportsGeography(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/admin-reports/geography`);
+  }
+
+  getAdminReportsPackBuyers(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/admin-reports/pack-buyers`);
+  }
+
+  getAdminReportsActivityDormancy(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/admin-reports/activity-dormancy`);
   }
 }

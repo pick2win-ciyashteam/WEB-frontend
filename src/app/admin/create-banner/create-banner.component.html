@@ -85,3 +85,20 @@
     </article>
   </div>
 </section>
+
+<div class="admin-confirm-overlay" *ngIf="deleteConfirmBanner" role="dialog" aria-modal="true" aria-labelledby="bannerConfirmTitle" (click)="closeDeleteConfirm()">
+  <div class="admin-confirm-modal" (click)="$event.stopPropagation()">
+    <button class="admin-confirm-close" type="button" aria-label="Close confirmation" (click)="closeDeleteConfirm()">×</button>
+    <div class="admin-confirm-icon">
+      <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+    </div>
+    <h3 id="bannerConfirmTitle">Delete Banner</h3>
+    <p>Delete "{{ deleteConfirmBanner.name }}"? This action cannot be undone.</p>
+    <div class="admin-confirm-actions">
+      <button class="btn-muted" type="button" (click)="closeDeleteConfirm()">Cancel</button>
+      <button class="confirm-danger" type="button" [disabled]="deletingBannerId === deleteConfirmBanner.id" (click)="confirmDeleteBanner()">
+        {{ deletingBannerId === deleteConfirmBanner.id ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>

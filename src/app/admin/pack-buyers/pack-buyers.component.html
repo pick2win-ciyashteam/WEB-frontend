@@ -1,0 +1,179 @@
+<section class="admin-form-card">
+  <div class="form-head">
+    <span class="material-symbols-outlined" aria-hidden="true">payments</span>
+    <div>
+      <h2>Pack Buyers</h2>
+      <p>View package buyer summary, plan performance, currency revenue, and recent purchases.</p>
+    </div>
+    <button type="button" class="refresh-btn" [disabled]="loading" (click)="loadPackBuyers()">
+      {{ loading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="buyer-state" *ngIf="loading">Loading pack buyers report...</div>
+
+  <div class="summary-grid">
+    <article>
+      <span>Unique Buyers</span>
+      <b>{{ reports?.summary?.unique_buyers || 0 }}</b>
+    </article>
+    <article>
+      <span>Total Purchases</span>
+      <b>{{ reports?.summary?.total_purchases || 0 }}</b>
+    </article>
+    <article>
+      <span>Coins Sold</span>
+      <b>{{ reports?.summary?.total_coins_sold || 0 }}</b>
+    </article>
+    <article>
+      <span>Coins Consumed</span>
+      <b>{{ reports?.summary?.coins_consumed || 0 }}</b>
+    </article>
+    <article>
+      <span>Coins Remaining</span>
+      <b>{{ reports?.summary?.coins_remaining || 0 }}</b>
+    </article>
+    <article>
+      <span>Usage</span>
+      <b>{{ formatPercentage(reports?.summary?.usage_pct) }}</b>
+    </article>
+    <article>
+      <span>Total Revenue</span>
+      <b>{{ formatMoney(reports?.summary?.total_revenue) }}</b>
+    </article>
+  </div>
+</section>
+
+<section class="admin-form-card report-card">
+  <div class="list-head">
+    <div>
+      <h2>Plan Performance</h2>
+      <p>Purchases, revenue, and coin usage grouped by package.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Coins</th>
+          <th>Price</th>
+          <th>Purchases</th>
+          <th>Unique Buyers</th>
+          <th>Coins Sold</th>
+          <th>Consumed</th>
+          <th>Remaining</th>
+          <th>Usage</th>
+          <th>Avg/User</th>
+          <th>Still Active</th>
+          <th>Last 30D</th>
+          <th>Total Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let plan of reports?.plan_performance">
+          <td>{{ plan.plan_name }}</td>
+          <td>{{ plan.plan_coins }}</td>
+          <td>{{ formatMoney(plan.plan_price) }}</td>
+          <td>{{ plan.purchases }}</td>
+          <td>{{ plan.unique_buyers }}</td>
+          <td>{{ plan.coins_sold }}</td>
+          <td>{{ plan.coins_consumed }}</td>
+          <td>{{ plan.coins_remaining }}</td>
+          <td>{{ formatPercentage(plan.usage_pct) }}</td>
+          <td>{{ plan.avg_coins_per_user }}</td>
+          <td>{{ plan.still_active }}</td>
+          <td>{{ plan.last_30d.purchases }} / {{ formatMoney(plan.last_30d.revenue) }}</td>
+          <td>{{ formatMoney(plan.total_revenue) }}</td>
+        </tr>
+        <tr *ngIf="!loading && !reports?.plan_performance?.length">
+          <td colspan="13">No plan performance found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="admin-form-card report-card">
+  <div class="list-head">
+    <div>
+      <h2>Revenue By Currency</h2>
+      <p>Buyer count and revenue for each plan currency.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap compact">
+    <table>
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Coins</th>
+          <th>Currency</th>
+          <th>Buyers</th>
+          <th>Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of currencyRows">
+          <td>{{ row.plan_name }}</td>
+          <td>{{ row.plan_coins }}</td>
+          <td>{{ row.currency }}</td>
+          <td>{{ row.buyers }}</td>
+          <td>{{ formatMoney(row.revenue) }}</td>
+        </tr>
+        <tr *ngIf="!loading && !currencyRows.length">
+          <td colspan="5">No currency revenue found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="admin-form-card report-card">
+  <div class="list-head">
+    <div>
+      <h2>Recent Purchases</h2>
+      <p>Latest package purchase records from backend.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Country</th>
+          <th>Plan</th>
+          <th>Coins</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Purchased At</th>
+          <th>Used</th>
+          <th>Remaining</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let purchase of reports?.recent_purchases">
+          <td>{{ purchase.user_id }}</td>
+          <td>{{ displayValue(purchase.user_name) }}</td>
+          <td>{{ displayValue(purchase.user_email) }}</td>
+          <td>{{ displayValue(purchase.country) }}</td>
+          <td>{{ purchase.plan_name }}</td>
+          <td>{{ purchase.plan_coins }}</td>
+          <td>{{ formatMoney(purchase.amount) }}</td>
+          <td>{{ purchase.currency }}</td>
+          <td>{{ purchase.purchased_at }}</td>
+          <td>{{ purchase.coins_used }}</td>
+          <td>{{ purchase.coins_remaining }}</td>
+        </tr>
+        <tr *ngIf="!loading && !reports?.recent_purchases?.length">
+          <td colspan="11">No recent purchases found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

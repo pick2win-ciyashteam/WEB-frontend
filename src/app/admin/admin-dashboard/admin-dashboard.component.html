@@ -3,120 +3,108 @@
     <div class="ph-title-row">
       <span class="ph-eyebrow">Operations overview</span>
       <h1>Admin <em>Dashboard</em></h1>
-      <p class="ph-sub">Dummy snapshot data for PICK2WIN operations. Replace these values with API metrics later.</p>
+      <p class="ph-sub">Live PICK2WIN admin reports overview.</p>
     </div>
 
     <div class="ph-actions">
-      <button class="btn btn-ghost" type="button">
-        <span class="material-symbols-outlined" aria-hidden="true">download</span>
-        Export
-      </button>
-      <button class="btn btn-acid" type="button">
+      <button class="btn btn-acid" type="button" (click)="loadReports()" [disabled]="loading">
         <span class="material-symbols-outlined" aria-hidden="true">sync</span>
-        Refresh
+        {{ loading ? 'Loading...' : 'Refresh' }}
       </button>
     </div>
   </div>
+
+  <div class="state-message loading" *ngIf="loading">Loading dashboard reports...</div>
+  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
   <div class="kpi-grid">
     <article class="kpi accent">
       <div class="kpi-lbl">Total Users</div>
-      <div class="kpi-val">12.8K</div>
-      <div class="kpi-delta up">+18.4%</div>
+      <div class="kpi-val">{{ reports?.total_users?.count || 0 }}</div>
+      <div class="kpi-delta up">This week: {{ reports?.total_users?.this_week || 0 }}</div>
       <span class="material-symbols-outlined kpi-icn" aria-hidden="true">groups</span>
     </article>
 
     <article class="kpi green">
-      <div class="kpi-lbl">Coin Revenue</div>
-      <div class="kpi-val"><span class="cur">£</span>42K</div>
-      <div class="kpi-delta up">+9.7%</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">payments</span>
+      <div class="kpi-lbl">Verified Users</div>
+      <div class="kpi-val">{{ reports?.verified?.count || 0 }}</div>
+      <div class="kpi-delta up">{{ formatPercentage(reports?.verified?.percentage) }}</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">verified_user</span>
     </article>
 
     <article class="kpi amber">
-      <div class="kpi-lbl">UCT Runs</div>
-      <div class="kpi-val">3,421</div>
-      <div class="kpi-delta neutral">Today</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">bolt</span>
+      <div class="kpi-lbl">Coin Pack Buyers</div>
+      <div class="kpi-val">{{ reports?.coin_pack_buyers?.count || 0 }}</div>
+      <div class="kpi-delta neutral">{{ formatPercentage(reports?.coin_pack_buyers?.percentage) }}</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">payments</span>
     </article>
 
     <article class="kpi">
-      <div class="kpi-lbl">Active Matches</div>
-      <div class="kpi-val">28</div>
-      <div class="kpi-delta up">+6 live</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">sports_soccer</span>
+      <div class="kpi-lbl">Active 30D</div>
+      <div class="kpi-val">{{ reports?.active_30d?.count || 0 }}</div>
+      <div class="kpi-delta up">{{ formatPercentage(reports?.active_30d?.percentage) }}</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">trending_up</span>
     </article>
 
     <article class="kpi red">
-      <div class="kpi-lbl">Failed Payments</div>
-      <div class="kpi-val">17</div>
-      <div class="kpi-delta dn">-2.1%</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">warning</span>
-    </article>
-
-    <article class="kpi">
-      <div class="kpi-lbl">Countries</div>
-      <div class="kpi-val">42</div>
-      <div class="kpi-delta neutral">Active</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">public</span>
+      <div class="kpi-lbl">Dormant 30D</div>
+      <div class="kpi-val">{{ reports?.dormant_30d?.count || 0 }}</div>
+      <div class="kpi-delta dn">{{ formatPercentage(reports?.dormant_30d?.percentage) }}</div>
+      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">person_off</span>
     </article>
   </div>
 
-  <div class="two-col">
-    <article class="card">
-      <div class="card-h">
-        <div>
-          <h3>Weekly UCT Activity</h3>
-          <span class="sub">Last 7 days</span>
-        </div>
-        <button class="btn btn-sm btn-ghost" type="button">View all</button>
+  <article class="card geography-card">
+    <div class="card-h">
+      <div>
+        <h3>Geography Reports</h3>
+        <span class="sub">Markets from backend</span>
       </div>
-      <div class="card-b">
-        <div class="chart">
-          <div class="bar-col"><div class="bar muted" style="height: 48%"><span class="bar-val">1,042</span></div><span class="bar-lbl">Wed</span></div>
-          <div class="bar-col"><div class="bar muted" style="height: 56%"><span class="bar-val">1,187</span></div><span class="bar-lbl">Thu</span></div>
-          <div class="bar-col"><div class="bar muted" style="height: 64%"><span class="bar-val">1,356</span></div><span class="bar-lbl">Fri</span></div>
-          <div class="bar-col"><div class="bar" style="height: 88%"><span class="bar-val">1,893</span></div><span class="bar-lbl">Sat</span></div>
-          <div class="bar-col"><div class="bar" style="height: 80%"><span class="bar-val">1,721</span></div><span class="bar-lbl">Sun</span></div>
-          <div class="bar-col"><div class="bar muted" style="height: 52%"><span class="bar-val">1,102</span></div><span class="bar-lbl">Mon</span></div>
-          <div class="bar-col"><div class="bar" style="height: 70%"><span class="bar-val">1,234</span></div><span class="bar-lbl">Tue</span></div>
-        </div>
+      <span class="status-pill">{{ geographyReports?.total_markets || 0 }} markets</span>
+    </div>
+    <div class="card-b">
+      <div class="geo-summary">
+        <div><span>Total users</span><b>{{ geographyReports?.totals?.total_users || 0 }}</b></div>
+        <div><span>Verified</span><b>{{ geographyReports?.totals?.verified || 0 }}</b></div>
+        <div><span>Coin buyers</span><b>{{ geographyReports?.totals?.coin_buyers || 0 }}</b></div>
+        <div><span>Active 30D</span><b>{{ geographyReports?.totals?.active_30d || 0 }}</b></div>
+        <div><span>Dormant 30D</span><b>{{ geographyReports?.totals?.dormant_30d || 0 }}</b></div>
+        <div><span>Lifetime revenue</span><b>{{ formatMoney(geographyReports?.totals?.lifetime_revenue) }}</b></div>
       </div>
-    </article>
 
-    <article class="card">
-      <div class="card-h">
-        <div>
-          <h3>Live Activity</h3>
-          <span class="sub">Dummy stream</span>
-        </div>
+      <div class="table-wrap">
+        <table class="geo-table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Total Users</th>
+              <th>Verified</th>
+              <th>Coin Buyers</th>
+              <th>Active 30D</th>
+              <th>Dormant 30D</th>
+              <th>Lifetime Revenue</th>
+              <th>% Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let market of geographyReports?.data">
+              <td>{{ market.country }}</td>
+              <td>{{ market.total_users }}</td>
+              <td>{{ market.verified }}</td>
+              <td>{{ market.coin_buyers }}</td>
+              <td>{{ market.active_30d }}</td>
+              <td>{{ market.dormant_30d }}</td>
+              <td>{{ formatMoney(market.lifetime_revenue) }}</td>
+              <td>{{ formatPercentage(market.percentage_of_total) }}</td>
+            </tr>
+            <tr *ngIf="!loading && !geographyReports?.data?.length">
+              <td colspan="8">No geography reports found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="card-b">
-        <div class="feed">
-          <div class="feed-row">
-            <span class="feed-dot green"></span>
-            <div><b>Pro Pack purchased</b><small>United Kingdom · £160.00</small></div>
-            <time>2m</time>
-          </div>
-          <div class="feed-row">
-            <span class="feed-dot red"></span>
-            <div><b>Banner updated</b><small>FIFA 2026 hero campaign</small></div>
-            <time>9m</time>
-          </div>
-          <div class="feed-row">
-            <span class="feed-dot amber"></span>
-            <div><b>Match toggled active</b><small>SportMonks fixture batch</small></div>
-            <time>18m</time>
-          </div>
-          <div class="feed-row">
-            <span class="feed-dot"></span>
-            <div><b>Country added</b><small>India · +91 enabled</small></div>
-            <time>31m</time>
-          </div>
-        </div>
-      </div>
-    </article>
-  </div>
+    </div>
+  </article>
 
   <div class="two-col flip">
     <article class="card">
@@ -148,16 +136,15 @@
     <article class="card">
       <div class="card-h">
         <div>
-          <h3>System Health</h3>
-          <span class="sub">Mock status</span>
+          <h3>Report Summary</h3>
+          <span class="sub">User activity</span>
         </div>
-        <span class="status-pill">Stable</span>
       </div>
       <div class="card-b health-list">
-        <div><span>Backend API</span><b>99.98%</b></div>
-        <div><span>Stripe Checkout</span><b>Operational</b></div>
-        <div><span>SportMonks Sync</span><b>12 jobs queued</b></div>
-        <div><span>OTP Provider</span><b>Healthy</b></div>
+        <div><span>Verified percentage</span><b>{{ formatPercentage(reports?.verified?.percentage) }}</b></div>
+        <div><span>Coin buyer percentage</span><b>{{ formatPercentage(reports?.coin_pack_buyers?.percentage) }}</b></div>
+        <div><span>Active in last 30 days</span><b>{{ reports?.active_30d?.count || 0 }}</b></div>
+        <div><span>Dormant in last 30 days</span><b>{{ reports?.dormant_30d?.count || 0 }}</b></div>
       </div>
     </article>
   </div>

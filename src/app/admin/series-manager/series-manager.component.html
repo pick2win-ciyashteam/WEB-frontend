@@ -1,0 +1,232 @@
+<section class="admin-form-card">
+  <div class="form-head">
+    <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+    <div>
+      <h2>Series Manager</h2>
+      <p>Fetch SportMonks fixtures, activate or deactivate matches, and view stored active series.</p>
+    </div>
+  </div>
+
+  <div class="alert success" *ngIf="message">{{ message }}</div>
+  <div class="alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="tab-row">
+    <button type="button" [class.active]="activeTab === 'fixtures'" (click)="setTab('fixtures')">Fetch Fixtures</button>
+    <button type="button" [class.active]="activeTab === 'active'" (click)="setTab('active')">Active Series</button>
+  </div>
+</section>
+
+<section class="admin-form-card report-card" *ngIf="activeTab === 'fixtures'">
+  <div class="list-head">
+    <div>
+      <h2>Fetch Fixtures</h2>
+      <p>Select date range, hit SportMonks fixtures API, then select matches for toggle.</p>
+    </div>
+  </div>
+
+  <form class="date-form" [formGroup]="dateForm" (ngSubmit)="loadFixtures()">
+    <label>
+      <span>From Date</span>
+      <input type="date" formControlName="from">
+    </label>
+    <label>
+      <span>To Date</span>
+      <input type="date" formControlName="to">
+    </label>
+    <button type="submit" [disabled]="fixturesLoading">{{ fixturesLoading ? 'Loading...' : 'Get Fixtures' }}</button>
+  </form>
+
+  <div class="series-state" *ngIf="fixturesLoading">Loading fixtures...</div>
+  <div class="series-state" *ngIf="!fixturesLoading && !fixtures.length">No fixtures loaded.</div>
+
+  <div class="table-wrap" *ngIf="!fixturesLoading && fixtures.length">
+    <table>
+      <thead>
+        <tr>
+          <th>Select</th>
+          <th>League</th>
+          <th>Match ID</th>
+          <th>Match</th>
+          <th>Date</th>
+          <th>Teams</th>
+          <th>Status</th>
+          <th>Venue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of fixtures">
+          <td>
+            <input type="checkbox" [checked]="isSelected(item)" [disabled]="!getMatchId(item)" (change)="toggleFixtureSelection(item, $any($event.target).checked)">
+          </td>
+          <td>{{ getLeagueName(item) }}</td>
+          <td>{{ getMatchId(item) || '-' }}</td>
+          <td>{{ getMatchName(item) }}</td>
+          <td>{{ getMatchDate(item) | date:'dd-MMM-YYYY'}}</td>
+          <td>{{ getTeams(item) }}</td>
+          <td>{{ item.match_status || item.status || '-' }}</td>
+          <td>{{ getVenue(item) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="selected-fixtures" *ngIf="selectedFixtures.length">
+    <div class="selected-head">
+      <div>
+        <h2>Selected Fixtures</h2>
+        <p>Confirm selected fixtures to activate and store them in backend.</p>
+      </div>
+      <span class="status-pill">{{ selectedFixtures.length }} selected</span>
+    </div>
+
+    <div class="selected-action-row">
+      <button type="button" [disabled]="toggleLoading" (click)="openToggleConfirm()">
+        {{ toggleLoading ? 'Saving...' : 'Confirm & Activate Selected' }}
+      </button>
+    </div>
+
+    <div class="fixture-card-grid">
+      <article class="fixture-card" *ngFor="let item of selectedFixtures">
+        <div class="fixture-top">
+          <span>{{ getLeagueName(item) }}</span>
+          <b>#{{ getMatchId(item) }}</b>
+        </div>
+
+        <div class="team-row">
+          <div class="team">
+            <img *ngIf="getTeamImage(item, 'home')" [src]="getTeamImage(item, 'home')" [alt]="getTeamName(item, 'home')" loading="lazy">
+            <span *ngIf="!getTeamImage(item, 'home')" class="team-fallback">{{ getTeamName(item, 'home').charAt(0) }}</span>
+            <b>{{ getTeamName(item, 'home') }}</b>
+          </div>
+          <strong>VS</strong>
+          <div class="team away">
+            <img *ngIf="getTeamImage(item, 'away')" [src]="getTeamImage(item, 'away')" [alt]="getTeamName(item, 'away')" loading="lazy">
+            <span *ngIf="!getTeamImage(item, 'away')" class="team-fallback">{{ getTeamName(item, 'away').charAt(0) }}</span>
+            <b>{{ getTeamName(item, 'away') }}</b>
+          </div>
+        </div>
+
+        <div class="fixture-meta">
+          <div><span>Date</span><b>{{ getMatchDate(item) }}</b></div>
+          <div><span>Status</span><b>{{ item.status || item.match_status || '-' }}</b></div>
+          <div><span>Venue</span><b>{{ getVenue(item) }}</b></div>
+          <div><span>Score</span><b>{{ getScore(item) }}</b></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="admin-form-card report-card" *ngIf="activeTab === 'active'">
+  <div class="list-head">
+    <div>
+      <h2>Active Series Matches</h2>
+      <p>Stored active series and related matches from backend.</p>
+    </div>
+    <button type="button" class="refresh-btn" [disabled]="activeSeriesLoading" (click)="loadActiveSeries()">
+      {{ activeSeriesLoading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="series-state" *ngIf="activeSeriesLoading">Loading active series...</div>
+  <div class="series-state" *ngIf="!activeSeriesLoading && !activeSeries.length">No active series found.</div>
+
+  <div class="table-wrap" *ngIf="!activeSeriesLoading && activeSeries.length">
+    <table>
+      <thead>
+        <tr>
+          <th>Series ID</th>
+          <th>Series</th>
+          <th>Status</th>
+          <th>Selected</th>
+          <th>Total Matches</th>
+          <th>Created</th>
+          <th>Matches</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of activeSeries">
+          <td>{{ item.seriesid || '-' }}</td>
+          <td>{{ item.name || '-' }}</td>
+          <td>{{ item.status || '-' }}</td>
+          <td>{{ item.is_selected ? 'Yes' : 'No' }}</td>
+          <td>{{ item.total_matches || getSeriesMatches(item).length || 0 }}</td>
+          <td>{{ item.created_at | date:'medium' }}</td>
+          <td>
+            <button class="view-matches-btn" type="button" (click)="openSeriesMatches(item)">
+              View Matches ({{ getSeriesMatches(item).length || item.total_matches || 0 }})
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="admin-confirm-overlay" *ngIf="confirmToggleOpen" role="dialog" aria-modal="true" aria-labelledby="toggleConfirmTitle" (click)="closeToggleConfirm()">
+  <div class="admin-confirm-modal" (click)="$event.stopPropagation()">
+    <button class="admin-confirm-close" type="button" aria-label="Close confirmation" (click)="closeToggleConfirm()">×</button>
+    <div class="admin-confirm-icon">
+      <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+    </div>
+    <h3 id="toggleConfirmTitle">Activate Matches</h3>
+    <p>Activate {{ selectedFixtures.length }} selected fixture(s)? This will call the toggle API and store them in backend.</p>
+    <div class="selected-list">
+      <span>Match IDs:</span>
+      <b>{{ selectedMatchIdsArray }}</b>
+    </div>
+    <div class="admin-confirm-actions">
+      <button class="btn-muted" type="button" (click)="closeToggleConfirm()">Cancel</button>
+      <button type="button" [disabled]="toggleLoading" (click)="confirmToggleSelectedMatches()">
+        {{ toggleLoading ? 'Saving...' : 'Confirm Activate' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="series-match-overlay" *ngIf="selectedSeries" role="dialog" aria-modal="true" aria-labelledby="seriesMatchesTitle" (click)="closeSeriesMatches()">
+  <div class="series-match-modal" (click)="$event.stopPropagation()">
+    <button class="admin-confirm-close" type="button" aria-label="Close matches modal" (click)="closeSeriesMatches()">×</button>
+
+    <div class="series-modal-head">
+      <div>
+        <span>Series #{{ selectedSeries.seriesid }}</span>
+        <h3 id="seriesMatchesTitle">{{ selectedSeries.name }}</h3>
+        <p>{{ getSeriesMatches(selectedSeries).length }} match(es) in this series</p>
+      </div>
+      <span class="status-pill">{{ selectedSeries.status || 'active' }}</span>
+    </div>
+
+    <div class="series-match-grid" *ngIf="getSeriesMatches(selectedSeries).length">
+      <article class="series-match-card" *ngFor="let match of getSeriesMatches(selectedSeries)">
+        <div class="series-match-top">
+          <span>#{{ match.provider_match_id }}</span>
+          <b [class.inactive]="!match.is_active">{{ match.is_active ? 'Active' : 'Inactive' }}</b>
+        </div>
+
+        <div class="team-row">
+          <div class="team">
+            <img *ngIf="getStoredMatchLogo(match, 'home')" [src]="getStoredMatchLogo(match, 'home')" [alt]="getStoredMatchName(match, 'home')" loading="lazy">
+            <span *ngIf="!getStoredMatchLogo(match, 'home')" class="team-fallback">{{ getStoredMatchName(match, 'home').charAt(0) }}</span>
+            <b>{{ getStoredMatchName(match, 'home') }}</b>
+          </div>
+          <strong>VS</strong>
+          <div class="team">
+            <img *ngIf="getStoredMatchLogo(match, 'away')" [src]="getStoredMatchLogo(match, 'away')" [alt]="getStoredMatchName(match, 'away')" loading="lazy">
+            <span *ngIf="!getStoredMatchLogo(match, 'away')" class="team-fallback">{{ getStoredMatchName(match, 'away').charAt(0) }}</span>
+            <b>{{ getStoredMatchName(match, 'away') }}</b>
+          </div>
+        </div>
+
+        <div class="fixture-meta">
+          <div><span>Start Time</span><b>{{ match.start_time | date:'medium' }}</b></div>
+          <div><span>Status</span><b>{{ match.status }}</b></div>
+          <div><span>Lineup</span><b>{{ match.lineup_status }}</b></div>
+          <div><span>DB ID</span><b>{{ match.id }}</b></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="series-state" *ngIf="!getSeriesMatches(selectedSeries).length">No matches found for this series.</div>
+  </div>
+</div>

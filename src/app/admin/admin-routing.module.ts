@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { adminAuthGuard } from '../core/guards/admin-auth.guard';
+import { ActivityDormancyComponent } from './activity-dormancy/activity-dormancy.component';
 import { AddCountryComponent } from './add-country/add-country.component';
 import { AddSubscriptionComponent } from './add-subscription/add-subscription.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminShellComponent } from './admin-shell/admin-shell.component';
 import { CreateBannerComponent } from './create-banner/create-banner.component';
+import { PackBuyersComponent } from './pack-buyers/pack-buyers.component';
+import { SeriesManagerComponent } from './series-manager/series-manager.component';
 
 const routes: Routes = [
   {
@@ -38,6 +41,18 @@ const routes: Routes = [
       {
         path: 'add-subscription',
         component: AddSubscriptionComponent
+      },
+      {
+        path: 'pack-buyers',
+        component: PackBuyersComponent
+      },
+      {
+        path: 'activity-dormancy',
+        component: ActivityDormancyComponent
+      },
+      {
+        path: 'series-manager',
+        component: SeriesManagerComponent
       }
     ]
   }

@@ -16,6 +16,7 @@ export class CreateBannerComponent implements OnInit {
   errorMessage = '';
   banners: AdminBanner[] = [];
   editingBannerId: number | null = null;
+  deleteConfirmBanner: AdminBanner | null = null;
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -114,11 +115,24 @@ export class CreateBannerComponent implements OnInit {
       return;
     }
 
-    const ok = confirm(`Delete banner "${item.name}"?`);
+    this.deleteConfirmBanner = item;
+  }
 
-    if (!ok) {
+  closeDeleteConfirm(): void {
+    if (this.deletingBannerId) {
       return;
     }
+
+    this.deleteConfirmBanner = null;
+  }
+
+  confirmDeleteBanner(): void {
+    if (!this.deleteConfirmBanner?.id || this.deletingBannerId) {
+      return;
+    }
+
+    const item = this.deleteConfirmBanner;
+    this.deleteConfirmBanner = null;
 
     this.deletingBannerId = item.id;
     this.message = '';

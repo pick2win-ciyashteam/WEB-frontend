@@ -65,11 +65,33 @@
         <p>{{ country.code }} · {{ country.dial_code }}</p>
       </div>
       <span class="country-status" [class.inactive]="country.is_active === 0">
-        {{ country.is_active === 0 ? 'Inactive' : 'Active' }}
+        {{ country.is_active === 0 ? 'Blocked' : 'Active' }}
       </span>
+      <button class="toggle-btn" type="button" [class.unblock]="country.is_active === 0" [disabled]="togglingCountryId === country.id" (click)="toggleCountry(country)">
+        {{ togglingCountryId === country.id ? 'Updating...' : (country.is_active === 0 ? 'Unblock' : 'Block') }}
+      </button>
       <button class="delete-btn" type="button" [disabled]="deletingCountryId === country.id" (click)="deleteCountry(country)">
         {{ deletingCountryId === country.id ? 'Deleting...' : 'Delete' }}
       </button>
     </article>
   </div>
 </section>
+
+<div class="admin-confirm-overlay" *ngIf="confirmModal" role="dialog" aria-modal="true" aria-labelledby="countryConfirmTitle" (click)="closeConfirmModal()">
+  <div class="admin-confirm-modal" (click)="$event.stopPropagation()">
+    <button class="admin-confirm-close" type="button" aria-label="Close confirmation" (click)="closeConfirmModal()">×</button>
+    <div class="admin-confirm-icon" [class.delete]="confirmModal.type === 'delete'">
+      <span class="material-symbols-outlined" aria-hidden="true">
+        {{ confirmModal.type === 'delete' ? 'delete' : 'block' }}
+      </span>
+    </div>
+    <h3 id="countryConfirmTitle">{{ confirmModal.title }}</h3>
+    <p>{{ confirmModal.message }}</p>
+    <div class="admin-confirm-actions">
+      <button class="btn-muted" type="button" (click)="closeConfirmModal()">Cancel</button>
+      <button class="confirm-danger" type="button" [disabled]="deletingCountryId === confirmModal.country.id || togglingCountryId === confirmModal.country.id" (click)="confirmAction()">
+        {{ deletingCountryId === confirmModal.country.id || togglingCountryId === confirmModal.country.id ? 'Processing...' : confirmModal.confirmText }}
+      </button>
+    </div>
+  </div>
+</div>

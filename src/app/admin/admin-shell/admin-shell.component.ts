@@ -19,9 +19,12 @@ export class AdminShellComponent {
 
   navItems: AdminNavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/admin/dashboard' },
+    { label: 'Series Manager', icon: 'sports_soccer', route: '/admin/series-manager' },
+    { label: 'Add Subscription', icon: 'workspace_premium', route: '/admin/add-subscription' },
+    { label: 'Pack Buyers', icon: 'payments', route: '/admin/pack-buyers' },
     { label: 'Create Banner', icon: 'image', route: '/admin/create-banner' },
     { label: 'Add Country', icon: 'public', route: '/admin/add-country' },
-    { label: 'Add Subscription', icon: 'workspace_premium', route: '/admin/add-subscription' }
+    { label: 'Activity Dormancy', icon: 'monitoring', route: '/admin/activity-dormancy' },
   ];
 
   constructor(

@@ -12,6 +12,14 @@ export class AddCountryComponent implements OnInit {
   loading = false;
   countriesLoading = false;
   deletingCountryId: number | null = null;
+  togglingCountryId: number | null = null;
+  confirmModal: {
+    type: 'delete' | 'toggle';
+    country: AdminCountry;
+    title: string;
+    message: string;
+    confirmText: string;
+  } | null = null;
   message = '';
   errorMessage = '';
   countries: AdminCountry[] = [];
@@ -90,12 +98,57 @@ export class AddCountryComponent implements OnInit {
       return;
     }
 
-    const ok = confirm(`Delete country "${country.name}"?`);
+    this.confirmModal = {
+      type: 'delete',
+      country,
+      title: 'Delete Country',
+      message: `Delete "${country.name}"? This action cannot be undone.`,
+      confirmText: 'Delete'
+    };
+  }
 
-    if (!ok) {
+  confirmAction(): void {
+    if (!this.confirmModal) {
       return;
     }
 
+    const { type, country } = this.confirmModal;
+
+    if (type === 'delete') {
+      this.confirmModal = null;
+      this.deleteCountryConfirmed(country);
+      return;
+    }
+
+    this.confirmModal = null;
+    this.toggleCountryConfirmed(country);
+  }
+
+  closeConfirmModal(): void {
+    if (this.deletingCountryId || this.togglingCountryId) {
+      return;
+    }
+
+    this.confirmModal = null;
+  }
+
+  toggleCountry(country: AdminCountry): void {
+    if (!country.id || this.togglingCountryId) {
+      return;
+    }
+
+    const nextStatus = country.is_active === 0 ? 'unblock' : 'block';
+
+    this.confirmModal = {
+      type: 'toggle',
+      country,
+      title: `${nextStatus === 'block' ? 'Block' : 'Unblock'} Country`,
+      message: `${nextStatus === 'block' ? 'Block' : 'Unblock'} "${country.name}"?`,
+      confirmText: nextStatus === 'block' ? 'Block' : 'Unblock'
+    };
+  }
+
+  private deleteCountryConfirmed(country: AdminCountry): void {
     this.deletingCountryId = country.id;
     this.message = '';
     this.errorMessage = '';
@@ -109,6 +162,26 @@ export class AddCountryComponent implements OnInit {
       error: (err) => {
         this.deletingCountryId = null;
         this.errorMessage = err?.error?.message || err?.error?.error || 'Unable to delete country.';
+      }
+    });
+  }
+
+  private toggleCountryConfirmed(country: AdminCountry): void {
+    const nextStatus = country.is_active === 0 ? 'unblock' : 'block';
+
+    this.togglingCountryId = country.id;
+    this.message = '';
+    this.errorMessage = '';
+
+    this.adminService.toggleCountry(country.id).subscribe({
+      next: (res) => {
+        this.togglingCountryId = null;
+        this.message = res?.message || `Country ${nextStatus === 'block' ? 'blocked' : 'unblocked'} successfully.`;
+        this.loadCountries();
+      },
+      error: (err) => {
+        this.togglingCountryId = null;
+        this.errorMessage = err?.error?.message || err?.error?.error || `Unable to ${nextStatus} country.`;
       }
     });
   }
