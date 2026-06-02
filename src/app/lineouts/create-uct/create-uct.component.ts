@@ -126,6 +126,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.sortPlayersByPosition(this.allSubstitutes.filter(player => this.selectedSubIds.has(player.id)));
   }
 
+  get mandateSubstitutes(): UctPlayer[] {
+    return this.selectedSubstitutes.filter(player => !this.isGoalkeeper(player));
+  }
+
   get homeStartingPlayers(): UctPlayer[] {
     return this.sortPlayersByPosition(this.startingPlayers.filter(player => player.teamSide === 'home'));
   }
@@ -156,7 +160,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   get mandatePool(): UctPlayer[] {
     if (this.mandateMode === 'NA') return [];
-    return this.mandateMode === 'NO' ? this.startingPlayers : this.availablePool;
+    const pool = this.mandateMode === 'NO' ? this.startingPlayers : this.availablePool;
+    return pool.filter(player => !this.isGoalkeeper(player));
   }
 
   get homeMandatePool(): UctPlayer[] {
@@ -168,11 +173,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get homeMandateMainPool(): UctPlayer[] {
-    return this.mandateMode === 'NO' ? this.homeStartingPlayers : this.homeStartingPlayers;
+    return this.homeStartingPlayers.filter(player => !this.isGoalkeeper(player));
   }
 
   get awayMandateMainPool(): UctPlayer[] {
-    return this.mandateMode === 'NO' ? this.awayStartingPlayers : this.awayStartingPlayers;
+    return this.awayStartingPlayers.filter(player => !this.isGoalkeeper(player));
   }
 
   get mandateYesPlayers(): UctPlayer[] {
@@ -789,7 +794,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     const fullPool = this.rotated(this.availablePool.filter(player => !excludedIds.has(player.id)), seed + 7);
 
     this.ensurePosition(team, selectedIds, 'GK', fullPool);
-    this.ensurePositionCount(team, selectedIds, 'DEF', 3, fullPool);
+    this.ensurePositionCount(team, selectedIds, 'DEF', 2, fullPool);
     this.ensurePositionCount(team, selectedIds, 'MID', 2, fullPool);
     this.ensurePositionCount(team, selectedIds, 'FWD', 1, fullPool);
     this.fillSide(team, selectedIds, 'home', targetHomeCount, homePool);

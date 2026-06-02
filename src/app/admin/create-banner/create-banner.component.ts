@@ -20,9 +20,10 @@ export class CreateBannerComponent implements OnInit {
 
   form = this.fb.group({
     name: ['', Validators.required],
+    heading: ['', Validators.required],
     image_url: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
     description: ['', Validators.required],
-    link: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+    link: ['', Validators.required],
     button: ['Go to UCT', Validators.required],
     sort_order: [null as number | null, Validators.min(0)]
   });
@@ -47,6 +48,7 @@ export class CreateBannerComponent implements OnInit {
 
     const payload: AdminBannerCreatePayload = {
       name: this.form.value.name || '',
+      heading: this.form.value.heading || '',
       image_url: this.form.value.image_url || '',
       description: this.form.value.description || '',
       link: this.form.value.link || '',
@@ -98,6 +100,7 @@ export class CreateBannerComponent implements OnInit {
     this.errorMessage = '';
     this.form.patchValue({
       name: item.name || '',
+      heading: item.heading || '',
       image_url: item.image_url || '',
       description: item.description || '',
       link: item.link || '',
@@ -158,6 +161,7 @@ export class CreateBannerComponent implements OnInit {
     this.editingBannerId = null;
     this.form.reset({
       name: '',
+      heading: '',
       image_url: '',
       description: '',
       link: '',

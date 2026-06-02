@@ -17,6 +17,11 @@
     </label>
 
     <label>
+      <span>Heading</span>
+      <input type="text" formControlName="heading" placeholder="Your first UCT is on us">
+    </label>
+
+    <label>
       <span>Image URL</span>
       <input type="url" formControlName="image_url" placeholder="https://...">
     </label>
@@ -28,7 +33,7 @@
 
     <label>
       <span>Link</span>
-      <input type="url" formControlName="link" placeholder="https://yoursite.com/ipl">
+      <input type="text" formControlName="link" placeholder="uctinfo">
     </label>
 
     <label>
@@ -68,6 +73,7 @@
       <div class="banner-info">
         <div>
           <h3>{{ item.name }}</h3>
+          <strong>{{ item.heading }}</strong>
           <p>{{ item.description }}</p>
         </div>
         <div class="banner-meta">

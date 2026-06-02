@@ -85,6 +85,78 @@
 </div>
 
 <section class="carousel-section">
+  <div class="banner-deck" id="bannerDeck">
+    <article class="banner tone-uct" [class.active]="currentBanner === 0">
+      <div>
+        <div class="banner-eyebrow">WHAT IS PICK2WIN</div>
+        <h3 class="banner-h">Football virtual team <em>configuration tool.</em></h3>
+        <p class="banner-body">A structured workflow tool that takes your configuration inputs and produces <b>20 structured football teams per match</b> in a few seconds, once official lineups release.</p>
+        <a routerLink="/uctinfo" class="banner-cta">What is UCT -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">⚽</span></div>
+    </article>
+
+    <article class="banner tone-uct" [class.active]="currentBanner === 1">
+      <div>
+        <div class="banner-eyebrow">FOUR-STEP WORKFLOW</div>
+        <h3 class="banner-h">Substitute. Mandate. <em>Captaincy.</em> Generate.</h3>
+        <p class="banner-body">Four simple screens after lineups release. Your inputs drive the output. <b>20 teams in a few seconds.</b> No editing chaos, no last-minute panic.</p>
+        <a routerLink="/uctinfo" class="banner-cta">See the workflow -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">⚙️</span></div>
+    </article>
+
+    <article class="banner tone-coverage" [class.active]="currentBanner === 2">
+      <div>
+        <div class="banner-eyebrow">COVERAGE · 30 COMPETITIONS</div>
+        <h3 class="banner-h">Premier League to <em>FIFA World Cup 2026.</em></h3>
+        <p class="banner-body">Premier League · UCL · La Liga · Serie A · Bundesliga · Ligue 1 · MLS, plus 23 more competitions <b>including FIFA World Cup 2026.</b> All covered by every coin pack.</p>
+        <a routerLink="/lineouts" class="banner-cta">See series -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🏆</span></div>
+    </article>
+
+    <article class="banner tone-wc" [class.active]="currentBanner === 3">
+      <div>
+        <div class="banner-eyebrow">SIMPLE PRICING</div>
+        <h3 class="banner-h">Four packs. <em>No subscription.</em></h3>
+        <p class="banner-body">Starter, Basic, Standard, and Pro packs. Every pack is valid for <b>365 days from purchase</b>. Buy once, use UCT whenever supported lineups are available.</p>
+        <a routerLink="/pricing" class="banner-cta">See pricing -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">💳</span></div>
+    </article>
+
+    <article class="banner tone-free" [class.active]="currentBanner === 4">
+      <div>
+        <div class="banner-eyebrow">NEW USERS · FREE FIRST MATCH</div>
+        <h3 class="banner-h">Your first UCT is <em>on us.</em></h3>
+        <p class="banner-body">Sign up, verify mobile + email, generate your first UCT <b>free</b>, no card needed. One per verified account. The fastest way to feel how the workflow saves time.</p>
+        <button type="button" class="banner-cta" (click)="openSignup()">Get started -></button>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🎁</span></div>
+    </article>
+
+    <article class="banner tone-skill" [class.active]="currentBanner === 5">
+      <div>
+        <div class="banner-eyebrow">TRUST · TRANSPARENT POSITIONING</div>
+        <h3 class="banner-h">India-incorporated. <em>Transparently positioned.</em></h3>
+        <p class="banner-body">PICK2WIN Technologies Pvt Ltd, supported markets, Stripe payments, dual OTP verification at signup, and clear positioning on what we do and what we do not.</p>
+        <a routerLink="/trust" class="banner-cta">Read Trust -></a>
+      </div>
+      <div class="banner-visual"><span class="emoji-big">🛡️</span></div>
+    </article>
+  </div>
+
+  <div class="banner-dots">
+    <button type="button" [class.active]="currentBanner === 0" aria-label="What is PICK2WIN" (click)="showBanner(0)"></button>
+    <button type="button" [class.active]="currentBanner === 1" aria-label="Four-step workflow" (click)="showBanner(1)"></button>
+    <button type="button" [class.active]="currentBanner === 2" aria-label="Coverage" (click)="showBanner(2)"></button>
+    <button type="button" [class.active]="currentBanner === 3" aria-label="Pricing" (click)="showBanner(3)"></button>
+    <button type="button" [class.active]="currentBanner === 4" aria-label="Free first match" (click)="showBanner(4)"></button>
+    <button type="button" [class.active]="currentBanner === 5" aria-label="Trust" (click)="showBanner(5)"></button>
+  </div>
+
+  <!-- Dynamic backend banners paused for now. Keep this block for later re-enable.
   <div class="banner-deck api-banner-deck" *ngIf="bannersLoading">
     <article class="banner api-banner active">
       <div>
@@ -106,13 +178,12 @@
         [class.active]="currentBanner === i">
         <div>
           <div class="banner-eyebrow">{{ banner.name }}</div>
-          <h3 class="banner-h">{{ banner.name }}</h3>
+          <h3 class="banner-h">{{ banner.heading || banner.name }}</h3>
           <p class="banner-body">{{ banner.description }}</p>
           <button
             class="banner-cta"
             type="button"
-            *ngIf="banner.link"
-            (click)="openBannerLink(banner)">
+            [routerLink]="bannerRouterLink(banner)">
             {{ banner.button }} ->
           </button>
         </div>
@@ -144,6 +215,7 @@
       </div>
     </div>
   </ng-template>
+  -->
 </section>
 
 <section class="home-section" *ngIf="showTodayLineupsCta">

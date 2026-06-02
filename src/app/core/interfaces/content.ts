@@ -155,6 +155,7 @@ export interface UctGenerateResponse {
 export interface Banner {
   id: number;
   name: string;
+  heading?: string;
   image_url: string;
   description: string;
   link: string;

@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private bannerTimer: any;
   private splashTimer: any;
   private launchDate = new Date('2026-06-10T09:00:00Z').getTime();
+  private staticHomeBannerCount = 6;
 
   constructor(
     private authModal: AuthModalService,
@@ -41,7 +42,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.updateCountdown();
     this.showLaunchModal = this.shouldShowLaunchModal();
-    this.loadBanners();
+    // Dynamic banners paused for now. Static home banners are rendered in the template.
+    // this.loadBanners();
+    this.startStaticBannerTimer();
     this.loadTodayLineupsCta();
     this.timer = setInterval(() => this.updateCountdown(), 1000);
     this.splashTimer = setTimeout(() => this.closeSplash(), 2200);
@@ -58,11 +61,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   nextBanner(): void {
-    if (!this.banners.length) {
+    const bannerCount = this.banners.length || this.staticHomeBannerCount;
+
+    if (!bannerCount) {
       return;
     }
 
-    this.currentBanner = (this.currentBanner + 1) % this.banners.length;
+    this.currentBanner = (this.currentBanner + 1) % bannerCount;
   }
 
   openBannerLink(banner: Banner): void {
@@ -73,6 +78,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   trackByBannerId(_: number, banner: Banner): number {
     return banner.id;
+  }
+
+  bannerRouterLink(banner: Banner): string {
+    const link = String(banner.link || '').trim();
+
+    if (!link) {
+      return '/';
+    }
+
+    return link.startsWith('/') ? link : `/${link}`;
   }
 
   closeSplash(): void {
@@ -107,13 +122,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.api.getBanners().subscribe({
       next: (res) => {
-        console.log('banners',res)
+        console.log('Home banner API response:', res);
         this.banners = res?.success && Array.isArray(res.data) ? res.data : [];
         this.currentBanner = 0;
         this.bannersLoading = false;
         this.startBannerTimer();
       },
-      error: () => {
+      error: (error) => {
+        console.log('Home banner API error:', error);
         this.banners = [];
         this.bannersLoading = false;
       }
@@ -137,6 +153,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.banners.length > 1) {
       this.bannerTimer = setInterval(() => this.nextBanner(), 5000);
     }
+  }
+
+  private startStaticBannerTimer(): void {
+    clearInterval(this.bannerTimer);
+    this.bannerTimer = setInterval(() => this.nextBanner(), 5000);
   }
 
   private shouldShowLaunchModal(): boolean {

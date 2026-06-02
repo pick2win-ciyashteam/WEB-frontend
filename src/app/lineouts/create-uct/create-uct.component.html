@@ -229,7 +229,7 @@
           </article>
         </div>
 
-        <div class="sub-player-section" *ngIf="mandateMode === 'YES' && selectedSubstitutes.length">
+        <div class="sub-player-section" *ngIf="mandateMode === 'YES' && mandateSubstitutes.length">
           <div class="sub-player-title">
             <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
             <div>
@@ -241,7 +241,7 @@
             <button
               class="player-row mandate-row"
               type="button"
-              *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer"
+              *ngFor="let player of mandateSubstitutes; trackBy: trackPlayer"
               [class.selected]="mandateOf(player) === 'YES'"
               [disabled]="isMandatePlayerDisabled(player)"
               (click)="setMandate(player, 'YES')">

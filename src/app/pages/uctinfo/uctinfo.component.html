@@ -355,6 +355,110 @@
       </div>
     </article>
 
+    <article class="info-block reveal" id="uct-step-04">
+      <div class="block-kicker">
+        <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+        Goalkeeper Strategy
+      </div>
+      <h2>Goalkeepers are managed <em>separately</em> from Mandate selections.</h2>
+      <p class="block-lead">
+        This is an intentional UCT design choice, not a technical limitation. PICK2WIN treats goalkeeper
+        selection as a separate strategic decision because only two goalkeepers are available and every
+        generated team must use exactly one.
+      </p>
+
+      <div class="confirm-card">
+        <span class="material-symbols-outlined" aria-hidden="true">push_pin</span>
+        <div>
+          <b>Recommended UCT rule</b>
+          <p>Goalkeepers are intentionally excluded from M-YES and M-NO selections. Mandates apply only to outfield positions where wider selection combinations exist.</p>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="compare-card good">
+          <h3>M-YES &amp; M-NO Apply To</h3>
+          <ul>
+            <li><b>DEF</b> - Defenders</li>
+            <li><b>MID</b> - Midfielders</li>
+            <li><b>FWD</b> - Forwards</li>
+            <li>Mandate logic adds value where there are many coverage choices.</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <h3>Goalkeeper Allocation Choice</h3>
+          <ul>
+            <li>Goalkeeper A in all teams</li>
+            <li>Goalkeeper B in all teams</li>
+            <li>Balanced distribution across teams</li>
+            <li>Only 2 goalkeepers and 1 per team makes this a coverage strategy.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="table-label">Why this makes sense</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Available Players</th>
+              <th>Mandate Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pos gk">GK</span></td>
+              <td>Only 2 players</td>
+              <td>Low - binary choice</td>
+            </tr>
+            <tr>
+              <td><span class="pos def">DEF</span></td>
+              <td>6-10 players</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td><span class="pos mid">MID</span></td>
+              <td>6-10 players</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td><span class="pos fwd">FWD</span></td>
+              <td>2-6 players</td>
+              <td>Moderate to high</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note">
+        Mandate logic adds the most value where there are many choices. With only 2 goalkeepers and exactly
+        1 GK per team, the real strategic question is not inclusion or exclusion - it is exposure distribution.
+      </p>
+
+      <div class="confirm-card">
+        <span class="material-symbols-outlined" aria-hidden="true">target</span>
+        <div>
+          <b>The real strategic question</b>
+          <ul>
+            <li>Should GK A appear in all teams?</li>
+            <li>Should GK B appear in all teams?</li>
+            <li>Should exposure be split across both?</li>
+          </ul>
+          <p>
+            That is a coverage strategy, not a mandate strategy, and UCT gives you exactly that choice on its own
+            dedicated screen.
+          </p>
+        </div>
+      </div>
+
+      <p class="note">
+        This design encourages users to independently evaluate goalkeeper strategy rather than relying on
+        mandate-based inclusion or exclusion. It is a transparent design choice that keeps the decision in your
+        hands while making the most strategically meaningful options available to you for every position.
+      </p>
+    </article>
+
     <article class="info-block reveal">
       <div class="block-kicker">
         <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
@@ -404,7 +508,7 @@
             <tr>
               <td><span class="pos def">DEF</span></td>
               <td>Defenders</td>
-              <td>3</td>
+              <td>2</td>
               <td>6</td>
             </tr>
             <tr>
@@ -439,7 +543,7 @@
 
       <div class="constraint-grid">
         <div><span>Goalkeeper</span><b>1 GK</b><p>Exactly one</p></div>
-        <div><span>Defenders</span><b>3-6 DEF</b><p>Range allowed</p></div>
+        <div><span>Defenders</span><b>2-6 DEF</b><p>Range allowed</p></div>
         <div><span>Midfielders</span><b>2-5 MID</b><p>Range allowed</p></div>
         <div><span>Forwards</span><b>1-3 FWD</b><p>Range allowed</p></div>
         <div class="danger"><span>Max per team</span><b>7 max</b><p>From any one real team</p></div>

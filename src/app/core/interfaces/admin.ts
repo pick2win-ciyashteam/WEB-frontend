@@ -73,6 +73,7 @@ export interface AdminCountry {
 
 export interface AdminBannerCreatePayload {
   name: string;
+  heading: string;
   image_url: string;
   description: string;
   link: string;
@@ -83,6 +84,7 @@ export interface AdminBannerCreatePayload {
 export interface AdminBanner {
   id: number;
   name: string;
+  heading?: string;
   image_url: string;
   description: string;
   link: string;
