@@ -51,7 +51,11 @@ countries: SignupCountry[] = [];
 countriesLoading = false;
 
   form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
+    name: ['', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.pattern(/^[A-Za-z][A-Za-z.'’-]*(?:\s+[A-Za-z][A-Za-z.'’-]*)+$/)
+    ]],
     country: ['', Validators.required],
     dob: ['', [Validators.required, minimumAgeValidator(18)]],
     dial: ['', Validators.required],

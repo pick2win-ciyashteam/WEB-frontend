@@ -136,7 +136,26 @@ select {
 }
 
 select option {
-  color: #061624;
+  color: #ffffff;
+  background: #081f32;
+  font-weight: 700;
+}
+
+select option:checked,
+select option:hover {
+  color: #051a2a;
+  background: #f4b400;
+}
+
+.country-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+}
+
+.country-select::-ms-expand {
+  display: none;
 }
 
 input:focus,
@@ -190,6 +209,7 @@ small {
 .dial-code-fixed {
   display: flex;
   align-items: center;
+  gap: 7px;
   height: 54px;
   padding: 0 16px;
   border: 1px solid var(--line);
@@ -200,6 +220,11 @@ small {
   font-weight: 850;
   white-space: nowrap;
   user-select: none;
+}
+
+.dial-flag {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .password-wrap {

@@ -21,12 +21,14 @@
     <form [formGroup]="form">
       <label>Full name <span>*</span></label>
       <input type="text" formControlName="name" placeholder="Your full name">
-      <small *ngIf="form.get('name')?.touched && form.get('name')?.invalid">Full name is required</small>
+      <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">Full name is required</small>
+      <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('minlength')">Full name must be at least 3 characters</small>
+      <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('pattern')">Enter full name with at least two parts</small>
 
       <label>Country of residence <span>*</span></label>
-      <select formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
+      <select class="country-select" formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
         <option value="">{{ countriesLoading ? 'Loading countries...' : 'Select your country' }}</option>
-        <option *ngFor="let c of countries" [value]="c.name">{{ c.flag }} {{ c.name }}</option>
+        <option *ngFor="let c of countries" [value]="c.name">{{ c.name }}</option>
       </select>
 
       <label>Date of birth <span>*</span></label>
@@ -40,6 +42,7 @@
       <label>Mobile number <span>*</span></label>
       <div class="phone-row">
         <div class="dial-code-fixed">
+          <span *ngIf="selectedCountry?.flag" class="dial-flag">{{ selectedCountry?.flag }}</span>
           {{ form.value.dial || 'Code' }}
         </div>
         <input type="tel" formControlName="mobile" placeholder="Mobile number" [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)">
