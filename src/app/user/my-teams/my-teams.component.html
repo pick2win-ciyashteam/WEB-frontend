@@ -8,12 +8,18 @@
       </span>
     </div>
 
-    <div class="profile-teams-datebar">
+    <div class="profile-teams-datebar" (click)="openDatePicker(myTeamsDateInput)">
       <label class="profile-teams-datelbl" for="myTeamsDate">Date</label>
-      <input type="date" id="myTeamsDate"  class="profile-teams-dateinput" [(ngModel)]="selectedDate"
-          (change)="applyDateFilter()">
+      <input
+        #myTeamsDateInput
+        type="date"
+        id="myTeamsDate"
+        class="profile-teams-dateinput"
+        [(ngModel)]="selectedDate"
+        (click)="openDatePicker(myTeamsDateInput); $event.stopPropagation()"
+        (change)="applyDateFilter()">
 
-        <button class="profile-teams-datebtn" type="button" (click)="resetDateFilter()">
+        <button class="profile-teams-datebtn" type="button" (click)="resetDateFilter(); $event.stopPropagation()">
           <span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>
           Latest
         </button>
@@ -81,8 +87,8 @@
         </div>
 
         <div class="myteams-stat">
-          <div class="myteams-stat-lbl">Status</div>
-          <div class="myteams-stat-val mono expiry">{{ match.status || match.expires }}</div>
+          <div class="myteams-stat-lbl">Expires In</div>
+          <div class="myteams-stat-val mono expiry">{{ match.expires }}</div>
         </div>
 
       </div>
@@ -135,7 +141,7 @@
         <div class="mt-detail-league">{{ selectedMatch?.league }}</div>
         <h3 class="mt-detail-title">{{ selectedMatch?.title }}</h3>
         <div class="mt-detail-meta">
-          Teams generated at {{ selectedMatch?.generatedAt }} - {{ selectedMatch?.status }}
+          Teams generated at {{ selectedMatch?.generatedAt }} - expires in {{ selectedMatch?.expires }}
         </div>
       </div>
 

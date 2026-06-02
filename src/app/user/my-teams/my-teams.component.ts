@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 
 type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
@@ -17,7 +17,9 @@ interface GeneratedMatch {
   awayLogo?: string;
   status?: string;
   teamsGenerated?: number;
-  matchDate?:string;
+  matchDate?: string;
+  startDate?: string;
+  startTimeISO?: string;
 }
 
 interface ApiPlayer {
@@ -55,7 +57,7 @@ interface PreviewTeam {
   templateUrl: './my-teams.component.html',
   styleUrls: ['./my-teams.component.css']
 })
-export class MyTeamsComponent implements OnInit {
+export class MyTeamsComponent implements OnInit, OnDestroy {
   selectedMatch: GeneratedMatch | null = null;
   previewTeam: PreviewTeam | null = null;
   previewIndex = 0;
@@ -71,11 +73,17 @@ export class MyTeamsComponent implements OnInit {
 
   selectedDate = '';
 filteredMatches: GeneratedMatch[] = [];
+private expiryTimer: any;
 
   constructor(private api: ApiService) {}
 
   ngOnInit(): void {
     this.loadMatches();
+    this.expiryTimer = setInterval(() => this.refreshExpiryLabels(), 60000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.expiryTimer);
   }
 
   loadMatches(): void {
@@ -86,22 +94,27 @@ filteredMatches: GeneratedMatch[] = [];
       console.log(res)
       const data = Array.isArray(res?.data) ? res.data : [];
 
-      this.matches = data.map((m: any) => ({
-        id: Number(m.match_id),
-        league: m.series_name || 'N/A',
-        time: this.formatMatchTime(m.start_time),
-        title: `${m.home_team || 'HOME'} vs ${m.away_team || 'AWAY'}`,
-        coin: '-1',
-        generatedAt: this.formatTime(m.generated_at),
-        expires: m.status === 'UPCOMING' ? 'upcoming' : 'match ended',
-        live: true,
-        free: false,
-        homeLogo: m.home_logo,
-        awayLogo: m.away_logo,
-        status: m.status,
-        teamsGenerated: Number(m.teams_generated || 0),
-        startDate: m.start_time ? new Date(m.start_time).toISOString().split('T')[0] : ''
-      }));
+      this.matches = data.map((m: any) => {
+        const startTimeISO = m.start_time || '';
+
+        return {
+          id: Number(m.match_id),
+          league: m.series_name || 'N/A',
+          time: this.formatMatchTime(startTimeISO),
+          title: `${m.home_team || 'HOME'} vs ${m.away_team || 'AWAY'}`,
+          coin: '-1',
+          generatedAt: this.formatTime(m.generated_at),
+          expires: this.expiryLabel(startTimeISO, m.status),
+          live: !this.isExpired(startTimeISO, m.status),
+          free: false,
+          homeLogo: m.home_logo,
+          awayLogo: m.away_logo,
+          status: m.status,
+          teamsGenerated: Number(m.teams_generated || 0),
+          startDate: startTimeISO ? new Date(startTimeISO).toISOString().split('T')[0] : '',
+          startTimeISO
+        };
+      });
 
       this.filteredMatches = [...this.matches];
       this.loadingMatches = false;
@@ -128,6 +141,13 @@ applyDateFilter() {
 resetDateFilter() {
   this.selectedDate = '';
   this.filteredMatches = [...this.matches];
+}
+
+openDatePicker(input: HTMLInputElement): void {
+  input.focus();
+
+  const pickerInput = input as HTMLInputElement & { showPicker?: () => void };
+  pickerInput.showPicker?.();
 }
 
 downloadMatchTeams(match: GeneratedMatch) {
@@ -431,5 +451,53 @@ downloadCSV(rows: any[], fileName: string) {
       minute: '2-digit',
       second: '2-digit'
     }).format(new Date(value));
+  }
+
+  private refreshExpiryLabels(): void {
+    this.matches = this.matches.map(match => ({
+      ...match,
+      expires: this.expiryLabel(match.startTimeISO || '', match.status),
+      live: !this.isExpired(match.startTimeISO || '', match.status)
+    }));
+
+    this.applyDateFilter();
+  }
+
+  private isExpired(startTime: string, status?: string): boolean {
+    if (String(status || '').toUpperCase() === 'LIVE') {
+      return true;
+    }
+
+    if (!startTime) {
+      return false;
+    }
+
+    return new Date(startTime).getTime() <= Date.now();
+  }
+
+  private expiryLabel(startTime: string, status?: string): string {
+    if (this.isExpired(startTime, status)) {
+      return '0m';
+    }
+
+    if (!startTime) {
+      return '-';
+    }
+
+    const diffMs = new Date(startTime).getTime() - Date.now();
+    const totalMinutes = Math.max(0, Math.ceil(diffMs / 60000));
+    const days = Math.floor(totalMinutes / 1440);
+    const hours = Math.floor((totalMinutes % 1440) / 60);
+    const minutes = totalMinutes % 60;
+
+    if (days > 0) {
+      return `${days}d ${hours}h`;
+    }
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+
+    return `${minutes}m`;
   }
 }

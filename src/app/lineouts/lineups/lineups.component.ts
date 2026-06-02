@@ -137,15 +137,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   statusLabel(match: LineoutMatch): string {
-    if (this.isLive(match)) {
-      return match.lineupReady ? 'Live - lineouts released' : 'Live';
-    }
-
-    if (match.lineupReady) {
-      return match.lineupJustReleased ? 'lineouts released' : 'Lineups ready';
-    }
-
-    return 'Waiting for lineouts';
+    return match.lineupReady ? 'Lineup Ready' : 'Waiting for lineup';
   }
 
   actionLabel(match: LineoutMatch): string {
@@ -153,19 +145,16 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return 'UCT Locked';
     }
 
-    return this.isLoggedIn ? 'Run UCT' : 'Sign in to run';
+    return 'Run UCT';
   }
 
   kickoffInfo(match: LineoutMatch): string {
-    if (this.isLive(match)) {
-      return `Live now - ${match.venue}`;
-    }
-
     const kickoffMs = new Date(match.kickoffISO).getTime();
     const diffMs = kickoffMs - Date.now();
+    const prefix = `${this.shortDayLabel(new Date(match.kickoffISO))} \u2022 ${this.formatKickoff(match)}`;
 
     if (diffMs <= 0) {
-      return `Started - ${match.venue}`;
+      return `${prefix} \u2022 Match started`;
     }
 
     const totalMinutes = Math.ceil(diffMs / 60000);
@@ -183,7 +172,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
       label = `Kicks off in ${minutes}m`;
     }
 
-    return `${label} - ${match.venue}`;
+    return `${prefix} \u2022 ${label}`;
   }
 
   openMatch(match: LineoutMatch): void {
@@ -264,6 +253,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
     }).format(new Date(match.kickoffISO));
   }
 
+  todayGroupLabel(): string {
+    return this.fullDayLabel(new Date());
+  }
+
   daysUntil(date: Date): number {
     const start = new Date();
     start.setHours(0, 0, 0, 0);
@@ -284,18 +277,34 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   private dayLabel(date: Date): string {
+    return this.fullDayLabel(date);
+  }
+
+  private fullDayLabel(date: Date): string {
+    const relative = this.shortDayLabel(date);
+
+    return `${relative} \u2022 ${new Intl.DateTimeFormat('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'short'
+    }).format(date)}`.toUpperCase();
+  }
+
+  private shortDayLabel(date: Date): string {
     const today = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
+
+    if (this.localDateKey(date) === this.localDateKey(today)) {
+      return 'Today';
+    }
 
     if (this.localDateKey(date) === this.localDateKey(tomorrow)) {
       return 'Tomorrow';
     }
 
     return new Intl.DateTimeFormat('en-GB', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'short'
+      weekday: 'short'
     }).format(date);
   }
 

@@ -67,6 +67,7 @@
   background: rgba(0, 0, 0, 0.24);
   border: 1px solid var(--line);
   border-radius: 9px;
+  cursor: pointer;
 }
 
 .profile-teams-datelbl {
@@ -79,12 +80,19 @@
 .profile-teams-dateinput {
   min-height: 32px;
   padding: 0 6px;
-  border: 0;
+  border: 1px solid transparent;
   outline: 0;
   color: var(--paper);
   background: transparent;
   font-family: var(--font-mono);
   color-scheme: dark;
+  cursor: pointer;
+}
+
+.profile-teams-dateinput:focus {
+  border-color: rgba(244, 180, 0, 0.34);
+  border-radius: 7px;
+  box-shadow: 0 0 0 3px rgba(244, 180, 0, 0.08);
 }
 
 .profile-teams-datebtn,
@@ -965,11 +973,39 @@
     grid-template-columns: 1fr;
   }
 
+  .profile-teams-datebar {
+    gap: 9px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.28);
+  }
+
+  .profile-teams-datelbl {
+    font-size: 10px;
+  }
+
   .myteams-action,
   .mt-back-btn,
   .profile-teams-datebtn,
   .profile-teams-dateinput {
     width: 100%;
+  }
+
+  .profile-teams-dateinput {
+    min-height: 46px;
+    padding: 0 12px;
+    border: 1px solid rgba(244, 180, 0, 0.28);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    font-size: 16px;
+    appearance: auto;
+    -webkit-appearance: auto;
+  }
+
+  .profile-teams-dateinput::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    filter: invert(1);
   }
 
   .preview-h {

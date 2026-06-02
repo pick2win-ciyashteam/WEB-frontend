@@ -9,10 +9,62 @@ interface SignupCountry extends Country {
   max: number;
 }
 
+interface MobileLengthRule {
+  min: number;
+  max: number;
+}
+
 interface CountryRegionGroup {
   label: string;
   countries: SignupCountry[];
 }
+
+const DEFAULT_MOBILE_LENGTH: MobileLengthRule = { min: 7, max: 14 };
+
+const MOBILE_LENGTH_BY_COUNTRY: Record<string, MobileLengthRule> = {
+  australia: { min: 9, max: 9 },
+  austria: { min: 10, max: 13 },
+  belgium: { min: 9, max: 9 },
+  canada: { min: 10, max: 10 },
+  denmark: { min: 8, max: 8 },
+  finland: { min: 9, max: 12 },
+  france: { min: 9, max: 9 },
+  germany: { min: 10, max: 11 },
+  india: { min: 10, max: 10 },
+  ireland: { min: 9, max: 9 },
+  italy: { min: 9, max: 10 },
+  netherlands: { min: 9, max: 9 },
+  'new zealand': { min: 8, max: 10 },
+  norway: { min: 8, max: 8 },
+  poland: { min: 9, max: 9 },
+  portugal: { min: 9, max: 9 },
+  spain: { min: 9, max: 9 },
+  sweden: { min: 9, max: 10 },
+  'united kingdom': { min: 10, max: 10 },
+  'united states': { min: 10, max: 10 },
+  usa: { min: 10, max: 10 }
+};
+
+const MOBILE_LENGTH_BY_DIAL_CODE: Record<string, MobileLengthRule> = {
+  '+1': { min: 10, max: 10 },
+  '+31': { min: 9, max: 9 },
+  '+32': { min: 9, max: 9 },
+  '+33': { min: 9, max: 9 },
+  '+34': { min: 9, max: 9 },
+  '+351': { min: 9, max: 9 },
+  '+353': { min: 9, max: 9 },
+  '+39': { min: 9, max: 10 },
+  '+44': { min: 10, max: 10 },
+  '+45': { min: 8, max: 8 },
+  '+46': { min: 9, max: 10 },
+  '+47': { min: 8, max: 8 },
+  '+48': { min: 9, max: 9 },
+  '+49': { min: 10, max: 11 },
+  '+61': { min: 9, max: 9 },
+  '+64': { min: 8, max: 10 },
+  '+91': { min: 10, max: 10 },
+  '+358': { min: 9, max: 12 }
+};
 
 const COUNTRY_REGION_ORDER: Array<{ label: string; countries: string[] }> = [
   {
@@ -108,7 +160,7 @@ countriesLoading = false;
     country: ['', Validators.required],
     dob: ['', [Validators.required, minimumAgeValidator(18)]],
     dial: ['', Validators.required],
-    mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{7,14}$/)]],
+    mobile: ['', [Validators.required, this.mobileNumberValidator.bind(this)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     terms: [false, Validators.requiredTrue]
@@ -158,6 +210,8 @@ onCountryChange() {
       mobile: ''
     });
   }
+
+  this.form.get('mobile')?.updateValueAndValidity();
 }
 
   get ageValid(): boolean {
@@ -520,8 +574,7 @@ private loadCountries(): void {
       this.countries = res?.success && Array.isArray(res.data)
         ? res.data.map(country => ({
             ...country,
-            min: 7,
-            max: 14
+            ...this.getMobileLengthRule(country)
           }))
         : [];
       this.countryRegionGroups = this.groupCountriesByRegion(this.countries);
@@ -573,7 +626,7 @@ private groupCountriesByRegion(countries: SignupCountry[]): CountryRegionGroup[]
 }
 
 get mobileLimit(): number {
-  return this.selectedCountry?.max || 14;
+  return this.selectedCountry?.max || DEFAULT_MOBILE_LENGTH.max;
 }
 
 get mobileError(): string {
@@ -597,12 +650,7 @@ get mobileError(): string {
 }
 
 validateMobileByCountry(): boolean {
-  const country = this.selectedCountry;
-  const mobile = this.form.value.mobile || '';
-
-  if (!country) return false;
-
-  return mobile.length >= country.min && mobile.length <= country.max;
+  return !this.mobileNumberValidator(this.form.get('mobile'));
 }
 
 onMobileInput(event: any) {
@@ -613,6 +661,42 @@ onMobileInput(event: any) {
   }
 
   this.form.patchValue({ mobile: value }, { emitEvent: false });
+  this.form.get('mobile')?.updateValueAndValidity({ emitEvent: false });
+}
+
+private mobileNumberValidator(control: AbstractControl | null): ValidationErrors | null {
+  const mobile = String(control?.value || '');
+
+  if (!mobile) {
+    return null;
+  }
+
+  if (!/^[0-9]+$/.test(mobile)) {
+    return { mobileDigits: true };
+  }
+
+  const country = this.selectedCountry;
+
+  if (!country) {
+    return { mobileCountry: true };
+  }
+
+  return mobile.length >= country.min && mobile.length <= country.max
+    ? null
+    : { mobileLength: true };
+}
+
+private getMobileLengthRule(country: Country): MobileLengthRule {
+  const countryKey = this.normalizeCountryKey(country.name);
+  const dialCodeKey = String(country.dial_code || '').replace(/\s/g, '');
+
+  return MOBILE_LENGTH_BY_COUNTRY[countryKey]
+    || MOBILE_LENGTH_BY_DIAL_CODE[dialCodeKey]
+    || DEFAULT_MOBILE_LENGTH;
+}
+
+private normalizeCountryKey(value: string): string {
+  return String(value || '').trim().toLowerCase();
 }
 
 private extractOtpFromResponse(res: any, type: 'mobile' | 'email'): string {

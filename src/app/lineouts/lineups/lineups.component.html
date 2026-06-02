@@ -37,24 +37,6 @@
           </a>
         </div>
 
-        <div class="status-strip">
-          <div>
-            <span class="material-symbols-outlined" aria-hidden="true">lock_clock</span>
-            <b>Before lineups</b>
-            <small>UCT locked</small>
-          </div>
-          <div>
-            <span class="material-symbols-outlined" aria-hidden="true">verified</span>
-            <b>Lineups released</b>
-            <small>Run UCT opens</small>
-          </div>
-          <div>
-            <span class="material-symbols-outlined" aria-hidden="true">groups</span>
-            <b>After generation</b>
-            <small>20 teams saved</small>
-          </div>
-        </div>
-
         <div class="empty-state" *ngIf="loadingMatches">
           <div class="empty-icon">
             <span class="material-symbols-outlined" aria-hidden="true">progress_activity</span>
@@ -65,6 +47,9 @@
 
         <ng-container *ngIf="!loadingMatches && visibleMatches.length; else noMatches">
           <section class="matches-panel today-matches-panel" *ngIf="todayMatches.length">
+            <div class="day-label today-day-label">
+              <span>{{ todayGroupLabel() }}</span>
+            </div>
             <div class="panel-head">
               <div>
                 <span class="panel-kicker">Today</span>
@@ -122,9 +107,6 @@
 
                 <div class="match-side">
                   <span class="lineup-state" [class.ready-state]="match.lineupReady" [class.generated-state]="isGenerated(match)">
-                    <span class="material-symbols-outlined" aria-hidden="true">
-                      {{ isGenerated(match) ? 'task_alt' : isLive(match) ? 'radio_button_checked' : match.lineupReady ? 'bolt' : 'lock' }}
-                    </span>
                     {{ statusLabel(match) }}
                   </span>
                   <button class="uct-btn" type="button" [disabled]="!canRunUct(match) && !isGenerated(match)" (click)="$event.stopPropagation(); handleMatchAction(match)">
@@ -196,9 +178,8 @@
                   </div>
 
                   <div class="match-side">
-                    <span class="lineup-state">
-                      <span class="material-symbols-outlined" aria-hidden="true">lock</span>
-                      Waiting for lineup
+                    <span class="lineup-state" [class.ready-state]="match.lineupReady">
+                      {{ statusLabel(match) }}
                     </span>
                     <button
                       class="uct-btn"
