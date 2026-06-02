@@ -9,6 +9,44 @@ interface SignupCountry extends Country {
   max: number;
 }
 
+interface CountryRegionGroup {
+  label: string;
+  countries: SignupCountry[];
+}
+
+const COUNTRY_REGION_ORDER: Array<{ label: string; countries: string[] }> = [
+  {
+    label: 'United Kingdom & Ireland',
+    countries: ['United Kingdom', 'Ireland']
+  },
+  {
+    label: 'European Union & EEA',
+    countries: [
+      'Austria',
+      'Belgium',
+      'Denmark',
+      'Finland',
+      'France',
+      'Germany',
+      'Italy',
+      'Netherlands',
+      'Norway',
+      'Poland',
+      'Portugal',
+      'Spain',
+      'Sweden'
+    ]
+  },
+  {
+    label: 'North America',
+    countries: ['United States', 'Canada']
+  },
+  {
+    label: 'Asia-Pacific',
+    countries: ['Australia', 'New Zealand']
+  }
+];
+
 function minimumAgeValidator(minAge: number) {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
@@ -32,6 +70,16 @@ function minimumAgeValidator(minAge: number) {
   };
 }
 
+function internationalNameValidator(control: AbstractControl): ValidationErrors | null {
+  const value = String(control.value || '').trim();
+
+  if (!value) {
+    return null;
+  }
+
+  return /^[\p{L}\p{M}][\p{L}\p{M}.' -]*$/u.test(value) ? null : { nameFormat: true };
+}
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -48,6 +96,7 @@ export class SignupComponent {
   maxDob = this.getMaxDob();
 
 countries: SignupCountry[] = [];
+countryRegionGroups: CountryRegionGroup[] = [];
 countriesLoading = false;
 
   form = this.fb.group({
@@ -74,6 +123,12 @@ successMessage = '';
     private fb: FormBuilder,
     private authModal: AuthModalService, private api:ApiService
   ) {
+    this.form.get('name')?.setValidators([
+      Validators.required,
+      Validators.minLength(3),
+      internationalNameValidator
+    ]);
+    this.form.get('name')?.updateValueAndValidity({ emitEvent: false });
     this.loadCountries();
   }
 
@@ -158,6 +213,90 @@ focusOtp(type: 'mobile' | 'email') {
 
 trackByIndex(index: number): number {
   return index;
+}
+
+trackByRegionLabel(_: number, group: CountryRegionGroup): string {
+  return group.label;
+}
+
+trackByCountryCode(_: number, country: SignupCountry): string {
+  return country.code || country.name;
+}
+
+get nameError(): string {
+  const control = this.form.get('name');
+
+  if (!control?.touched || !control.errors) {
+    return '';
+  }
+
+  if (control.hasError('required')) {
+    return 'Please enter your full name.';
+  }
+
+  if (control.hasError('minlength')) {
+    return 'Your name must contain at least 3 characters.';
+  }
+
+  if (control.hasError('nameFormat')) {
+    return 'Please use letters, spaces, apostrophes, or hyphens only.';
+  }
+
+  return '';
+}
+
+get dobError(): string {
+  const control = this.form.get('dob');
+
+  if (!control?.touched || !control.errors) {
+    return '';
+  }
+
+  if (control.hasError('required')) {
+    return 'Please select your date of birth.';
+  }
+
+  if (control.hasError('underAge')) {
+    return 'You must be at least 18 years old to create an account.';
+  }
+
+  return '';
+}
+
+get emailError(): string {
+  const control = this.form.get('email');
+
+  if (!control?.touched || !control.errors) {
+    return '';
+  }
+
+  if (control.hasError('required')) {
+    return 'Please enter your email address.';
+  }
+
+  if (control.hasError('email')) {
+    return 'Please enter a valid email address.';
+  }
+
+  return '';
+}
+
+get passwordError(): string {
+  const control = this.form.get('password');
+
+  if (!control?.touched || !control.errors) {
+    return '';
+  }
+
+  if (control.hasError('required')) {
+    return 'Please create a password.';
+  }
+
+  if (control.hasError('minlength')) {
+    return 'Your password must contain at least 6 characters.';
+  }
+
+  return '';
 }
 
 otpInput(event: Event, index: number, type: 'mobile' | 'email') {
@@ -385,13 +524,48 @@ private loadCountries(): void {
             max: 14
           }))
         : [];
+      this.countryRegionGroups = this.groupCountriesByRegion(this.countries);
     },
     error: () => {
       this.countriesLoading = false;
       this.countries = [];
+      this.countryRegionGroups = [];
       this.errorMessage = 'Unable to load countries. Please try again later.';
     }
   });
+}
+
+private groupCountriesByRegion(countries: SignupCountry[]): CountryRegionGroup[] {
+  const countryByName = new Map(
+    countries.map(country => [country.name.trim().toLowerCase(), country])
+  );
+  const groupedNames = new Set<string>();
+
+  const groups = COUNTRY_REGION_ORDER
+    .map(region => {
+      const regionCountries = region.countries
+        .map(countryName => countryByName.get(countryName.toLowerCase()))
+        .filter((country): country is SignupCountry => !!country);
+
+      regionCountries.forEach(country => groupedNames.add(country.name.trim().toLowerCase()));
+
+      return {
+        label: region.label,
+        countries: regionCountries
+      };
+    })
+    .filter(group => group.countries.length > 0);
+
+  const otherCountries = countries.filter(country => !groupedNames.has(country.name.trim().toLowerCase()));
+
+  if (otherCountries.length) {
+    groups.push({
+      label: 'Other Supported Countries',
+      countries: otherCountries
+    });
+  }
+
+  return groups;
 }
 
   get selectedCountry(): SignupCountry | undefined {
@@ -406,17 +580,17 @@ get mobileError(): string {
   const country = this.selectedCountry;
 
   if (!country) {
-    return 'Select country first';
+    return 'Please select your country before entering a mobile number.';
   }
 
   const mobile = this.form.value.mobile || '';
 
   if (!mobile) {
-    return 'Mobile number is required';
+    return 'Please enter your mobile number.';
   }
 
   if (mobile.length < country.min || mobile.length > country.max) {
-    return `${country.name} mobile number must be ${country.min === country.max ? country.max : country.min + ' to ' + country.max} digits`;
+    return `${country.name} mobile numbers must contain ${country.min === country.max ? country.max : country.min + ' to ' + country.max} digits.`;
   }
 
   return '';

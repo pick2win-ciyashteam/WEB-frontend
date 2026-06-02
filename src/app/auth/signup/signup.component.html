@@ -21,14 +21,14 @@
     <form [formGroup]="form">
       <label>Full name <span>*</span></label>
       <input type="text" formControlName="name" placeholder="Your full name">
-      <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">Full name is required</small>
-      <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('minlength')">Full name must be at least 3 characters</small>
-      <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('pattern')">Enter full name with at least two parts</small>
+      <small class="field-error" *ngIf="nameError" role="alert">{{ nameError }}</small>
 
       <label>Country of residence <span>*</span></label>
       <select class="country-select" formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
         <option value="">{{ countriesLoading ? 'Loading countries...' : 'Select your country' }}</option>
-        <option *ngFor="let c of countries" [value]="c.name">{{ c.name }}</option>
+        <optgroup *ngFor="let group of countryRegionGroups; trackBy: trackByRegionLabel" [label]="group.label">
+          <option *ngFor="let c of group.countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
+        </optgroup>
       </select>
 
       <label>Date of birth <span>*</span></label>
@@ -36,8 +36,7 @@
         <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)">
         <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
       </div>
-      <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('required')">Date of birth is required</small>
-      <small *ngIf="form.get('dob')?.touched && form.get('dob')?.hasError('underAge')">You must be +18 or older</small>
+      <small class="field-error" *ngIf="dobError" role="alert">{{ dobError }}</small>
 
       <label>Mobile number <span>*</span></label>
       <div class="phone-row">
@@ -47,12 +46,11 @@
         </div>
         <input type="tel" formControlName="mobile" placeholder="Mobile number" [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)">
       </div>
-      <small *ngIf="form.get('mobile')?.touched && mobileError">{{ mobileError }}</small>
-      <small *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid">Enter valid mobile number</small>
+      <small class="field-error" *ngIf="form.get('mobile')?.touched && mobileError" role="alert">{{ mobileError }}</small>
 
       <label>Email address <span>*</span></label>
       <input type="email" formControlName="email" placeholder="you@example.com">
-      <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Enter valid email</small>
+      <small class="field-error" *ngIf="emailError" role="alert">{{ emailError }}</small>
 
       <label>Password <span>*</span></label>
       <div class="password-wrap">
@@ -70,9 +68,7 @@
       <div class="strength">
         <div [style.width.%]="passwordStrength * 25"></div>
       </div>
-      <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-        Password must be at least 6 characters
-      </small>
+      <small class="field-error" *ngIf="passwordError" role="alert">{{ passwordError }}</small>
 
       <label class="terms">
         <input type="checkbox" formControlName="terms">

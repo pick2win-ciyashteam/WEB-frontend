@@ -141,6 +141,14 @@ select option {
   font-weight: 700;
 }
 
+select optgroup {
+  color: var(--gold);
+  background: #031421;
+  font-family: var(--f-mono);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
 select option:checked,
 select option:hover {
   color: #051a2a;
@@ -195,9 +203,16 @@ select:focus {
 }
 
 small {
-  color: #ff8a96;
+  display: block;
+  margin-top: -3px;
   font-size: 12px;
-  font-weight: 750;
+  line-height: 1.45;
+  font-weight: 800;
+}
+
+.field-error {
+  color: #ffb3bb;
+  letter-spacing: 0.01em;
 }
 
 .phone-row {
