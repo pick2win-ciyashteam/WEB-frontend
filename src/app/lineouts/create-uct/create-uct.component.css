@@ -2128,16 +2128,16 @@ h1 em,
     background: rgba(16, 185, 129, .08) !important;
   }
 
-  .mandate-mode-toggle button:nth-child(2).active {
-    border-color: rgba(239, 51, 64, .28) !important;
-    color: #ef3340 !important;
-    background: rgba(239, 51, 64, .08) !important;
-  }
-
-  .mandate-mode-toggle button:nth-child(3).active {
+  .mandate-mode-toggle button:nth-child(1).active {
     border-color: rgba(100, 116, 139, .3) !important;
     color: #64748b !important;
     background: rgba(100, 116, 139, .08) !important;
+  }
+
+  .mandate-mode-toggle button:nth-child(3).active {
+    border-color: rgba(239, 51, 64, .28) !important;
+    color: #ef3340 !important;
+    background: rgba(239, 51, 64, .08) !important;
   }
 
   .mandate-mode-toggle b {

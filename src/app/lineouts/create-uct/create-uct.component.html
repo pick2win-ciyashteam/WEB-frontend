@@ -48,10 +48,10 @@
           <h1>{{ d.home_team.short_name }} vs {{ d.away_team.short_name }} <em>UCT.</em></h1>
           <p>{{ d.match.seriesname }} - 4-step workflow. Your selections drive every generated team.</p>
         </div>
-        <div class="hero-stat">
+        <!-- <div class="hero-stat">
           <strong>20</strong>
           <span>Teams generated</span>
-        </div>
+        </div> -->
       </section>
 
       <div class="submit-error" *ngIf="submitError">
@@ -177,14 +177,14 @@
         </div>
 
         <div class="mandate-mode-toggle" role="group" aria-label="Mandate mode">
+          <button type="button" [class.active]="mandateMode === 'NA'" (click)="setMandateMode('NA')">
+            <b>N/A</b>
+          </button>
           <button type="button" [class.active]="mandateMode === 'YES'" (click)="setMandateMode('YES')">
             <b>M-YES</b><span>{{ mandateYesPlayers.length }}/{{ maxMandateYes }}</span>
           </button>
           <button type="button" [class.active]="mandateMode === 'NO'" (click)="setMandateMode('NO')">
             <b>M-NO</b><span>{{ mandateNoPlayers.length }}/{{ maxMandateNo }}</span>
-          </button>
-          <button type="button" [class.active]="mandateMode === 'NA'" (click)="setMandateMode('NA')">
-            <b>N/A</b><span>Skip</span>
           </button>
         </div>
 

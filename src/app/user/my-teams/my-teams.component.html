@@ -97,7 +97,7 @@
         <button
           class="myteams-action primary"
           type="button"
-          *ngIf="match.live"
+          *ngIf="match.viewable"
           (click)="openMatchTeams(match)">
           <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
           View {{ match.teamsGenerated || 0 }} Teams ->
@@ -106,13 +106,13 @@
         <button
           class="myteams-action"
           type="button"
-          *ngIf="match.live"
+          *ngIf="match.viewable"
           (click)="downloadMatchTeams(match)">
           <span class="material-symbols-outlined" aria-hidden="true">download</span>
           Download all (CSV)
         </button>
 
-        <button class="myteams-action" type="button" *ngIf="!match.live" disabled>
+        <button class="myteams-action" type="button" *ngIf="!match.viewable" disabled>
           Teams archived - no longer viewable
         </button>
       </div>
@@ -283,7 +283,10 @@
                 [class.vice]="isViceCaptain(player)">
 
                 <div class="pp-avatar">
-                  <span>{{ playerInitials(player) }}</span>
+                  <img *ngIf="player.logo; else playerInitialsTpl" [src]="player.logo" [alt]="player.name" (error)="player.logo = null">
+                  <ng-template #playerInitialsTpl>
+                    <span>{{ playerInitials(player) }}</span>
+                  </ng-template>
                 </div>
 
                 <div class="pp-cap-badge" [style.background]="teamColor(player.team)" *ngIf="isCaptain(player)">C</div>

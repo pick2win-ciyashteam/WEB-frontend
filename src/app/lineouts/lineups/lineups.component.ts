@@ -23,6 +23,9 @@ interface LineoutMatch {
   kickoffISO: string;
   lineupReady: boolean;
   lineupJustReleased?: boolean;
+  teamsGenerated: boolean;
+  generatedTeamsCount?: number;
+  generatedAt?: string | null;
   venue: string;
   status: string;
 }
@@ -132,14 +135,22 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   isGenerated(match: LineoutMatch): boolean {
-    return false;
+    return match.teamsGenerated;
   }
 
   statusLabel(match: LineoutMatch): string {
+    if (this.isGenerated(match)) {
+      return 'Teams Generated';
+    }
+
     return match.lineupReady ? 'Lineup Ready' : 'Waiting for lineup';
   }
 
   actionLabel(match: LineoutMatch): string {
+    if (this.isGenerated(match)) {
+      return 'View Team';
+    }
+
     if (!this.canRunUct(match)) {
       return 'UCT Locked';
     }
@@ -184,19 +195,19 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.openCreateUct(match);
+    this.openMatchDestination(match);
   }
 
   canOpenMatch(match: LineoutMatch): boolean {
-    return this.canRunUct(match);
+    return this.isGenerated(match) || this.canRunUct(match);
   }
 
   canRunUct(match: LineoutMatch): boolean {
-    return this.showUctButtonForTesting || match.lineupReady;
+    return !this.isGenerated(match) && (this.showUctButtonForTesting || match.lineupReady);
   }
 
   handleMatchAction(match: LineoutMatch): void {
-    if (!this.canRunUct(match)) {
+    if (!this.canOpenMatch(match)) {
       return;
     }
 
@@ -205,11 +216,29 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.openCreateUct(match);
+    this.openMatchDestination(match);
   }
 
   openCreateUct(match: LineoutMatch): void {
     this.router.navigate(['/lineouts/create-uct', match.id]);
+  }
+
+  openViewTeams(match: LineoutMatch): void {
+    this.router.navigate(['/user/profile'], {
+      queryParams: {
+        tab: 'teams',
+        match: match.id
+      }
+    });
+  }
+
+  private openMatchDestination(match: LineoutMatch): void {
+    if (this.isGenerated(match)) {
+      this.openViewTeams(match);
+      return;
+    }
+
+    this.openCreateUct(match);
   }
 
   openLogin(): void {
@@ -360,6 +389,9 @@ export class LineupsComponent implements OnInit, OnDestroy {
       kickoffISO,
       lineupReady: this.isLineupAvailable(match),
       lineupJustReleased: this.isLineupAvailable(match),
+      teamsGenerated: this.hasGeneratedTeams(match),
+      generatedTeamsCount: Number(match.generated_teams_count ?? 0),
+      generatedAt: match.generated_at ?? null,
       venue: match.status || 'Scheduled',
       status: match.status || 'Scheduled'
     };
@@ -388,6 +420,12 @@ export class LineupsComponent implements OnInit, OnDestroy {
     const lineupStatus = String(match.lineup_status || '').toLowerCase();
 
     return lineupFlag === '1' || lineupFlag === 'true' || lineupStatus === 'available' || lineupStatus === 'released' || lineupStatus === 'confirmed';
+  }
+
+  private hasGeneratedTeams(match: Match): boolean {
+    const generated = match.teams_generated;
+
+    return generated === true || generated === 1 || String(generated).toLowerCase() === 'true';
   }
 
   private createTeam(name: string, logo?: string): LineoutTeam {

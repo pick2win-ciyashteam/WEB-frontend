@@ -184,8 +184,8 @@
                     <button
                       class="uct-btn"
                       type="button"
-                      [class.locked]="!canRunUct(match)"
-                      [disabled]="!canRunUct(match)"
+                      [class.locked]="!canOpenMatch(match)"
+                      [disabled]="!canOpenMatch(match)"
                       (click)="$event.stopPropagation(); handleMatchAction(match)">
                       {{ actionLabel(match) }}
                     </button>

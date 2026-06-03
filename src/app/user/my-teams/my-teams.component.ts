@@ -17,6 +17,7 @@ interface GeneratedMatch {
   awayLogo?: string;
   status?: string;
   teamsGenerated?: number;
+  viewable?: boolean;
   matchDate?: string;
   startDate?: string;
   startTimeISO?: string;
@@ -25,11 +26,26 @@ interface GeneratedMatch {
 interface ApiPlayer {
   id: number;
   match_id?: number;
-  team_side: 'team_a' | 'team_b';
+  team_side?: 'team_a' | 'team_b';
   name: string;
+  original_name?: string;
   role: PlayerPosition;
   mandate?: string | null;
   captain?: string | null;
+  cap?: string | null;
+  dt_no?: number;
+  logo?: string | null;
+  elogo?: string | null;
+  image?: string | null;
+  photo?: string | null;
+  player_image?: string | null;
+}
+
+interface ApiGeneratedTeam {
+  team_no: number;
+  captain?: string;
+  vice_captain?: string;
+  players: ApiPlayer[];
 }
 
 interface PreviewPlayer {
@@ -39,6 +55,7 @@ interface PreviewPlayer {
   pos: PlayerPosition;
   team: 'home' | 'away';
   captain?: string | null;
+  logo?: string | null;
 }
 
 interface PreviewTeam {
@@ -91,7 +108,7 @@ private expiryTimer: any;
 
   this.api.GetMyTeams().subscribe({
     next: (res: any) => {
-      console.log(res)
+      console.log('My Teams matches response:', res);
       const data = Array.isArray(res?.data) ? res.data : [];
 
       this.matches = data.map((m: any) => {
@@ -110,7 +127,8 @@ private expiryTimer: any;
           homeLogo: m.home_logo,
           awayLogo: m.away_logo,
           status: m.status,
-          teamsGenerated: Number(m.teams_generated || 0),
+          teamsGenerated: Number(m.teams_generated || m.total_teams || 0),
+          viewable: true,
           startDate: startTimeISO ? new Date(startTimeISO).toISOString().split('T')[0] : '',
           startTimeISO
         };
@@ -150,9 +168,19 @@ openDatePicker(input: HTMLInputElement): void {
   pickerInput.showPicker?.();
 }
 
-downloadMatchTeams(match: GeneratedMatch) {
+  downloadMatchTeams(match: GeneratedMatch) {
   this.api.MatchByTeams(match.id).subscribe({
     next: (res: any) => {
+      console.log('My Teams download response:', res);
+
+      const generatedTeams = this.generatedTeamsFromResponse(res);
+
+      if (generatedTeams.length) {
+        const rows = generatedTeams.map((team: ApiGeneratedTeam) => this.teamCsvRow(match, team));
+        this.downloadCSV(rows, this.makeTeamFileName(match));
+        return;
+      }
+
       const teamA = Array.isArray(res?.team_a) ? res.team_a : [];
       const teamB = Array.isArray(res?.team_b) ? res.team_b : [];
 
@@ -239,6 +267,22 @@ downloadCSV(rows: any[], fileName: string) {
 
     this.api.MatchByTeams(match.id).subscribe({
       next: (res: any) => {
+        console.log('My Teams match teams response:', res);
+
+        const generatedTeams = this.generatedTeamsFromResponse(res);
+
+        if (generatedTeams.length) {
+          console.log('My teams response:', res);
+          this.previewTeams = generatedTeams.map((team: ApiGeneratedTeam) => this.mapGeneratedTeam(team));
+          this.selectedMatch = {
+            ...match,
+            teamsGenerated: Number(res?.total_teams || res?.data?.total_teams || generatedTeams.length),
+            viewable: true
+          };
+          this.loadingTeams = false;
+          return;
+        }
+
         const teamA: ApiPlayer[] = Array.isArray(res?.team_a) ? res.team_a : [];
         const teamB: ApiPlayer[] = Array.isArray(res?.team_b) ? res.team_b : [];
 
@@ -267,10 +311,20 @@ downloadCSV(rows: any[], fileName: string) {
     this.previewIndex = this.previewTeams.findIndex(t => t.id === teamId);
     if (this.previewIndex < 0) this.previewIndex = 0;
 
+    const selectedTeam = this.previewTeams[this.previewIndex] || null;
+
+    if (selectedTeam?.players?.length > 1) {
+      this.previewTeam = selectedTeam;
+      this.loadingPlayers = false;
+      return;
+    }
+
     this.loadingPlayers = true;
 
     this.api.TeamsByPlayers(teamId).subscribe({
       next: (res: any) => {
+        console.log('My Teams team players response:', res);
+
         const players = Array.isArray(res?.players) ? res.players : [];
 
         this.previewTeam = this.buildPreviewFromPlayers(teamId, players);
@@ -389,15 +443,45 @@ downloadCSV(rows: any[], fileName: string) {
     };
   }
 
+  private mapGeneratedTeam(team: ApiGeneratedTeam): PreviewTeam {
+    const players = (Array.isArray(team.players) ? team.players : []).map(player => this.mapPreviewPlayer(player));
+    const captain = players.find(player => player.captain === 'C' || player.name === team.captain) || null;
+    const viceCaptain = players.find(player => player.captain === 'VC' || player.name === team.vice_captain) || null;
+
+    if (captain && !captain.captain) {
+      captain.captain = 'C';
+    }
+
+    if (viceCaptain && !viceCaptain.captain) {
+      viceCaptain.captain = 'VC';
+    }
+
+    return {
+      id: Number(team.team_no),
+      split: `${players.filter(player => player.team === 'home').length}-${players.filter(player => player.team === 'away').length}`,
+      players,
+      captain,
+      viceCaptain,
+      homeCount: players.filter(player => player.team === 'home').length,
+      awayCount: players.filter(player => player.team === 'away').length,
+      counts: this.positionCounts(players)
+    };
+  }
+
+  private generatedTeamsFromResponse(res: any): ApiGeneratedTeam[] {
+    if (Array.isArray(res?.teams)) {
+      return res.teams;
+    }
+
+    if (Array.isArray(res?.data?.teams)) {
+      return res.data.teams;
+    }
+
+    return [];
+  }
+
   private buildPreviewFromPlayers(teamId: number, apiPlayers: ApiPlayer[]): PreviewTeam {
-    const players: PreviewPlayer[] = apiPlayers.map((p: any) => ({
-      id: p.id,
-      name: p.name,
-      short: this.shortName(p.name),
-      pos: p.role || 'MID',
-      team: p.team_side === 'team_a' ? 'home' : 'away',
-      captain: p.captain
-    }));
+    const players: PreviewPlayer[] = apiPlayers.map(player => this.mapPreviewPlayer(player));
 
     const captain =
       players.find(p => p.captain === 'C' || p.captain === 'CVC') || null;
@@ -413,12 +497,57 @@ downloadCSV(rows: any[], fileName: string) {
       viceCaptain,
       homeCount: players.filter(p => p.team === 'home').length,
       awayCount: players.filter(p => p.team === 'away').length,
-      counts: {
-        GK: players.filter(p => p.pos === 'GK').length,
-        DEF: players.filter(p => p.pos === 'DEF').length,
-        MID: players.filter(p => p.pos === 'MID').length,
-        FWD: players.filter(p => p.pos === 'FWD').length
-      }
+      counts: this.positionCounts(players)
+    };
+  }
+
+  private mapPreviewPlayer(player: ApiPlayer): PreviewPlayer {
+    const displayName = player.original_name || player.name;
+
+    return {
+      id: player.id,
+      name: displayName,
+      short: this.shortName(displayName),
+      pos: player.role || 'MID',
+      team: this.playerTeam(player),
+      captain: player.cap || player.captain,
+      logo: player.player_image || player.logo || player.elogo || player.image || player.photo || null
+    };
+  }
+
+  private playerTeam(player: ApiPlayer): 'home' | 'away' {
+    if (player.team_side) {
+      return player.team_side === 'team_a' ? 'home' : 'away';
+    }
+
+    return /_B$/i.test(player.name || '') ? 'away' : 'home';
+  }
+
+  private positionCounts(players: PreviewPlayer[]): Record<PlayerPosition, number> {
+    return {
+      GK: players.filter(player => player.pos === 'GK').length,
+      DEF: players.filter(player => player.pos === 'DEF').length,
+      MID: players.filter(player => player.pos === 'MID').length,
+      FWD: players.filter(player => player.pos === 'FWD').length
+    };
+  }
+
+  private teamCsvRow(match: GeneratedMatch, team: ApiGeneratedTeam): Record<string, string | number> {
+    const players = (Array.isArray(team.players) ? team.players : []).map(player => this.mapPreviewPlayer(player));
+    const byRole = (role: PlayerPosition) => players.filter(player => player.pos === role).map(player => player.name);
+
+    return {
+      Team: `T${team.team_no}`,
+      Split: `${players.filter(player => player.team === 'home').length}-${players.filter(player => player.team === 'away').length}`,
+      'Formation (GK-DEF-MID-FWD)': `${byRole('GK').length}-${byRole('DEF').length}-${byRole('MID').length}-${byRole('FWD').length}`,
+      Captain: team.captain || players.find(player => this.isCaptain(player))?.name || '',
+      'Vice-Captain': team.vice_captain || players.find(player => this.isViceCaptain(player))?.name || '',
+      'GK Players': byRole('GK').join(' / '),
+      Defenders: byRole('DEF').join(' / '),
+      Midfielders: byRole('MID').join(' / '),
+      Forwards: byRole('FWD').join(' / '),
+      [`${this.teamCodeFromTitle(match.title, 'home')} Count`]: players.filter(player => player.team === 'home').length,
+      [`${this.teamCodeFromTitle(match.title, 'away')} Count`]: players.filter(player => player.team === 'away').length
     };
   }
 

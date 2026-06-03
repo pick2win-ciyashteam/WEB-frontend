@@ -176,6 +176,9 @@ export interface Match {
   away_team_name: string;
   home_team_logo: string;
   away_team_logo: string;
+  teams_generated?: boolean | number | string;
+  generated_teams_count?: number;
+  generated_at?: string | null;
 }
 
 export interface Series {
