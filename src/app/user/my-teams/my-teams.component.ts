@@ -176,8 +176,11 @@ openDatePicker(input: HTMLInputElement): void {
       const generatedTeams = this.generatedTeamsFromResponse(res);
 
       if (generatedTeams.length) {
-        const rows = generatedTeams.map((team: ApiGeneratedTeam) => this.teamCsvRow(match, team));
-        this.downloadCSV(rows, this.makeTeamFileName(match));
+        // TXT format kept for future use:
+        // const text = generatedTeams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team)).join('\n\n');
+        // this.downloadText(text, this.makeTeamFileName(match, 'txt'));
+        const rows = this.teamCsvRows(generatedTeams);
+        this.downloadCSV(rows, this.makeTeamFileName(match, 'csv'));
         return;
       }
 
@@ -215,7 +218,7 @@ openDatePicker(input: HTMLInputElement): void {
         };
       });
 
-      const fileName = this.makeTeamFileName(match);
+      const fileName = this.makeTeamFileName(match, 'csv');
       this.downloadCSV(rows, fileName);
     }
   });
@@ -226,7 +229,7 @@ teamCodeFromTitle(title: string, side: 'home' | 'away'): string {
   return side === 'home' ? (home || 'HOME') : (away || 'AWAY');
 }
 
-makeTeamFileName(match: any): string {
+makeTeamFileName(match: any, extension = 'txt'): string {
   const companyName = 'Pick2Win-uct';
 
   const teamsName = (match.title || 'Teams')
@@ -235,19 +238,34 @@ makeTeamFileName(match: any): string {
 
   const matchDate = match.startDate || new Date().toISOString().split('T')[0];
 
-  return `${companyName}-${teamsName}-${matchDate}.csv`;
+  return `${companyName}-${teamsName}-${matchDate}.${extension}`;
+}
+
+downloadText(content: string, fileName: string) {
+  if (!content.trim()) return;
+
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+  const link = document.createElement('a');
+
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+
+  URL.revokeObjectURL(link.href);
 }
 
 downloadCSV(rows: any[], fileName: string) {
   if (!rows.length) return;
 
-  const headers = Object.keys(rows[0]);
-  const csv = [
-    headers.join(','),
-    ...rows.map(row =>
-      headers.map(header => `"${String(row[header] ?? '').replace(/"/g, '""')}"`).join(',')
-    )
-  ].join('\n');
+  const escapeCell = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`;
+  const csv = Array.isArray(rows[0])
+    ? rows.map(row => row.map(escapeCell).join(',')).join('\n')
+    : [
+        Object.keys(rows[0]).join(','),
+        ...rows.map(row =>
+          Object.keys(rows[0]).map(header => escapeCell(row[header])).join(',')
+        )
+      ].join('\n');
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
@@ -532,23 +550,68 @@ downloadCSV(rows: any[], fileName: string) {
     };
   }
 
-  private teamCsvRow(match: GeneratedMatch, team: ApiGeneratedTeam): Record<string, string | number> {
-    const players = (Array.isArray(team.players) ? team.players : []).map(player => this.mapPreviewPlayer(player));
-    const byRole = (role: PlayerPosition) => players.filter(player => player.pos === role).map(player => player.name);
+  private teamCsvRows(teams: ApiGeneratedTeam[]): string[][] {
+    const rows: string[][] = [];
 
-    return {
-      Team: `T${team.team_no}`,
-      Split: `${players.filter(player => player.team === 'home').length}-${players.filter(player => player.team === 'away').length}`,
-      'Formation (GK-DEF-MID-FWD)': `${byRole('GK').length}-${byRole('DEF').length}-${byRole('MID').length}-${byRole('FWD').length}`,
-      Captain: team.captain || players.find(player => this.isCaptain(player))?.name || '',
-      'Vice-Captain': team.vice_captain || players.find(player => this.isViceCaptain(player))?.name || '',
-      'GK Players': byRole('GK').join(' / '),
-      Defenders: byRole('DEF').join(' / '),
-      Midfielders: byRole('MID').join(' / '),
-      Forwards: byRole('FWD').join(' / '),
-      [`${this.teamCodeFromTitle(match.title, 'home')} Count`]: players.filter(player => player.team === 'home').length,
-      [`${this.teamCodeFromTitle(match.title, 'away')} Count`]: players.filter(player => player.team === 'away').length
-    };
+    teams.forEach((team, teamIndex) => {
+      const players = (Array.isArray(team.players) ? team.players : []).map(player => this.mapPreviewPlayer(player));
+      const combination = `${players.filter(player => player.team === 'home').length} X ${players.filter(player => player.team === 'away').length}`;
+
+      rows.push(['UCT Team:', String(team.team_no)]);
+      rows.push(['Combination:', combination]);
+      rows.push([]);
+      rows.push(['', 'Player', 'Role', 'C/VC']);
+
+      players.forEach((player, index) => {
+        rows.push([
+          String(index + 1),
+          player.name,
+          player.pos,
+          this.csvCaptainLabel(player, team)
+        ]);
+      });
+
+      if (teamIndex < teams.length - 1) {
+        rows.push([]);
+      }
+    });
+
+    return rows;
+  }
+
+  private csvCaptainLabel(player: PreviewPlayer, team: ApiGeneratedTeam): string {
+    if (player.captain === 'C' || player.captain === 'CVC' || player.name === team.captain) {
+      return 'C';
+    }
+
+    if (player.captain === 'VC' || player.name === team.vice_captain) {
+      return 'VC';
+    }
+
+    return '.';
+  }
+
+  private teamTextBlock(team: ApiGeneratedTeam): string {
+    const players = Array.isArray(team.players) ? team.players : [];
+    const previewPlayers = players.map(player => this.mapPreviewPlayer(player));
+    const combination = `${previewPlayers.filter(player => player.team === 'home').length} X ${previewPlayers.filter(player => player.team === 'away').length}`;
+    const playerWidth = Math.max(16, ...previewPlayers.map(player => player.name.length));
+
+    const lines = [
+      `UCT Team:  ${team.team_no}`,
+      `Combination:  ${combination}`,
+      '',
+      `${''.padEnd(4)}${'Player'.padStart(playerWidth)}    ${'Role'.padEnd(4)}    C/VC`
+    ];
+
+    previewPlayers.forEach((player, index) => {
+      const cap = player.captain || '.';
+      lines.push(
+        `${String(index + 1).padEnd(4)}${player.name.padStart(playerWidth)}    ${player.pos.padEnd(4)}    ${cap}`
+      );
+    });
+
+    return lines.join('\n');
   }
 
   private shortName(name: string): string {
