@@ -281,7 +281,7 @@
   width: min(100%, 440px);
   max-height: 90vh;
   overflow-y: auto;
-  padding: 30px;
+  padding: 48px 30px 30px;
   border: 1px solid var(--line-2);
   border-radius: 24px;
   color: var(--paper);
@@ -290,6 +290,33 @@
     radial-gradient(circle at 0% 100%, rgba(215, 38, 56, 0.14), transparent 34%),
     linear-gradient(180deg, #092640 0%, #031421 100%);
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+}
+
+.forgot-step-pill {
+  position: absolute;
+  top: 16px;
+  left: 30px;
+  display: grid;
+  place-items: center;
+  min-width: 74px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--surface-deep);
+  background: linear-gradient(135deg, var(--gold), #ffcf35);
+  border: 1px solid rgba(255, 231, 150, 0.8);
+  font-family: var(--f-display);
+  font-size: 13px;
+  font-weight: 950;
+  box-shadow: 0 12px 28px rgba(244, 180, 0, 0.28);
+}
+
+.forgot-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding-right: 42px;
 }
 
 .forgot-close {
@@ -302,14 +329,18 @@
   border-radius: 50%;
   color: var(--paper-2);
   background: rgba(255, 255, 255, 0.07);
-  font-size: 24px;
   cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.forgot-close .material-symbols-outlined {
+  font-size: 20px;
 }
 
 .forgot-icon {
   width: 58px;
   height: 58px;
-  margin-bottom: 18px;
   display: grid;
   place-items: center;
   border-radius: 18px;
@@ -342,6 +373,10 @@
   gap: 12px;
 }
 
+.forgot-modal form {
+  margin-top: 22px;
+}
+
 .otp-area {
   margin-top: 12px;
   padding-top: 16px;
@@ -359,6 +394,14 @@
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 14px 34px rgba(244, 180, 0, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.forgot-primary .material-symbols-outlined {
+  font-size: 19px;
 }
 
 .forgot-primary:disabled {
@@ -390,7 +433,11 @@
   .forgot-modal {
     width: 100%;
     max-height: calc(100vh - 60px);
-    padding: 24px 18px;
+    padding: 48px 18px 24px;
+  }
+
+  .forgot-step-pill {
+    left: 18px;
   }
 }
 
@@ -428,6 +475,123 @@
   border-color: rgba(244, 180, 0, 0.55);
   background: rgba(255, 255, 255, 0.035);
   box-shadow: 0 0 0 4px rgba(244, 180, 0, 0.1);
+}
+
+.forgot-security {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--paper-2);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.forgot-security .material-symbols-outlined {
+  color: var(--gold);
+  font-size: 19px;
+}
+
+.forgot-modal .otp-code-input {
+  height: 64px;
+  text-align: center;
+  letter-spacing: 0.5em;
+  font-size: 28px;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.forgot-modal .otp-code-input::placeholder {
+  letter-spacing: 0.35em;
+}
+
+.forgot-resend {
+  color: var(--paper-2);
+  font-size: 13px;
+}
+
+.forgot-resend button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--gold);
+  background: transparent;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.forgot-resend button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.password-strength {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  margin-top: -4px;
+}
+
+.password-strength::before {
+  content: "";
+  grid-column: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.password-strength span {
+  grid-column: 1;
+  grid-row: 1;
+  display: block;
+  max-width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff5c6d, var(--gold), var(--pitch-2));
+}
+
+.password-strength b {
+  color: var(--pitch-2);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.forgot-success {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.forgot-success-check {
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 82px;
+  border: 4px solid rgba(11, 204, 142, 0.45);
+  border-radius: 50%;
+  color: #c8fff0;
+  background: rgba(11, 204, 142, 0.12);
+  box-shadow: 0 0 38px rgba(11, 204, 142, 0.2);
+}
+
+.forgot-success-check .material-symbols-outlined {
+  font-size: 46px;
+}
+
+.forgot-success h4 {
+  margin: 0;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-size: 28px;
+  font-weight: 950;
+}
+
+.forgot-success p {
+  max-width: 330px;
+  margin: 0 0 6px;
 }
 
 .forgot-modal small {

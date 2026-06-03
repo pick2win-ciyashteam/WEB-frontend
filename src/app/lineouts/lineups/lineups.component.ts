@@ -86,8 +86,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   get visibleMatches(): LineoutMatch[] {
-    const nowMs = Date.now();
-    return this.matches.filter(match => this.isLive(match) || new Date(match.kickoffISO).getTime() > nowMs);
+    return this.matches.filter(match => this.isVisibleMatch(match));
   }
 
   get todayMatches(): LineoutMatch[] {
@@ -316,9 +315,13 @@ export class LineupsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
+          console.log('Lineups series response:', res);
+
           this.matches = res?.success && Array.isArray(res.data)
             ? this.mapSeriesMatches(res.data)
             : [];
+
+          console.log('Lineups mapped matches:', this.matches);
 
           if (!this.matches.length) {
             this.matchesError = 'No upcoming matches in our coverage right now.';
@@ -364,6 +367,20 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   isLive(match: LineoutMatch): boolean {
     return String(match.status || '').toUpperCase() === 'LIVE';
+  }
+
+  private isVisibleMatch(match: LineoutMatch): boolean {
+    const status = String(match.status || '').toUpperCase();
+
+    if (['LIVE', 'UPCOMING', 'SCHEDULED', 'NOT_STARTED', 'NS'].includes(status)) {
+      return true;
+    }
+
+    if (['FINISHED', 'FT', 'ENDED', 'CANCELLED', 'POSTPONED'].includes(status)) {
+      return false;
+    }
+
+    return new Date(match.kickoffISO).getTime() > Date.now();
   }
 
   private isLineupAvailable(match: Match): boolean {

@@ -64,7 +64,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   readonly maxMandateYes = 2;
   readonly maxMandateNo = 2;
   readonly maxCvc = 4;
-  readonly minCvc = 4;
+  readonly minCvc = 2;
   readonly maxCaptains = 4;
   readonly maxViceCaptains = 5;
 
@@ -158,10 +158,22 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.sortPlayersByPosition(this.availablePool.filter(player => player.teamSide === 'away'));
   }
 
+  get captaincySubstitutes(): UctPlayer[] {
+    return this.selectedSubstitutes.filter(player => this.mandates.get(player.id) !== 'NO');
+  }
+
+  get homeCaptaincyPlayers(): UctPlayer[] {
+    return this.homeStartingPlayers.filter(player => this.mandates.get(player.id) !== 'NO');
+  }
+
+  get awayCaptaincyPlayers(): UctPlayer[] {
+    return this.awayStartingPlayers.filter(player => this.mandates.get(player.id) !== 'NO');
+  }
+
   get mandatePool(): UctPlayer[] {
     if (this.mandateMode === 'NA') return [];
     const pool = this.mandateMode === 'NO' ? this.startingPlayers : this.availablePool;
-    return pool.filter(player => !this.isGoalkeeper(player));
+    return this.filterMandateModePlayers(pool).filter(player => !this.isGoalkeeper(player));
   }
 
   get homeMandatePool(): UctPlayer[] {
@@ -173,11 +185,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get homeMandateMainPool(): UctPlayer[] {
-    return this.homeStartingPlayers.filter(player => !this.isGoalkeeper(player));
+    return this.filterMandateModePlayers(this.homeStartingPlayers).filter(player => !this.isGoalkeeper(player));
   }
 
   get awayMandateMainPool(): UctPlayer[] {
-    return this.awayStartingPlayers.filter(player => !this.isGoalkeeper(player));
+    return this.filterMandateModePlayers(this.awayStartingPlayers).filter(player => !this.isGoalkeeper(player));
   }
 
   get mandateYesPlayers(): UctPlayer[] {
@@ -206,10 +218,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   get canReview(): boolean {
     if (this.captainMode === 'CVC') {
-      return this.cvcIds.size === this.maxCvc && this.allMandateYesInCvc();
+      return this.cvcIds.size >= this.minCvc && this.cvcIds.size <= this.maxCvc;
     }
 
-    return this.isCandVcMatrixValid() && !this.hasUnassignedMandateYesCaptaincy();
+    return this.isCandVcMatrixValid();
   }
 
   get canGenerate(): boolean {
@@ -269,6 +281,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.selectedSubIds.add(player.id);
   }
 
+  isSubstituteDisabled(player: UctPlayer): boolean {
+    return !this.selectedSubIds.has(player.id) && this.selectedSubIds.size >= this.maxSubs;
+  }
+
   setMandateMode(value: Mandate): void {
     this.mandateMode = value;
 
@@ -314,12 +330,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (value === 'YES' && this.mandateYesPlayers.length >= this.maxMandateYes) {
+    if (value === 'YES' && this.mandateCount('YES') >= this.maxMandateYes) {
       this.showAlert('M-YES limit reached', 'You can force maximum 2 players into every generated team.', 'warning');
       return;
     }
 
-    if (value === 'NO' && this.mandateNoPlayers.length >= this.maxMandateNo) {
+    if (value === 'NO' && this.mandateCount('NO') >= this.maxMandateNo) {
       this.showAlert('M-NO limit reached', 'You can exclude maximum 2 players from generated teams.', 'warning');
       return;
     }
@@ -342,9 +358,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.viceCaptainIds.delete(player.id);
     }
 
-    if (value === 'YES' && this.captainMode === 'CVC') {
-      this.cvcIds.add(player.id);
-    }
   }
 
   mandateOf(player: UctPlayer): Mandate {
@@ -358,11 +371,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     if (this.cvcIds.has(player.id)) {
-      if (this.mandates.get(player.id) === 'YES') {
-        this.showAlert('M-YES required', 'M-YES players are automatically included in CVC and cannot be removed.', 'warning');
-        return;
-      }
-
       this.cvcIds.delete(player.id);
       return;
     }
@@ -394,10 +402,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.showAlert('Player excluded', 'M-NO players cannot be selected as Captain.', 'warning');
       return;
     }
-    if (!this.isMandateYesPlayer(player) && this.hasUnassignedMandateYesCaptaincy()) {
-      this.showAlert('Assign M-YES first', 'All M-YES players must be selected as C or VC before choosing other players.', 'warning');
-      return;
-    }
     if (this.viceCaptainIds.has(player.id)) {
       this.showAlert('Already Vice-Captain', 'A player cannot be both Captain and Vice-Captain.', 'warning');
       return;
@@ -423,10 +427,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   toggleViceCaptain(player: UctPlayer): void {
     if (this.mandates.get(player.id) === 'NO') {
       this.showAlert('Player excluded', 'M-NO players cannot be selected as Vice-Captain.', 'warning');
-      return;
-    }
-    if (!this.isMandateYesPlayer(player) && this.hasUnassignedMandateYesCaptaincy()) {
-      this.showAlert('Assign M-YES first', 'All M-YES players must be selected as C or VC before choosing other players.', 'warning');
       return;
     }
     if (this.captainIds.has(player.id)) {
@@ -464,7 +464,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.mandates.get(player.id) === 'NO') return false;
     if (this.viceCaptainIds.has(player.id)) return false;
     if (this.captainIds.size >= this.maxCaptains) return false;
-    if (!this.isMandateYesPlayer(player) && this.hasUnassignedMandateYesCaptaincy()) return false;
 
     return this.viceCaptainIds.size <= this.maxViceForCaptainCount(this.captainIds.size + 1);
   }
@@ -473,7 +472,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.viceCaptainIds.has(player.id)) return true;
     if (this.mandates.get(player.id) === 'NO') return false;
     if (this.captainIds.has(player.id)) return false;
-    if (!this.isMandateYesPlayer(player) && this.hasUnassignedMandateYesCaptaincy()) return false;
 
     return this.viceCaptainIds.size < this.maxViceForCurrentCaptains();
   }
@@ -490,8 +488,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.mandateMode === 'YES' && this.mandateOf(player) === 'NO') return true;
     if (this.mandateMode === 'NO' && this.mandateOf(player) === 'YES') return true;
     if (this.mandateMode === 'NO' && player.is_substitute) return true;
-    if (this.mandateMode === 'YES' && this.mandateYesPlayers.length >= this.maxMandateYes) return true;
-    if (this.mandateMode === 'NO' && this.mandateNoPlayers.length >= this.maxMandateNo) return true;
+    if (this.mandateMode === 'YES' && this.mandateCount('YES') >= this.maxMandateYes) return true;
+    if (this.mandateMode === 'NO' && this.mandateCount('NO') >= this.maxMandateNo) return true;
     if (this.isGoalkeeper(player) && this.mandateGoalkeeperCount(this.mandateMode) >= 1) return true;
     return false;
   }
@@ -519,15 +517,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   captaincyHint(): string {
     if (this.captainMode === 'CVC') {
-      return this.canReview ? 'CVC pool ready.' : `Select exactly ${this.maxCvc} CVC players. M-YES players are auto-selected.`;
+      return this.canReview ? 'CVC pool ready.' : `Select ${this.minCvc}-${this.maxCvc} CVC players.`;
     }
 
     if (this.canReview) {
       return 'C & VC matrix ready.';
-    }
-
-    if (this.hasUnassignedMandateYesCaptaincy()) {
-      return 'Assign every M-YES player as C or VC first.';
     }
 
     if (!this.captainIds.size) {
@@ -726,10 +720,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.cvcIds.clear();
     this.captainIds.clear();
     this.viceCaptainIds.clear();
-
-    if (mode === 'CVC') {
-      this.mandateYesPlayers.forEach(player => this.cvcIds.add(player.id));
-    }
   }
 
   private showAlert(title: string, message: string, type: UctAlertType): void {
@@ -744,16 +734,20 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.availablePool.filter(player => this.mandates.get(player.id) === value && this.isGoalkeeper(player)).length;
   }
 
-  private allMandateYesInCvc(): boolean {
-    return this.mandateYesPlayers.every(player => this.cvcIds.has(player.id));
+  private mandateCount(value: Exclude<Mandate, 'NA'>): number {
+    return Array.from(this.mandates.values()).filter(mandate => mandate === value).length;
   }
 
-  private isMandateYesPlayer(player: UctPlayer): boolean {
-    return this.mandates.get(player.id) === 'YES';
-  }
+  private filterMandateModePlayers(players: UctPlayer[]): UctPlayer[] {
+    if (this.mandateMode === 'YES') {
+      return players.filter(player => this.mandates.get(player.id) !== 'NO');
+    }
 
-  private hasUnassignedMandateYesCaptaincy(): boolean {
-    return this.mandateYesPlayers.some(player => !this.captainIds.has(player.id) && !this.viceCaptainIds.has(player.id));
+    if (this.mandateMode === 'NO') {
+      return players.filter(player => this.mandates.get(player.id) !== 'YES');
+    }
+
+    return players;
   }
 
   private resetAfterSubmitFailure(message: string): void {

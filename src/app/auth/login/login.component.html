@@ -40,7 +40,7 @@
         Remember me
       </label>
 
-      <a href="#" (click)="openForgotPassword()">Forgot password?</a>
+      <a href="#" (click)="openForgotPassword($event)">Forgot password?</a>
     </div>
 
     <button type="submit" [disabled]="loading">
@@ -57,31 +57,70 @@
 
 <div class="forgot-overlay" *ngIf="forgotModal">
   <div class="forgot-modal">
-    <button class="forgot-close" type="button" (click)="closeForgotPassword()">×</button>
+    <button class="forgot-close" type="button" aria-label="Close reset password" (click)="closeForgotPassword()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
 
-    <div class="forgot-icon">
-      <span class="material-symbols-outlined">lock_reset</span>
+    <div class="forgot-step-pill">Step {{ forgotStepNumber }}</div>
+
+    <div class="forgot-head">
+      <div class="forgot-icon">
+        <span class="material-symbols-outlined">{{ forgotStep === 'success' ? 'check' : 'lock_reset' }}</span>
+      </div>
+
+      <div>
+        <h3>{{ forgotTitle }}</h3>
+        <p>{{ forgotDescription }}</p>
+      </div>
     </div>
 
-    <h3>Reset Password</h3>
-    <p>Enter your email. We’ll send an OTP to verify your account.</p>
-
     <form [formGroup]="forgotForm">
-      <label>Email <span>*</span></label>
-      <input type="email" formControlName="email" placeholder="you@example.com">
+      <ng-container *ngIf="forgotStep === 'email'">
+        <label>Email <span>*</span></label>
+        <input type="email" formControlName="email" placeholder="you@example.com">
 
-      <small *ngIf="forgotForm.get('email')?.touched && forgotForm.get('email')?.invalid">
-        Enter valid email
-      </small>
+        <small *ngIf="forgotForm.get('email')?.touched && forgotForm.get('email')?.invalid">
+          Enter valid email
+        </small>
 
-      <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="sendForgotOtp()">
-        {{ forgotLoading ? 'Sending OTP...' : otpSent ? 'Resend OTP' : 'Send OTP' }}
-      </button>
+        <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="sendForgotOtp()">
+          <span class="material-symbols-outlined">send</span>
+          {{ forgotLoading ? 'Sending OTP...' : 'Send OTP' }}
+        </button>
 
-      <div class="otp-area" *ngIf="otpSent">
+        <div class="forgot-security">
+          <span class="material-symbols-outlined">verified_user</span>
+          For your security, we will verify your identity.
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="forgotStep === 'otp'">
         <label>OTP <span>*</span></label>
-        <input type="text" formControlName="otp" placeholder="Enter OTP">
+        <input
+          class="otp-code-input"
+          type="text"
+          inputmode="numeric"
+          maxlength="6"
+          formControlName="otp"
+          placeholder="------">
 
+        <small *ngIf="forgotForm.get('otp')?.touched && forgotForm.get('otp')?.invalid">
+          Enter the OTP sent to your email
+        </small>
+
+        <div class="forgot-resend">
+          Didn't receive OTP?
+          <button type="button" [disabled]="forgotLoading" (click)="sendForgotOtp(true)">
+            {{ forgotLoading ? 'Sending...' : 'Resend OTP' }}
+          </button>
+        </div>
+
+        <button class="forgot-primary" type="button" (click)="verifyForgotOtp()">
+          Verify OTP
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="forgotStep === 'password'">
         <label>New Password <span>*</span></label>
         <div class="password-field">
           <input
@@ -100,8 +139,52 @@
           </button>
         </div>
 
+        <div class="password-strength">
+          <span [style.width.%]="resetPasswordStrength"></span>
+          <b>{{ resetPasswordStrengthLabel }}</b>
+        </div>
+
+        <small *ngIf="forgotForm.get('password')?.touched && forgotForm.get('password')?.invalid">
+          Password must be minimum 6 characters.
+        </small>
+
+        <label>Confirm Password <span>*</span></label>
+        <div class="password-field">
+          <input
+            [type]="showConfirmResetPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Confirm new password">
+
+          <button
+            type="button"
+            class="password-toggle"
+            [class.visible]="showConfirmResetPassword"
+            (click)="showConfirmResetPassword = !showConfirmResetPassword">
+            <span class="material-symbols-outlined">
+              {{ showConfirmResetPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+
+        <small *ngIf="forgotForm.get('confirmPassword')?.touched && forgotForm.get('confirmPassword')?.invalid">
+          Confirm password must be minimum 6 characters.
+        </small>
+
         <button class="forgot-primary" type="button" [disabled]="resetLoading" (click)="resetPassword()">
-          {{ resetLoading ? 'Resetting...' : 'Reset Password' }}
+          <span class="material-symbols-outlined">lock</span>
+          {{ resetLoading ? 'Updating...' : 'Update Password' }}
+        </button>
+      </ng-container>
+
+      <div class="forgot-success" *ngIf="forgotStep === 'success'">
+        <div class="forgot-success-check">
+          <span class="material-symbols-outlined">check</span>
+        </div>
+        <h4>Password Updated!</h4>
+        <p>Your password has been changed successfully. You can now sign in using your new password.</p>
+        <button class="forgot-primary" type="button" (click)="finishForgotPassword()">
+          <span class="material-symbols-outlined">login</span>
+          Go to Sign In
         </button>
       </div>
     </form>

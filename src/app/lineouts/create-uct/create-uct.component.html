@@ -137,7 +137,7 @@
               <h3><span class="team-color home"></span>{{ d.home_team.name }}</h3>
               <b>{{ homeSubstitutes.length }} players</b>
             </div>
-            <button class="player-row" type="button" *ngFor="let player of homeSubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" (click)="toggleSubstitute(player)">
+            <button class="player-row" type="button" *ngFor="let player of homeSubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
@@ -153,7 +153,7 @@
               <h3><span class="team-color away"></span>{{ d.away_team.name }}</h3>
               <b>{{ awaySubstitutes.length }} players</b>
             </div>
-            <button class="player-row away" type="button" *ngFor="let player of awaySubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" (click)="toggleSubstitute(player)">
+            <button class="player-row away" type="button" *ngFor="let player of awaySubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
@@ -280,14 +280,14 @@
         </div>
 
         <div class="mode-note" *ngIf="captainMode === 'CVC'">
-          Select exactly 4 players. M-YES players are automatically included and cannot be removed from CVC.
+          CVC mode · Captain & Vice-Captain Rotation: 2-4 selected players rotate as both Captain and Vice-Captain across your 20 teams. Wider C/VC exposure, reduced single-player dependency. (Demo simplified to single C + VC selection.)
         </div>
         <div class="mode-note" *ngIf="captainMode === 'C_AND_VC'">
-          C &amp; VC mode - M-YES players must be assigned as C or VC first. Then use: 1 Captain x 2-5 VC, 2 Captains x 2-4 VC, 3 Captains x 2-3 VC, or 4 Captains x 2 VC.
+          C & VC mode · Structured Configuration: Captains and Vice-Captains selected separately with structured limits — 1 Cap × 2-5 VC, 2 Cap × 2-4 VC, 3 Cap × 2-3 VC, 4 Cap × 2 VC. Creates multiple balanced combinations. (Demo simplified to single C + VC selection.)
         </div>
 
         <div class="team-pool-grid" *ngIf="captainMode === 'CVC'">
-          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeStartingPlayers, cls: 'home'}, {name: d.away_team.name, players: awayStartingPlayers, cls: 'away'}]">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeCaptaincyPlayers, cls: 'home'}, {name: d.away_team.name, players: awayCaptaincyPlayers, cls: 'away'}]">
             <div class="team-pool-head">
               <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
               <b>{{ side.players.length }} players</b>
@@ -304,7 +304,7 @@
           </article>
         </div>
 
-        <div class="sub-player-section" *ngIf="captainMode === 'CVC' && selectedSubstitutes.length">
+        <div class="sub-player-section" *ngIf="captainMode === 'CVC' && captaincySubstitutes.length">
           <div class="sub-player-title">
             <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
             <div>
@@ -313,7 +313,7 @@
             </div>
           </div>
           <div class="sub-player-grid">
-            <button class="player-row" type="button" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="mandateOf(player) === 'NO'" (click)="toggleCvc(player)">
+            <button class="player-row" type="button" *ngFor="let player of captaincySubstitutes; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="mandateOf(player) === 'NO'" (click)="toggleCvc(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
@@ -325,7 +325,7 @@
         </div>
 
         <div class="team-pool-grid captain-matrix-grid" *ngIf="captainMode === 'C_AND_VC'">
-          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeStartingPlayers, cls: 'home'}, {name: d.away_team.name, players: awayStartingPlayers, cls: 'away'}]">
+          <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeCaptaincyPlayers, cls: 'home'}, {name: d.away_team.name, players: awayCaptaincyPlayers, cls: 'away'}]">
             <div class="team-pool-head">
               <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
               <b>C {{ captainIds.size }}/{{ maxCaptains }} - VC {{ viceCaptainIds.size }}/{{ maxViceForCurrentCaptains() }}</b>
@@ -345,7 +345,7 @@
           </article>
         </div>
 
-        <div class="sub-player-section" *ngIf="captainMode === 'C_AND_VC' && selectedSubstitutes.length">
+        <div class="sub-player-section" *ngIf="captainMode === 'C_AND_VC' && captaincySubstitutes.length">
           <div class="sub-player-title">
             <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
             <div>
@@ -354,7 +354,7 @@
             </div>
           </div>
           <div class="sub-player-grid">
-            <div class="player-row captain-select-row" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id) || viceCaptainIds.has(player.id)" [class.muted]="mandateOf(player) === 'NO'">
+            <div class="player-row captain-select-row" *ngFor="let player of captaincySubstitutes; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id) || viceCaptainIds.has(player.id)" [class.muted]="mandateOf(player) === 'NO'">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
@@ -415,7 +415,7 @@
                 <span class="avatar image-avatar">
                   <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                 </span>
-                <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                 <em>SUB</em>
               </div>
             </div>
@@ -439,7 +439,7 @@
                   <span class="avatar image-avatar">
                     <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                   </span>
-                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                   <em class="yes">YES</em>
                 </div>
                 <p class="preview-empty" *ngIf="!mandateYesPlayers.length">No M-YES players.</p>
@@ -450,7 +450,7 @@
                   <span class="avatar image-avatar">
                     <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                   </span>
-                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                   <em class="no">NO</em>
                 </div>
                 <p class="preview-empty" *ngIf="!mandateNoPlayers.length">No M-NO players.</p>
@@ -471,7 +471,7 @@
                 <span class="avatar image-avatar">
                   <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                 </span>
-                <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                 <em>CVC</em>
               </div>
             </div>
@@ -482,7 +482,7 @@
                   <span class="avatar image-avatar">
                     <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                   </span>
-                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                   <em>C</em>
                 </div>
               </div>
@@ -492,7 +492,7 @@
                   <span class="avatar image-avatar">
                     <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                   </span>
-                  <span><b>{{ player.player_name }}</b><small>{{ player.position }}</small></span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                   <em>VC</em>
                 </div>
               </div>

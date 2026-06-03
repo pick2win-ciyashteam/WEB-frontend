@@ -19,8 +19,9 @@ export class LoginComponent {
 
   forgotForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    otp: ['', [Validators.required, Validators.minLength(4)]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    otp: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
   });
 
   loading = false;
@@ -29,9 +30,11 @@ export class LoginComponent {
 
   showPassword = false;
   showResetPassword = false;
+  showConfirmResetPassword = false;
 
   forgotModal = false;
   otpSent = false;
+  forgotStep: 'email' | 'otp' | 'password' | 'success' = 'email';
 
   toast: { type: 'success' | 'error'; message: string } | null = null;
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
@@ -48,27 +51,33 @@ export class LoginComponent {
     this.authModal.open('signup');
   }
 
-  openForgotPassword() {
+  openForgotPassword(event?: Event) {
+    event?.preventDefault();
     const email = this.loginForm.value.email || '';
 
     this.forgotForm.reset({
       email,
       otp: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     });
 
     this.otpSent = false;
+    this.forgotStep = 'email';
     this.forgotModal = true;
+    this.showResetPassword = false;
+    this.showConfirmResetPassword = false;
     this.hideToast();
   }
 
   closeForgotPassword() {
     this.forgotModal = false;
     this.otpSent = false;
+    this.forgotStep = 'email';
     this.forgotForm.reset();
   }
 
-  sendForgotOtp() {
+  sendForgotOtp(isResend = false) {
     const emailCtrl = this.forgotForm.get('email');
     emailCtrl?.markAsTouched();
 
@@ -83,7 +92,8 @@ export class LoginComponent {
       next: (res) => {
         this.forgotLoading = false;
         this.otpSent = true;
-        this.showToast('success', res?.message || 'OTP sent to your email.');
+        this.forgotStep = 'otp';
+        this.showToast('success', res?.message || (isResend ? 'OTP resent to your email.' : 'OTP sent to your email.'));
       },
       error: (err) => {
         this.forgotLoading = false;
@@ -95,11 +105,38 @@ export class LoginComponent {
     });
   }
 
-  resetPassword() {
-    this.forgotForm.markAllAsTouched();
+  verifyForgotOtp() {
+    const otpCtrl = this.forgotForm.get('otp');
+    otpCtrl?.setValue(String(otpCtrl?.value || '').replace(/\D/g, '').slice(0, 6));
+    otpCtrl?.markAsTouched();
 
-    if (this.forgotForm.invalid) {
-      this.showToast('error', 'Please enter valid OTP ..');
+    if (otpCtrl?.invalid) {
+      this.showToast('error', 'Please enter valid OTP.');
+      return;
+    }
+
+    this.forgotStep = 'password';
+    this.hideToast();
+  }
+
+  resetPassword() {
+    this.forgotForm.get('email')?.markAsTouched();
+    this.forgotForm.get('otp')?.markAsTouched();
+    this.forgotForm.get('password')?.markAsTouched();
+    this.forgotForm.get('confirmPassword')?.markAsTouched();
+
+    if (
+      this.forgotForm.get('email')?.invalid ||
+      this.forgotForm.get('otp')?.invalid ||
+      this.forgotForm.get('password')?.invalid ||
+      this.forgotForm.get('confirmPassword')?.invalid
+    ) {
+      this.showToast('error', 'Password must be minimum 6 characters.');
+      return;
+    }
+
+    if (this.forgotForm.value.password !== this.forgotForm.value.confirmPassword) {
+      this.showToast('error', 'Password and confirm password must match.');
       return;
     }
 
@@ -113,11 +150,8 @@ export class LoginComponent {
       next: (res) => {
         this.resetLoading = false;
         this.showToast('success', res?.message || 'Password reset successful. Please login.');
-
-        setTimeout(() => {
-          this.closeForgotPassword();
-          this.loginForm.patchValue({ email, password: '' });
-        }, 1200);
+        this.forgotStep = 'success';
+        this.loginForm.patchValue({ email, password: '' });
       },
       error: (err) => {
         this.resetLoading = false;
@@ -127,6 +161,12 @@ export class LoginComponent {
         );
       }
     });
+  }
+
+  finishForgotPassword() {
+    const email = this.forgotForm.value.email || '';
+    this.closeForgotPassword();
+    this.loginForm.patchValue({ email, password: '' });
   }
 
   login() {
@@ -179,6 +219,60 @@ export class LoginComponent {
       clearTimeout(this.toastTimer);
       this.toastTimer = null;
     }
+  }
+
+  get forgotStepNumber(): number {
+    const stepMap = {
+      email: 1,
+      otp: 2,
+      password: 3,
+      success: 4
+    };
+
+    return stepMap[this.forgotStep];
+  }
+
+  get forgotTitle(): string {
+    const titleMap = {
+      email: 'Reset Password',
+      otp: 'Verify OTP',
+      password: 'Create New Password',
+      success: 'Password Updated!'
+    };
+
+    return titleMap[this.forgotStep];
+  }
+
+  get forgotDescription(): string {
+    const email = this.forgotForm.value.email || 'your email';
+    const descriptionMap = {
+      email: 'Enter your registered email address. We will send an OTP to verify your account.',
+      otp: `Enter the OTP sent to ${email}.`,
+      password: 'Your new password must be strong and unique.',
+      success: 'Your password has been changed successfully.'
+    };
+
+    return descriptionMap[this.forgotStep];
+  }
+
+  get resetPasswordStrength(): number {
+    const value = this.forgotForm.value.password || '';
+    let score = 0;
+
+    if (value.length >= 6) score += 25;
+    if (value.length >= 10) score += 20;
+    if (/[A-Z]/.test(value)) score += 20;
+    if (/[0-9]/.test(value)) score += 20;
+    if (/[^A-Za-z0-9]/.test(value)) score += 15;
+
+    return Math.min(score, 100);
+  }
+
+  get resetPasswordStrengthLabel(): string {
+    if (this.resetPasswordStrength >= 80) return 'Strong';
+    if (this.resetPasswordStrength >= 50) return 'Good';
+    if (this.resetPasswordStrength > 0) return 'Weak';
+    return '';
   }
 
   ngOnDestroy() {

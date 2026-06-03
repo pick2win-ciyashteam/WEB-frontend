@@ -1987,12 +1987,12 @@ h1 em,
   .player-row {
     position: relative;
     display: grid !important;
-    grid-template-columns: 42px minmax(0, 1fr) 46px !important;
-    gap: 8px !important;
+    grid-template-columns: 30px minmax(0, 1fr) 30px !important;
+    gap: 4px !important;
     align-items: center;
-    min-height: 72px !important;
+    min-height: 68px !important;
     margin-bottom: 9px;
-    padding: 8px !important;
+    padding: 7px 6px !important;
     overflow: hidden;
     border: 2px solid #d8e1ea !important;
     border-radius: 14px !important;
@@ -2019,9 +2019,9 @@ h1 em,
   }
 
   .avatar {
-    width: 42px !important;
-    height: 42px !important;
-    border-radius: 13px;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 9px;
     background: #eef4f8;
   }
 
@@ -2030,7 +2030,7 @@ h1 em,
     max-width: 100%;
     overflow: hidden;
     color: #0f172a !important;
-    font-size: 13.5px !important;
+    font-size: 12px !important;
     font-weight: 950;
     line-height: 1.18;
     text-overflow: ellipsis;
@@ -2059,13 +2059,14 @@ h1 em,
     grid-column: 3 !important;
     grid-row: 1 / span 2;
     justify-self: end !important;
-    min-width: 42px !important;
-    height: 34px !important;
+    min-width: 28px !important;
+    height: 30px !important;
+    padding: 0 5px !important;
     border-color: rgba(59, 130, 246, .25) !important;
-    border-radius: 11px !important;
+    border-radius: 9px !important;
     color: #3b82f6 !important;
     background: rgba(59, 130, 246, .08) !important;
-    font-size: 11px !important;
+    font-size: 10px !important;
     box-shadow: none;
   }
 
@@ -2345,8 +2346,10 @@ h1 em,
   }
 
   .preview-player {
-    grid-template-columns: 42px minmax(0, 1fr) 42px !important;
-    min-height: 70px !important;
+    grid-template-columns: 30px minmax(0, 1fr) 34px !important;
+    gap: 5px !important;
+    min-height: 66px !important;
+    padding: 7px 6px !important;
     border: 2px solid #d8e1ea !important;
     border-radius: 14px !important;
     background: #fff !important;
@@ -2354,7 +2357,7 @@ h1 em,
 
   .preview-player b {
     color: #0f172a !important;
-    font-size: 13.5px !important;
+    font-size: 12px !important;
     font-weight: 950;
   }
 
@@ -2371,10 +2374,12 @@ h1 em,
   }
 
   .preview-player em {
+    min-width: 30px;
+    padding: 5px 4px;
     color: #3b82f6 !important;
     border-color: rgba(59, 130, 246, .24) !important;
     background: rgba(59, 130, 246, .08) !important;
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .preview-player em.no {
