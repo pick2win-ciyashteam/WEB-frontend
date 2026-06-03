@@ -296,12 +296,12 @@ export class MyProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const otp = this.deleteOtp.trim();
+    const otp = this.deleteOtp.trim().slice(0, 6);
     this.deleteMessage = '';
     this.deleteError = '';
 
-    if (!/^[0-9]{4,8}$/.test(otp)) {
-      this.deleteError = 'Enter the OTP sent for account deletion.';
+    if (!/^[0-9]{6}$/.test(otp)) {
+      this.deleteError = 'Enter the 6-digit OTP sent for account deletion.';
       return;
     }
 
