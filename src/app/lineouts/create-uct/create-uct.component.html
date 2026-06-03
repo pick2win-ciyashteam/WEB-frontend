@@ -292,7 +292,7 @@
               <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
               <b>{{ side.players.length }} players</b>
             </div>
-          <button class="player-row" type="button" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="mandateOf(player) === 'NO'" (click)="toggleCvc(player)">
+          <button class="player-row" type="button" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="!canSelectCvc(player)" (click)="toggleCvc(player)">
             <span class="avatar image-avatar">
               <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
             </span>
@@ -313,7 +313,7 @@
             </div>
           </div>
           <div class="sub-player-grid">
-            <button class="player-row" type="button" *ngFor="let player of captaincySubstitutes; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="mandateOf(player) === 'NO'" (click)="toggleCvc(player)">
+            <button class="player-row" type="button" *ngFor="let player of captaincySubstitutes; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="!canSelectCvc(player)" (click)="toggleCvc(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>

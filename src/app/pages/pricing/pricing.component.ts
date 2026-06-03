@@ -204,8 +204,7 @@ async confirmPayment(): Promise<void> {
       this.paymentElement = null;
     }
 
-    // coins/profile refresh
-    this.api.getProfile().subscribe();
+    this.profileService.loadProfile(true).subscribe();
 
    setTimeout(() => {
   this.checkoutOpen = false;

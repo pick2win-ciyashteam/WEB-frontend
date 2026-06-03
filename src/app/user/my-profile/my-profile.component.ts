@@ -39,6 +39,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   deletionTimestamp = '';
   showTodayLineupsCta = false;
   private todayLineupsTimer: any;
+  private profileRefreshTimer: any;
 
   constructor(
     private api: ApiService,
@@ -49,13 +50,14 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
   this.applyTabFromRoute();
-  this.profileService.loadProfile(true).subscribe();
+  this.refreshProfileFromRoute();
   this.loadTodayLineupsCta();
   this.startTodayLineupsRefresh();
 }
 
   ngOnDestroy(): void {
     clearInterval(this.todayLineupsTimer);
+    clearTimeout(this.profileRefreshTimer);
   }
 
   setTab(tab: 'profile' | 'teams' | 'feedback') {
@@ -221,6 +223,23 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
     if (tab === 'teams' || tab === 'feedback' || tab === 'profile') {
       this.activeTab = tab;
+    }
+  }
+
+  private refreshProfileFromRoute(): void {
+    const shouldRefreshAfterPayment = this.route.snapshot.queryParamMap.has('refresh');
+
+    this.profileService.loadProfile(true).subscribe(profile => {
+      console.log('Profile component data:', profile);
+    });
+
+    if (shouldRefreshAfterPayment) {
+      clearTimeout(this.profileRefreshTimer);
+      this.profileRefreshTimer = setTimeout(() => {
+        this.profileService.loadProfile(true).subscribe(profile => {
+          console.log('Profile component refreshed data:', profile);
+        });
+      }, 1200);
     }
   }
 
@@ -403,7 +422,10 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     return new Intl.DateTimeFormat('en-GB', {
       day: '2-digit',
       month: 'short',
-      year: 'numeric'
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
     }).format(new Date(value));
   }
 }

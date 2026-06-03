@@ -138,8 +138,10 @@
 
       <div class="transaction-note">
         <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-        <b>Transaction transparency:</b>
-        Every coin pack purchase and every match UCT generation is logged here forever. Coin balances reflect remaining coins across all active packs. For any billing question, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with your payment ID.
+        <p>
+          <b>Transaction transparency:</b>
+          Every coin pack purchase and every match UCT generation is logged here forever. Coin balances reflect remaining coins across all active packs. For any billing question, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with your payment ID.
+        </p>
       </div>
 
       <div class="danger-zone">
@@ -314,7 +316,7 @@
           <input
             type="text"
             inputmode="numeric"
-            maxlength="8"
+            maxlength="6"
             [value]="deleteOtp"
             [disabled]="deletingAccount"
             placeholder="Enter OTP"

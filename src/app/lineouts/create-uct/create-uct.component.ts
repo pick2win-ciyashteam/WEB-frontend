@@ -383,6 +383,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.cvcIds.add(player.id);
   }
 
+  canSelectCvc(player: UctPlayer): boolean {
+    if (this.cvcIds.has(player.id)) return true;
+    if (this.mandates.get(player.id) === 'NO') return false;
+    return this.cvcIds.size < this.maxCvc;
+  }
+
   setCaptainMode(mode: CaptainMode): void {
     if (this.captainMode === mode) {
       return;
