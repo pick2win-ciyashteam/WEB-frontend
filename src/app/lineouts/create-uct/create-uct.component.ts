@@ -602,6 +602,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     const payload = this.buildSubmitPayload();
     console.log('Generate UCT request payload:', payload);
+    console.log('Generate UCT request payload JSON:', JSON.stringify(payload, null, 2));
 
     this.api.createUctTeams(payload)
       .pipe(takeUntil(this.destroy$))

@@ -120,7 +120,11 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
   }
 
   createUctTeams(data: UctGeneratePayload): Observable<UctGenerateResponse> {
-    return this.http.post<UctGenerateResponse>(`${this.BASE}/user/teams/generate-teams`, data);
+    return this.http.post<UctGenerateResponse>(
+      `${this.BASE}/user/teams/generate-teams`,
+      JSON.stringify(data),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
    GetMyTeams(): Observable<ApiListResponse<Country>> {
