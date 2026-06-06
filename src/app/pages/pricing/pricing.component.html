@@ -62,8 +62,10 @@
 
     <div class="credit-packs reveal" *ngIf="!loading && plans.length">
       <article class="credit-pack" *ngFor="let plan of plans; trackBy: trackPlan" [ngClass]="planClass(plan)">
-        <div class="credit-pack-badge" *ngIf="plan.is_popular">Most Popular</div>
-        <div class="credit-pack-badge" *ngIf="plan.is_pro">Pro Tier</div>
+        <div class="credit-pack-badge" *ngIf="badgeLabel(plan)">
+          <span class="material-symbols-outlined" aria-hidden="true">{{ badgeIcon(plan) }}</span>
+          {{ badgeLabel(plan) }}
+        </div>
         <div class="credit-pack-name">{{ plan.name }}</div>
         <div class="credit-pack-sub">{{ plan.subtitle }}</div>
         <div class="credit-pack-coins">
@@ -71,16 +73,22 @@
           <span class="credit-pack-label">coins</span>
         </div>
         <p class="credit-pack-matches"><b>{{ plan.matches }} matches</b> of UCT workflow</p>
+        <div class="credit-pack-divider"></div>
         <div class="credit-pack-price">
           <span class="credit-pack-cur">{{ plan.currency_symbol }}</span>
-          <span class="credit-pack-amount">{{ plan.price | number:'1.0-2' }}</span>
+          <span class="credit-pack-amount">{{ plan.price | number:'1.0-0' }}</span>
         </div>
-        <div class="credit-pack-per">Approx <b>{{ plan.currency_symbol }}{{ plan.price_per_coin | number:'1.2-2' }}</b> per coin</div>
+        <div class="credit-pack-per">
+          ≈ <b>{{ plan.currency_symbol }}{{ plan.price_per_coin | number:'1.2-2' }}</b> per coin<span *ngIf="isLowestPricePerCoin(plan)"> · lowest</span>
+        </div>
         <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPlan(plan)">
           {{ isPurchasing(plan) ? 'Opening Stripe...' : 'Buy ' + plan.coins + ' Coins' }}
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+          <span aria-hidden="true">→</span>
         </button>
-        <div class="credit-pack-foot">Valid {{ plan.validity_days }} days · one-time payment · no auto-renew</div>
+        <div class="credit-pack-foot">
+          <span class="material-symbols-outlined" aria-hidden="true">hourglass_empty</span>
+          Valid {{ plan.validity_days }} days · one-time payment · no auto-renew
+        </div>
       </article>
     </div>
 

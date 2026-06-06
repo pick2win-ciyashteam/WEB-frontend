@@ -128,25 +128,7 @@
       </div>
     </div>
 
-    <div class="signup-nudge reveal">
-      <div class="signup-nudge-icon material-symbols-outlined" aria-hidden="true">redeem</div>
-      <div class="signup-nudge-body">
-        <span class="signup-nudge-eyebrow">JOIN US AT LAUNCH - 10 JUNE 2026 - 09:00 UTC</span>
-        <h3 class="signup-nudge-h">Built in Bengaluru. <em>Available everywhere.</em></h3>
-        <p class="signup-nudge-sub">19 markets at launch, USD pricing, India-incorporated and globally accessible. Sign up free today and we will have your account ready when UCT goes live on launch day.</p>
-      </div>
-
-      <div class="signup-nudge-actions" *ngIf="loggedIn$ | async; else guestActions">
-        <a routerLink="/user/profile" class="signup-nudge-btn">Go to profile</a>
-      </div>
-
-      <ng-template #guestActions>
-        <div class="signup-nudge-actions">
-          <button class="signup-nudge-btn" type="button" (click)="openSignup()">Create free account</button>
-          <button class="signup-nudge-btn-ghost" type="button" (click)="openLogin()">Sign in</button>
-        </div>
-      </ng-template>
-    </div>
+   
 
     <div class="company-contact reveal">
       <div class="company-contact-section-label">

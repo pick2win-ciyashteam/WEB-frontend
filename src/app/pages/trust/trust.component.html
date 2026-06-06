@@ -85,7 +85,7 @@
       <article class="trust-card">
         <div class="num">365d</div>
         <h4>Coin Validity &amp; Pack Merge</h4>
-        <p>Every coin pack is valid for <b>365 days from the latest successful purchase</b>. Buy a new pack before existing coins expire and the remaining balance merges into the new pack with a fresh 365-day validity.</p>
+        <p>Every coin pack is valid for <b>365 days from the latest successful purchase</b>. Buy a new pack before existing coins expire and the remaining balance merges into the new pack with a fresh 365-day validity. No silent expirations, no hidden countdowns.</p>
       </article>
       <article class="trust-card">
         <div class="num"><span class="material-symbols-outlined" aria-hidden="true">credit_card</span></div>
@@ -100,7 +100,7 @@
       <article class="trust-card">
         <div class="num">03D</div>
         <h4>Stripe Secured</h4>
-        <p>Stripe Radar fraud monitoring, 3D Secure verification, device fingerprinting, IP monitoring, and velocity checks.</p>
+        <p>Stripe Radar fraud monitoring, 3D Secure verification, device fingerprinting, IP monitoring, velocity checks.</p>
       </article>
     </div>
 
@@ -108,7 +108,7 @@
       <div class="partners-head">
         <span class="partners-eyebrow">Our Infrastructure Partners</span>
         <h3 class="partners-h">We rely on best-in-class providers. <em>And we tell you who they are.</em></h3>
-        <p class="partners-lead">PICK2WIN does not build everything in-house. For payments and football data, the two systems users care about most, we partner with proven providers and disclose them publicly.</p>
+        <p class="partners-lead">PICK2WIN does not build everything in-house. For payments and football data, the two systems users care about most, we partner with proven, regulated providers and disclose them publicly.</p>
       </div>
 
       <div class="partners-grid">
@@ -116,14 +116,14 @@
           <div class="partner-logo">stripe</div>
           <div class="partner-tag">Payment Gateway Partner</div>
           <h4>All payments processed by Stripe.</h4>
-          <p>Every coin-pack purchase runs through Stripe with 3D Secure authentication, Radar fraud detection, and card fingerprint deduplication. PICK2WIN never stores card numbers. Stripe holds PCI compliance, dispute resolution, and chargeback flow.</p>
+          <p>Every coin-pack purchase runs through Stripe with 3D Secure authentication, Radar fraud detection, and card fingerprint deduplication. PICK2WIN never stores card numbers. Stripe holds PCI compliance, the dispute resolution flow, and the chargeback process. We receive only the confirmation event.</p>
         </article>
 
         <article class="partner-card sportmonks">
           <div class="partner-logo"><span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span> DATA</div>
           <div class="partner-tag">Football API Partner</div>
           <h4>Football data sourced from our third-party football API provider.</h4>
-          <p>All starting XIs, substitute lists, player metadata, fixture timings, and live match status come from a third-party football API provider, covering the leagues PICK2WIN operates across. PICK2WIN does not maintain its own lineup database.</p>
+          <p>All starting XIs, substitute lists, player metadata, fixture timings, and live match status come from a <b>third-party football API provider</b>, covering exactly the leagues PICK2WIN operates across. When the provider publishes a starting XI, our UCT window opens. When the provider updates a substitute, our engine reflects it. <b>PICK2WIN does not maintain its own lineup database.</b></p>
         </article>
       </div>
     </div>
@@ -161,7 +161,12 @@
         <div class="important-box">
           <div class="principles-title">Important</div>
           <p><b>UCT generation completed using the lineup information available at the time of generation.</b></p>
-          <p>Lineup updates received later do <b>not</b> automatically trigger UCT regeneration, additional UCT runs, or additional coin deductions.</p>
+          <p>Lineup updates received later do <b>not</b> automatically trigger:</p>
+          <ul class="notice-list">
+            <li>UCT regeneration</li>
+            <li>additional UCT runs</li>
+            <li>additional coin deductions</li>
+          </ul>
           <p>The purpose of the notification is simply to keep users informed when post-generation lineup updates are received from external data providers.</p>
         </div>
 

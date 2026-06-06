@@ -737,11 +737,22 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private setActiveStep(step: number): void {
     this.step = step;
-    this.scrollToTop();
+    this.scrollToStepView(step);
   }
 
-  private scrollToTop(): void {
-    setTimeout(() => this.viewportScroller.scrollToPosition([0, 0]));
+  private scrollToStepView(step: number): void {
+    setTimeout(() => {
+      const elementId = step === 6 ? 'uctGeneratingPanel' : 'uctStepNav';
+      const element = document.getElementById(elementId);
+
+      if (!element) {
+        return;
+      }
+
+      const headerOffset = 96;
+      const top = element.getBoundingClientRect().top + window.scrollY - headerOffset;
+      this.viewportScroller.scrollToPosition([0, Math.max(0, top)]);
+    });
   }
 
   private isGoalkeeper(player: UctPlayer): boolean {

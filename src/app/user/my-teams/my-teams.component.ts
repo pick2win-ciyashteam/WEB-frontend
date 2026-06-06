@@ -563,7 +563,8 @@ downloadCSV(rows: any[], fileName: string) {
     const rows: string[][] = [];
 
     teams.forEach((team, teamIndex) => {
-      const players = (Array.isArray(team.players) ? team.players : []).map(player => this.mapPreviewPlayer(player));
+      const previewTeam = this.mapGeneratedTeam(team);
+      const players = previewTeam.players;
       const combination = `${players.filter(player => player.team === 'home').length} X ${players.filter(player => player.team === 'away').length}`;
 
       rows.push(['UCT Team:', String(team.team_no)]);
@@ -576,7 +577,7 @@ downloadCSV(rows: any[], fileName: string) {
           String(index + 1),
           player.name,
           player.pos,
-          this.csvCaptainLabel(player, team)
+          this.csvCaptainLabel(player, previewTeam)
         ]);
       });
 
@@ -588,12 +589,12 @@ downloadCSV(rows: any[], fileName: string) {
     return rows;
   }
 
-  private csvCaptainLabel(player: PreviewPlayer, team: ApiGeneratedTeam): string {
-    if (player.captain === 'C' || player.captain === 'CVC' || player.name === team.captain) {
+  private csvCaptainLabel(player: PreviewPlayer, team: PreviewTeam): string {
+    if (team.captain?.id === player.id || player.captain === 'C' || player.captain === 'CVC') {
       return 'C';
     }
 
-    if (player.captain === 'VC' || player.name === team.vice_captain) {
+    if (team.viceCaptain?.id === player.id || player.captain === 'VC') {
       return 'VC';
     }
 

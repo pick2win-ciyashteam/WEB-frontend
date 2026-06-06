@@ -257,6 +257,47 @@ closeCheckout(): void {
     return this.purchasingPlanId === plan.id;
   }
 
+  badgeLabel(plan: SubscriptionPlan): string {
+    if (plan.is_popular) {
+      return 'Most Popular';
+    }
+
+    if (plan.is_pro) {
+      return 'Pro Tier';
+    }
+
+    return '';
+  }
+
+  badgeIcon(plan: SubscriptionPlan): string {
+    if (plan.is_popular) {
+      return 'star';
+    }
+
+    if (plan.is_pro) {
+      return 'health_and_safety';
+    }
+
+    return '';
+  }
+
+  perCoinText(plan: SubscriptionPlan): string {
+    const suffix = this.isLowestPricePerCoin(plan) ? ' · lowest' : '';
+    return `≈ ${plan.currency_symbol}${Number(plan.price_per_coin || 0).toFixed(2)} per coin${suffix}`;
+  }
+
+  isLowestPricePerCoin(plan: SubscriptionPlan): boolean {
+    const prices = this.plans
+      .map(item => Number(item.price_per_coin))
+      .filter(price => Number.isFinite(price) && price > 0);
+
+    if (!prices.length) {
+      return false;
+    }
+
+    return Number(plan.price_per_coin) === Math.min(...prices);
+  }
+
   private handleStripeReturn(): void {
     const params = this.route.snapshot.queryParamMap;
     const payment = params.get('payment');

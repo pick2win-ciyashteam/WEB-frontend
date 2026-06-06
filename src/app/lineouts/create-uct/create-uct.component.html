@@ -23,7 +23,7 @@
 
     <button class="back-link" type="button" (click)="goBack()">
       <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-      Back to match
+      Back
     </button>
 
     <div class="state-card" *ngIf="loading">
@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <nav class="stepper" aria-label="UCT workflow steps">
+      <nav class="stepper" id="uctStepNav" aria-label="UCT workflow steps">
         <button type="button" [class.active]="step === 1" [class.done]="step > 1" (click)="setStep(1)">
           <b>01</b><span>Substitute</span>
         </button>
@@ -90,14 +90,14 @@
         <div class="substitute-section-title playing-title">
           <span class="material-symbols-outlined" aria-hidden="true">groups</span>
           <b>Playing XI</b>
-          <small>Locked players</small>
+          <!-- <small>11 players</small> -->
         </div>
 
         <div class="team-pool-grid locked-xi-grid">
           <article class="team-pool locked-pool">
             <div class="team-pool-head">
               <h3><span class="team-color home"></span>{{ d.home_team.name }}</h3>
-              <b>{{ homeStartingPlayers.length }} locked XI</b>
+              <b>{{ homeStartingPlayers.length }} PLAYERS</b>
             </div>
             <div class="player-row locked-row" *ngFor="let player of homeStartingPlayers; trackBy: trackPlayer">
               <span class="avatar image-avatar">
@@ -529,7 +529,7 @@
         </div>
       </section>
 
-      <section class="flow-panel generating-panel" *ngIf="step === 6">
+      <section class="flow-panel generating-panel" id="uctGeneratingPanel" *ngIf="step === 6">
         <div class="gen-loader">
           <div class="gen-spinner"></div>
           <div class="gen-title">Generating 20 structured teams...</div>
@@ -538,10 +538,80 @@
       </section>
 
       <div class="flow-actions" *ngIf="step < 5">
-        <button class="ghost-btn" type="button" (click)="prevStep()">{{ step === 1 ? 'Back to match' : 'Back' }}</button>
-        <button class="primary-btn" type="button" *ngIf="step < 3" (click)="nextStep()">Next</button>
-        <button class="primary-btn" type="button" *ngIf="step === 3" [disabled]="!canReview" (click)="nextStep()">Next to Review</button>
-        <button class="primary-btn generate" type="button" *ngIf="step === 4" [disabled]="!canGenerate || submitting" (click)="generateTeams()">Create / Submit</button>
+        <div class="flow-actions-info">
+          <div class="action-selection-summary" *ngIf="step === 1" [class.empty]="!selectedSubstitutes.length">
+            <div class="action-summary-title">
+              <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+              <b>{{ selectedSubstitutes.length }} Substitute{{ selectedSubstitutes.length === 1 ? '' : 's' }} Selected</b>
+            </div>
+            <div class="action-chip-row" *ngIf="selectedSubstitutes.length; else noBottomSubs">
+              <span class="action-player-chip" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer">
+                <b>{{ player.player_name }}</b>
+                <small>{{ player.teamShort }} - {{ player.position }}</small>
+              </span>
+            </div>
+            <ng-template #noBottomSubs>
+              <small class="action-empty">No substitute selected yet.</small>
+            </ng-template>
+          </div>
+
+          <div class="action-selection-summary mandate-bottom-summary" *ngIf="step === 2 && (mandateYesPlayers.length || mandateNoPlayers.length)">
+            <div class="action-mandate-col" *ngIf="mandateYesPlayers.length">
+              <div class="action-summary-title yes">
+                <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                <b>M-YES {{ mandateYesPlayers.length }}/{{ maxMandateYes }}</b>
+              </div>
+              <div class="action-chip-row">
+                <span class="action-player-chip yes" *ngFor="let player of mandateYesPlayers; trackBy: trackPlayer">
+                  <b>{{ player.player_name }}</b>
+                  <small>{{ player.teamShort }} - {{ player.position }}</small>
+                </span>
+              </div>
+            </div>
+
+            <div class="action-mandate-col" *ngIf="mandateNoPlayers.length">
+              <div class="action-summary-title no">
+                <span class="material-symbols-outlined" aria-hidden="true">block</span>
+                <b>M-NO {{ mandateNoPlayers.length }}/{{ maxMandateNo }}</b>
+              </div>
+              <div class="action-chip-row">
+                <span class="action-player-chip no" *ngFor="let player of mandateNoPlayers; trackBy: trackPlayer">
+                  <b>{{ player.player_name }}</b>
+                  <small>{{ player.teamShort }} - {{ player.position }}</small>
+                </span>
+              </div>
+            </div>
+          </div>
+          <span *ngIf="step === 3"><b>{{ captainMode === 'CVC' ? cvcIds.size : captainIds.size + viceCaptainIds.size }}</b> captaincy player(s) selected</span>
+          <span class="final-action-note" *ngIf="step === 4">Ready to generate. <b>This action is final</b> - no edits after generation.</span>
+          <span *ngIf="step === 4"><b>{{ selectedSubstitutes.length }}</b> subs · <b>{{ mandateYesPlayers.length }}</b> M-YES · <b>{{ mandateNoPlayers.length }}</b> M-NO</span>
+        </div>
+
+        <div class="flow-actions-buttons" [class.review-actions]="step === 4">
+          <button class="ghost-btn" type="button" (click)="prevStep()">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+            Back
+          </button>
+          <button class="primary-btn" type="button" *ngIf="step === 1" (click)="nextStep()">
+            Next
+            <span aria-hidden="true">→</span>
+            Mandate
+          </button>
+          <button class="primary-btn" type="button" *ngIf="step === 2" (click)="nextStep()">
+            Next
+            <span aria-hidden="true">→</span>
+            Captaincy
+          </button>
+          <button class="primary-btn" type="button" *ngIf="step === 3" [disabled]="!canReview" (click)="nextStep()">
+            Next
+            <span aria-hidden="true">→</span>
+            Review
+          </button>
+          <button class="primary-btn generate" type="button" *ngIf="step === 4" [disabled]="!canGenerate || submitting" (click)="generateTeams()">
+            Create / Submit
+            <span aria-hidden="true">-&gt;</span>
+          </button>
+        </div>
       </div>
     </ng-container>
   </div>
@@ -549,21 +619,17 @@
 
 <div class="uct-confirm-modal" *ngIf="showGenerateConfirm" role="dialog" aria-modal="true" aria-labelledby="uctConfirmTitle" (click)="closeGenerateConfirm()">
   <div class="uct-confirm-card" (click)="$event.stopPropagation()">
-    <button class="uct-confirm-close" type="button" aria-label="Close" (click)="closeGenerateConfirm()">
-      <span class="material-symbols-outlined" aria-hidden="true">close</span>
-    </button>
-
-    <div class="uct-confirm-icon">
-      <span class="material-symbols-outlined" aria-hidden="true">task_alt</span>
+    <div class="uct-confirm-title-row">
+      <div class="uct-confirm-icon">
+        <span class="material-symbols-outlined" aria-hidden="true">balance</span>
+      </div>
+      <div>
+        <span class="uct-confirm-kicker">UCT Confirmation</span>
+        <h2 id="uctConfirmTitle">Acknowledge your configuration responsibility</h2>
+      </div>
     </div>
 
-    <h2 id="uctConfirmTitle">User Responsibility Notice</h2>
-    <p>The User Config Teams feature operates strictly based on the inputs provided by you. PICK2WIN does not influence, recommend, or alter player selections, substitute selections, mandate choices, or Captain/Vice-Captain configuration.</p>
-
-    <div class="uct-responsibility-box">
-      <span class="material-symbols-outlined" aria-hidden="true">shield</span>
-      <p>All selections and resulting teams are entirely your responsibility. One coin may be used for this match once generation succeeds.</p>
-    </div>
+    <p class="uct-confirm-quote">"The User Config Teams (UCT) feature operates strictly based on the inputs provided by the user. The platform does not influence, recommend, or alter any player selections, substitute selections, mandate choices, or Captain/Vice-Captain configurations. All selections and resulting teams are entirely the responsibility of the user."</p>
 
     <div class="uct-confirm-summary desktop-confirm-summary">
       <div><span>Substitutes</span><b>{{ selectedSubstitutes.length }}</b></div>
@@ -574,13 +640,14 @@
 
     <label class="confirm-box modal-confirm">
       <input type="checkbox" [checked]="generateConsent" (change)="generateConsent = !generateConsent">
-      <span>I confirm that the teams will be generated strictly based on my configuration.</span>
+      <span><b>I confirm</b> that the teams will be generated strictly based on my configuration.</span>
     </label>
 
     <div class="uct-confirm-actions">
-      <button class="ghost-btn" type="button" (click)="closeGenerateConfirm()">Review again</button>
+      <button class="ghost-btn" type="button" (click)="closeGenerateConfirm()" style="color:#fff">Cancel</button>
       <button class="primary-btn generate" type="button" [disabled]="submitting || !generateConsent" (click)="confirmGenerateTeams()">
-        {{ submitting ? 'Generating...' : 'Confirm & Generate' }}
+        {{ submitting ? 'Generating...' : 'Generate 20 Teams' }}
+        <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
       </button>
     </div>
   </div>
