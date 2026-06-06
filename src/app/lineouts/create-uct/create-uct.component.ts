@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, switchMap, takeUntil } from 'rxjs';
 import { MatchDetail, MatchPlayer, UctGeneratePayload, UctGeneratePlayer } from 'src/app/core/interfaces/content';
@@ -71,7 +72,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit(): void {
@@ -245,13 +247,13 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     if (this.step < 4) {
-      this.step++;
+      this.setActiveStep(this.step + 1);
     }
   }
 
   prevStep(): void {
     if (this.step > 1) {
-      this.step--;
+      this.setActiveStep(this.step - 1);
     } else {
       this.goBack();
     }
@@ -259,7 +261,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   setStep(step: number): void {
     if (step <= this.step) {
-      this.step = step;
+      this.setActiveStep(step);
     }
   }
 
@@ -597,7 +599,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     this.submitting = true;
     this.submitError = '';
-    this.step = 6;
+    this.setActiveStep(6);
     this.startGeneratingStatus();
 
     const payload = this.buildSubmitPayload();
@@ -659,7 +661,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.generatedTeams = teams;
-    this.step = 5;
+    this.setActiveStep(5);
   }
 
   positionClass(player: UctPlayer): string {
@@ -733,6 +735,15 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.uctAlert = { title, message, type };
   }
 
+  private setActiveStep(step: number): void {
+    this.step = step;
+    this.scrollToTop();
+  }
+
+  private scrollToTop(): void {
+    setTimeout(() => this.viewportScroller.scrollToPosition([0, 0]));
+  }
+
   private isGoalkeeper(player: UctPlayer): boolean {
     return String(player.position || '').toUpperCase() === 'GK';
   }
@@ -759,7 +770,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private resetAfterSubmitFailure(message: string): void {
     this.submitError = message;
-    this.step = 1;
+    this.setActiveStep(1);
     this.confirmed = false;
     this.generatedTeams = [];
   }

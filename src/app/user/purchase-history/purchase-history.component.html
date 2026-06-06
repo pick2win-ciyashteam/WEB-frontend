@@ -35,11 +35,8 @@
         <tr>
           <th>Purchase Date</th>
           <th>Pack</th>
-          <!-- <th>Expiry Date</th> -->
           <th>Coins Added</th>
           <th>Amount</th>
-          <!-- <th>Opening</th>
-          <th>Closing</th> -->
           <th>Payment ID (Stripe)</th>
           <th>Status</th>
         </tr>
@@ -52,12 +49,8 @@
           <td class="col-match">
             {{ item.plan_name }}
           </td>
-
-          <!-- <td class="col-expiry">{{ packageExpiryDate(item) }}</td> -->
           <td class="col-coins">+{{ item.coins }}</td>
           <td class="col-amount">${{ item.amount }}</td>
-          <!-- <td>{{ item.opening_coins }}</td>
-          <td>{{ item.closing_coins }}</td> -->
 
           <td class="col-id" [title]="item.reference_id">
             {{ shortPaymentId(item.reference_id) }}

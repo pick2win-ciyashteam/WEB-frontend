@@ -47,7 +47,7 @@
           <th>League</th>
           <th>Match ID</th>
           <th>Match</th>
-          <th>Date</th>
+          <th>Date &amp; Time</th>
           <th>Teams</th>
           <th>Status</th>
           <th>Venue</th>
@@ -61,7 +61,7 @@
           <td>{{ getLeagueName(item) }}</td>
           <td>{{ getMatchId(item) || '-' }}</td>
           <td>{{ getMatchName(item) }}</td>
-          <td>{{ getMatchDate(item) | date:'dd-MMM-YYYY'}}</td>
+          <td>{{ getMatchDate(item) | date:'dd-MMM-yyyy, h:mm a' }}</td>
           <td>{{ getTeams(item) }}</td>
           <td>{{ item.match_status || item.status || '-' }}</td>
           <td>{{ getVenue(item) }}</td>
@@ -107,7 +107,7 @@
         </div>
 
         <div class="fixture-meta">
-          <div><span>Date</span><b>{{ getMatchDate(item) }}</b></div>
+          <div><span>Date &amp; Time</span><b>{{ getMatchDate(item) | date:'dd-MMM-yyyy, h:mm a' }}</b></div>
           <div><span>Status</span><b>{{ item.status || item.match_status || '-' }}</b></div>
           <div><span>Venue</span><b>{{ getVenue(item) }}</b></div>
           <div><span>Score</span><b>{{ getScore(item) }}</b></div>

@@ -47,7 +47,8 @@ export class PurchaseHistoryComponent implements OnInit {
 
     this.api.GetPurchaseHistory().subscribe({
       next: (res: any) => {
-        this.history = Array.isArray(res?.data) ? res.data : [];
+        const history: PurchaseHistory[] = Array.isArray(res?.data) ? res.data : [];
+        this.history = history.filter(item => this.isPurchaseTransaction(item));
         this.history.forEach(item => this.logMissingExpiryDate(item));
 
         this.totalPacks = this.history.length;
@@ -149,5 +150,9 @@ export class PurchaseHistoryComponent implements OnInit {
     }
 
     console.log('Purchase history item missing package expiry date:', item);
+  }
+
+  private isPurchaseTransaction(item: PurchaseHistory): boolean {
+    return String(item.transaction_type || '').toLowerCase() === 'purchase';
   }
 }

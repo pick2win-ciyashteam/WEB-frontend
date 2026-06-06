@@ -305,6 +305,14 @@
   opacity: 0.55;
 }
 
+.myteams-action.archived {
+  justify-content: flex-start;
+  min-width: min(100%, 264px);
+  color: var(--paper-3);
+  background: rgba(255, 255, 255, 0.025);
+  border-color: var(--line);
+}
+
 .myteams-tail {
   margin-top: 18px;
   padding: 16px 22px;

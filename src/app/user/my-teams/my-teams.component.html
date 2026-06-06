@@ -97,7 +97,7 @@
         <button
           class="myteams-action primary"
           type="button"
-          *ngIf="match.viewable"
+          *ngIf="canAccessTeams(match)"
           (click)="openMatchTeams(match)">
           <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
           View {{ match.teamsGenerated || 0 }} Teams ->
@@ -106,13 +106,13 @@
         <button
           class="myteams-action"
           type="button"
-          *ngIf="match.viewable"
+          *ngIf="canAccessTeams(match)"
           (click)="downloadMatchTeams(match)">
           <span class="material-symbols-outlined" aria-hidden="true">download</span>
           Download all (CSV)
         </button>
 
-        <button class="myteams-action" type="button" *ngIf="!match.viewable" disabled>
+        <button class="myteams-action archived" type="button" *ngIf="!canAccessTeams(match)" disabled>
           Teams archived - no longer viewable
         </button>
       </div>
@@ -145,14 +145,16 @@
         </div>
       </div>
 
+      <ng-container *ngIf="selectedMatch as detailMatch">
         <button
-      class="myteams-action primary"
-      type="button"
-      *ngIf="selectedMatch"
-      (click)="downloadMatchTeams(selectedMatch)">
-      <span class="material-symbols-outlined" aria-hidden="true">download</span>
-      Download {{ selectedMatch.teamsGenerated || 0 }} Teams (CSV)
-    </button>
+          class="myteams-action primary"
+          type="button"
+          *ngIf="canAccessTeams(detailMatch)"
+          (click)="downloadMatchTeams(detailMatch)">
+          <span class="material-symbols-outlined" aria-hidden="true">download</span>
+          Download {{ detailMatch.teamsGenerated || 0 }} Teams (CSV)
+        </button>
+      </ng-container>
 
     </div>
 

@@ -113,6 +113,7 @@ private expiryTimer: any;
 
       this.matches = data.map((m: any) => {
         const startTimeISO = m.start_time || '';
+        const expired = this.isExpired(startTimeISO, m.status);
 
         return {
           id: Number(m.match_id),
@@ -122,13 +123,13 @@ private expiryTimer: any;
           coin: '-1',
           generatedAt: this.formatTime(m.generated_at),
           expires: this.expiryLabel(startTimeISO, m.status),
-          live: !this.isExpired(startTimeISO, m.status),
+          live: !expired,
           free: false,
           homeLogo: m.home_logo,
           awayLogo: m.away_logo,
           status: m.status,
           teamsGenerated: Number(m.teams_generated || m.total_teams || 0),
-          viewable: true,
+          viewable: !expired,
           startDate: startTimeISO ? new Date(startTimeISO).toISOString().split('T')[0] : '',
           startTimeISO
         };
@@ -169,6 +170,10 @@ openDatePicker(input: HTMLInputElement): void {
 }
 
   downloadMatchTeams(match: GeneratedMatch) {
+  if (!this.canAccessTeams(match)) {
+    return;
+  }
+
   this.api.MatchByTeams(match.id).subscribe({
     next: (res: any) => {
       console.log('My Teams download response:', res);
@@ -278,6 +283,10 @@ downloadCSV(rows: any[], fileName: string) {
 }
 
   openMatchTeams(match: GeneratedMatch) {
+    if (!this.canAccessTeams(match)) {
+      return;
+    }
+
     this.selectedMatch = match;
     this.previewTeam = null;
     this.previewTeams = [];
@@ -649,7 +658,8 @@ downloadCSV(rows: any[], fileName: string) {
     this.matches = this.matches.map(match => ({
       ...match,
       expires: this.expiryLabel(match.startTimeISO || '', match.status),
-      live: !this.isExpired(match.startTimeISO || '', match.status)
+      live: !this.isExpired(match.startTimeISO || '', match.status),
+      viewable: !this.isExpired(match.startTimeISO || '', match.status)
     }));
 
     this.applyDateFilter();
@@ -669,7 +679,7 @@ downloadCSV(rows: any[], fileName: string) {
 
   private expiryLabel(startTime: string, status?: string): string {
     if (this.isExpired(startTime, status)) {
-      return '0m';
+      return 'match ended';
     }
 
     if (!startTime) {
@@ -691,5 +701,13 @@ downloadCSV(rows: any[], fileName: string) {
     }
 
     return `${minutes}m`;
+  }
+
+  canAccessTeams(match: GeneratedMatch | null): boolean {
+    if (!match) {
+      return false;
+    }
+
+    return Boolean(match.viewable) && !this.isExpired(match.startTimeISO || '', match.status);
   }
 }
