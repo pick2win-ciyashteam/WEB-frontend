@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { EMPTY, Subject, catchError, interval, switchMap, takeUntil } from 'rxjs';
 import { Match, Series } from '../../core/interfaces/content';
 import { ApiService } from '../../core/services/api.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
@@ -43,6 +43,7 @@ interface MatchDayGroup {
 })
 export class LineupsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
+  private readonly todayRefreshMs = 60000;
 
   readonly loggedIn$ = this.authService.loggedIn$;
   isLoggedIn = this.authService.isLoggedIn();
@@ -63,6 +64,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadSeriesMatches();
+    this.startTodayMatchesRefresh();
 
     this.loggedIn$
       .pipe(takeUntil(this.destroy$))
@@ -123,7 +125,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   get readyAndNotGeneratedCount(): number {
-    return this.todayMatches.filter(match => match.lineupReady && !this.isGenerated(match)).length;
+    return this.todayMatches.filter(match => this.canRunUct(match)).length;
   }
 
   get upcomingMatchCount(): number {
@@ -366,6 +368,27 @@ export class LineupsComponent implements OnInit, OnDestroy {
       });
   }
 
+  private startTodayMatchesRefresh(): void {
+    interval(this.todayRefreshMs)
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(() => this.api.getSeriesMatches().pipe(catchError(() => EMPTY)))
+      )
+      .subscribe(res => {
+        if (res?.success && Array.isArray(res.data)) {
+          this.refreshTodayMatches(this.mapSeriesMatches(res.data));
+        }
+      });
+  }
+
+  private refreshTodayMatches(freshMatches: LineoutMatch[]): void {
+    const existingNonTodayMatches = this.matches.filter(match => !this.isTodayMatch(match));
+    const freshTodayMatches = freshMatches.filter(match => this.isTodayMatch(match));
+
+    this.matches = [...existingNonTodayMatches, ...freshTodayMatches]
+      .sort((a, b) => new Date(a.kickoffISO).getTime() - new Date(b.kickoffISO).getTime());
+  }
+
   private mapSeriesMatches(seriesList: Series[]): LineoutMatch[] {
     return seriesList
       .flatMap(series => (series.matches ?? []).map(match => this.mapMatch(series, match)))
@@ -401,6 +424,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
     return String(match.status || '').toUpperCase() === 'LIVE';
   }
 
+  private isTodayMatch(match: LineoutMatch): boolean {
+    return this.isLive(match) || this.localDateKey(match.kickoffISO) === this.localDateKey(new Date());
+  }
+
   private isVisibleMatch(match: LineoutMatch): boolean {
     const status = String(match.status || '').toUpperCase();
 
@@ -416,16 +443,144 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   private isLineupAvailable(match: Match): boolean {
-    const lineupFlag = String(match.lineupavailable).toLowerCase();
-    const lineupStatus = String(match.lineup_status || '').toLowerCase();
+    const flag = this.firstMatchValue(match, [
+      'lineupavailable',
+      'lineup_available',
+      'lineups_available',
+      'is_lineup_available',
+      'lineupReady',
+      'lineup_ready'
+    ]);
+    const status = this.normalizedText(this.firstMatchValue(match, [
+      'lineup_status',
+      'lineupStatus',
+      'lineups_status'
+    ]));
 
-    return lineupFlag === '1' || lineupFlag === 'true' || lineupStatus === 'available' || lineupStatus === 'released' || lineupStatus === 'confirmed';
+    return this.isAvailableFlag(flag)
+      || ['available', 'released', 'confirmed', 'ready', 'lineupavailable', 'lineupsavailable', 'lineupreleased', 'lineupsreleased', 'lineupconfirmed', 'lineupsconfirmed'].includes(status)
+      || this.hasStartingLineupCounts(match);
   }
 
   private hasGeneratedTeams(match: Match): boolean {
-    const generated = match.teams_generated;
+    const generated = this.firstMatchValue(match, [
+      'teams_generated',
+      'teamsGenerated',
+      'uct_generated',
+      'is_uct_generated'
+    ]);
 
-    return generated === true || generated === 1 || String(generated).toLowerCase() === 'true';
+    return this.isTruthyFlag(generated);
+  }
+
+  private hasStartingLineupCounts(match: Match): boolean {
+    const homeCount = Math.max(
+      this.numericMatchValue(match, ['home_playing_xi', 'home_playing_xi_count', 'home_lineup_count']),
+      this.arrayLengthAtPath(match, ['home_team', 'playing_xi']),
+      this.arrayLengthAtPath(match, ['homeTeam', 'playing_xi'])
+    );
+    const awayCount = Math.max(
+      this.numericMatchValue(match, ['away_playing_xi', 'away_playing_xi_count', 'away_lineup_count']),
+      this.arrayLengthAtPath(match, ['away_team', 'playing_xi']),
+      this.arrayLengthAtPath(match, ['awayTeam', 'playing_xi'])
+    );
+    const totalCount = Math.max(
+      this.numericMatchValue(match, ['playing_xi_count', 'starting_players_count', 'lineup_players_count']),
+      this.totalNestedLineupPlayers(match)
+    );
+
+    return (homeCount >= 11 && awayCount >= 11) || totalCount >= 22;
+  }
+
+  private numericMatchValue(match: Match, keys: string[]): number {
+    const value = this.firstMatchValue(match, keys);
+    const numeric = Number(value);
+
+    return Number.isFinite(numeric) ? numeric : 0;
+  }
+
+  private firstMatchValue(match: Match, keys: string[]): unknown {
+    const source = match as unknown as Record<string, unknown>;
+
+    return keys.map(key => source[key]).find(value => value !== undefined && value !== null);
+  }
+
+  private isTruthyFlag(value: unknown): boolean {
+    if (typeof value === 'boolean') {
+      return value;
+    }
+
+    if (typeof value === 'number') {
+      return value === 1;
+    }
+
+    const text = this.normalizedText(value);
+
+    return ['1', 'true', 'yes', 'y', 'available', 'released', 'confirmed', 'ready'].includes(text);
+  }
+
+  private isAvailableFlag(value: unknown): boolean {
+    if (this.isTruthyFlag(value)) {
+      return true;
+    }
+
+    const numeric = Number(value);
+
+    return Number.isFinite(numeric) && numeric > 0;
+  }
+
+  private normalizedText(value: unknown): string {
+    return String(value ?? '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+  }
+
+  private arrayLengthAtPath(match: Match, path: string[]): number {
+    let current: unknown = match;
+
+    for (const key of path) {
+      if (!this.isRecord(current)) {
+        return 0;
+      }
+
+      current = current[key];
+    }
+
+    return Array.isArray(current) ? current.length : 0;
+  }
+
+  private totalNestedLineupPlayers(match: Match): number {
+    const lineupKeys = new Set([
+      'playing_xi',
+      'playingXI',
+      'starting_xi',
+      'startingXI',
+      'lineup_players',
+      'lineupPlayers'
+    ]);
+
+    return this.collectLineupArrayLengths(match, lineupKeys, 0)
+      .reduce((total, count) => total + count, 0);
+  }
+
+  private collectLineupArrayLengths(value: unknown, lineupKeys: Set<string>, depth: number): number[] {
+    if (depth > 4 || !this.isRecord(value)) {
+      return [];
+    }
+
+    return Object.entries(value).flatMap(([key, child]) => {
+      if (lineupKeys.has(key) && Array.isArray(child)) {
+        return [child.length];
+      }
+
+      if (Array.isArray(child)) {
+        return child.flatMap(item => this.collectLineupArrayLengths(item, lineupKeys, depth + 1));
+      }
+
+      return this.collectLineupArrayLengths(child, lineupKeys, depth + 1);
+    });
+  }
+
+  private isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
   }
 
   private createTeam(name: string, logo?: string): LineoutTeam {

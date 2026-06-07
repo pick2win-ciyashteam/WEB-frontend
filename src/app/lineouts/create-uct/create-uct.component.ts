@@ -230,6 +230,39 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.canReview;
   }
 
+  matchDateLabel(detail: MatchDetail): string {
+    const date = this.matchStartDate(detail);
+
+    if (!date) {
+      return '-';
+    }
+
+    return new Intl.DateTimeFormat(undefined, {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    }).format(date);
+  }
+
+  matchTimeLabel(detail: MatchDetail): string {
+    const date = this.matchStartDate(detail);
+
+    if (!date) {
+      return '-';
+    }
+
+    return new Intl.DateTimeFormat(undefined, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+      timeZoneName: 'short'
+    }).format(date).toUpperCase();
+  }
+
+  teamAccent(side: 'home' | 'away'): string {
+    return side === 'home' ? '#1167ff' : '#40c65b';
+  }
+
   goBack(): void {
     this.router.navigate(['/lineouts']);
   }
@@ -688,6 +721,18 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   trackTeam(_: number, team: GeneratedTeam): number {
     return team.index;
+  }
+
+  private matchStartDate(detail: MatchDetail): Date | null {
+    const value = detail.match.start_time || detail.match.matchdate;
+
+    if (!value) {
+      return null;
+    }
+
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime()) ? null : date;
   }
 
   private buildSubmitPayload(): UctGeneratePayload {

@@ -39,19 +39,51 @@
     </div>
 
     <ng-container *ngIf="!loading && detail as d">
-      <section class="uct-hero">
-        <div>
-          <div class="eyebrow">
-            <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
-            User Configuration Teams
-          </div>
-          <h1>{{ d.home_team.short_name }} vs {{ d.away_team.short_name }} <em>UCT.</em></h1>
-          <p>{{ d.match.seriesname }} - 4-step workflow. Your selections drive every generated team.</p>
+      <section class="uct-match-card" aria-label="UCT match summary">
+        <div class="uct-match-kicker">
+          <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
+          User Configuration Teams For
         </div>
-        <!-- <div class="hero-stat">
-          <strong>20</strong>
-          <span>Teams generated</span>
-        </div> -->
+
+        <div class="uct-match-title">
+          <span [style.color]="teamAccent('home')">{{ d.home_team.short_name || d.home_team.name }}</span>
+          <b>vs</b>
+          <span [style.color]="teamAccent('away')">{{ d.away_team.short_name || d.away_team.name }}</span>
+        </div>
+
+        <div class="uct-match-meta-grid">
+          <div class="uct-match-meta">
+            <span class="material-symbols-outlined date-icon" aria-hidden="true">calendar_month</span>
+            <div>
+              <small>Date</small>
+              <b>{{ matchDateLabel(d) }}</b>
+            </div>
+          </div>
+
+          <div class="uct-match-meta">
+            <span class="material-symbols-outlined time-icon" aria-hidden="true">schedule</span>
+            <div>
+              <small>Time</small>
+              <b>{{ matchTimeLabel(d) }}</b>
+            </div>
+          </div>
+
+          <div class="uct-match-meta">
+            <span class="material-symbols-outlined series-icon" aria-hidden="true">emoji_events</span>
+            <div>
+              <small>Series</small>
+              <b>{{ d.match.seriesname || 'Football' }}</b>
+            </div>
+          </div>
+
+          <div class="uct-match-meta">
+            <span class="material-symbols-outlined teams-icon" aria-hidden="true">groups</span>
+            <div>
+              <small>Teams</small>
+              <b>20 Teams</b>
+            </div>
+          </div>
+        </div>
       </section>
 
       <div class="submit-error" *ngIf="submitError">
