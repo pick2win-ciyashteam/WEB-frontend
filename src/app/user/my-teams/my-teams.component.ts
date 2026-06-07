@@ -88,9 +88,10 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
   loadingTeams = false;
   loadingPlayers = false;
 
-  selectedDate = '';
-filteredMatches: GeneratedMatch[] = [];
-private expiryTimer: any;
+  browserLocale = navigator.language || 'en-US';
+  selectedDate = this.toDateInputValue(new Date());
+  filteredMatches: GeneratedMatch[] = [];
+  private expiryTimer: any;
 
   constructor(private api: ApiService) {}
 
@@ -130,12 +131,12 @@ private expiryTimer: any;
           status: m.status,
           teamsGenerated: Number(m.teams_generated || m.total_teams || 0),
           viewable: !expired,
-          startDate: startTimeISO ? new Date(startTimeISO).toISOString().split('T')[0] : '',
+          startDate: startTimeISO ? this.toDateInputValue(new Date(startTimeISO)) : '',
           startTimeISO
         };
       });
 
-      this.filteredMatches = [...this.matches];
+      this.applyDateFilter();
       this.loadingMatches = false;
     },
     error: () => {
@@ -158,8 +159,8 @@ applyDateFilter() {
 }
 
 resetDateFilter() {
-  this.selectedDate = '';
-  this.filteredMatches = [...this.matches];
+  this.selectedDate = this.toDateInputValue(new Date());
+  this.applyDateFilter();
 }
 
 openDatePicker(input: HTMLInputElement): void {
@@ -636,7 +637,7 @@ downloadCSV(rows: any[], fileName: string) {
   private formatMatchTime(value: string): string {
     if (!value) return '-';
 
-    return new Intl.DateTimeFormat('en-GB', {
+    return new Intl.DateTimeFormat(this.browserLocale, {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -648,11 +649,19 @@ downloadCSV(rows: any[], fileName: string) {
   private formatTime(value: string): string {
     if (!value) return '-';
 
-    return new Intl.DateTimeFormat('en-GB', {
+    return new Intl.DateTimeFormat(this.browserLocale, {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit'
     }).format(new Date(value));
+  }
+
+  private toDateInputValue(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   private refreshExpiryLabels(): void {

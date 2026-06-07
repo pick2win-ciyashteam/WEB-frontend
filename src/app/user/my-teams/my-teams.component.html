@@ -15,6 +15,7 @@
         type="date"
         id="myTeamsDate"
         class="profile-teams-dateinput"
+        [attr.lang]="browserLocale"
         [(ngModel)]="selectedDate"
         (click)="openDatePicker(myTeamsDateInput); $event.stopPropagation()"
         (change)="applyDateFilter()">
