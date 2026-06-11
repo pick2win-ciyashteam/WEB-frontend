@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Banner } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 
 @Component({
@@ -32,12 +34,29 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private authModal: AuthModalService,
-    private api: ApiService
+    private api: ApiService,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   openSignup() {
     this.showLaunchModal = false;
     this.authModal.open('signup');
+  }
+
+  openFreeMatchCta(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/lineouts']);
+      return;
+    }
+
+    this.openSignup();
+  }
+
+  freeMatchCtaText(): string {
+    return this.authService.isLoggedIn()
+      ? 'Go to lineouts ->'
+      : 'Sign up - your first match is free ->';
   }
 
   ngOnInit(): void {

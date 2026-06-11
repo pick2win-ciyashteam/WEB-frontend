@@ -43,10 +43,10 @@ const routes: Routes = [
     path: 'pricing',
     component: PricingComponent
   },
-   {
-    path: 'about',
-    component: AboutComponent
-  },
+  //  {
+  //   path: 'about',
+  //   component: AboutComponent
+  // },
    {
     path: 'trust',
     component: TrustComponent

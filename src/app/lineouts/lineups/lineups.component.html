@@ -4,26 +4,15 @@
   <ng-container *ngIf="loggedIn$ | async; else guestLineouts">
     <section class="lineouts-shell">
       <div class="wrap">
-        <div class="lineouts-hero">
-          <div class="hero-copy">
-            <!-- <div class="hero-eyebrow">
-              <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
-              Series · Official Lineouts
-            </div>
-            <h1>Pick a match. Wait for lineups. <em>Run UCT.</em></h1> -->
-            <!-- <p>
-              Series shows upcoming supported football matches from the backend. Once official lineups release,
-              UCT unlocks and you can generate your 20 structured teams before kickoff.
-            </p> -->
-            <!-- <div class="timezone-note">
-              <span class="material-symbols-outlined" aria-hidden="true">public</span>
-              Match times are converted from backend UTC start_time to {{ timezoneLabel }}.
-            </div> -->
+        <div class="lineouts-topbar">
+          <div class="coin-ticket" aria-hidden="true">
+            <strong>1 COIN = 1 MATCH</strong>
+            <span>ANY MATCH · ANY LEAGUE</span>
           </div>
 
           <a class="balance-card" routerLink="/user/profile" title="Your coin balance">
             <div class="balance-icon">
-              <span class="material-symbols-outlined" aria-hidden="true">account_balance</span>
+              <span>P2W</span>
             </div>
             <div class="balance-body">
               <div class="balance-label">My Balance</div>
@@ -31,163 +20,133 @@
                 <strong>{{ coinBalance }}</strong>
                 <span>Coins</span>
               </div>
-              <div class="balance-hint">1 coin = 1 UCT match</div>
             </div>
-            <!-- <span class="balance-cta">Top up</span> -->
           </a>
         </div>
 
+        <div class="try-free-note">
+          <span class="try-free-icon">🎁</span>
+          <div>Try your first match free — continue only if you like it, <b>no pressure to buy.</b></div>
+        </div>
+
         <div class="empty-state" *ngIf="loadingMatches">
-          <div class="empty-icon">
-            <span class="material-symbols-outlined" aria-hidden="true">progress_activity</span>
-          </div>
+          <div class="empty-ball">⚽</div>
           <h3>Loading matches</h3>
           <p>Fetching latest series and match data.</p>
         </div>
 
         <ng-container *ngIf="!loadingMatches && visibleMatches.length; else noMatches">
-          <section class="matches-panel today-matches-panel" *ngIf="todayMatches.length">
-            <div class="day-label today-day-label">
-              <span>{{ todayGroupLabel() }}</span>
-            </div>
-            <div class="panel-head">
-              <div>
-                <span class="panel-kicker">Today</span>
-                <h2>Today's Matches</h2>
-                <p>{{ todayMatches.length }} match{{ todayMatches.length === 1 ? '' : 'es' }} · {{ readyAndNotGeneratedCount }} ready for UCT</p>
-              </div>
-              <span class="match-count">{{ todayMatches.length }} match{{ todayMatches.length === 1 ? '' : 'es' }}</span>
+          <section class="today-section" *ngIf="todayMatches.length">
+            <div class="ts-head">
+              <span class="ts-pulse"></span>
+              <h3>Today's Matches</h3>
+              <span class="ts-count">{{ todayMatches.length }} MATCH{{ todayMatches.length === 1 ? '' : 'ES' }} · {{ readyAndNotGeneratedCount }} READY</span>
             </div>
 
-            <div class="match-row-list">
+            <div class="today-grid">
               <article
-                class="match-row"
+                class="today-card"
                 *ngFor="let match of todayMatches; trackBy: trackByMatchId"
                 [class.ready]="match.lineupReady && !isGenerated(match)"
+                [class.waiting]="!match.lineupReady && !isGenerated(match)"
                 [class.generated]="isGenerated(match)"
-                [class.clickable]="canOpenMatch(match)"
                 [attr.role]="canOpenMatch(match) ? 'button' : null"
                 [attr.tabindex]="canOpenMatch(match) ? 0 : null"
                 (click)="openMatch(match)"
                 (keydown.enter)="openMatch(match)"
                 (keydown.space)="openMatch(match)">
-                <div class="match-time-block">
-                  <strong>{{ formatKickoff(match) }}</strong>
-                  <span>{{ isLive(match) ? 'Today · Live' : 'Today' }}</span>
-                </div>
-
-                <div class="match-main">
-                  <div class="match-league">{{ match.league }} · {{ match.country }}</div>
-                  <div class="match-teams">
-                    <div class="team-side">
-                      <img class="team-logo" *ngIf="match.home.logo; else homeColorBox" [src]="match.home.logo" [alt]="match.home.name">
-                      <ng-template #homeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
-                      <div>
-                        <strong>{{ match.home.code }}</strong>
-                        <span>{{ match.home.name }}</span>
-                      </div>
-                    </div>
-
-                    <small>vs</small>
-
-                    <div class="team-side away">
-                      <img class="team-logo" *ngIf="match.away.logo; else awayColorBox" [src]="match.away.logo" [alt]="match.away.name">
-                      <ng-template #awayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
-                      <div>
-                        <strong>{{ match.away.code }}</strong>
-                        <span>{{ match.away.name }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="match-meta">
-                    <span class="material-symbols-outlined" aria-hidden="true">event</span>
-                    {{ kickoffInfo(match) }}
-                  </div>
-                </div>
-
-                <div class="match-side">
-                  <span class="lineup-state" [class.ready-state]="match.lineupReady" [class.generated-state]="isGenerated(match)">
-                    {{ statusLabel(match) }}
+                <div class="tc-top">
+                  <div class="tc-league">{{ match.league }}</div>
+                  <span
+                    class="tc-status"
+                    [class.live]="match.lineupReady && !isGenerated(match)"
+                    [class.waiting]="!match.lineupReady && !isGenerated(match)"
+                    [class.generated]="isGenerated(match)">
+                    {{ isGenerated(match) ? 'UCT Generated' : (match.lineupReady ? '⚡ Lineup Released' : 'Waiting for Lineup') }}
                   </span>
-                  <button class="uct-btn" type="button" [disabled]="!canRunUct(match) && !isGenerated(match)" (click)="$event.stopPropagation(); handleMatchAction(match)">
-                    {{ actionLabel(match) }}
+                </div>
+
+                <div class="tc-mid">
+                  <div class="tc-versus">
+                    <div class="tc-team">
+                      <span class="tc-swatch" [style.background]="match.home.color"></span>
+                      <span class="tc-code">{{ match.home.code }}</span>
+                      <span class="tc-name">{{ match.home.name }}</span>
+                    </div>
+                    <div class="tc-vs">vs</div>
+                    <div class="tc-team">
+                      <span class="tc-swatch" [style.background]="match.away.color"></span>
+                      <span class="tc-code">{{ match.away.code }}</span>
+                      <span class="tc-name">{{ match.away.name }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tc-bot">
+                  <div class="tc-time">
+                    <div class="tc-clock">{{ formatKickoff(match) }}</div>
+                    <div class="tc-rel">{{ kickoffInfo(match) }}{{ match.venue ? ' · ' + match.venue : '' }}</div>
+                  </div>
+                  <button
+                    class="tc-uct"
+                    type="button"
+                    [disabled]="!canRunUct(match) && !isGenerated(match)"
+                    (click)="$event.stopPropagation(); handleMatchAction(match)">
+                    {{ isGenerated(match) ? 'See in My Teams ->' : (canRunUct(match) ? '⚡ Run UCT ->' : 'UCT Locked') }}
                   </button>
                 </div>
               </article>
             </div>
           </section>
 
-          <section class="matches-panel" *ngIf="upcomingGroups.length">
-            <div class="panel-head">
-              <div>
-                <span class="panel-kicker">Upcoming</span>
-                <h2>Upcoming Matches · This Week</h2>
-                <p>Lineups usually unlock close to kickoff. UCT stays locked until official team news appears.</p>
-              </div>
-              <span class="match-count">{{ upcomingMatchCount }} match{{ upcomingMatchCount === 1 ? '' : 'es' }}</span>
+          <section class="upcoming-section" *ngIf="upcomingGroups.length">
+            <div class="us-head">
+              <h3>Upcoming Matches · This Week</h3>
+              <span class="us-count">{{ upcomingMatchCount }} MATCH{{ upcomingMatchCount === 1 ? '' : 'ES' }}</span>
             </div>
 
             <div class="day-group" *ngFor="let group of upcomingGroups; trackBy: trackByGroupLabel">
-              <div class="day-label">
-                <span>{{ group.label }}</span>
-                <small>in {{ daysUntil(group.date) }} day{{ daysUntil(group.date) === 1 ? '' : 's' }}</small>
-              </div>
+              <div class="day-label">{{ group.label }}</div>
 
-              <div class="match-row-list">
+              <div class="upcoming-grid">
                 <article
-                  class="match-row upcoming"
+                  class="upcoming-card"
                   *ngFor="let match of group.matches; trackBy: trackByMatchId"
-                  [class.clickable]="canOpenMatch(match)"
+                  [class.ready]="match.lineupReady && !isGenerated(match)"
+                  [class.generated]="isGenerated(match)"
                   [attr.role]="canOpenMatch(match) ? 'button' : null"
                   [attr.tabindex]="canOpenMatch(match) ? 0 : null"
                   (click)="openMatch(match)"
                   (keydown.enter)="openMatch(match)"
                   (keydown.space)="openMatch(match)">
-                  <div class="match-time-block">
-                    <strong>{{ formatKickoff(match) }}</strong>
-                    <span>{{ dateStamp(match) }}</span>
+                  <div class="uc-info">
+                    <div class="uc-league">{{ match.league }}</div>
+                    <div class="uc-teams">
+                      <span class="uc-team">
+                        <span class="uc-swatch" [style.background]="match.home.color"></span>{{ match.home.code }}
+                      </span>
+                      <span class="uc-vs">vs</span>
+                      <span class="uc-team">
+                        <span class="uc-swatch" [style.background]="match.away.color"></span>{{ match.away.code }}
+                      </span>
+                    </div>
+                    <div class="uc-time">{{ formatKickoff(match) }} · <span>{{ kickoffInfo(match) }}</span></div>
                   </div>
 
-                  <div class="match-main">
-                    <div class="match-league">{{ match.league }} · {{ match.country }}</div>
-                    <div class="match-teams">
-                      <div class="team-side">
-                        <img class="team-logo" *ngIf="match.home.logo; else upcomingHomeColorBox" [src]="match.home.logo" [alt]="match.home.name">
-                        <ng-template #upcomingHomeColorBox><span class="team-box" [style.background]="match.home.color"></span></ng-template>
-                        <div>
-                          <strong>{{ match.home.code }}</strong>
-                          <span>{{ match.home.name }}</span>
-                        </div>
-                      </div>
-
-                      <small>vs</small>
-
-                      <div class="team-side away">
-                        <img class="team-logo" *ngIf="match.away.logo; else upcomingAwayColorBox" [src]="match.away.logo" [alt]="match.away.name">
-                        <ng-template #upcomingAwayColorBox><span class="team-box" [style.background]="match.away.color"></span></ng-template>
-                        <div>
-                          <strong>{{ match.away.code }}</strong>
-                          <span>{{ match.away.name }}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="match-meta">
-                      <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
-                      {{ kickoffInfo(match) }}
-                    </div>
-                  </div>
-
-                  <div class="match-side">
-                    <span class="lineup-state" [class.ready-state]="match.lineupReady">
-                      {{ statusLabel(match) }}
+                  <div class="uc-right">
+                    <span
+                      class="uc-status"
+                      [class.live]="match.lineupReady && !isGenerated(match)"
+                      [class.waiting]="!match.lineupReady && !isGenerated(match)"
+                      [class.generated]="isGenerated(match)">
+                      {{ isGenerated(match) ? 'UCT Generated' : (match.lineupReady ? 'Lineup Ready' : 'Waiting for Lineup') }}
                     </span>
                     <button
-                      class="uct-btn"
+                      class="uc-uct"
                       type="button"
-                      [class.locked]="!canOpenMatch(match)"
-                      [disabled]="!canOpenMatch(match)"
+                      [disabled]="!canRunUct(match) && !isGenerated(match)"
                       (click)="$event.stopPropagation(); handleMatchAction(match)">
-                      {{ actionLabel(match) }}
+                      {{ isGenerated(match) ? 'See in My Teams ->' : (canRunUct(match) ? '⚡ Run UCT' : 'UCT Locked') }}
                     </button>
                   </div>
                 </article>
@@ -202,9 +161,7 @@
   <ng-template #guestLineouts>
     <section class="signin-required">
       <div class="signin-card">
-        <div class="signin-icon">
-          <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
-        </div>
+        <div class="signin-icon">⚽</div>
         <div class="signin-eyebrow">Sign-in required · Series Manager</div>
         <h1>Sign in to view <em>today's match list.</em></h1>
         <p>
@@ -222,9 +179,7 @@
 
   <ng-template #noMatches>
     <div class="empty-state" *ngIf="!loadingMatches">
-      <div class="empty-icon">
-        <span class="material-symbols-outlined" aria-hidden="true">event_busy</span>
-      </div>
+      <div class="empty-ball">⚽</div>
       <h3>No matches available</h3>
       <p>{{ matchesError || 'No upcoming matches in our coverage right now. Check back soon - new fixtures load after backend updates.' }}</p>
     </div>
