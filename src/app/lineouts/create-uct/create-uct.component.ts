@@ -254,13 +254,19 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return new Intl.DateTimeFormat(undefined, {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true,
-      timeZoneName: 'short'
+      hour12: true
     }).format(date).toUpperCase();
   }
 
+  matchLocationLabel(detail: MatchDetail): string {
+    const source = detail.match as unknown as Record<string, unknown>;
+    const value = source['venue'] || source['location'] || source['stadium'] || source['ground'];
+
+    return String(value || 'Venue TBC');
+  }
+
   teamAccent(side: 'home' | 'away'): string {
-    return side === 'home' ? '#1167ff' : '#40c65b';
+    return side === 'home' ? '#020a12' : '#1fb6ff';
   }
 
   goBack(): void {

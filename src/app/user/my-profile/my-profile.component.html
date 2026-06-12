@@ -3,8 +3,28 @@
 <main class="profile-page">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="section-num"><strong>--</strong> Account</div>
-      <h1 class="section-title">My <span>Space.</span></h1>
+      <h1 class="section-title"><span class="head-ic" aria-hidden="true">★</span> My <span>Space</span></h1>
+    </div>
+
+    <div class="myspace-stamp-row reveal">
+      <div class="coin-stamp coin-stamp-rect" role="img" aria-label="1 coin equals 1 match, any match, any league">
+        <svg viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <circle cx="120" cy="61" r="42" fill="currentColor" opacity="0.06"/>
+          <circle cx="120" cy="61" r="42" fill="none" stroke="currentColor" stroke-width="2" opacity="0.15"/>
+          <circle cx="120" cy="61" r="35" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" opacity="0.12"/>
+          <text x="120" y="74" text-anchor="middle" class="cs-wm" opacity="0.14">P2W</text>
+          <rect x="6" y="6" width="228" height="108" rx="15" fill="none" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+          <rect x="13" y="13" width="214" height="94" rx="11" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.32"/>
+          <text x="120" y="52" text-anchor="middle"><tspan class="cs-num">1</tspan><tspan class="cs-word"> COIN </tspan><tspan class="cs-eq">= </tspan><tspan class="cs-num">1</tspan><tspan class="cs-word"> MATCH</tspan></text>
+          <line x1="46" y1="66" x2="194" y2="66" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+          <text x="120" y="88" text-anchor="middle" class="cs-arc" opacity="0.95">ANY MATCH - ANY LEAGUE</text>
+        </svg>
+      </div>
+      <div class="myspace-stamp-body">
+        <div class="myspace-stamp-eyebrow">Your Coin Economy</div>
+        <h3 class="myspace-stamp-title">1 coin = 1 match UCT generation.</h3>
+        <p class="myspace-stamp-sub">Every coin in your wallet covers one match across any league or competition PICK2WIN supports. Same price, any league.</p>
+      </div>
     </div>
 
     <div class="myspace-top-cta" *ngIf="showTodayLineupsCta">
@@ -32,23 +52,39 @@
 
     <section class="profile-section active" *ngIf="activeTab === 'profile'">
       <div class="profile-hero" *ngIf="profile$ | async as profile; else profileLoading">
-        <div class="profile-avatar">{{ initials(profile) }}</div>
-        <div class="profile-info-row">
-          <h3 class="profile-name">
-            {{ profile.fullname }}
-            <span class="profile-verify">{{ verifyLabel(profile) }}</span>
-          </h3>
-          <div class="profile-meta">
-            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">mail</span> <b>{{ profile.email }}</b></span>
-            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">phone_iphone</span> <b>{{ maskedMobile(profile) }}</b></span>
-            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">public</span> <b>{{ profile.country }}</b></span>
-            <span class="profile-meta-item"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span> Member since <b>{{ memberSince(profile) }}</b></span>
+        <div class="profile-hero-top">
+          <div class="profile-avatar">{{ initials(profile) }}</div>
+          <div class="profile-id">
+            <h3 class="profile-name">
+              {{ profile.fullname }}
+              <span class="profile-verify">✓ {{ verifyLabel(profile) }}</span>
+            </h3>
+            <div class="profile-id-tagline">PICK2WIN member · {{ profile.country || 'Supported market' }}</div>
+          </div>
+          <button class="profile-edit-btn" type="button" (click)="openEditModal(profile)">
+            <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+            Edit Account
+          </button>
+        </div>
+
+        <div class="profile-id-grid">
+          <div class="profile-id-tile">
+            <span class="ic material-symbols-outlined" aria-hidden="true">mail</span>
+            <div><div class="pid-lbl">Email</div><div class="pid-val">{{ profile.email }}</div></div>
+          </div>
+          <div class="profile-id-tile">
+            <span class="ic material-symbols-outlined" aria-hidden="true">phone_iphone</span>
+            <div><div class="pid-lbl">Phone</div><div class="pid-val">{{ maskedMobile(profile) }}</div></div>
+          </div>
+          <div class="profile-id-tile">
+            <span class="ic material-symbols-outlined" aria-hidden="true">public</span>
+            <div><div class="pid-lbl">Country</div><div class="pid-val">{{ profile.country || '-' }}</div></div>
+          </div>
+          <div class="profile-id-tile">
+            <span class="ic material-symbols-outlined" aria-hidden="true">calendar_month</span>
+            <div><div class="pid-lbl">Member since</div><div class="pid-val">{{ memberSince(profile) }}</div></div>
           </div>
         </div>
-        <button class="profile-edit-btn" type="button" (click)="openEditModal(profile)">
-          <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-          Edit Account
-        </button>
       </div>
 
       <ng-template #profileLoading>
@@ -65,15 +101,15 @@
       <div class="profile-ledger">
         <div class="profile-ledger-head">
           <div class="profile-ledger-eyebrow">
-            <span class="material-symbols-outlined" aria-hidden="true">toll</span>
-            Coin Ledger - Your Account Math
+            <span class="p2w-coin-inline" aria-hidden="true">P2W</span>
+            Coin Ledger · Your Account Math
           </div>
         </div>
         <div class="profile-ledger-row" *ngIf="profile$ | async as profile">
           <div class="profile-ledger-cell total">
             <div class="profile-ledger-cell-lbl">Total Coins</div>
             <div class="profile-ledger-cell-num">{{ totalCoins(profile) }}</div>
-            <div class="profile-ledger-cell-sub">total coins credited to your account</div>
+            <div class="profile-ledger-cell-sub">{{ purchasedCoins(profile) }} purchased + free match credits</div>
           </div>
           <div class="profile-ledger-op">-</div>
           <div class="profile-ledger-cell used">
@@ -88,7 +124,11 @@
             <div class="profile-ledger-cell-sub">available for {{ availableCoins(profile) }} more matches</div>
           </div>
         </div>
-        <p class="profile-ledger-foot">Each coin = <b>1 match UCT generation</b>. Each pack is valid for 365 days from purchase. Use them within that window whenever lineups drop for any supported league.</p>
+        <div class="profile-ledger-bar" *ngIf="profile$ | async as profile">
+          <div class="profile-ledger-bar-track"><div class="profile-ledger-bar-fill" [style.width.%]="coinUsagePercent(profile)"></div></div>
+          <div class="profile-ledger-bar-labels"><span><b>{{ usedCoins(profile) }}</b> used</span><span><b>{{ totalCoins(profile) }}</b> total coins</span></div>
+        </div>
+        <p class="profile-ledger-foot">Each coin = <b>1 match UCT generation</b>. Your coins stay valid for 365 days from your most recent purchase - every new pack refreshes the clock on your whole balance. Use them whenever lineups drop for any league PICK2WIN supports.</p>
       </div>
 
       <div class="coin-lots-wrap">
@@ -98,7 +138,7 @@
               <span class="material-symbols-outlined" aria-hidden="true">hourglass_top</span>
               Active Coin Lots
             </h4>
-            <span class="coin-lots-sub">Each pack has its own 365-day clock. Coins are consumed from the lot closest to expiry first.</span>
+            <span class="coin-lots-sub">Your coins live as one combined balance. Each new pack you buy merges your remaining active coins and refreshes the validity to 365 days from that purchase date.</span>
           </div>
         </div>
         <div class="table-scroll">
@@ -111,22 +151,24 @@
                 <th>Used</th>
                 <th>Remaining</th>
                 <th>Expires</th>
+                <!-- <th>Days Left</th> -->
                 <th>Status</th>
               </tr>
             </thead>
             <tbody *ngIf="profile$ | async as profile">
               <tr *ngIf="profile.subscription; else noActiveSubscription">
-                <td>{{ profile.subscription.plan_name }}</td>
+                <td>⭐{{ profile.subscription.plan_name }}</td>
                 <td>{{ subscriptionPurchased(profile) }}</td>
                 <td>{{ profile.subscription.matches_allowed }}</td>
                 <td>{{ profile.subscription.matches_used }}</td>
                 <td class="col-coins">{{ availableCoins(profile) }}</td>
                 <td>{{ subscriptionExpires(profile) }}</td>
-                <td><span class="profile-status-pill" [ngClass]="subscriptionStatusClass(profile)">{{ subscriptionStatus(profile) }}</span></td>
+                <td style="color:#0bcc8e;">{{ subscriptionDaysLeft(profile) }} left</td>
+                <!-- <td><span class="profile-status-pill" [ngClass]="subscriptionStatusClass(profile)">{{ subscriptionStatus(profile) }}</span></td> -->
               </tr>
               <ng-template #noActiveSubscription>
                 <tr>
-                  <td colspan="7">No active subscription found.</td>
+                  <td colspan="8">No active subscription found.</td>
                 </tr>
               </ng-template>
             </tbody>
@@ -136,12 +178,16 @@
 
      <app-purchase-history></app-purchase-history>
 
-      <div class="transaction-note">
-        <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-        <p>
-          <b>Transaction transparency:</b>
-          Every coin pack purchase and every match UCT generation is logged here forever. Coin balances reflect remaining coins across all active packs. For any billing question, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with your payment ID.
-        </p>
+      <div class="profile-transparency">
+        <div class="profile-transparency-icon" aria-hidden="true">DOC</div>
+        <div class="profile-transparency-body">
+          <div class="profile-transparency-title">Transaction transparency</div>
+          <p class="profile-transparency-text">
+            Every coin pack purchase and every UCT generation is logged here. For billing questions, email
+            <a href="mailto:support@pick2win.io" class="profile-transparency-link">support@pick2win.io</a>
+            with your payment ID.
+          </p>
+        </div>
       </div>
 
       <div class="danger-zone">

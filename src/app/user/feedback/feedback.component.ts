@@ -16,6 +16,7 @@ interface UserFeedbackItem {
   styleUrls: ['./feedback.component.css']
 })
 export class FeedbackComponent implements OnInit {
+  feedbackTab: 'vote' | 'suggest' = 'vote';
   surveySubmitted = false;
   feedbackSubmitted = false;
   surveyRef = '';
@@ -54,7 +55,13 @@ export class FeedbackComponent implements OnInit {
 
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
-    const comment = String(formData.get('survey_comment') || '').trim();
+
+    if (!formData.getAll('uct_changes').length) {
+      this.surveySubmitError = 'Please select at least one improvement request.';
+      return;
+    }
+
+    const comment = this.buildSurveyComment(formData);
     const answers = Object.entries(this.selectedAnswers).map(([questionId, optionId]) => ({
       question_id: Number(questionId),
       option_id: Number(optionId)
@@ -67,6 +74,7 @@ export class FeedbackComponent implements OnInit {
           this.submittingSurvey = false;
           this.surveyRef = String(res?.data?.reference || res?.reference || res?.id || this.localRef('SUR'));
           this.surveySubmitted = true;
+          this.feedbackTab = 'suggest';
         },
         error: (err) => {
           this.submittingSurvey = false;
@@ -77,6 +85,10 @@ export class FeedbackComponent implements OnInit {
 
   resetSurvey(): void {
     this.surveySubmitted = false;
+  }
+
+  setFeedbackTab(tab: 'vote' | 'suggest'): void {
+    this.feedbackTab = tab;
   }
 
   selectSurveyAnswer(questionId: number, optionId: number): void {
@@ -112,6 +124,7 @@ export class FeedbackComponent implements OnInit {
           this.submittingFeedback = false;
           this.feedbackRef = String(res?.data?.reference || res?.reference || res?.id || this.localRef('FB'));
           this.feedbackSubmitted = true;
+          this.feedbackTab = 'suggest';
           form.reset();
           this.loadFeedback();
         },
@@ -151,6 +164,25 @@ export class FeedbackComponent implements OnInit {
 
   trackOption(_: number, option: { id: number }): number {
     return option.id;
+  }
+
+  private buildSurveyComment(formData: FormData): string {
+    const selectedChanges = formData.getAll('uct_changes').map(String).join(', ');
+    const lines = [
+      `UCT sentiment: ${formData.get('uct_sentiment') || '-'}`,
+      `Most requested improvements: ${selectedChanges || '-'}`,
+      `Usage frequency: ${formData.get('uct_frequency') || '-'}`,
+      `Recommend: ${formData.get('uct_recommend') || '-'}`,
+      `Teams per match: ${formData.get('uct_team_need') || '-'}`,
+      `Competitions wanted: ${formData.get('uct_competitions') || '-'}`,
+      `Next sport: ${formData.get('uct_next_sport') || '-'}`,
+      `Pricing preference: ${formData.get('uct_pricing') || '-'}`,
+      `Device: ${formData.get('uct_device') || '-'}`,
+      `UCT rating: ${formData.get('uct_rating') || '-'}`,
+      `Additional comment: ${formData.get('survey_comment') || '-'}`
+    ];
+
+    return lines.join('\n');
   }
 
   private loadFeedback(): void {

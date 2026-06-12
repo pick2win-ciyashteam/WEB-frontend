@@ -26,8 +26,8 @@
         <h5>Product</h5>
         <ul>
           <li><a routerLink="/uctinfo">UCT Engine</a></li>
-          <li><a routerLink="/lineouts">Lineouts</a></li>
-          <li><a routerLink="/user/profile">My Teams</a></li>
+          <li *ngIf="loggedIn$ | async"><a routerLink="/lineouts">Lineouts</a></li>
+          <li *ngIf="loggedIn$ | async"><a routerLink="/user/profile">My Teams</a></li>
           <li><a routerLink="/pricing">Pricing</a></li>
         </ul>
       </div>
@@ -54,11 +54,7 @@
     </div>
 
     <div class="legal-bar">
-      <a routerLink="/trust" class="pledge-badge">
-        <span class="pledge-badge-ic">!</span>
-        <span class="pledge-badge-text">PICK2WIN PLATFORM PLEDGE</span>
-        <span class="pledge-badge-arrow">-></span>
-      </a>
+  
       <span>© 2026 PICK2WIN TECHNOLOGIES PVT LTD - ALL RIGHTS RESERVED</span>
      <div class="payment-security">
         <span class="security-item stripe">

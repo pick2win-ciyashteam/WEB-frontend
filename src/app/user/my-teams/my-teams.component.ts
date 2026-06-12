@@ -720,4 +720,35 @@ downloadCSV(rows: any[], fileName: string) {
 
     return Boolean(match.viewable) && !this.isExpired(match.startTimeISO || '', match.status);
   }
+
+  activeMatchesCount(): number {
+    return this.matches.filter(match => this.canAccessTeams(match)).length;
+  }
+
+  totalGeneratedTeams(): number {
+    return this.matches.reduce((sum, match) => sum + Number(match.teamsGenerated || 0), 0);
+  }
+
+  homeName(match: GeneratedMatch | null): string {
+    return this.matchTeamName(match, 'home');
+  }
+
+  awayName(match: GeneratedMatch | null): string {
+    return this.matchTeamName(match, 'away');
+  }
+
+  teamInitial(name: string): string {
+    return (name || 'T')
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join('')
+      .toUpperCase() || 'T';
+  }
+
+  private matchTeamName(match: GeneratedMatch | null, side: 'home' | 'away'): string {
+    const [home, away] = (match?.title || 'HOME vs AWAY').split(/\s+vs\s+/i);
+    return side === 'home' ? (home || 'HOME') : (away || 'AWAY');
+  }
 }

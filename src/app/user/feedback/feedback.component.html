@@ -1,198 +1,424 @@
-<div class="fb-hero">
-  <span class="fb-eyebrow">User Voice - Direct Line To The Team</span>
-  <h1>Your feedback shapes the next tuning.</h1>
-  <p>Every suggestion, tuning request, league wish-list, and bug report comes straight to the PICK2WIN team. We read every submission, and the patterns we see drive what gets shipped next.</p>
+<div class="fb-hero reveal">
+  <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">tips_and_updates</span> User Voice - Direct Line To The Team</span>
+  <h1 class="fb-h">Your feedback shapes the next tuning.</h1>
+  <p class="fb-lead">
+    Every suggestion, tuning request, league wish-list, and bug report comes straight to the PICK2WIN team.
+    We read every submission, and the patterns we see in user feedback directly drive what gets shipped next.
+    <b>All replies are sent from</b> <a href="mailto:support@pick2win.io">support@pick2win.io</a> within 48 hours.
+  </p>
 </div>
 
-<div class="fb-roadmap-banner">
+<div class="fb-roadmap-banner reveal">
   <div class="fb-rb-icon material-symbols-outlined" aria-hidden="true">rocket_launch</div>
-  <div>
+  <div class="fb-rb-body">
     <div class="fb-rb-eyebrow">A full roadmap is already lined up - your voice decides what ships first</div>
     <h3>PICK2WIN has many version updates planned. But the best <em>refinements</em> come from you.</h3>
     <p>Your votes, comments, and bug reports tell us what genuinely saves users time and brings real satisfaction to people using UCT every gameweek.</p>
   </div>
 </div>
 
-<div class="fb-categories">
-  <article><div class="material-symbols-outlined" aria-hidden="true">tune</div><h4>UCT tuning requests</h4><p>Captain variance, formation splits, and engine behavior.</p></article>
-  <article><div class="material-symbols-outlined" aria-hidden="true">settings</div><h4>Feature suggestions</h4><p>Exports, integrations, workflow shortcuts, and presets.</p></article>
-  <article><div class="material-symbols-outlined" aria-hidden="true">emoji_events</div><h4>League requests</h4><p>Tell us which competitions matter most to you.</p></article>
-  <article><div class="material-symbols-outlined" aria-hidden="true">science</div><h4>Engine accuracy</h4><p>Missing players, lineup refreshes, and validation issues.</p></article>
-  <article><div class="material-symbols-outlined" aria-hidden="true">bug_report</div><h4>Bug reports</h4><p>UI glitches, payment issues, and account access problems.</p></article>
-  <article><div class="material-symbols-outlined" aria-hidden="true">favorite</div><h4>What you love</h4><p>Tell us what should be protected in future releases.</p></article>
+<div class="fb-section-head reveal">
+  <h3>What can you tell us?</h3>
+  <p>Six kinds of feedback - all read by a real person within 48 hours.</p>
 </div>
 
-<div class="fb-survey">
-  <div class="fb-survey-h">
-    <span class="fb-eyebrow red">Quick Product Survey - ~30 Seconds</span>
-    <h3>Three feature questions - your vote shapes the next UCT release.</h3>
-    <p>These are the product questions the team is actively debating right now.</p>
+<div class="fb-categories reveal">
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">target</div>
+    <h4>UCT tuning requests</h4>
+    <p>"Increase variance on captains" - "Add 8-3 / 3-8 splits" - "Hard-lock a specific formation" - anything about how the engine generates teams.</p>
   </div>
-
-  <form class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (submit)="submitSurvey($event)">
-    <div class="fb-shipped-state" *ngIf="loadingQuestions">Loading survey questions...</div>
-    <div class="fb-shipped-state error" *ngIf="!loadingQuestions && surveyLoadError">{{ surveyLoadError }}</div>
-    <div class="fb-shipped-state" *ngIf="!loadingQuestions && !surveyLoadError && !feedbackQuestions.length">No survey questions available right now.</div>
-
-    <div class="fb-q" *ngFor="let question of feedbackQuestions; let i = index; trackBy: trackQuestion">
-      <div class="fb-q-num">Q{{ i + 1 }} {{ question.is_mandatory ? '- Mandatory' : '- Optional' }}</div>
-      <div class="fb-q-text">{{ question.question }}</div>
-      <div class="fb-q-help">{{ question.hint }}</div>
-      <div class="fb-option-grid" [class.two]="question.options.length <= 2">
-        <label class="fb-opt" *ngFor="let option of question.options; trackBy: trackOption">
-          <input
-            type="radio"
-            [name]="'question_' + question.id"
-            [value]="option.id"
-            [required]="!!question.is_mandatory"
-            [checked]="selectedAnswers[question.id] === option.id"
-            (change)="selectSurveyAnswer(question.id, option.id)">
-          <span>
-            <b><span class="fb-opt-emoji">{{ option.emoji }}</span>{{ option.label }}</b>
-            <small>{{ option.description }}</small>
-          </span>
-        </label>
-      </div>
-    </div>
-
-    <div class="fb-q">
-      <div class="fb-q-num">Optional context</div>
-      <textarea name="survey_comment" rows="4" placeholder="Anything you want the product team to know about why you voted this way?"></textarea>
-    </div>
-
-    <div class="fb-shipped-state error" *ngIf="surveySubmitError">{{ surveySubmitError }}</div>
-
-    <div class="fb-submit-row">
-      <button type="submit" class="btn-pri-large" [disabled]="submittingSurvey || loadingQuestions || !feedbackQuestions.length">
-        {{ submittingSurvey ? 'Submitting...' : 'Submit my votes' }}
-      </button>
-      <span>Anonymous - only your selections are stored unless you add a comment</span>
-    </div>
-  </form>
-
-  <ng-template #surveyThanks>
-    <div class="fb-thanks">
-      <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">how_to_vote</div>
-      <h3>Votes recorded - thank you!</h3>
-      <p>Your survey reference: <code>{{ surveyRef }}</code></p>
-      <button type="button" class="btn-ghost-small" (click)="resetSurvey()">Review my votes</button>
-    </div>
-  </ng-template>
-</div>
-
-<div class="fb-form-wrap">
-  <div class="fb-form-card">
-    <div class="fb-form-h">
-      <span class="fb-eyebrow">Submit Feedback</span>
-      <h3>Share your suggestion - we read every submission within 48 hours.</h3>
-    </div>
-
-    <form class="fb-form" *ngIf="!feedbackSubmitted; else feedbackThanks" (submit)="submitFeedback($event)">
-      <div class="fb-row-2">
-        <div class="fb-field">
-          <label>Category</label>
-          <select name="category" required>
-            <option value="">Select a category...</option>
-            <option value="uct_tuning_request">UCT tuning request</option>
-            <option value="feature_suggestion">Feature suggestion</option>
-            <option value="league_coverage_request">League / coverage request</option>
-            <option value="engine_accuracy_feedback">Engine accuracy feedback</option>
-            <option value="bug_report">Bug report</option>
-            <option value="what_you_love">What you love</option>
-          </select>
-        </div>
-        <div class="fb-field">
-          <label>How important is this to you?</label>
-          <select name="importance">
-            <option value="nice_to_have">Nice to have</option>
-            <option value="would_really_help_my_workflow" selected>Would really help my workflow</option>
-            <option value="stopping_me_from_using_pick2win">It is stopping me from using PICK2WIN properly</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="fb-field">
-        <label>Subject</label>
-        <input name="subject" type="text" required maxlength="120" placeholder="e.g. Allow 8-3 captain splits for La Liga matches">
-      </div>
-
-      <div class="fb-field">
-        <label>Your suggestion</label>
-        <textarea name="description" required rows="7" placeholder="Tell us what you would like to see, why it matters, and how it would improve your workflow."></textarea>
-      </div>
-
-      <div class="fb-row-2">
-        <div class="fb-field">
-          <label>Email (for follow-up)</label>
-          <input name="email" type="email" placeholder="you@example.com">
-        </div>
-        <div class="fb-field">
-          <label>Where in PICK2WIN?</label>
-          <select name="location">
-            <option value="anywhere_general">Anywhere / general</option>
-            <option value="uct_configuration_step">UCT configuration step</option>
-            <option value="my_teams_view">My Teams view</option>
-            <option value="lineouts">Lineouts</option>
-            <option value="pricing_packs">Pricing / packs</option>
-            <option value="profile_account">Profile / account</option>
-          </select>
-        </div>
-      </div>
-
-      <label class="fb-consent"><input name="email_followup" type="checkbox" value="true" checked> OK to follow up via email if we need more details.</label>
-
-      <div class="fb-shipped-state error" *ngIf="feedbackSubmitError">{{ feedbackSubmitError }}</div>
-
-      <div class="fb-submit-row">
-        <button type="submit" class="btn-pri-large" [disabled]="submittingFeedback">
-          {{ submittingFeedback ? 'Sending...' : 'Send feedback' }}
-        </button>
-        <span>Typical reply within 48 hours - top requests reviewed weekly</span>
-      </div>
-    </form>
-
-    <ng-template #feedbackThanks>
-      <div class="fb-thanks">
-        <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">check_circle</div>
-        <h3>Thank you! Your feedback has been logged.</h3>
-        <p>Reference ID: <code>{{ feedbackRef }}</code></p>
-        <button type="button" class="btn-ghost-small" (click)="resetFeedbackForm()">Submit another</button>
-      </div>
-    </ng-template>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">settings</div>
+    <h4>Feature suggestions</h4>
+    <p>New exports, integrations, workflow shortcuts, presets, team-comparison views - anything that would make your workflow smoother.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">emoji_events</div>
+    <h4>League / coverage requests</h4>
+    <p>Want a league we do not cover yet? A specific cup competition? Women's football? Tell us which competition matters most to you.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">science</div>
+    <h4>Engine accuracy feedback</h4>
+    <p>Noticed a player missing? Lineup did not refresh in time? Constraint validation behaved oddly? The engineering team triages these within 24 hours.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">bug_report</div>
+    <h4>Bug reports</h4>
+    <p>UI glitches, mobile issues, payment problems, account access - anything not working as expected. Include screenshots if you can.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">favorite</div>
+    <h4>What you love</h4>
+    <p>Equally important - what is working well? Knowing what users genuinely value helps us protect those things during future changes.</p>
   </div>
 </div>
 
-<div class="fb-shipped">
+<div class="fb-section-head reveal fb-build-head">
+  <h3>You decide what we build next</h3>
+  <p>Two quick steps - cast your <b class="green">Votes</b>, then share your <b class="gold">Detailed Feedback</b>. Finishing both shapes the next version the most.</p>
+</div>
+
+<div class="fb-tabs reveal">
+  <div class="fb-tabbar" role="tablist">
+    <button class="fb-tab" data-fbtab="vote" type="button" [class.active]="feedbackTab === 'vote'" [class.done]="surveySubmitted" (click)="setFeedbackTab('vote')">
+      <span class="material-symbols-outlined" aria-hidden="true">how_to_vote</span>
+      Votes
+      <span class="fb-tab-done" aria-hidden="true">done</span>
+    </button>
+    <button class="fb-tab" data-fbtab="suggest" type="button" [class.active]="feedbackTab === 'suggest'" [class.done]="feedbackSubmitted" (click)="setFeedbackTab('suggest')">
+      <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
+      Detailed Feedback
+      <span class="fb-tab-done" aria-hidden="true">done</span>
+    </button>
+  </div>
+
+  <div class="fb-tabpanel" *ngIf="feedbackTab === 'vote'">
+    <div class="fb-survey">
+      <div class="fb-survey-h">
+        <span class="fb-eyebrow vote"><span class="material-symbols-outlined" aria-hidden="true">ballot</span> Votes - Help Shape The Next Version</span>
+        <h3>How do you feel about UCT - and what should we build next?</h3>
+        <p>A quick required survey - about a minute. Please answer every question; you will finish with a star rating. One submission per user.</p>
+      </div>
+
+      <form class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (submit)="submitSurvey($event)">
+        <div class="fb-q">
+          <div class="fb-q-num">Q1 - Required</div>
+          <div class="fb-q-text">Overall, how do you feel about <b>UCT</b> - the engine that builds your 20 teams?</div>
+          <div class="fb-q-options">
+            <label class="fb-opt fb-opt-green">
+              <input type="radio" name="uct_sentiment" value="like" required>
+              <div class="fb-opt-body"><div class="fb-opt-title">Like UCT</div><div class="fb-opt-sub">It works well for me - generating 20 teams in one tap is the best part.</div></div>
+            </label>
+            <label class="fb-opt fb-opt-gold">
+              <input type="radio" name="uct_sentiment" value="want_changes">
+              <div class="fb-opt-body"><div class="fb-opt-title">Like it, but want changes</div><div class="fb-opt-sub">Good overall - but there are things I would like improved.</div></div>
+            </label>
+            <label class="fb-opt">
+              <input type="radio" name="uct_sentiment" value="dislike">
+              <div class="fb-opt-body"><div class="fb-opt-title">Dislike</div><div class="fb-opt-sub">It is not working for me - I will explain in the comment below.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q2 - Choose at least one</div>
+          <div class="fb-q-text">What would you <b>most like us to improve</b>?</div>
+          <div class="fb-q-help">Pick as many as you like - these build our most-requested changes ranking.</div>
+          <div class="fb-changes">
+            <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="more_leagues"><div class="fb-opt-body"><div class="fb-opt-title">More leagues / series</div></div></label>
+            <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="remove_sub_mandate"><div class="fb-opt-body"><div class="fb-opt-title">Remove Sub, Mandate options</div></div></label>
+            <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="better_coins"><div class="fb-opt-body"><div class="fb-opt-title">Better coin packs</div></div></label>
+            <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="choose_players"><div class="fb-opt-body"><div class="fb-opt-title">Let me choose my 18-22 players to generate teams</div></div></label>
+            <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="more_sports"><div class="fb-opt-body"><div class="fb-opt-title">Add more sports</div></div></label>
+            <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="ui_improvements"><div class="fb-opt-body"><div class="fb-opt-title">Website / UI improvements</div></div></label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q3 - Required</div>
+          <div class="fb-q-text">How often do you use <b>PICK2WIN</b>?</div>
+          <div class="fb-pills">
+            <label class="fb-pill"><input type="radio" name="uct_frequency" value="every_matchday" required><span>Every matchday</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_frequency" value="weekly"><span>A few times a week</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_frequency" value="very_rare"><span>Very rare</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_frequency" value="only_fifa_wc"><span>Only FIFA WC</span></label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q4 - Required</div>
+          <div class="fb-q-text">How likely are you to <b>recommend PICK2WIN</b> to a friend?</div>
+          <div class="fb-pills">
+            <label class="fb-pill"><input type="radio" name="uct_recommend" value="very_likely" required><span>Very likely</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_recommend" value="maybe"><span>Maybe</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_recommend" value="unlikely"><span>Unlikely</span></label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q5 - Required</div>
+          <div class="fb-q-text">How many teams do you usually need <b>per match</b>?</div>
+          <div class="fb-q-help">Helps us decide whether to offer custom team counts other than 20.</div>
+          <div class="fb-pills">
+            <label class="fb-pill"><input type="radio" name="uct_team_need" value="20" required><span>20</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_team_need" value="40"><span>40</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_team_need" value="60"><span>60</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_team_need" value="80"><span>80</span></label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q6 - Required</div>
+          <div class="fb-q-text">Which <b>competitions</b> do you most want us to add or expand?</div>
+          <div class="fb-q-help">Type the leagues, cups or tournaments you would like - e.g. Champions League knockouts, Women's Super League, World Cup.</div>
+          <input type="text" class="fb-input" name="uct_competitions" required maxlength="160" placeholder="Enter the competitions you would like us to add">
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q7 - Required</div>
+          <div class="fb-q-text">If we add a <b>new sport</b>, which should come first?</div>
+          <div class="fb-q-help">Future sports depend on demand and sustainability - your pick guides the order.</div>
+          <div class="fb-pills">
+            <label class="fb-pill"><input type="radio" name="uct_next_sport" value="cricket" required><span>Cricket</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_next_sport" value="basketball"><span>Basketball</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_next_sport" value="nfl"><span>American football</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_next_sport" value="baseball"><span>Baseball</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_next_sport" value="none"><span>Football only is fine</span></label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q8 - Required</div>
+          <div class="fb-q-text">Which <b>pricing</b> would suit you best?</div>
+          <div class="fb-pills">
+            <label class="fb-pill"><input type="radio" name="uct_pricing" value="current_packs" required><span>Current Coin Packs</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_pricing" value="pay_per_match"><span>Pay per match</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_pricing" value="subscription"><span>Monthly subscription</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_pricing" value="league_series"><span>League / Series basis packs</span></label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q9 - Required</div>
+          <div class="fb-q-text">Where do you mostly use <b>PICK2WIN</b>?</div>
+          <div class="fb-pills">
+            <label class="fb-pill"><input type="radio" name="uct_device" value="mobile_web" required><span>Mobile browser</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_device" value="desktop"><span>Desktop</span></label>
+          </div>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q10 - Required</div>
+          <div class="fb-q-text">Anything you would like to add? <em>Shown to the product team.</em></div>
+          <textarea class="fb-input" name="survey_comment" rows="3" maxlength="400" required placeholder="Example: Love generating 20 teams in one tap - please add more leagues and make generation faster."></textarea>
+        </div>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q11 - Final - Required</div>
+          <div class="fb-q-text">Finally, how would you <b>rate UCT</b> right now?</div>
+          <div class="fb-stars">
+            <input type="radio" id="uct-r5" name="uct_rating" value="5" required><label for="uct-r5" title="5 - Excellent">★</label>
+            <input type="radio" id="uct-r4" name="uct_rating" value="4"><label for="uct-r4" title="4 - Good">★</label>
+            <input type="radio" id="uct-r3" name="uct_rating" value="3"><label for="uct-r3" title="3 - OK">★</label>
+            <input type="radio" id="uct-r2" name="uct_rating" value="2"><label for="uct-r2" title="2 - Poor">★</label>
+            <input type="radio" id="uct-r1" name="uct_rating" value="1"><label for="uct-r1" title="1 - Bad">★</label>
+          </div>
+          <div class="fb-stars-hint">Tap a star - 1 = poor, 5 = excellent - required to submit</div>
+        </div>
+
+        <div class="fb-q" *ngIf="loadingQuestions || surveyLoadError || feedbackQuestions.length">
+          <div class="fb-q-num">Live PICK2WIN Questions</div>
+          <div class="fb-shipped-state" *ngIf="loadingQuestions">Loading survey questions...</div>
+          <div class="fb-shipped-state error" *ngIf="!loadingQuestions && surveyLoadError">{{ surveyLoadError }}</div>
+          <ng-container *ngIf="!loadingQuestions && !surveyLoadError">
+            <div class="fb-live-q" *ngFor="let question of feedbackQuestions; let i = index; trackBy: trackQuestion">
+              <div class="fb-q-num">Dynamic Q{{ i + 1 }} {{ question.is_mandatory ? '- Required' : '- Optional' }}</div>
+              <div class="fb-q-text">{{ question.question }}</div>
+              <div class="fb-q-help">{{ question.hint }}</div>
+              <div class="fb-q-options">
+                <label class="fb-opt" *ngFor="let option of question.options; trackBy: trackOption">
+                  <input type="radio" [name]="'question_' + question.id" [value]="option.id" [required]="!!question.is_mandatory" [checked]="selectedAnswers[question.id] === option.id" (change)="selectSurveyAnswer(question.id, option.id)">
+                  <div class="fb-opt-body"><div class="fb-opt-title">{{ option.emoji }} {{ option.label }}</div><div class="fb-opt-sub">{{ option.description }}</div></div>
+                </label>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="fb-shipped-state error" *ngIf="surveySubmitError">{{ surveySubmitError }}</div>
+
+        <div class="fb-submit-row">
+          <button type="submit" class="btn-pri-large" [disabled]="submittingSurvey || loadingQuestions">
+            <span class="material-symbols-outlined" aria-hidden="true">task_alt</span>
+            {{ submittingSurvey ? 'Submitting...' : 'Submit My Votes' }}
+          </button>
+          <span class="fb-sla">All questions required - finish with your rating - one submission per user</span>
+        </div>
+      </form>
+
+      <ng-template #surveyThanks>
+        <div class="fb-thanks">
+          <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">how_to_vote</div>
+          <h3>Votes recorded - thank you!</h3>
+          <p>Your survey reference: <code>{{ surveyRef }}</code><br>Aggregate results are reviewed in the Tuesday product call. Any direct questions? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> - we reply within 48 hours.</p>
+          <p class="fb-locked-note">One vote per user - your response has been recorded.</p>
+          <button type="button" class="btn-ghost-small" (click)="resetSurvey()">Review my votes</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="fb-tabpanel" *ngIf="feedbackTab === 'suggest'">
+    <div class="fb-form-wrap">
+      <div class="fb-form-card">
+        <div class="fb-form-h">
+          <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">edit_note</span> Submit Feedback</span>
+          <h3>Share your suggestion - we read every submission within 48 hours.</h3>
+        </div>
+
+        <form class="fb-form" *ngIf="!feedbackSubmitted; else feedbackThanks" (submit)="submitFeedback($event)">
+          <div class="fb-row-2">
+            <div class="fb-field">
+              <label for="fb-category">Category</label>
+              <select id="fb-category" name="category" required>
+                <option value="">Select a category...</option>
+                <option value="uct_tuning_request">UCT tuning request</option>
+                <option value="feature_suggestion">Feature suggestion</option>
+                <option value="league_coverage_request">League / coverage request</option>
+                <option value="engine_accuracy_feedback">Engine accuracy feedback</option>
+                <option value="bug_report">Bug report</option>
+                <option value="what_you_love">What you love</option>
+                <option value="other_general">Other / general</option>
+              </select>
+            </div>
+            <div class="fb-field">
+              <label for="fb-priority">How important is this to you?</label>
+              <select id="fb-priority" name="importance">
+                <option value="nice_to_have">Nice to have</option>
+                <option value="would_really_help_my_workflow" selected>Would really help my workflow</option>
+                <option value="stopping_me_from_using_pick2win">It is stopping me from using PICK2WIN properly</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fb-field">
+            <label for="fb-subject">Subject - one-line summary</label>
+            <input type="text" id="fb-subject" name="subject" required placeholder="e.g. Allow 8-3 captain splits for La Liga matches" maxlength="120">
+            <small>120 characters max</small>
+          </div>
+
+          <div class="fb-field">
+            <label for="fb-message">Your suggestion - be as specific as you can</label>
+            <textarea id="fb-message" name="description" required rows="7" placeholder="Tell us what you would like to see, why it matters, and how it would improve your workflow. Specific examples are extra helpful."></textarea>
+          </div>
+
+          <div class="fb-row-2">
+            <div class="fb-field">
+              <label for="fb-email">Email (for follow-up)</label>
+              <input type="email" id="fb-email" name="email" placeholder="you@example.com">
+              <small>Optional - we will only contact you about this submission</small>
+            </div>
+            <div class="fb-field">
+              <label for="fb-app-version">Where in PICK2WIN? (optional)</label>
+              <select id="fb-app-version" name="location">
+                <option value="anywhere_general">Anywhere / general</option>
+                <option value="uct_configuration_step">UCT Config Screens</option>
+                <option value="run_uct">Run UCT</option>
+                <option value="my_teams_view">My Teams Preview</option>
+                <option value="teams_download">Teams Download</option>
+                <option value="series_leagues">Series / Leagues</option>
+                <option value="pricing_packs">Pricing / packs</option>
+                <option value="payment_gateway">Payment Gateway</option>
+                <option value="profile_account">My Space</option>
+                <option value="mobile_browser">Mobile browser view</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fb-consent">
+            <label>
+              <input type="checkbox" name="email_followup" value="true" checked>
+              <span>OK to follow up via email if we need more details. We will not use your email for marketing.</span>
+            </label>
+          </div>
+
+          <div class="fb-shipped-state error" *ngIf="feedbackSubmitError">{{ feedbackSubmitError }}</div>
+
+          <div class="fb-submit-row">
+            <button type="submit" class="btn-pri-large" [disabled]="submittingFeedback">
+              <span class="material-symbols-outlined" aria-hidden="true">send</span>
+              {{ submittingFeedback ? 'Sending...' : 'Send feedback' }}
+            </button>
+            <span class="fb-sla">Typical reply within <b>48 hours</b> - top requests reviewed weekly</span>
+          </div>
+        </form>
+
+        <ng-template #feedbackThanks>
+          <div class="fb-thanks">
+            <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">check_circle</div>
+            <h3>Thank you! Your feedback has been logged.</h3>
+            <p>Reference ID: <code>{{ feedbackRef }}</code><br>We will review it within 48 hours and reply from <a href="mailto:support@pick2win.io">support@pick2win.io</a> if we need more details.</p>
+            <p class="fb-locked-note">One submission per user - your feedback has been logged.</p>
+            <button type="button" class="btn-ghost-small" (click)="resetFeedbackForm()">Submit another</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fb-shipped reveal">
   <div class="fb-shipped-h">
-    <span class="fb-eyebrow green">Shipped From User Feedback</span>
+    <span class="fb-eyebrow shipped"><span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span> Shipped From User Feedback</span>
     <h3>Recent improvements <em>credited to user submissions.</em></h3>
-    <p>Proof we listen - every item below started as a user suggestion.</p>
+    <p>Proof we listen - every item below started as a user suggestion in this form.</p>
   </div>
   <div class="fb-shipped-list">
+    <div class="fb-shipped-item">
+      <div class="fb-shipped-date">May 2026</div>
+      <div class="fb-shipped-body">
+        <div class="fb-shipped-title">CSV download now uses structured player rows</div>
+        <p>Requested by users who wanted better paste-compatibility with several fantasy app entry forms.</p>
+      </div>
+      <div class="fb-shipped-tag tag-shipped">Shipped</div>
+    </div>
+    <div class="fb-shipped-item">
+      <div class="fb-shipped-date">May 2026</div>
+      <div class="fb-shipped-body">
+        <div class="fb-shipped-title">Mobile menu now opens a proper drawer</div>
+        <p>Reported by users as a critical mobile UX issue.</p>
+      </div>
+      <div class="fb-shipped-tag tag-shipped">Shipped</div>
+    </div>
+    <div class="fb-shipped-item">
+      <div class="fb-shipped-date">Apr 2026</div>
+      <div class="fb-shipped-body">
+        <div class="fb-shipped-title">Added more supported leagues</div>
+        <p>Requested across Japan, Netherlands, Turkey, and the US.</p>
+      </div>
+      <div class="fb-shipped-tag tag-shipped">Shipped</div>
+    </div>
+    <div class="fb-shipped-item">
+      <div class="fb-shipped-date">Apr 2026</div>
+      <div class="fb-shipped-body">
+        <div class="fb-shipped-title">UCT engine now varies formation across all 4 splits</div>
+        <p>One of the most-asked tuning requests from early users.</p>
+      </div>
+      <div class="fb-shipped-tag tag-shipped">Shipped</div>
+    </div>
+    <div class="fb-shipped-item upcoming">
+      <div class="fb-shipped-date">Jun 2026</div>
+      <div class="fb-shipped-body">
+        <div class="fb-shipped-title">Custom team count (10 / 15 / 20 / 25 / 30)</div>
+        <p>Currently high in the suggestion backlog and planned for a future engine release.</p>
+      </div>
+      <div class="fb-shipped-tag tag-planned">Planned</div>
+    </div>
+
     <div class="fb-shipped-state" *ngIf="loadingFeedback">Loading recent feedback...</div>
     <div class="fb-shipped-state error" *ngIf="!loadingFeedback && feedbackLoadError">{{ feedbackLoadError }}</div>
-    <div class="fb-shipped-state" *ngIf="!loadingFeedback && !feedbackLoadError && !feedbackItems.length">No user feedback submissions yet.</div>
-
     <div class="fb-shipped-item" *ngFor="let item of feedbackItems; trackBy: trackFeedback">
       <div class="fb-shipped-date">{{ formatFeedbackDate(item.created_at) }}</div>
-      <div>
-        <b>{{ feedbackTitle(item.title) }}</b>
+      <div class="fb-shipped-body">
+        <div class="fb-shipped-title">{{ feedbackTitle(item.title) }}</div>
         <p>{{ item.message }}</p>
       </div>
-      <span>{{ item.status }}</span>
+      <div class="fb-shipped-tag tag-shipped">{{ item.status }}</div>
     </div>
   </div>
 </div>
 
-<div class="fb-commitment">
+<div class="fb-commitment reveal">
   <div class="fb-commit-icon material-symbols-outlined" aria-hidden="true">handshake</div>
-  <div>
+  <div class="fb-commit-body">
     <h3>Our commitment to feedback senders</h3>
     <ul>
-      <li><b>Every submission is read within 48 hours</b> by a real person.</li>
-      <li><b>Top-voted requests reviewed weekly</b> in the Tuesday product call.</li>
-      <li><b>Status updates go directly to your inbox</b> when we need follow-up.</li>
-      <li><b>No suggestion is too small</b> for product triage.</li>
+      <li><b>Every submission is read within 48 hours</b> by a real person on the PICK2WIN team - no auto-replies, no triage shortcuts.</li>
+      <li><b>Top-voted requests reviewed weekly</b> in our product call every Tuesday. Decisions and timelines are emailed back when possible.</li>
+      <li><b>Status updates go directly to your inbox</b> - Acknowledged, In Review, Planned, Declined, or Shipped.</li>
+      <li><b>No suggestion is too small</b>. Typo fixes, copy improvements, and layout bugs all get product triage.</li>
     </ul>
   </div>
 </div>

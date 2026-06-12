@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthModalService } from 'src/app/core/services/auth-modal.service';
-import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-faq',
@@ -8,18 +6,20 @@ import { AuthService } from 'src/app/core/services/auth.service';
   styleUrls: ['./faq.component.css']
 })
 export class FaqComponent {
-  loggedIn$ = this.authService.loggedIn$;
+  closeOtherFaqs(event: Event) {
+    const current = event.target as HTMLDetailsElement;
 
-  constructor(
-    private authModal: AuthModalService,
-    private authService: AuthService
-  ) {}
+    if (!current.open) {
+      return;
+    }
 
-  openSignup() {
-    this.authModal.open('signup');
-  }
-
-  openLogin() {
-    this.authModal.open('login');
+    current
+      .closest('.faq-list')
+      ?.querySelectorAll<HTMLDetailsElement>('details.faq')
+      .forEach((item) => {
+        if (item !== current) {
+          item.open = false;
+        }
+      });
   }
 }

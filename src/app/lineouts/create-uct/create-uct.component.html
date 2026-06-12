@@ -63,8 +63,16 @@
           <div class="uct-match-meta">
             <span class="material-symbols-outlined time-icon" aria-hidden="true">schedule</span>
             <div>
-              <small>Time</small>
+              <small>Kick-off - Local</small>
               <b>{{ matchTimeLabel(d) }}</b>
+            </div>
+          </div>
+
+          <div class="uct-match-meta">
+            <span class="material-symbols-outlined location-icon" aria-hidden="true">location_on</span>
+            <div>
+              <small>Location</small>
+              <b>{{ matchLocationLabel(d) }}</b>
             </div>
           </div>
 
@@ -73,14 +81,6 @@
             <div>
               <small>Series</small>
               <b>{{ d.match.seriesname || 'Football' }}</b>
-            </div>
-          </div>
-
-          <div class="uct-match-meta">
-            <span class="material-symbols-outlined teams-icon" aria-hidden="true">groups</span>
-            <div>
-              <small>Teams</small>
-              <b>20 Teams</b>
             </div>
           </div>
         </div>
@@ -96,13 +96,13 @@
 
       <nav class="stepper" id="uctStepNav" aria-label="UCT workflow steps">
         <button type="button" [class.active]="step === 1" [class.done]="step > 1" (click)="setStep(1)">
-          <b>01</b><span>Substitute</span>
+          <b>01</b><span>Substitute</span><small>Optional</small>
         </button>
         <button type="button" [class.active]="step === 2" [class.done]="step > 2" (click)="setStep(2)">
-          <b>02</b><span>Mandate</span>
+          <b>02</b><span>Mandate</span><small>Optional</small>
         </button>
         <button type="button" [class.active]="step === 3" [class.done]="step > 3" (click)="setStep(3)">
-          <b>03</b><span>Captaincy</span>
+          <b>03</b><span>Captaincy</span><small>Mandatory</small>
         </button>
         <button type="button" [class.active]="step === 4" [class.done]="step > 4" (click)="setStep(4)">
           <b>04</b><span>Review</span>
@@ -651,6 +651,10 @@
 
 <div class="uct-confirm-modal" *ngIf="showGenerateConfirm" role="dialog" aria-modal="true" aria-labelledby="uctConfirmTitle" (click)="closeGenerateConfirm()">
   <div class="uct-confirm-card" (click)="$event.stopPropagation()">
+    <button class="uct-confirm-close" type="button" aria-label="Close" (click)="closeGenerateConfirm()">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+
     <div class="uct-confirm-title-row">
       <div class="uct-confirm-icon">
         <span class="material-symbols-outlined" aria-hidden="true">balance</span>
@@ -661,27 +665,38 @@
       </div>
     </div>
 
-    <p class="uct-confirm-quote">"The User Config Teams (UCT) feature operates strictly based on the inputs provided by the user. The platform does not influence, recommend, or alter any player selections, substitute selections, mandate choices, or Captain/Vice-Captain configurations. All selections and resulting teams are entirely the responsibility of the user."</p>
-
-    <div class="uct-confirm-summary desktop-confirm-summary">
-      <div><span>Substitutes</span><b>{{ selectedSubstitutes.length }}</b></div>
-      <div><span>Mandate YES</span><b>{{ mandateYesPlayers.length }}</b></div>
-      <div><span>Mandate NO</span><b>{{ mandateNoPlayers.length }}</b></div>
-      <div><span>Captaincy</span><b>{{ captainMode === 'CVC' ? 'CVC' : 'C & VC' }}</b></div>
+    <div class="uct-confirm-notices" aria-label="UCT responsibility notices">
+      <div class="uct-confirm-notice">
+        <span class="notice-icon" aria-hidden="true">user</span>
+        <p>The User Configuration Teams (UCT) feature generates teams based on the selections and configurations provided by you.</p>
+      </div>
+      <div class="uct-confirm-notice">
+        <span class="notice-icon" aria-hidden="true">shield</span>
+        <p><strong>PICK2WIN</strong> does not recommend, influence, modify, or validate any user configuration selections. All selections are made solely by the user, and teams are generated accordingly.</p>
+      </div>
+      <div class="uct-confirm-notice">
+        <span class="notice-icon" aria-hidden="true">info</span>
+        <p>Please review your configuration carefully. <strong class="gold">Once team generation is completed, the generated teams cannot be modified or regenerated for the same lineup.</strong></p>
+      </div>
     </div>
 
     <label class="confirm-box modal-confirm">
       <input type="checkbox" [checked]="generateConsent" (change)="generateConsent = !generateConsent">
-      <span><b>I confirm</b> that the teams will be generated strictly based on my configuration.</span>
+      <span>I acknowledge that all configuration selections have been made by me and I wish to proceed with team generation.</span>
     </label>
 
     <div class="uct-confirm-actions">
-      <button class="ghost-btn" type="button" (click)="closeGenerateConfirm()" style="color:#fff">Cancel</button>
+      <button class="ghost-btn" type="button" (click)="closeGenerateConfirm()">← Cancel</button>
       <button class="primary-btn generate" type="button" [disabled]="submitting || !generateConsent" (click)="confirmGenerateTeams()">
-        {{ submitting ? 'Generating...' : 'Generate 20 Teams' }}
+        {{ submitting ? 'Generating...' : 'Confirm & Generate 20 Teams →' }}
         <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
       </button>
     </div>
+
+    <p class="uct-confirm-footnote">
+      <span class="material-symbols-outlined" aria-hidden="true">shield</span>
+      You are fully responsible for all selections and resulting teams.
+    </p>
   </div>
 </div>
 

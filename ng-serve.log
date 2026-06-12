@@ -1,0 +1,509 @@
+
+> pick2win-web@0.0.0 start
+> ng serve --host 127.0.0.1 --port 4200
+
+
+Initial Chunk Files                        | Names              |  Raw Size
+vendor.js                                  | vendor             |   2.56 MB |
+polyfills.js                               | polyfills          | 252.55 kB |
+main.js                                    | main               | 218.37 kB |
+styles.css, styles.js                      | styles             | 152.75 kB |
+runtime.js                                 | runtime            |  12.61 kB |
+
+| Initial Total      |   3.19 MB
+
+Lazy Chunk Files                           | Names              |  Raw Size
+src_app_pages_pages_module_ts.js           | pages-pages-module |   1.94 MB |
+src_app_admin_admin_module_ts.js           | admin-admin-module | 530.30 kB |
+src_app_user_user_module_ts.js             | user-user-module   | 454.57 kB |
+default-src_app_shared_shared_module_ts.js | user-user-module   |  74.60 kB |
+
+Build at: 2026-06-12T04:47:07.525Z - Hash: 2f5997f3555c2f14 - Time: 34009ms
+
+** Angular Live Development Server is listening on 127.0.0.1:4200, open your browser on http://127.0.0.1:4200/ **
+
+
+√ Compiled successfully.
+
+Initial Chunk Files                        | Names            | Raw Size
+runtime.js                                 | runtime          | 12.61 kB |
+
+Lazy Chunk Files                           | Names            | Raw Size
+default-src_app_shared_shared_module_ts.js | user-user-module | 75.98 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:19:30.491Z - Hash: 708cdedcffcae065 - Time: 6810ms
+
+√ Compiled successfully.
+
+Initial Chunk Files                        | Names            | Raw Size
+runtime.js                                 | runtime          | 12.61 kB |
+
+Lazy Chunk Files                           | Names            | Raw Size
+default-src_app_shared_shared_module_ts.js | user-user-module | 77.61 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:19:31.354Z - Hash: 30f2d34a8362ddba - Time: 800ms
+
+√ Compiled successfully.
+
+Initial Chunk Files              | Names              | Raw Size
+runtime.js                       | runtime            | 12.61 kB |
+
+Lazy Chunk Files                 | Names              | Raw Size
+src_app_pages_pages_module_ts.js | pages-pages-module |  1.89 MB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:39:38.833Z - Hash: d0053f143f7b7abe - Time: 4248ms
+
+× Failed to compile.
+
+Initial Chunk Files              | Names              | Raw Size
+runtime.js                       | runtime            | 12.61 kB |
+
+Lazy Chunk Files                 | Names              | Raw Size
+src_app_pages_pages_module_ts.js | pages-pages-module |  1.89 MB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:39:40.322Z - Hash: dc37a3a233150a86 - Time: 1381ms
+
+× Failed to compile.
+
+Initial Chunk Files              | Names              | Raw Size
+runtime.js                       | runtime            | 12.61 kB |
+
+Lazy Chunk Files                 | Names              | Raw Size
+src_app_pages_pages_module_ts.js | pages-pages-module |  1.75 MB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:40:09.084Z - Hash: 0c3587916c049496 - Time: 2847ms
+
+× Failed to compile.
+
+Initial Chunk Files              | Names              | Raw Size
+runtime.js                       | runtime            | 12.61 kB |
+
+Lazy Chunk Files                 | Names              | Raw Size
+src_app_pages_pages_module_ts.js | pages-pages-module |  1.49 MB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:47:10.601Z - Hash: 00de37157a77ba49 - Time: 4325ms
+
+× Failed to compile.
+
+Initial Chunk Files              | Names              | Raw Size
+runtime.js                       | runtime            | 12.61 kB |
+
+Lazy Chunk Files                 | Names              | Raw Size
+src_app_pages_pages_module_ts.js | pages-pages-module |  1.49 MB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:47:14.064Z - Hash: b7af50b1126161ca - Time: 3391ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:47:54.746Z - Hash: 2267d5ede7cedb0c - Time: 3415ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:47:58.067Z - Hash: aebcbf7ec4051fd9 - Time: 3239ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:52:01.403Z - Hash: 7286e92ae2617045 - Time: 2758ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:52:53.611Z - Hash: 7c048a64f30522be - Time: 8048ms
+
+× Failed to compile.
+
+Initial Chunk Files                        | Names              | Raw Size
+runtime.js                                 | runtime            | 12.61 kB |
+
+Lazy Chunk Files                           | Names              | Raw Size
+src_app_pages_pages_module_ts.js           | pages-pages-module |  1.89 MB |
+default-src_app_shared_shared_module_ts.js | user-user-module   | 76.76 kB |
+
+6 unchanged chunks
+
+Build at: 2026-06-12T05:53:15.342Z - Hash: 360857576fb17c62 - Time: 2893ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 262.46 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T05:58:50.989Z - Hash: 24b7dca0e9a435db - Time: 1453ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:59:14.028Z - Hash: d145c8dddd58643e - Time: 1749ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:59:34.038Z - Hash: 2748a9a394a3d257 - Time: 2280ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:59:36.181Z - Hash: 747398c15f6a3560 - Time: 2074ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T05:59:51.730Z - Hash: adc7e0fb5f58ae85 - Time: 1720ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T06:01:59.614Z - Hash: 8dac7edad1b7062d - Time: 2947ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:07:10.948Z - Hash: ff869fef7b703192 - Time: 2276ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:09:07.028Z - Hash: d35215ab6e98365f - Time: 1875ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:12:36.292Z - Hash: f322a86dacda09f3 - Time: 1143ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:14:40.437Z - Hash: 26ed36b1b6fcf138 - Time: 2612ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:14:53.325Z - Hash: 37c50cee0ccf78d5 - Time: 2241ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:23:17.170Z - Hash: 17a253d0ff53460a - Time: 900ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:23:27.425Z - Hash: 13de25ccadcc98ca - Time: 2400ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:25:24.294Z - Hash: 039d3a2b0d746e2b - Time: 2005ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:25:52.158Z - Hash: 47fb49396b7a4523 - Time: 1172ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:25:55.687Z - Hash: 895c5c968fef1d15 - Time: 1334ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:25:57.631Z - Hash: f850b20efe999254 - Time: 1357ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:26:01.132Z - Hash: 55ab42058be794c3 - Time: 1568ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:26:03.978Z - Hash: 52579b832f380a54 - Time: 2789ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 499.57 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:31:22.664Z - Hash: df2dfa0a2766211c - Time: 7014ms
+
+× Failed to compile.
+
+9 unchanged chunks
+
+Build at: 2026-06-12T08:31:25.625Z - Hash: df2dfa0a2766211c - Time: 2794ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 355.56 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:31:42.445Z - Hash: 3dfb7df0a5137d72 - Time: 2613ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:34:42.858Z - Hash: d2936398dbd4fde0 - Time: 2253ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 506.24 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:34:44.693Z - Hash: e1350b3ef5a98df9 - Time: 1776ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 355.56 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:36:45.626Z - Hash: 8e0317cc1c4bd635 - Time: 1515ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:41:41.076Z - Hash: 5e6e34a62d2b0bc1 - Time: 3336ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 502.28 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:41:43.194Z - Hash: 6d75d54e55962527 - Time: 1994ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 355.56 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:41:57.444Z - Hash: 7b94a696f510886e - Time: 2142ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:42:11.075Z - Hash: f5c77b893fc0e1a9 - Time: 2036ms
+
+× Failed to compile.
+
+Initial Chunk Files | Names   | Raw Size
+runtime.js          | runtime | 12.61 kB |
+
+8 unchanged chunks
+
+Build at: 2026-06-12T08:44:52.849Z - Hash: 055753d732afbe89 - Time: 2654ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 494.25 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:44:55.222Z - Hash: 93db8d08999509b2 - Time: 2266ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 418.83 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:51:16.296Z - Hash: 4b935bff074e6872 - Time: 1609ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 495.18 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:51:32.933Z - Hash: d51dd8b9e5a5b1b1 - Time: 1577ms
+
+× Failed to compile.
+
+Initial Chunk Files            | Names            |  Raw Size
+runtime.js                     | runtime          |  12.61 kB |
+
+Lazy Chunk Files               | Names            |  Raw Size
+src_app_user_user_module_ts.js | user-user-module | 186.27 kB |
+
+7 unchanged chunks
+
+Build at: 2026-06-12T08:53:59.184Z - Hash: 4bf481c845a6d7fa - Time: 1468ms
+
+× Failed to compile.
+
+Initial Chunk Files              | Names              |  Raw Size
+main.js                          | main               | 218.21 kB |
+runtime.js                       | runtime            |  12.61 kB |
+
+Lazy Chunk Files                 | Names              |  Raw Size
+src_app_pages_pages_module_ts.js | pages-pages-module |   1.97 MB |
+src_app_user_user_module_ts.js   | user-user-module   |   1.09 kB |
+
+4 unchanged chunks
+
+Build at: 2026-06-12T08:54:12.925Z - Hash: bdcf60454c4df79c - Time: 985ms
+
+× Failed to compile.

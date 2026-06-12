@@ -359,12 +359,50 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     return Number(profile?.coins?.coins ?? 0);
   }
 
+  purchasedCoins(profile: UserProfile | null): number {
+    return Math.max(0, this.totalCoins(profile) - 1);
+  }
+
+  coinUsagePercent(profile: UserProfile | null): number {
+    const total = this.totalCoins(profile);
+
+    if (!total) {
+      return 0;
+    }
+
+    return Math.min(100, Math.max(0, (this.usedCoins(profile) / total) * 100));
+  }
+
   subscriptionPurchased(profile: UserProfile | null): string {
     return this.formatDate(profile?.subscription?.start_date);
   }
 
   subscriptionExpires(profile: UserProfile | null): string {
     return this.formatDate(profile?.subscription?.expiry_date);
+  }
+
+  subscriptionDaysLeft(profile: UserProfile | null): string {
+    const expiryValue = profile?.subscription?.expiry_date;
+
+    if (!expiryValue) {
+      return '-';
+    }
+
+    const expiry = new Date(expiryValue);
+
+    if (Number.isNaN(expiry.getTime())) {
+      return '-';
+    }
+
+    const diffMs = expiry.getTime() - Date.now();
+
+    if (diffMs <= 0) {
+      return 'Expired';
+    }
+
+    const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    return daysLeft <= 1 ? 'Today' : `${daysLeft} days`;
   }
 
   subscriptionStatus(profile: UserProfile | null): string {
