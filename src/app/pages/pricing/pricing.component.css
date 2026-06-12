@@ -13,6 +13,7 @@
   --gold: #f4b400;
   --gold-2: #ffcf48;
   --pitch-2: #0bcc8e;
+  --acid: #d72638;
   --red: #d72638;
   --blue: #5bb0e6;
   --f-display: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -39,6 +40,7 @@
 }
 
 .pricing-header-row,
+.try-free-note,
 .credit-intro,
 .coin-policy,
 .free-banner,
@@ -121,8 +123,8 @@
 
 .head-ic {
   color: var(--gold);
-  font-size: .52em;
-  vertical-align: .1em;
+  font-size: .72em;
+  vertical-align: -.06em;
 }
 
 .italic-accent,
@@ -140,30 +142,122 @@ em {
 }
 
 .coin-stamp {
-  width: 154px;
-  height: 154px;
+  width: 224px;
+  height: 112px;
   flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  border: 2px dashed rgba(244,180,0,0.48);
-  border-radius: 50%;
   color: var(--gold);
-  background: radial-gradient(circle, rgba(244,180,0,0.16), rgba(244,180,0,0.02));
-  box-shadow: 0 12px 36px rgba(244,180,0,0.13);
+  filter: drop-shadow(0 6px 18px rgba(244,180,0,0.22));
   transform: rotate(-7deg);
 }
 
-.coin-stamp-inner {
-  display: grid;
-  gap: 2px;
-  text-align: center;
-  font-family: var(--f-display);
-  font-weight: 900;
-  text-transform: uppercase;
+.coin-stamp svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.coin-stamp-inner b {
+.coin-stamp .cs-num,
+.coin-stamp .cs-word,
+.coin-stamp .cs-eq,
+.coin-stamp .cs-wm {
+  font-family: var(--f-display), sans-serif;
+  font-weight: 900;
+}
+
+.coin-stamp .cs-num {
+  fill: var(--gold);
+  font-size: 20px;
+}
+
+.coin-stamp .cs-word,
+.coin-stamp .cs-eq {
+  fill: var(--paper);
+  font-size: 17px;
+}
+
+.coin-stamp .cs-arc {
+  fill: currentColor;
+  font-family: var(--f-mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.coin-stamp .cs-wm {
+  fill: currentColor;
+  font-size: 37px;
+}
+
+.try-free-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding: 15px 20px;
+  border: 1px solid rgba(244,180,0,0.28);
+  border-radius: 14px;
+  color: var(--paper-2);
+  background: rgba(244,180,0,0.06);
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.try-free-note b {
   color: var(--paper);
+}
+
+.try-free-note .tf-ic {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(244,180,0,0.30);
+  border-radius: 10px;
+  color: var(--gold);
+  background: rgba(244,180,0,0.12);
+  font-size: 20px;
+}
+
+.pricing-intro-top {
+  margin-bottom: 44px;
+  text-align: center;
+}
+
+.pricing-intro-top p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.credit-intro-eyebrow .material-symbols-outlined,
+.coin-policy-eyebrow .material-symbols-outlined {
+  font-size: 15px;
+  vertical-align: -3px;
+  margin-right: 6px;
+}
+
+.cur-note {
+  margin: 24px auto 0;
+  text-align: center;
+}
+
+.cur-note-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 16px;
+  border: 1px solid rgba(244,180,0,0.28);
+  border-radius: 999px;
+  color: var(--gold);
+  background: rgba(244,180,0,0.08);
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 
 .coin-policy {
@@ -229,6 +323,11 @@ em {
   font-weight: 900;
 }
 
+.policy-card-ic .material-symbols-outlined {
+  font-size: 25px;
+  font-weight: 600;
+}
+
 .policy-card-h {
   margin: 0 0 6px;
   color: var(--paper);
@@ -285,6 +384,10 @@ em {
   font-size: 13px;
   line-height: 1.55;
   font-style: italic;
+}
+
+.policy-list li::before {
+  content: "\2713";
 }
 
 .coin-policy-foot {
@@ -482,6 +585,7 @@ em {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   align-items: stretch;
+  max-width: 1080px;
   margin-bottom: 34px;
 }
 
@@ -492,7 +596,7 @@ em {
   min-width: 0;
   height: 100%;
   min-height: 374px;
-  padding: 30px 26px 28px;
+  padding: 28px 26px 30px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background:
@@ -543,7 +647,7 @@ em {
   padding-right: 0;
   color: var(--paper);
   font-family: var(--f-display);
-  font-size: 20px;
+  font-size: 19px;
   line-height: 1.15;
   font-weight: 900;
   text-transform: uppercase;
@@ -561,15 +665,15 @@ em {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  min-height: 66px;
+  min-height: 54px;
   margin-top: 20px;
 }
 
 .credit-pack-num {
   color: var(--gold);
   font-family: var(--f-display);
-  font-size: clamp(54px, 6vw, 72px);
-  line-height: .9;
+  font-size: 52px;
+  line-height: .94;
   font-weight: 900;
 }
 
@@ -586,15 +690,15 @@ em {
   min-height: 22px;
   margin: 12px 0 0;
   color: var(--paper-2);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .credit-pack-matches::after {
   content: "";
   display: block;
   height: 1px;
-  margin: 20px 0 18px;
+  margin: 19px 0 18px;
   background: var(--line);
 }
 
@@ -616,7 +720,7 @@ em {
 }
 
 .credit-pack-amount {
-  font-size: clamp(44px, 5.6vw, 62px);
+  font-size: 40px;
   line-height: .95;
 }
 
@@ -624,24 +728,47 @@ em {
   min-height: 16px;
   margin-top: 8px;
   color: var(--paper-3);
-  font-size: 11px;
+  font-size: 10px;
+  line-height: 1.35;
 }
 
 .credit-pack-cta {
   width: 100%;
   min-height: 48px;
   margin-top: 22px;
+  border-color: var(--gold);
   border-radius: 999px;
+  color: var(--ink);
+  background: var(--gold);
   font-family: var(--f-body);
   font-size: 14px;
+  font-weight: 900;
   letter-spacing: 0;
   text-transform: none;
-  box-shadow: 0 14px 30px rgba(244,180,0,0.22);
+  box-shadow: 0 12px 28px rgba(244,180,0,0.24);
+}
+
+.credit-pack-cta:hover:not(:disabled) {
+  background: var(--gold-2);
+  box-shadow: 0 15px 32px rgba(244,180,0,0.34);
 }
 
 .credit-pack-cta:disabled {
   opacity: .58;
   cursor: wait;
+}
+
+.credit-pack-foot {
+  display: none;
+  margin-top: 13px;
+  color: var(--paper-3);
+  font-family: var(--f-mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  line-height: 1.45;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .pricing-table-wrap,
@@ -694,6 +821,8 @@ em {
   overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: 12px;
+  background: var(--ink-2);
+  box-shadow: 0 12px 32px rgba(0,15,30,0.34);
 }
 
 .pricing-table {
@@ -713,14 +842,20 @@ em {
 
 .pricing-table th {
   color: var(--paper);
-  background: rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, var(--ink-3), var(--ink-2));
   font-family: var(--f-mono);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
+  border-bottom: 2px solid rgba(244,180,0,0.30);
 }
 
 .pricing-table th.highlight {
+  color: var(--gold);
+}
+
+.pricing-table th.highlight::after {
+  content: " \2605";
   color: var(--gold);
 }
 
@@ -819,6 +954,13 @@ em {
   color: var(--gold);
   background: rgba(244,180,0,0.12);
   font-weight: 900;
+}
+
+.credit-benefits-list .ico.material-symbols-outlined,
+.pricing-note-guarantee .ico.material-symbols-outlined,
+.pricing-commitments-foot .ico.material-symbols-outlined {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .credit-benefits-foot {

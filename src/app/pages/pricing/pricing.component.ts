@@ -282,8 +282,8 @@ closeCheckout(): void {
   }
 
   perCoinText(plan: SubscriptionPlan): string {
-    const suffix = this.isLowestPricePerCoin(plan) ? ' · lowest' : '';
-    return `≈ ${plan.currency_symbol}${Number(plan.price_per_coin || 0).toFixed(2)} per coin${suffix}`;
+    const suffix = this.isLowestPricePerCoin(plan) ? ' - lowest' : '';
+    return `~ ${plan.currency_symbol}${Number(plan.price_per_coin || 0).toFixed(2)} per coin${suffix}`;
   }
 
   isLowestPricePerCoin(plan: SubscriptionPlan): boolean {

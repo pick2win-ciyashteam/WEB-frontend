@@ -4,35 +4,48 @@
     {{ toast.message }}
   </div>
 
-  <div class="login-logo">
+  <div class="login-logo modal-brand">
     <img src="assets/logo.png" alt="Pick2Win">
   </div>
 
   <h2>WELCOME <em>back.</em></h2>
   <p>Sign in to your PICK2WIN account.</p>
+  <!-- <div class="auth-trust-tag">
+    <span class="material-symbols-outlined" aria-hidden="true">shield_lock</span>
+    Secure account access
+  </div> -->
 
   <form [formGroup]="loginForm" (ngSubmit)="login()">
-    <label>Email <span>*</span></label>
-    <input type="email" formControlName="email" placeholder="you@example.com">
-    <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-      Enter valid email
-    </small>
-
-    <label>Password <span>*</span></label>
-    <div class="password-field">
-      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Your password">
-      <button
-        type="button"
-        class="password-toggle"
-        [class.visible]="showPassword"
-        (click)="showPassword = !showPassword"
-        [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-        <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
-      </button>
+    <div class="field">
+      <label>Email <span>*</span></label>
+      <div class="input-icon-wrap">
+        <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <!-- <div class="hint">Use the email verified during signup.</div> -->
+      <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+        Enter valid email
+      </small>
     </div>
-    <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-      Password is required
-    </small>
+
+    <div class="field">
+      <label>Password <span>*</span></label>
+      <div class="password-field input-icon-wrap">
+        <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Your password" autocomplete="current-password">
+        <button
+          type="button"
+          class="password-toggle"
+          [class.visible]="showPassword"
+          (click)="showPassword = !showPassword"
+          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+          <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+        </button>
+      </div>
+      <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+        Password is required
+      </small>
+    </div>
 
     <div class="login-options">
       <label class="remember">
@@ -45,12 +58,13 @@
 
     <button type="submit" [disabled]="loading">
       {{ loading ? 'Signing in...' : 'Sign in' }}
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
     </button>
   </form>
 
   <div class="login-footer">
     New to PICK2WIN?
-    <a (click)="openSignup()">Join PICK2WIN</a>
+    <a (click)="openSignup()">Create an Account</a>
   </div>
 
 </div>
@@ -83,10 +97,9 @@
           Enter valid email
         </small>
 
-        <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="sendForgotOtp()">
-          <span class="material-symbols-outlined">send</span>
-          {{ forgotLoading ? 'Sending OTP...' : 'Send OTP' }}
-        </button>
+    <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="verifyForgotOtp()">
+  {{ forgotLoading ? 'Verifying...' : 'Verify OTP' }}
+</button>
 
         <div class="forgot-security">
           <span class="material-symbols-outlined">verified_user</span>

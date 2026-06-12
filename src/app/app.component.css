@@ -61,12 +61,34 @@
 
   .auth-modal app-login {
     display: block;
-    width: min(460px, 94vw);
+    width: min(540px, 94vw);
   }
 
   .auth-modal app-signup {
     display: block;
-    width: min(620px, 94vw);
+    width: min(560px, 94vw);
+  }
+}
+
+@media (max-width: 560px) {
+  .auth-backdrop {
+    align-items: flex-start;
+    padding: 12px 10px;
+    overflow-y: auto;
+  }
+
+  .auth-modal {
+    width: min(100%, 390px);
+    max-height: calc(100dvh - 24px);
+    border-radius: 18px;
+  }
+
+  .auth-close {
+    top: 18px;
+    right: 18px;
+    width: 34px;
+    height: 34px;
+    background: rgba(2,10,18,0.62);
   }
 }
 

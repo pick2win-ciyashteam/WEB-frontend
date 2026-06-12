@@ -19,7 +19,34 @@ interface CountryRegionGroup {
   countries: SignupCountry[];
 }
 
+type FieldState = '' | 'valid' | 'invalid' | 'warn';
+
+interface FieldValidation {
+  state: FieldState;
+  message: string;
+}
+
 const DEFAULT_MOBILE_LENGTH: MobileLengthRule = { min: 7, max: 14 };
+
+const DISPOSABLE_EMAIL_DOMAINS = [
+  '10minutemail.com',
+  'mailinator.com',
+  'tempmail.com',
+  'guerrillamail.com',
+  'trashmail.com',
+  'getnada.com',
+  'maildrop.cc',
+  'dispostable.com'
+];
+
+const COMMON_PASSWORDS = [
+  'password',
+  'password123',
+  '12345678',
+  'qwerty123',
+  'pick2win',
+  'football123'
+];
 
 const MOBILE_LENGTH_BY_COUNTRY: Record<string, MobileLengthRule> = {
   australia: { min: 9, max: 9 },
@@ -132,6 +159,22 @@ function internationalNameValidator(control: AbstractControl): ValidationErrors 
   return /^[\p{L}\p{M}][\p{L}\p{M}.' -]*$/u.test(value) ? null : { nameFormat: true };
 }
 
+function strictPasswordValidator(control: AbstractControl): ValidationErrors | null {
+  const value = String(control.value || '');
+
+  if (!value) {
+    return null;
+  }
+
+  const hasLetter = /[A-Za-z]/.test(value);
+  const hasDigit = /\d/.test(value);
+  const hasSymbol = /[!@#$%^&*(),.?":{}|<>_\-+=[\]/\\;'`~]/.test(value);
+
+  return value.length >= 8 && hasLetter && hasDigit && hasSymbol
+    ? null
+    : { passwordStrict: true };
+}
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -162,7 +205,7 @@ countriesLoading = false;
     dial: ['', Validators.required],
     mobile: ['', [Validators.required, this.mobileNumberValidator.bind(this)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(8), strictPasswordValidator]],
     terms: [false, Validators.requiredTrue]
   });
 
@@ -224,6 +267,11 @@ continueStep1() {
   this.successMessage = '';
 
   if (this.form.invalid || !this.ageValid || !this.validateMobileByCountry()) {
+    return;
+  }
+
+  if (!this.allClientGatesPassed) {
+    this.errorMessage = 'Please complete all signup validation checks.';
     return;
   }
 
@@ -347,10 +395,170 @@ get passwordError(): string {
   }
 
   if (control.hasError('minlength')) {
-    return 'Your password must contain at least 6 characters.';
+    return 'Your password must contain at least 8 characters.';
+  }
+
+  if (control.hasError('passwordStrict')) {
+    return 'Need 8+ characters, a letter, a number, and a symbol.';
   }
 
   return '';
+}
+
+fieldClass(field: 'name' | 'dob' | 'mobile' | 'email' | 'password'): Record<string, boolean> {
+  const validation = this.fieldValidation(field);
+
+  return {
+    field: true,
+    'is-valid': validation.state === 'valid',
+    'is-invalid': validation.state === 'invalid'
+  };
+}
+
+fieldValidation(field: 'name' | 'dob' | 'mobile' | 'email' | 'password'): FieldValidation {
+  if (field === 'name') return this.nameValidation;
+  if (field === 'dob') return this.dobValidation;
+  if (field === 'mobile') return this.mobileValidation;
+  if (field === 'email') return this.emailValidation;
+  return this.passwordValidation;
+}
+
+get nameValidation(): FieldValidation {
+  const value = String(this.form.value.name || '').trim();
+  const control = this.form.get('name');
+
+  if (!value) return { state: '', message: '' };
+  if (value.length < 2) return { state: 'invalid', message: '✗ Name is too short' };
+  if (!/^[\p{L}\s'\-.]+$/u.test(value)) {
+    return { state: 'invalid', message: '✗ Letters, spaces, hyphens, and apostrophes only' };
+  }
+  if (value.split(/\s+/).length < 2) {
+    return { state: 'warn', message: '⚠ Please enter your full name (first + last)' };
+  }
+  if (control?.valid) return { state: 'valid', message: '✓ Looks good' };
+
+  return { state: '', message: '' };
+}
+
+get dobValidation(): FieldValidation {
+  const value = String(this.form.value.dob || '');
+
+  if (!value) return { state: '', message: '' };
+
+  const dob = new Date(value);
+
+  if (Number.isNaN(dob.getTime())) {
+    return { state: 'invalid', message: '✗ Please enter a valid date' };
+  }
+
+  const age = this.ageFromDate(value);
+
+  if (age < 0) {
+    return { state: 'invalid', message: '✗ Date of birth cannot be in the future' };
+  }
+
+  if (age < 18) {
+    return { state: 'invalid', message: `✗ Must be 18 or older - you are ${Math.floor(age)}` };
+  }
+
+  if (age > 120) {
+    return { state: 'invalid', message: '✗ Please check the year you entered' };
+  }
+
+  return { state: 'valid', message: `✓ Verified 18+ (age ${Math.floor(age)})` };
+}
+
+get mobileValidation(): FieldValidation {
+  const country = this.selectedCountry;
+  const digits = String(this.form.value.mobile || '');
+  const dial = String(this.form.value.dial || country?.dial_code || '');
+
+  if (!digits) return { state: '', message: '' };
+
+  if (!country) {
+    return { state: 'invalid', message: '✗ Select your country before mobile number' };
+  }
+
+  if (/^(\d)\1{6,}$/.test(digits)) {
+    return { state: 'invalid', message: '✗ Please enter your real mobile number' };
+  }
+
+  if (dial === '+1' && (digits.startsWith('555') || /^\d{3}555\d/.test(digits))) {
+    return { state: 'invalid', message: '✗ 555-xxxx numbers are reserved for fiction - please use your real mobile' };
+  }
+
+  if (dial === '+44' && digits.length >= country.max && !digits.startsWith('7')) {
+    return { state: 'invalid', message: '✗ UK mobile numbers must start with 7 (after the +44)' };
+  }
+
+  if (dial === '+61' && digits.length >= country.max && !digits.startsWith('4')) {
+    return { state: 'invalid', message: '✗ AU mobile numbers must start with 4 (after the +61)' };
+  }
+
+  if (digits.length < country.min) {
+    return { state: 'warn', message: `Keep going - ${digits.length}/${country.min} digits so far` };
+  }
+
+  if (digits.length > country.max) {
+    return { state: 'invalid', message: `✗ Max ${country.max} digits for ${country.name}` };
+  }
+
+  if (digits.length === country.max) {
+    return { state: 'valid', message: `✓ Valid mobile - ${dial} ${digits} - max length reached` };
+  }
+
+  return { state: 'valid', message: `✓ Valid mobile format - ${dial} ${digits}` };
+}
+
+get emailValidation(): FieldValidation {
+  const value = String(this.form.value.email || '').trim().toLowerCase();
+
+  if (!value) return { state: '', message: '' };
+
+  const pattern = /^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/i;
+
+  if (!pattern.test(value)) {
+    return { state: 'invalid', message: '✗ Not a valid email format' };
+  }
+
+  const domain = value.split('@')[1] || '';
+
+  if (DISPOSABLE_EMAIL_DOMAINS.includes(domain)) {
+    return { state: 'invalid', message: `✗ ${domain} is a disposable email service - please use your real email` };
+  }
+
+  if (value.includes('+')) {
+    return { state: 'warn', message: '⚠ Aliased emails (with +tag) are accepted but get extra abuse review' };
+  }
+
+  if (value === 'test@test.com' || value.startsWith('test@example')) {
+    return { state: 'invalid', message: '✗ Please use your real email address' };
+  }
+
+  return { state: 'valid', message: '✓ Email format looks good' };
+}
+
+get passwordValidation(): FieldValidation {
+  const value = String(this.form.value.password || '');
+
+  if (!value) return { state: '', message: '' };
+
+  if (COMMON_PASSWORDS.includes(value.toLowerCase())) {
+    return { state: 'invalid', message: '✗ This password is too common - pick something unique' };
+  }
+
+  const missing: string[] = [];
+
+  if (value.length < 8) missing.push('8+ characters');
+  if (!/[A-Za-z]/.test(value)) missing.push('a letter');
+  if (!/\d/.test(value)) missing.push('a number');
+  if (!/[!@#$%^&*(),.?":{}|<>_\-+=[\]/\\;'`~]/.test(value)) missing.push('a symbol (!@#$...)');
+
+  if (missing.length) {
+    return { state: 'invalid', message: '✗ Need: ' + missing.join(', ') };
+  }
+
+  return { state: 'valid', message: `✓ ${this.passwordStrengthLabel} password` };
 }
 
 otpInput(event: Event, index: number, type: 'mobile' | 'email') {
@@ -565,6 +773,36 @@ resendOtp(type: 'mobile' | 'email') {
     return score;
   }
 
+get passwordStrengthLabel(): string {
+  const labels: Record<number, string> = {
+    1: 'Very weak',
+    2: 'Weak',
+    3: 'Fair',
+    4: 'Strong',
+    5: 'Very strong'
+  };
+
+  return labels[Math.max(1, this.passwordStrength)] || 'Strength';
+}
+
+get allClientGatesPassed(): boolean {
+  return this.nameValidation.state === 'valid'
+    && this.dobValidation.state === 'valid'
+    && this.mobileValidation.state === 'valid'
+    && this.emailValidation.state === 'valid'
+    && this.passwordValidation.state === 'valid'
+    && !!this.form.value.country
+    && !!this.form.value.terms;
+}
+
+private ageFromDate(value: string): number {
+  const dob = new Date(value);
+  const now = new Date();
+  const ageMs = now.getTime() - dob.getTime();
+
+  return ageMs / (365.25 * 24 * 60 * 60 * 1000);
+}
+
 private loadCountries(): void {
   this.countriesLoading = true;
 
@@ -629,6 +867,22 @@ get mobileLimit(): number {
   return this.selectedCountry?.max || DEFAULT_MOBILE_LENGTH.max;
 }
 
+get dialLabel(): string {
+  const country = this.selectedCountry;
+  const dial = String(this.form.value.dial || country?.dial_code || '').trim();
+  const code = String(country?.code || '').trim().toUpperCase();
+
+  return [dial, code].filter(Boolean).join(' ');
+}
+
+get mobileRangeText(): string {
+  const country = this.selectedCountry;
+  const min = country?.min || DEFAULT_MOBILE_LENGTH.min;
+  const max = country?.max || DEFAULT_MOBILE_LENGTH.max;
+
+  return min === max ? String(max) : `${min}-${max}`;
+}
+
 get mobileError(): string {
   const country = this.selectedCountry;
 
@@ -679,6 +933,24 @@ private mobileNumberValidator(control: AbstractControl | null): ValidationErrors
 
   if (!country) {
     return { mobileCountry: true };
+  }
+
+  const dial = String(this.form.value.dial || country.dial_code || '');
+
+  if (/^(\d)\1{6,}$/.test(mobile)) {
+    return { mobileFake: true };
+  }
+
+  if (dial === '+1' && (mobile.startsWith('555') || /^\d{3}555\d/.test(mobile))) {
+    return { mobileFiction: true };
+  }
+
+  if (dial === '+44' && mobile.length >= country.max && !mobile.startsWith('7')) {
+    return { mobileUkPrefix: true };
+  }
+
+  if (dial === '+61' && mobile.length >= country.max && !mobile.startsWith('4')) {
+    return { mobileAuPrefix: true };
   }
 
   return mobile.length >= country.min && mobile.length <= country.max

@@ -1,74 +1,101 @@
 <div class="signup-box">
 
-  <div class="signup-logo">
+  <div class="signup-logo modal-brand">
     <img src="assets/logo.png" alt="Pick2Win">
   </div>
 
   <div *ngIf="step === 1">
-    <h2>Create <em>your</em> account.</h2>
+    <span class="age-stamp" role="img" aria-label="18 plus only"><b>18+</b><i>ONLY</i></span>
+    <h2>SET UP <em>your</em> ACCOUNT.</h2>
+    <div class="signup-tag">
+      <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+      One account per user
+    </div>
     <p class="sub">One account per user. Verify mobile + email to unlock your <b>first UCT free</b>. 18+ only.</p>
 
     <div class="verify-progress">
-      <div class="vp-step active">1 <span>Details</span></div>
-      <div class="vp-step">2 <span>Mobile</span></div>
-      <div class="vp-step">3 <span>Email</span></div>
-      <div class="vp-step">4 <span>Done</span></div>
+      <div class="vp-step active"><span class="vp-num">1</span><span>Details</span></div>
+      <div class="vp-line"></div>
+      <div class="vp-step"><span class="vp-num">2</span><span>Mobile</span></div>
+      <div class="vp-line"></div>
+      <div class="vp-step"><span class="vp-num">3</span><span>Email</span></div>
+      <div class="vp-line"></div>
+      <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
     </div>
 
     <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
 
     <form [formGroup]="form">
-      <label>Full name <span>*</span></label>
-      <input type="text" formControlName="name" placeholder="Your full name">
-      <small class="field-error" *ngIf="nameError" role="alert">{{ nameError }}</small>
-
-      <label>Country of residence <span>*</span></label>
-      <select class="country-select" formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
-        <option value="">{{ countriesLoading ? 'Loading countries...' : 'Select your country' }}</option>
-        <optgroup *ngFor="let group of countryRegionGroups; trackBy: trackByRegionLabel" [label]="group.label">
-          <option *ngFor="let c of group.countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
-        </optgroup>
-      </select>
-
-      <label>Date of birth <span>*</span></label>
-      <div class="date-wrap" (click)="openDatePicker(dobInput)">
-        <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)">
-        <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
+      <div [ngClass]="fieldClass('name')">
+        <label>Full name <span>*</span></label>
+        <input type="text" formControlName="name" placeholder="Your full name">
+        <div class="field-msg" [ngClass]="nameValidation.state">{{ nameValidation.message }}</div>
       </div>
-      <small class="field-error" *ngIf="dobError" role="alert">{{ dobError }}</small>
 
-      <label>Mobile number <span>*</span></label>
-      <div class="phone-row">
-        <div class="dial-code-fixed">
-          <span *ngIf="selectedCountry?.flag" class="dial-flag">{{ selectedCountry?.flag }}</span>
-          {{ form.value.dial || 'Code' }}
+      <div class="field-row">
+      <div class="field" [class.is-valid]="form.value.country">
+        <label>Country of residence <span>*</span></label>
+        <select class="country-select" formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
+          <option value="">{{ countriesLoading ? 'Loading countries...' : 'Select your country' }}</option>
+          <optgroup *ngFor="let group of countryRegionGroups; trackBy: trackByRegionLabel" [label]="group.label">
+            <option *ngFor="let c of group.countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
+          </optgroup>
+        </select>
+        <div class="hint">Sets your billing currency & dial code.</div>
+      </div>
+
+      <div [ngClass]="fieldClass('dob')">
+        <label>Date of birth <span>*</span></label>
+        <div class="date-wrap" (click)="openDatePicker(dobInput)">
+          <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)">
+          <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
         </div>
-        <input type="tel" formControlName="mobile" placeholder="Mobile number" [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)">
+        <div class="hint">Tap to open calendar - must be 18+.</div>
+        <div class="field-msg" [ngClass]="dobValidation.state">{{ dobValidation.message }}</div>
       </div>
-      <small class="field-error" *ngIf="form.get('mobile')?.touched && mobileError" role="alert">{{ mobileError }}</small>
-
-      <label>Email address <span>*</span></label>
-      <input type="email" formControlName="email" placeholder="you@example.com">
-      <small class="field-error" *ngIf="emailError" role="alert">{{ emailError }}</small>
-
-      <label>Password <span>*</span></label>
-      <div class="password-wrap">
-        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="At least 6 characters">
-        <button
-          type="button"
-          class="password-toggle"
-          [class.visible]="showPassword"
-          (click)="showPassword = !showPassword"
-          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-          <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
-        </button>
       </div>
 
-      <div class="strength">
-        <div [style.width.%]="passwordStrength * 25"></div>
+      <div [ngClass]="fieldClass('mobile')">
+        <label>Mobile number <span>*</span></label>
+        <div class="phone-row">
+          <div class="dial-code-fixed">
+            <span *ngIf="selectedCountry?.flag" class="dial-flag">{{ selectedCountry?.flag }}</span>
+            {{ dialLabel || 'Code' }}
+          </div>
+          <input type="tel" formControlName="mobile" placeholder="Mobile number" [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)">
+        </div>
+        <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - SMS verification required - VoIP / virtual numbers blocked.</div>
+        <div class="field-msg" [ngClass]="mobileValidation.state">{{ mobileValidation.message }}</div>
       </div>
-      <small class="field-error" *ngIf="passwordError" role="alert">{{ passwordError }}</small>
+
+      <div [ngClass]="fieldClass('email')">
+        <label>Email address <span>*</span></label>
+        <input type="email" formControlName="email" placeholder="you@example.com">
+        <div class="hint">No disposable, temporary, or aliased emails.</div>
+        <div class="field-msg" [ngClass]="emailValidation.state">{{ emailValidation.message }}</div>
+      </div>
+
+      <div [ngClass]="fieldClass('password')">
+        <label>Password <span>*</span></label>
+        <div class="password-wrap">
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="At least 8 characters">
+          <button
+            type="button"
+            class="password-toggle"
+            [class.visible]="showPassword"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+          </button>
+        </div>
+
+        <div class="strength">
+          <div [style.width.%]="passwordStrength * 20"></div>
+        </div>
+        <div class="hint">8+ chars - letters, numbers and one symbol.</div>
+        <div class="field-msg" [ngClass]="passwordValidation.state">{{ passwordValidation.message }}</div>
+      </div>
 
       <label class="terms">
         <input type="checkbox" formControlName="terms">
@@ -83,9 +110,9 @@
       <button
         type="button"
         class="btn-block"
-        [disabled]="loading || form.invalid || !ageValid || !validateMobileByCountry()"
+        [disabled]="loading || !allClientGatesPassed"
         (click)="continueStep1()">
-        {{ loading ? 'Creating account...' : 'Continue' }}
+        {{ loading ? 'Creating account...' : (allClientGatesPassed ? 'Continue -> Verify mobile' : 'Complete all fields to continue') }}
       </button>
 
       <p class="alt-action">
@@ -96,7 +123,19 @@
   </div>
 
   <div *ngIf="step === 2" class="center-step">
-    <h2>Verify <em>mobile.</em></h2>
+    <div class="verify-progress">
+      <div class="vp-step done"><span class="vp-num">✓</span><span>Details</span></div>
+      <div class="vp-line done"></div>
+      <div class="vp-step active"><span class="vp-num">2</span><span>Mobile</span></div>
+      <div class="vp-line"></div>
+      <div class="vp-step"><span class="vp-num">3</span><span>Email</span></div>
+      <div class="vp-line"></div>
+      <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
+    </div>
+    <div class="verify-icon">
+      <span class="material-symbols-outlined" aria-hidden="true">phone_iphone</span>
+    </div>
+    <h2>Verify <em>your</em> mobile.</h2>
     <p class="sub">We sent a 6-digit SMS code to <b>{{ form.value.dial }} {{ form.value.mobile }}</b></p>
 
     <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
@@ -121,21 +160,36 @@
         (paste)="otpPaste($event, 'mobile')">
     </div>
 
-    <button class="btn-block" type="button" [disabled]="loading || !isOtpComplete('mobile')" (click)="verifyMobile()">
-      {{ loading ? 'Verifying...' : 'Verify' }}
-    </button>
-
-    <p class="alt-action">
+    <p class="resend-line">
+      Didn't receive it?
       <button type="button" [disabled]="resending === 'mobile'" (click)="resendOtp('mobile')">
-        {{ resending === 'mobile' ? 'Resending...' : 'Resend mobile OTP' }}
+        {{ resending === 'mobile' ? 'Resending...' : 'Resend SMS' }}
       </button>
+      <span>- Code expires in 10 min</span>
     </p>
 
-    <p class="alt-action"><button type="button" (click)="step = 1">Change number</button></p>
+    <button class="btn-block verify-btn" type="button" [disabled]="loading || !isOtpComplete('mobile')" (click)="verifyMobile()">
+      {{ loading ? 'Verifying...' : 'Verify mobile & continue' }}
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+    </button>
+
+    <p class="alt-action step-change"><button type="button" (click)="step = 1">← Use a different number</button></p>
   </div>
 
   <div *ngIf="step === 3" class="center-step">
-    <h2>Verify <em>email.</em></h2>
+    <div class="verify-progress">
+      <div class="vp-step done"><span class="vp-num">✓</span><span>Details</span></div>
+      <div class="vp-line done"></div>
+      <div class="vp-step done"><span class="vp-num">✓</span><span>Mobile</span></div>
+      <div class="vp-line done"></div>
+      <div class="vp-step active"><span class="vp-num">3</span><span>Email</span></div>
+      <div class="vp-line"></div>
+      <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
+    </div>
+    <div class="verify-icon">
+      <span class="material-symbols-outlined" aria-hidden="true">alternate_email</span>
+    </div>
+    <h2>Verify <em>your</em> email.</h2>
     <p class="sub">We sent a 6-digit code to <b>{{ form.value.email }}</b></p>
 
     <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
@@ -160,20 +214,31 @@
         (paste)="otpPaste($event, 'email')">
     </div>
 
-    <button class="btn-block" type="button" [disabled]="loading || !isOtpComplete('email')" (click)="verifyEmail()">
-      {{ loading ? 'Verifying...' : 'Verify' }}
-    </button>
-
-    <p class="alt-action">
+    <p class="resend-line">
+      Didn't receive it?
       <button type="button" [disabled]="resending === 'email'" (click)="resendOtp('email')">
-        {{ resending === 'email' ? 'Resending...' : 'Resend email OTP' }}
+        {{ resending === 'email' ? 'Resending...' : 'Resend email' }}
       </button>
+      <span>- Check your spam folder</span>
     </p>
 
-    <p class="alt-action"><button type="button" (click)="step = 1">Change email</button></p>
+    <button class="btn-block verify-btn" type="button" [disabled]="loading || !isOtpComplete('email')" (click)="verifyEmail()">
+      {{ loading ? 'Verifying...' : 'Verify email & finish' }}
+    </button>
+
+    <p class="alt-action step-change"><button type="button" (click)="step = 1">← Use a different email</button></p>
   </div>
 
   <div *ngIf="step === 4" class="center-step">
+    <div class="verify-progress">
+      <div class="vp-step done"><span class="vp-num">✓</span><span>Details</span></div>
+      <div class="vp-line done"></div>
+      <div class="vp-step done"><span class="vp-num">✓</span><span>Mobile</span></div>
+      <div class="vp-line done"></div>
+      <div class="vp-step done"><span class="vp-num">✓</span><span>Email</span></div>
+      <div class="vp-line done"></div>
+      <div class="vp-step done"><span class="vp-num">✓</span><span>Done</span></div>
+    </div>
     <div class="success-circle material-symbols-outlined" aria-hidden="true">check</div>
     <h2>You're <em>in.</em></h2>
     <p class="sub">Mobile and email verified. Your PICK2WIN account is live.</p>
@@ -184,10 +249,24 @@
     <div class="free-claim">
       <div class="free-tag">UNLOCKED - ONE-TIME</div>
       <h3>Your <em>first match</em> is free.</h3>
-      <p>Run UCT on the next match window of your choice - full 20-team generation, no charge.</p>
+      <p>Run UCT on the next match window of your choice - full 20-team generation, no charge. Claim within <b>14 days</b>. After that, then choose any coin pack.</p>
     </div>
 
-    <button class="btn-block" type="button" (click)="openLogin()">Sign in now</button>
+    <div class="next-list">
+      <div class="lbl">What's unlocked</div>
+      <ul>
+        <li class="done"><span class="ind">✓</span><b>Mobile verified</b><span>- tied to this account</span></li>
+        <li class="done"><span class="ind">✓</span><b>Email verified</b><span>- tied to this account</span></li>
+        <li class="done"><span class="ind">✓</span><b>First UCT generation - free</b></li>
+        <li><span class="ind">→</span>All prices shown in USD ($)</li>
+        <li><span class="ind">→</span>Browse upcoming match windows</li>
+      </ul>
+    </div>
+
+    <button class="btn-block verify-btn" type="button" (click)="openLogin()">
+      Go to my dashboard
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+    </button>
   </div>
 
 </div>

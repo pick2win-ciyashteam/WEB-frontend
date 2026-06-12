@@ -52,23 +52,35 @@ export class LoginComponent {
   }
 
   openForgotPassword(event?: Event) {
-    event?.preventDefault();
-    const email = this.loginForm.value.email || '';
+  event?.preventDefault();
+  this.hideToast();
 
-    this.forgotForm.reset({
-      email,
-      otp: '',
-      password: '',
-      confirmPassword: ''
-    });
+  const emailCtrl = this.loginForm.get('email');
+  emailCtrl?.markAsTouched();
 
-    this.otpSent = false;
-    this.forgotStep = 'email';
-    this.forgotModal = true;
-    this.showResetPassword = false;
-    this.showConfirmResetPassword = false;
-    this.hideToast();
+  if (!emailCtrl?.value || emailCtrl.invalid) {
+    this.showToast(
+      'error',
+      'Enter your email above first, then tap "Forgot password?"'
+    );
+    return;
   }
+
+  const email = emailCtrl.value.trim();
+
+  this.forgotForm.reset({
+    email,
+    otp: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  this.otpSent = false;
+  this.forgotStep = 'email';
+  this.forgotModal = true;
+  this.showResetPassword = false;
+  this.showConfirmResetPassword = false;
+}
 
   closeForgotPassword() {
     this.forgotModal = false;
@@ -106,18 +118,35 @@ export class LoginComponent {
   }
 
   verifyForgotOtp() {
-    const otpCtrl = this.forgotForm.get('otp');
-    otpCtrl?.setValue(String(otpCtrl?.value || '').replace(/\D/g, '').slice(0, 6));
-    otpCtrl?.markAsTouched();
+  const otpCtrl = this.forgotForm.get('otp');
+  otpCtrl?.setValue(String(otpCtrl?.value || '').replace(/\D/g, '').slice(0, 6));
+  otpCtrl?.markAsTouched();
 
-    if (otpCtrl?.invalid) {
-      this.showToast('error', 'Please enter valid OTP.');
-      return;
-    }
-
-    this.forgotStep = 'password';
-    this.hideToast();
+  if (otpCtrl?.invalid) {
+    this.showToast('error', 'Please enter valid OTP.');
+    return;
   }
+
+  const email = this.forgotForm.value.email || '';
+  const otp = otpCtrl?.value || '';
+
+  this.forgotLoading = true;
+
+  this.api.verifyEmailOtp({ email, otp }).subscribe({
+    next: (res:any) => {
+      this.forgotLoading = false;
+      this.forgotStep = 'password';
+      this.showToast('success', res?.message || 'OTP verified successfully.');
+    },
+    error: (err:any) => {
+      this.forgotLoading = false;
+      this.showToast(
+        'error',
+        err?.error?.message || err?.error?.error || 'Invalid OTP. Please try again.'
+      );
+    }
+  });
+}
 
   resetPassword() {
     this.forgotForm.get('email')?.markAsTouched();
