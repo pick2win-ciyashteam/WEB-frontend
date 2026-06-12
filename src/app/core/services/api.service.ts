@@ -9,7 +9,10 @@ import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResp
 })
 export class ApiService {
 
-  private BASE = 'https://pick2win-backend-website.onrender.com/api'
+  // private BASE = 'https://pick2win-backend-website.onrender.com/api'
+
+  private BASE = 'http://187.124.173.183/api'
+
 
   constructor(private http: HttpClient) { }
 

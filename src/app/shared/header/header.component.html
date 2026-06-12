@@ -21,13 +21,13 @@
     </nav>
 
     <div class="header-auth" *ngIf="loggedIn$ | async; else desktopGuestActions">
-      <button type="button" class="btn-signin header-profile" (click)="openMySpace()">
-        <span class="icon-user"></span>
+      <button type="button" class="header-profile-pill" (click)="openMySpace()">
+        <span class="header-avatar" aria-hidden="true">{{ profileInitial$ | async }}</span>
         My Space
       </button>
-      <button type="button" class="header-cta header-signout" (click)="signOut()">
-        <span class="icon-logout"></span>
-        Signout
+      <button type="button" class="header-signout-pill" (click)="signOut()">
+        <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+        Sign out
       </button>
     </div>
 
@@ -65,12 +65,18 @@
 
   <div class="drawer-actions" *ngIf="loggedIn$ | async; else drawerGuestActions">
     <button type="button" class="drawer-profile" (click)="openMySpace()">
-      <span class="icon-user"></span>
-      My Space
+      <span class="drawer-action-icon material-symbols-outlined" aria-hidden="true">account_circle</span>
+      <span class="drawer-action-copy">
+        <span class="drawer-action-title">My Space</span>
+        <span class="drawer-action-meta">Profile, teams, coins</span>
+      </span>
     </button>
     <button type="button" class="drawer-signout" (click)="signOut()">
-      <span class="icon-logout"></span>
-      Signout
+      <span class="drawer-action-icon material-symbols-outlined" aria-hidden="true">logout</span>
+      <span class="drawer-action-copy">
+        <span class="drawer-action-title">Signout</span>
+        <span class="drawer-action-meta">End this session</span>
+      </span>
     </button>
   </div>
 

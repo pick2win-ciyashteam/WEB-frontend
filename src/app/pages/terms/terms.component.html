@@ -1,334 +1,38 @@
-﻿<app-header></app-header>
-<main class="legal-document-page" id="top">
-  <section class="legal-hero">
-    <div class="wrap">
-      <div class="hero-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">contract</span> LEGAL · <strong>TERMS DOCUMENT</strong></div>
-      <h1>Terms <em>&amp; Conditions.</em></h1>
-      <p class="hero-lead">PICK2WIN's binding user agreement for platform access, UCT usage, coin packs, supported regions, and user responsibilities.</p>
-      <div class="hero-meta">
-        <span>Version <strong>1.0</strong></span>
-        <span>Effective <strong>10 June 2026</strong></span>
-        <span>Jurisdiction <strong>India · Global</strong></span>
-      </div>
+<app-header></app-header>
+
+<main class="pol-page">
+  <div class="pol-container">
+    <div class="pol-top">
+      <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">description</span>
+      <span class="pol-eyebrow">PICK2WIN &middot; Legal</span>
     </div>
-  </section>
-  <section class="wrap legal-shell">
-    <aside class="legal-sidebar" aria-label="Legal pages">
-      <div class="sidebar-title">3 Policies</div>
-      <nav class="sidebar-nav">
-        <a routerLink="/terms" class="active"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">contract</span><span class="sidebar-nav-label">Terms &amp; Conditions<br><span class="sidebar-nav-num">POLICY 1 OF 3</span></span></a>
-        <a routerLink="/policy"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">lock</span><span class="sidebar-nav-label">Privacy Policy<br><span class="sidebar-nav-num">POLICY 2 OF 3</span></span></a>
-        <a routerLink="/refund"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">payments</span><span class="sidebar-nav-label">Refund Policy<br><span class="sidebar-nav-num">POLICY 3 OF 3</span></span></a>
-      </nav>
-      <div class="sidebar-foot">
-        Questions on any policy? Email<br>
-        <a href="mailto:support@pick2win.io">support@pick2win.io</a><br><br>
-        Response within 48 hours.
-      </div>
-    </aside>
-    <div class="policies">
-<article class="policy" id="terms">
-      <div class="policy-head">
-        <span class="policy-num">📜 POLICY <strong>1 OF 3</strong> · TERMS</span>
-        <h2 class="policy-title">Terms <em>&amp; Conditions.</em></h2>
-        <div class="policy-meta">
-          <span>Version <strong>1.0</strong></span>
-          <span>Effective <strong>10 June 2026</strong></span>
-          <span>26 sections · <strong>India governing law</strong></span>
-        </div>
-      </div>
+    <h1 class="pol-mast">PICK2WIN <em>policies</em></h1>
+    <p class="pol-intro">The terms that govern your use of PICK2WIN. <a routerLink="/" class="pol-back">&larr; Back to app</a></p>
 
-      <div class="callout" style="border-color:var(--gold); background:rgba(244,180,0,0.06);">
-        <strong>🔞 STRICTLY 18+ ONLY.</strong> By accessing or using PICK2WIN, users confirm that they are 18 years of age or older and legally permitted to use the platform within their jurisdiction. PICK2WIN services are not intended for minors.
-      </div>
+    <nav class="pol-tabbar" aria-label="PICK2WIN policy pages">
+      <a class="pol-tab active" routerLink="/terms">Terms &amp; Conditions</a>
+      <a class="pol-tab" routerLink="/policy">Privacy Policy</a>
+      <a class="pol-tab" routerLink="/refund">Refund Policy</a>
+    </nav>
 
-      <div class="policy-toc">
-        <div class="policy-toc-title">In this policy</div>
-        <ol>
-          <li><a href="#terms-1" (click)="scrollToSection($event, 'terms-1')">Platform Overview</a></li>
-          <li><a href="#terms-2" (click)="scrollToSection($event, 'terms-2')">Supported Countries</a></li>
-          <li><a href="#terms-3" (click)="scrollToSection($event, 'terms-3')">Account Registration &amp; Eligibility</a></li>
-          <li><a href="#terms-4" (click)="scrollToSection($event, 'terms-4')">Lineouts &amp; UCT Access Flow</a></li>
-          <li><a href="#terms-5" (click)="scrollToSection($event, 'terms-5')">UCT Workflow Screens</a></li>
-          <li><a href="#terms-6" (click)="scrollToSection($event, 'terms-6')">Team Structure Rules</a></li>
-          <li><a href="#terms-7" (click)="scrollToSection($event, 'terms-7')">Team Combination Structure</a></li>
-          <li><a href="#terms-8" (click)="scrollToSection($event, 'terms-8')">UCT Coverage Structure</a></li>
-          <li><a href="#terms-9" (click)="scrollToSection($event, 'terms-9')">One-Time Match Generation Rule</a></li>
-          <li><a href="#terms-10" (click)="scrollToSection($event, 'terms-10')">Coin-Based Access Model</a></li>
-          <li><a href="#terms-11" (click)="scrollToSection($event, 'terms-11')">Coin Packs</a></li>
-          <li><a href="#terms-12" (click)="scrollToSection($event, 'terms-12')">Free First Match</a></li>
-          <li><a href="#terms-13" (click)="scrollToSection($event, 'terms-13')">Payments</a></li>
-          <li><a href="#terms-14" (click)="scrollToSection($event, 'terms-14')">UCT Completion &amp; Match Responsibility</a></li>
-          <li><a href="#terms-15" (click)="scrollToSection($event, 'terms-15')">Platform Availability</a></li>
-          <li><a href="#terms-16" (click)="scrollToSection($event, 'terms-16')">Third-Party Services</a></li>
-          <li><a href="#terms-17" (click)="scrollToSection($event, 'terms-17')">Account Security &amp; Platform Protection</a></li>
-          <li><a href="#terms-18" (click)="scrollToSection($event, 'terms-18')">Prohibited Activities</a></li>
-          <li><a href="#terms-19" (click)="scrollToSection($event, 'terms-19')">Account Deletion &amp; Coin Balance</a></li>
-          <li><a href="#terms-20" (click)="scrollToSection($event, 'terms-20')">Account Termination</a></li>
-          <li><a href="#terms-21" (click)="scrollToSection($event, 'terms-21')">Data Retention</a></li>
-          <li><a href="#terms-22" (click)="scrollToSection($event, 'terms-22')">Intellectual Property</a></li>
-          <li><a href="#terms-23" (click)="scrollToSection($event, 'terms-23')">Force Majeure</a></li>
-          <li><a href="#terms-24" (click)="scrollToSection($event, 'terms-24')">Service Modifications</a></li>
-          <li><a href="#terms-25" (click)="scrollToSection($event, 'terms-25')">Governing Law</a></li>
-          <li><a href="#terms-26" (click)="scrollToSection($event, 'terms-26')">Contact Information</a></li>
-        </ol>
-      </div>
+    <article class="pol-panel active" id="terms">
+      <h3 class="pol-doc-title">Terms &amp; Conditions</h3>
+      <p class="pol-doc-meta">Last updated 8 June 2026 &middot; PICK2WIN Technologies Pvt Ltd</p>
 
-      <h3 id="terms-1">⚽ 1. Platform Overview</h3>
-      <p>PICK2WIN operates strictly as a <strong>football virtual team configuration and workflow assistance platform.</strong></p>
-      <p>The platform is designed to:</p>
-      <ul>
-        <li>⚙️ assist users in structured football virtual team generation</li>
-        <li>⚙️ support wider configuration coverage workflows</li>
-        <li>⚙️ help users configure Captain &amp; Vice-Captain rotation structures</li>
-        <li>⚙️ simplify multi-team configuration workflows after official football lineups</li>
-        <li>⚙️ reduce manual team creation complexity</li>
-      </ul>
-      <p>PICK2WIN operational responsibility is limited only to:</p>
-      <ul>
-        <li>football virtual team configuration workflows</li>
-        <li>structured multi-team generation assistance</li>
-        <li>football lineup workflow support</li>
-      </ul>
-      <div class="callout"><strong>✅ Once football virtual teams are successfully generated and delivered, PICK2WIN operational responsibility for that match workflow is considered completed.</strong></div>
-      <p>Any further usage, modification, replication, submission, participation, or independent user decisions on third-party fantasy football platforms remain fully user-controlled, fully user-managed, and outside PICK2WIN operational responsibility.</p>
-
-      <h3 id="terms-2">🌍 2. Supported Countries</h3>
-      <p>PICK2WIN currently supports users from:</p>
-      <table>
-        <thead><tr><th>Region</th><th>Countries</th></tr></thead>
-        <tbody>
-          <tr><td>🇬🇧 UK &amp; Ireland</td><td>United Kingdom · Ireland</td></tr>
-          <tr><td>🇪🇺 Western Europe</td><td>Germany · France · Spain · Italy · Netherlands · Belgium · Austria · Portugal</td></tr>
-          <tr><td>🇳🇴 Nordic</td><td>Sweden · Norway · Denmark · Finland</td></tr>
-          <tr><td>🇵🇱 Central Europe</td><td>Poland</td></tr>
-          <tr><td>🇺🇸 North America</td><td>United States · Canada</td></tr>
-          <tr><td>🇦🇺 Oceania</td><td>Australia · New Zealand</td></tr>
-        </tbody>
-      </table>
-      <div class="callout"><strong>✅ Total supported countries: 19</strong></div>
-      <p>PICK2WIN may modify supported countries based on operational requirements, compliance requirements, payment provider policies, and infrastructure availability.</p>
-
-      <h3 id="terms-3">👤 3. Account Registration &amp; Eligibility</h3>
-      <p>Users must:</p>
-      <ul>
-        <li>📧 provide valid email address</li>
-        <li>📱 provide valid mobile number</li>
-        <li>🌍 select correct country</li>
-        <li>🔞 be 18 years or older</li>
-        <li>✅ comply with local laws of their jurisdiction</li>
-      </ul>
-      <p>Users are responsible for account confidentiality, login security, and activities performed through their account.</p>
-      <p><strong>🚫 Multiple-Account Abuse.</strong> Creating multiple accounts to abuse free trials, promotions, or coin balances may result in <strong>❌ permanent suspension</strong>.</p>
-
-      <h3 id="terms-4">📑 4. Lineouts &amp; UCT Access Flow</h3>
-      <p>Users can access the <strong>📋 Lineouts Tab</strong>, which displays supported football matches, lineup release status, and UCT workflow availability.</p>
-      <p><strong>⏳ Waiting for lineup.</strong> Before official football lineups are released:</p>
-      <ul>
-        <li>users can view upcoming matches</li>
-        <li>UCT workflow remains unavailable</li>
-        <li>Status shown: ⏳ WAITING FOR LINEUP · 🔒 UCT Locked</li>
-      </ul>
-      <p><strong>▶️ Run UCT availability.</strong> Once official football lineups are released, Playing XI becomes visible, substitute players become visible, and the ▶️ Run UCT button becomes active. When users click <strong>▶️ Run UCT</strong>, the structured UCT workflow sequence begins.</p>
-
-      <h3 id="terms-5">⚙️ 5. UCT Workflow Screens</h3>
-      <p><strong>🧩 UI Screen 1 — Substitute Player Configuration.</strong> Users can view 🟢 Playing XI players and 🔄 substitute players. Users may optionally select <strong>0–3 substitute players</strong>. Substitute player selection is optional and completely user-controlled.</p>
-      <p>Substitute rules:</p>
-      <ul>
-        <li>✅ Mandate YES (M-YES)</li>
-        <li>⚪ NA</li>
-      </ul>
-      <p>Substitute players cannot be ❌ Mandate NO (M-NO).</p>
-      <p><strong>🎯 UI Screen 2 — Mandate Player Configuration.</strong> Mandate configuration is optional, user-controlled, and preference-based.</p>
-      <ul>
-        <li><strong>✅ Mandate YES (M-YES):</strong> select 1–2 players — selected players appear in all generated teams</li>
-        <li><strong>❌ Mandate NO (M-NO):</strong> select 1–2 players — selected players appear in 0 generated teams · 🚫 M-NO players cannot appear in Captain or Vice-Captain roles</li>
-        <li><strong>⚪ NA (No Mandate):</strong> no forced inclusion, no forced exclusion · participation depends on generation logic, combinations, category balancing, and configuration structures</li>
-      </ul>
-      <p><strong>Valid configurations:</strong> ✔ M-YES only · ✔ M-NO only · ✔ M-YES + M-NO · ✔ NA only</p>
-      <p><strong>Invalid configurations:</strong> ❌ M-YES + M-NO + NA together · ❌ NA combined with M-YES or M-NO · ❌ more than 2 players per mandate type</p>
-      <p><strong>👑 UI Screen 3 — Captain &amp; Vice-Captain Configuration.</strong> This screen is <strong>mandatory</strong>. Users must select captaincy mode and select eligible players. Without valid configuration, <strong>🚫 workflow cannot proceed.</strong></p>
-      <p><strong>🔄 CVC Mode:</strong> select 2–4 players; selected players rotate as 👑 Captain and ⭐ Vice-Captain.</p>
-      <p><strong>👑⭐ C &amp; VC Mode:</strong></p>
-      <table>
-        <thead><tr><th>Captains</th><th>Vice-Captains</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>2–5</td></tr>
-          <tr><td>2</td><td>2–4</td></tr>
-          <tr><td>3</td><td>2–3</td></tr>
-          <tr><td>4</td><td>2</td></tr>
-        </tbody>
-      </table>
-      <p>Role definitions: <strong>CVC</strong> — Captain &amp; Vice-Captain rotation · <strong>C</strong> — Captain only · <strong>VC</strong> — Vice-Captain only.</p>
-      <p><strong>🧾 UI Screen 4 — Team Generation &amp; Review.</strong> Users may review configurations, validate mandates, validate captaincy structures, validate category structures, and generate football virtual teams. Generated teams appear under "My Teams", can be previewed, can be downloaded, remain visible until kickoff, and may be auto-pruned after kickoff.</p>
-
-      <h3 id="terms-6">🧱 6. Team Structure Rules</h3>
-      <p>Each generated football virtual team contains:</p>
-      <ul>
-        <li>⚽ 11 total players</li>
-        <li>🔀 players from both real teams</li>
-        <li>⚖️ valid category balancing</li>
-        <li>🧩 structured combinations</li>
-        <li>👑 Captain &amp; Vice-Captain assignments</li>
-      </ul>
-      <p><strong>📊 Category limits:</strong></p>
-      <table>
-        <thead><tr><th>Category</th><th>Min</th><th>Max</th></tr></thead>
-        <tbody>
-          <tr><td>GK</td><td>1</td><td>1</td></tr>
-          <tr><td>DEF</td><td>3</td><td>6</td></tr>
-          <tr><td>MID</td><td>2</td><td>5</td></tr>
-          <tr><td>FWD</td><td>1</td><td>3</td></tr>
-        </tbody>
-      </table>
-
-      <h3 id="terms-7">🔄 7. Team Combination Structure</h3>
-      <p>Generated teams follow combinations including 4-7, 5-6, 6-5, and 7-4. Purpose: wider configuration coverage, balanced combinations, structured distribution, and Captain &amp; Vice-Captain diversification.</p>
-
-      <h3 id="terms-8">🛡️ 8. UCT Coverage Structure</h3>
-      <div class="callout"><strong>PICK2WIN currently generates exactly 20 structured football virtual teams.</strong></div>
-      <p>The minimum 20-team structure is intentionally designed to support broader configuration coverage, structured combinations, Captain &amp; Vice-Captain distribution workflows, and balanced exposure structures.</p>
-      <p>Future versions may optionally support 40, 60, 80, or 100 teams. However: <strong>✅ 20 teams will always remain the minimum fixed generation structure.</strong></p>
-
-      <h3 id="terms-9">🔒 9. One-Time Match Generation Rule</h3>
-      <div class="callout"><strong>Each match supports only one successful UCT generation per user.</strong></div>
-      <p>Once teams are generated:</p>
-      <ul>
-        <li>🪙 coin is permanently consumed</li>
-        <li>🔒 regeneration is blocked</li>
-        <li>🚫 same match cannot be regenerated</li>
-        <li>✅ workflow is considered completed</li>
-      </ul>
-      <p>After successful generation, "Run UCT" becomes disabled, "UCT Generated" status appears, and users are redirected to "My Teams".</p>
-
-      <h3 id="terms-10">🪙 10. Coin-Based Access Model</h3>
-      <div class="callout"><strong>1 Coin = 1 Match UCT Generation</strong></div>
-      <p>Coins are consumed only when UCT successfully generates teams. Coins may be used across supported football leagues, across supported football series, and anytime before expiry.</p>
-
-      <h3 id="terms-11">💳 11. Coin Packs</h3>
-      <table>
-        <thead><tr><th>Pack</th><th style="text-align:center;">Coins</th><th style="text-align:center;">Price (USD)</th></tr></thead>
-        <tbody>
-          <tr><td>Starter</td><td style="text-align:center;">10</td><td style="text-align:center;">$30</td></tr>
-          <tr><td>Basic</td><td style="text-align:center;">25</td><td style="text-align:center;">$70</td></tr>
-          <tr><td>Standard</td><td style="text-align:center;">50</td><td style="text-align:center;">$130</td></tr>
-          <tr><td>Pro</td><td style="text-align:center;">100</td><td style="text-align:center;">$240</td></tr>
-        </tbody>
-      </table>
-      <p><strong>📌 Pack rules.</strong> All packs:</p>
-      <ul>
-        <li>are one-time purchases</li>
-        <li>are non-transferable</li>
-        <li>are non-refundable except verified technical failure</li>
-        <li>do not auto-renew</li>
-      </ul>
-
-      <h3 id="terms-12">🎁 12. Free First Match</h3>
-      <p>New verified users receive <strong>1 free UCT match generation</strong>.</p>
-      <p>Conditions:</p>
-      <ul>
-        <li>email verification required</li>
-        <li>mobile verification required</li>
-        <li>one-time usage only</li>
-      </ul>
-      <p>Multiple-account abuse may result in <strong>❌ permanent suspension</strong>.</p>
-
-      <h3 id="terms-13">💰 13. Payments</h3>
-      <p>Payments are securely processed using third-party payment providers.</p>
-      <p>Current billing currency: <strong>USD ($)</strong></p>
-      <p>PICK2WIN does NOT store full card details, CVV data, or banking passwords.</p>
-
-      <h3 id="terms-14">⚠️ 14. UCT Completion &amp; Match Responsibility</h3>
-      <p>Once UCT successfully generates and delivers football virtual teams:</p>
-      <ul>
-        <li>🪙 associated coin is permanently consumed</li>
-        <li>✅ match workflow is considered completed</li>
-        <li>🔒 PICK2WIN operational responsibility immediately ends</li>
-      </ul>
-      <p>After successful generation, coins cannot be reversed, regeneration is blocked, and refunds are not applicable except verified technical failure before generation.</p>
-      <p>PICK2WIN is not responsible for:</p>
-      <ul>
-        <li>cancelled matches</li>
-        <li>postponed matches</li>
-        <li>abandoned matches</li>
-        <li>interrupted tournaments</li>
-        <li>lineup changes</li>
-        <li>reduced schedules</li>
-        <li>third-party platform actions</li>
-        <li>user decisions after generation</li>
-      </ul>
-      <div class="callout"><strong>✅ Once teams are successfully delivered, PICK2WIN responsibility for that workflow is fully completed.</strong></div>
-
-      <h3 id="terms-15">🌐 15. Platform Availability</h3>
-      <p>Platform access may temporarily be affected by:</p>
-      <ul>
-        <li>server maintenance</li>
-        <li>infrastructure upgrades</li>
-        <li>third-party football data API issues</li>
-        <li>internet/network failures</li>
-        <li>payment provider outages</li>
-      </ul>
-
-      <h3 id="terms-16">🔗 16. Third-Party Services</h3>
-      <p>PICK2WIN may utilize third-party football data APIs, infrastructure providers, payment providers, and analytics services for operational functionality purposes.</p>
-
-      <h3 id="terms-17">🛡️ 17. Account Security &amp; Platform Protection</h3>
-      <p>PICK2WIN reserves the right to:</p>
-      <ul>
-        <li>monitor suspicious activity</li>
-        <li>restrict abusive usage</li>
-        <li>suspend fraudulent accounts</li>
-        <li>block unsupported access attempts</li>
-        <li>review unusual payment activities</li>
-      </ul>
-      <p>where necessary for platform protection, operational stability, payment security, and compliance requirements.</p>
-
-      <h3 id="terms-18">🚫 18. Prohibited Activities</h3>
-      <p>Users must NOT:</p>
-      <ul>
-        <li>create multiple accounts</li>
-        <li>automate usage</li>
-        <li>scrape platform data</li>
-        <li>bypass country restrictions</li>
-        <li>resell generated outputs</li>
-        <li>misuse the platform commercially</li>
-      </ul>
-      <p>Violations may result in suspension, permanent ban, payment restrictions, or legal escalation.</p>
-
-      <h3 id="terms-19">🗑️ 19. Account Deletion &amp; Coin Balance</h3>
-      <p>If a user voluntarily deletes their account:</p>
-      <ul>
-        <li>unused coins are permanently forfeited</li>
-        <li>balances are non-refundable</li>
-        <li>deleted balances cannot be restored</li>
-      </ul>
-      <p>Users should fully utilize purchased coins before requesting account deletion.</p>
-
-      <h3 id="terms-20">⛔ 20. Account Termination</h3>
-      <p>PICK2WIN reserves the right to suspend accounts, terminate access, and block future registrations. Reasons may include fraud, abuse, policy violations, payment disputes, and compliance risks.</p>
-
-      <h3 id="terms-21">🗃️ 21. Data Retention</h3>
-      <p>Generated teams and operational data may be temporarily archived, auto-pruned, or permanently deleted based on storage policies, operational requirements, and compliance obligations.</p>
-
-      <h3 id="terms-22">©️ 22. Intellectual Property</h3>
-      <p>All PICK2WIN platform elements including UCT workflows, UI/UX designs, branding, logos, algorithms, and structured generation systems remain exclusive intellectual property of <strong>PICK2WIN Technologies Private Limited</strong>.</p>
-      <p>Unauthorized copying or commercial reuse is prohibited.</p>
-
-      <h3 id="terms-23">🌪️ 23. Force Majeure</h3>
-      <p>PICK2WIN shall not be responsible for service interruptions caused by natural disasters, wars, cyber attacks, internet outages, government restrictions, sports federation decisions, third-party service failures, or payment infrastructure outages.</p>
-
-      <h3 id="terms-24">🔄 24. Service Modifications</h3>
-      <p>PICK2WIN reserves the right to modify platform features, pricing, coin structures, supported leagues, supported countries, discontinue services, and update policies where required for operational reasons, compliance requirements, infrastructure improvements, or business decisions.</p>
-
-      <h3 id="terms-25">⚖️ 25. Governing Law</h3>
-      <p>These Terms &amp; Conditions are governed under <strong>Indian jurisdiction</strong>. Any disputes shall be handled under applicable Indian laws and courts.</p>
-
-      <h3 id="terms-26">📩 26. Contact Information</h3>
-      <p><strong>PICK2WIN Technologies Private Limited</strong><br>📧 <a href="mailto:support@pick2win.io">support@pick2win.io</a></p>
-
-      <div class="back-top"><a href="#top" (click)="scrollToTop($event)">Back to top</a></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 1</span>Acceptance &amp; eligibility</h4><p>By creating a PICK2WIN account you confirm you are <strong>18 years or older</strong>, legally permitted to use the platform in your jurisdiction, and that you accept these Terms, the Privacy Policy and the Refund Policy. PICK2WIN is not intended for minors.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 2</span>What PICK2WIN is &mdash; and is not</h4><p>PICK2WIN is a <strong>virtual team-configuration tool</strong>. Its UCT engine turns your own inputs into 20 structured teams per match. PICK2WIN is <strong>not</strong> a betting, gambling or real-money gaming service, does <strong>not</strong> predict match outcomes, does <strong>not</strong> guarantee any result, and pays out no winnings. You decide how to use the generated teams elsewhere.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 3</span>Accounts &amp; verification</h4><p>Each user may hold <strong>one account only</strong>. Both a mobile number and an email address must be verified; disposable email and VoIP / virtual numbers are blocked. Creating multiple accounts &mdash; including to re-claim the free first match &mdash; leads to <strong>permanent ban</strong> and forfeiture of any balance.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 4</span>Coins &amp; generation</h4><p>One coin equals one match UCT generation. Every verified user receives <strong>one free first match</strong>. Once a generation completes, the 20 teams are <strong>final</strong> &mdash; they cannot be edited, regenerated or undone, and the match locks. Coin packs are one-time purchases with no subscription or auto-renewal.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 5</span>Acceptable use</h4><p>You agree not to scrape, automate, resell, or commercially redistribute the service or its output, not to attempt to bypass verification or rate limits, and not to interfere with the platform&rsquo;s operation. We may suspend or terminate accounts that breach these terms.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 6</span>Intellectual property</h4><p>The PICK2WIN name, UCT engine, interface and content are owned by PICK2WIN Technologies Pvt Ltd. You retain ownership of the inputs you provide; you receive a personal, non-transferable right to use the teams generated for you.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 7</span>Disclaimers &amp; limitation of liability</h4><p>The service is provided &ldquo;as is&rdquo;. Football data is sourced from third-party providers and may change; PICK2WIN is not liable for lineup changes, cancellations, third-party platform actions, or how you use the generated teams. To the maximum extent permitted by law, our aggregate liability is limited to the amount you paid in the preceding 12 months.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 8</span>Changes to these terms</h4><p>We may update these Terms. Coins you have already purchased remain usable under the terms in force at the time of purchase; future changes never retroactively shorten the validity of coins you already hold or change a pack you already paid for.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 9</span>Governing law</h4><p>These Terms are governed by the laws of India, with exclusive jurisdiction of the courts of Bengaluru, Karnataka.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 10</span>Contact</h4><p>Questions about these Terms? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a>.</p></div>
     </article>
-    </div>
-  </section>
+
+    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd &middot; All rights reserved &middot; support@pick2win.io</div>
+  </div>
 </main>
+
 <app-footer></app-footer>

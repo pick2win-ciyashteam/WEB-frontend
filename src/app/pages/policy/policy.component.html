@@ -1,144 +1,38 @@
-﻿<app-header></app-header>
-<main class="legal-document-page" id="top">
-  <section class="legal-hero">
-    <div class="wrap">
-      <div class="hero-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">shield_lock</span> LEGAL · <strong>PRIVACY DOCUMENT</strong></div>
-      <h1>Privacy <em>Policy.</em></h1>
-      <p class="hero-lead">How PICK2WIN collects, uses, protects, and deletes user data for account verification, payments, fraud prevention, support, and platform security.</p>
-      <div class="hero-meta">
-        <span>Version <strong>1.0</strong></span>
-        <span>Effective <strong>10 June 2026</strong></span>
-        <span>Jurisdiction <strong>India · Global</strong></span>
-      </div>
+<app-header></app-header>
+
+<main class="pol-page">
+  <div class="pol-container">
+    <div class="pol-top">
+      <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">description</span>
+      <span class="pol-eyebrow">PICK2WIN &middot; Legal</span>
     </div>
-  </section>
-  <section class="wrap legal-shell">
-    <aside class="legal-sidebar" aria-label="Legal pages">
-      <div class="sidebar-title">3 Policies</div>
-      <nav class="sidebar-nav">
-        <a routerLink="/terms"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">contract</span><span class="sidebar-nav-label">Terms &amp; Conditions<br><span class="sidebar-nav-num">POLICY 1 OF 3</span></span></a>
-        <a routerLink="/policy" class="active"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">lock</span><span class="sidebar-nav-label">Privacy Policy<br><span class="sidebar-nav-num">POLICY 2 OF 3</span></span></a>
-        <a routerLink="/refund"><span class="material-symbols-outlined sidebar-icon" aria-hidden="true">payments</span><span class="sidebar-nav-label">Refund Policy<br><span class="sidebar-nav-num">POLICY 3 OF 3</span></span></a>
-      </nav>
-      <div class="sidebar-foot">
-        Questions on any policy? Email<br>
-        <a href="mailto:support@pick2win.io">support@pick2win.io</a><br><br>
-        Response within 48 hours.
-      </div>
-    </aside>
-    <div class="policies">
-<article class="policy" id="privacy">
-      <div class="policy-head">
-        <span class="policy-num">🔒 POLICY <strong>2 OF 3</strong> · PRIVACY</span>
-        <h2 class="policy-title">Privacy <em>Policy.</em></h2>
-        <div class="policy-meta">
-          <span>Version <strong>1.0</strong></span>
-          <span>Effective <strong>10 June 2026</strong></span>
-          <span>8 sections · <strong>18+ only · Stripe payment processing</strong></span>
-        </div>
-      </div>
+    <h1 class="pol-mast">PICK2WIN <em>policies</em></h1>
+    <p class="pol-intro">The terms that govern your use of PICK2WIN. <a routerLink="/" class="pol-back">&larr; Back to app</a></p>
 
-      <div class="policy-toc">
-        <div class="policy-toc-title">In this policy</div>
-        <ol>
-          <li><a href="#privacy-1" (click)="scrollToSection($event, 'privacy-1')">Information Collected</a></li>
-          <li><a href="#privacy-2" (click)="scrollToSection($event, 'privacy-2')">Payment &amp; Data Security</a></li>
-          <li><a href="#privacy-3" (click)="scrollToSection($event, 'privacy-3')">Why Information Is Used</a></li>
-          <li><a href="#privacy-4" (click)="scrollToSection($event, 'privacy-4')">Third-Party Services</a></li>
-          <li><a href="#privacy-5" (click)="scrollToSection($event, 'privacy-5')">Data Sharing</a></li>
-          <li><a href="#privacy-6" (click)="scrollToSection($event, 'privacy-6')">User Rights</a></li>
-          <li><a href="#privacy-7" (click)="scrollToSection($event, 'privacy-7')">Account Deletion Policy</a></li>
-          <li><a href="#privacy-8" (click)="scrollToSection($event, 'privacy-8')">Age Restriction</a></li>
-        </ol>
-      </div>
+    <nav class="pol-tabbar" aria-label="PICK2WIN policy pages">
+      <a class="pol-tab" routerLink="/terms">Terms &amp; Conditions</a>
+      <a class="pol-tab active" routerLink="/policy">Privacy Policy</a>
+      <a class="pol-tab" routerLink="/refund">Refund Policy</a>
+    </nav>
 
-      <h3 id="privacy-1">📖 1. Information Collected</h3>
-      <p>PICK2WIN may collect:</p>
-      <ul>
-        <li>👤 full name</li>
-        <li>📧 email address</li>
-        <li>📱 mobile number</li>
-        <li>🌍 country</li>
-        <li>🌐 IP address</li>
-        <li>💳 payment references</li>
-        <li>📊 usage history</li>
-      </ul>
-      <p>Payments are securely processed by <strong>Stripe</strong>.</p>
+    <article class="pol-panel active" id="privacy">
+      <h3 class="pol-doc-title">Privacy Policy</h3>
+      <p class="pol-doc-meta">Last updated 8 June 2026 &middot; PICK2WIN Technologies Pvt Ltd</p>
 
-      <h3 id="privacy-2">🔒 2. Payment &amp; Data Security</h3>
-      <p>PICK2WIN does NOT store:</p>
-      <ul>
-        <li>full card details</li>
-        <li>CVV numbers</li>
-        <li>banking passwords</li>
-      </ul>
-      <p>PICK2WIN uses:</p>
-      <ul>
-        <li>encrypted HTTPS connections</li>
-        <li>OTP verification</li>
-        <li>secure infrastructure</li>
-      </ul>
-      <p>to help protect user information.</p>
-
-      <h3 id="privacy-3">⚙️ 3. Why Information Is Used</h3>
-      <p>Information may be used for:</p>
-      <ul>
-        <li>account verification</li>
-        <li>OTP validation</li>
-        <li>payment processing</li>
-        <li>fraud prevention</li>
-        <li>customer support</li>
-        <li>platform security</li>
-        <li>operational support</li>
-      </ul>
-
-      <h3 id="privacy-4">🔗 4. Third-Party Services</h3>
-      <p>PICK2WIN may use trusted third-party providers for:</p>
-      <ul>
-        <li>payment processing</li>
-        <li>hosting infrastructure</li>
-        <li>OTP delivery</li>
-        <li>email delivery</li>
-      </ul>
-      <p>These providers may process limited operational data required for service functionality.</p>
-
-      <h3 id="privacy-5">📤 5. Data Sharing</h3>
-      <div class="callout"><strong>PICK2WIN does NOT sell user data.</strong></div>
-      <p>Information may be shared only with:</p>
-      <ul>
-        <li>Stripe</li>
-        <li>infrastructure providers</li>
-        <li>OTP and email providers</li>
-      </ul>
-      <p>for operational purposes only.</p>
-
-      <h3 id="privacy-6">👤 6. User Rights</h3>
-      <p>Users may request:</p>
-      <ul>
-        <li>account deletion</li>
-        <li>data correction</li>
-        <li>support assistance</li>
-      </ul>
-      <p>through 📧 <a href="mailto:support@pick2win.io">support@pick2win.io</a>.</p>
-
-      <h3 id="privacy-7">🗑️ 7. Account Deletion Policy</h3>
-      <p>If a user voluntarily deletes their PICK2WIN account:</p>
-      <ul>
-        <li>unused coins will NOT be refunded</li>
-        <li>deleted balances cannot be restored</li>
-        <li>remaining balances are permanently removed</li>
-      </ul>
-      <p>Users are advised to fully utilize purchased coins and complete intended UCT usage before requesting account deletion.</p>
-
-      <h3 id="privacy-8">🔞 8. Age Restriction</h3>
-      <div class="callout"><strong>PICK2WIN services are strictly intended only for users aged 18 years or older.</strong></div>
-
-      <h3>📩 Support</h3>
-      <p><strong>PICK2WIN Technologies Private Limited</strong><br>📧 <a href="mailto:support@pick2win.io">support@pick2win.io</a></p>
-
-      <div class="back-top"><a href="#top" (click)="scrollToTop($event)">Back to top</a></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 1</span>What we collect</h4><p>Account details you provide: full name, date of birth, country of residence, mobile number, email address and a securely hashed password. We also record usage needed to run the service (matches you configure, coin balance and purchase history) and limited technical data (device / IP signals) for fraud prevention.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 2</span>Why we collect it</h4><p>To verify eligibility (18+, one account per user), prevent fraud and multi-accounting, deliver UCT generations, process payments, and provide support. We do not sell your personal data.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 3</span>Verification data</h4><p>One-time passcodes are sent by SMS and email to confirm ownership of your number and address. Device and IP signals are used only for fraud and abuse detection.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 4</span>Payments</h4><p>All payments are processed by <strong>Stripe</strong>. We never see or store full card numbers or CVV &mdash; that data goes directly to Stripe under PCI-DSS. We retain only the minimum record (pack, amount, date, reference) needed for billing and refunds.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 5</span>Sharing with processors</h4><p>We share the minimum data required with service providers acting on our behalf: Stripe (payments), our SMS / email provider (verification), and our football-data provider (lineups). These providers are bound by contract and may not use your data for their own purposes.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 6</span>Cookies &amp; local storage</h4><p>We use essential cookies / local storage to keep you signed in and remember in-session state. We do not run third-party advertising trackers.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 7</span>Data retention &amp; account deletion</h4><p>We keep your data while your account is active. If you delete your account, your personal data is <strong>erased</strong> and the account cannot be reclaimed; limited transaction records may be retained where required by law (e.g. tax / anti-fraud). Deletion is permanent and any unused coins are forfeited (see Refund Policy &sect;5).</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 8</span>Your rights</h4><p>Subject to applicable law, you may request access to, correction of, export of, or erasure of your personal data. Contact us to exercise these rights.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 9</span>Security</h4><p>We use encryption in transit, hashed passwords, and access controls. No system is perfectly secure, but we work to protect your data and to notify you of material incidents where required.</p></div>
+      <div class="pol-section"><h4><span class="sec-num">&rarr; 10</span>Contact</h4><p>Privacy questions or requests? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a>.</p></div>
     </article>
-    </div>
-  </section>
+
+    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd &middot; All rights reserved &middot; support@pick2win.io</div>
+  </div>
 </main>
+
 <app-footer></app-footer>

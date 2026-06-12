@@ -725,6 +725,14 @@ downloadCSV(rows: any[], fileName: string) {
     return this.matches.filter(match => this.canAccessTeams(match)).length;
   }
 
+  pastMatchesCount(): number {
+    return this.matches.filter(match => !this.canAccessTeams(match)).length;
+  }
+
+  totalMatchesCount(): number {
+    return this.matches.length;
+  }
+
   totalGeneratedTeams(): number {
     return this.matches.reduce((sum, match) => sum + Number(match.teamsGenerated || 0), 0);
   }

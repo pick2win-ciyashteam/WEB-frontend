@@ -27,7 +27,7 @@
         <ul>
           <li><a routerLink="/uctinfo">UCT Engine</a></li>
           <li *ngIf="loggedIn$ | async"><a routerLink="/lineouts">Lineouts</a></li>
-          <li *ngIf="loggedIn$ | async"><a routerLink="/user/profile">My Teams</a></li>
+          <li *ngIf="loggedIn$ | async"><a routerLink="/user/profile" [queryParams]="{ tab: 'teams' }">My Teams</a></li>
           <li><a routerLink="/pricing">Pricing</a></li>
         </ul>
       </div>
