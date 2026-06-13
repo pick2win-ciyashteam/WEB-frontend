@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://pick2win.io/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://pick2win.io/uctguide</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pick2win.io/lineouts</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pick2win.io/pricing</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pick2win.io/about</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://pick2win.io/trust</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://pick2win.io/faq</loc>
+    <priority>0.7</priority>
+  </url>
+
+    <url>
+    <loc>https://pick2win.io/terms</loc>
+    <priority>0.6</priority>
+  </url>
+
+    <url>
+    <loc>https://pick2win.io/policy</loc>
+    <priority>0.6</priority>
+  </url>
+
+    <url>
+    <loc>https://pick2win.io/refund</loc>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>

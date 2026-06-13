@@ -25,7 +25,7 @@
       <div>
         <h5>Product</h5>
         <ul>
-          <li><a routerLink="/uctinfo">UCT Engine</a></li>
+          <li><a routerLink="/uctguide">UCT Engine</a></li>
           <li *ngIf="loggedIn$ | async"><a routerLink="/lineouts">Lineouts</a></li>
           <li *ngIf="loggedIn$ | async"><a routerLink="/user/profile" [queryParams]="{ tab: 'teams' }">My Teams</a></li>
           <li><a routerLink="/pricing">Pricing</a></li>
@@ -54,39 +54,43 @@
     </div>
 
     <div class="legal-bar">
-  
-      <span>© 2026 PICK2WIN TECHNOLOGIES PVT LTD - ALL RIGHTS RESERVED</span>
-     <div class="payment-security">
+      <span class="legal-copy">&copy; 2026 PICK2WIN TECHNOLOGIES PVT LTD - ALL RIGHTS RESERVED</span>
+
+      <div class="payment-security" aria-label="Payment and site security">
         <span class="security-item stripe">
-          <i class="fa-brands fa-stripe"></i>
+          <i class="fa-brands fa-stripe" aria-hidden="true"></i>
           Stripe Secure
         </span>
 
         <span class="security-item ssl">
-          <i class="fa-solid fa-lock"></i>
+          <span class="material-symbols-outlined security-symbol" aria-hidden="true">lock</span>
           SSL Encrypted
         </span>
 
-        <span class="security-item">
-          <i class="fa-brands fa-cc-visa"></i>
+        <span class="security-item site-lock" aria-label="Domain protected with SiteLock security">
+          <span class="material-symbols-outlined security-symbol" aria-hidden="true">verified_user</span>
+          SiteLock
         </span>
 
-        <span class="security-item">
-          <i class="fa-brands fa-cc-mastercard"></i>
+        <span class="security-item payment-card" aria-label="Visa accepted">
+          <i class="fa-brands fa-cc-visa" aria-hidden="true"></i>
         </span>
 
-        <span class="security-item">
-          <i class="fa-brands fa-cc-amex"></i>
+        <span class="security-item payment-card" aria-label="Mastercard accepted">
+          <i class="fa-brands fa-cc-mastercard" aria-hidden="true"></i>
         </span>
 
-        <span class="security-item">
-          <i class="fa-brands fa-cc-discover"></i>
+        <span class="security-item payment-card" aria-label="American Express accepted">
+          <i class="fa-brands fa-cc-amex" aria-hidden="true"></i>
         </span>
 
-        <span class="security-item more">
+        <span class="security-item payment-card" aria-label="Discover accepted">
+          <i class="fa-brands fa-cc-discover" aria-hidden="true"></i>
+        </span>
+
+        <!-- <span class="security-item more">
           + More
-        </span>
-
+        </span> -->
       </div>
     </div>
   </div>

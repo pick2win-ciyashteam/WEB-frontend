@@ -24,6 +24,8 @@ export class PricingComponent implements OnInit, OnDestroy {
   creditingCoins = false;
   purchasingPlanId: number | null = null;
   plans: SubscriptionPlan[] = [];
+  generatedStateLoaded = false;
+  hasGeneratedAnyUct = false;
   private stripePublishableKey = '';
 
   stripe: any;
@@ -50,6 +52,9 @@ paymentSucceeded = false;
 
     if (this.authService.isLoggedIn()) {
       this.profileService.loadProfile(true).subscribe();
+      this.loadGeneratedMatchState();
+    } else {
+      this.generatedStateLoaded = true;
     }
 
     this.api.getSubscriptionPlans().subscribe({
@@ -94,7 +99,10 @@ paymentSucceeded = false;
   }
 
   showFreeTrialBanner(profile: UserProfile | null): boolean {
-    return Number(profile?.free_trial_used) === 0
+    return this.authService.isLoggedIn()
+      && this.generatedStateLoaded
+      && !this.hasGeneratedAnyUct
+      && Number(profile?.free_trial_used) === 0
       && String(profile?.free_trial_status || '').toLowerCase() === 'available';
   }
 
@@ -351,6 +359,26 @@ closeCheckout(): void {
           err?.error?.message ||
           err?.error?.error ||
           'Payment succeeded, but coins could not be added. Please contact support.';
+      }
+    });
+  }
+
+  private loadGeneratedMatchState(): void {
+    this.generatedStateLoaded = false;
+
+    this.api.GetMyTeams().subscribe({
+      next: (res: any) => {
+        const data = Array.isArray(res?.data) ? res.data : [];
+
+        this.hasGeneratedAnyUct = data.some((match: any) => {
+          const teamsGenerated = Number(match?.teams_generated || match?.total_teams || 0);
+          return teamsGenerated > 0 || Boolean(match?.generated_at);
+        });
+        this.generatedStateLoaded = true;
+      },
+      error: () => {
+        this.hasGeneratedAnyUct = false;
+        this.generatedStateLoaded = true;
       }
     });
   }

@@ -99,14 +99,14 @@
       <p class="coin-policy-foot">UCT treats every match the same way. The engine uses the exact same logic for every fixture: same structure, same constraints, same 20 structured teams.</p>
     </div>
 
-    <div class="free-banner reveal" *ngIf="!(loggedIn$ | async) || showFreeTrialBanner(profile$ | async)">
+    <div class="free-banner reveal" *ngIf="showFreeTrialBanner(profile$ | async)">
       <div class="free-banner-icon">
         <span class="material-symbols-outlined" aria-hidden="true">verified</span>
       </div>
       <div class="free-banner-body">
-        <div class="free-banner-eyebrow">FREE FIRST MATCH - EVERY NEW USER</div>
-        <div class="free-banner-h">Sign up. Verify mobile + email. <em>Your first UCT is free.</em></div>
-        <div class="free-banner-sub">Every new PICK2WIN user gets <b>1 free match UCT generation</b> - no card required upfront. Experience the workflow, test structured team generation, see the time-saving benefit. Free means truly free - one per verified user, ever. From your second match onwards, choose any coin pack below. Multi-account abuse leads to permanent ban.</div>
+        <div class="free-banner-eyebrow">FREE FIRST MATCH - READY TO USE</div>
+        <div class="free-banner-h">Your account is verified. <em>Your first UCT is free.</em></div>
+        <div class="free-banner-sub">You have <b>1 free match UCT generation</b> available - no card required upfront. Experience the workflow, test structured team generation, and see the time-saving benefit. Free means truly free - one per verified user, ever. From your second match onwards, choose any coin pack below. Multi-account abuse leads to permanent ban.</div>
       </div>
       <button class="free-banner-cta" type="button" (click)="claimFreeMatch()">
         Claim Free Match

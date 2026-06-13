@@ -19,7 +19,7 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'uctinfo',
+    path: 'uctguide',
     component: UctinfoComponent
   },
     {

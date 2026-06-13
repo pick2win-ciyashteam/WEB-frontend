@@ -1048,3 +1048,1851 @@ Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackCompo
 
 
 
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\c72dd32f5158df925758c08806bc3f885ed4acd17e35b3fe0d3acf0f46611fc7.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\b79f2d87135e30943adee919468ea3bfb3537272192b03a50a8842d0a0e76c34.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\a3562c4243ce6aa9dfc0f5a2144ab09bbc890dc2dfd403ef88350866a8efd3ea.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\babf7200fb0f29951539eb761c8caa35fa0934cc2ac22f7471793fb158d926ad.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\c0b1b06530819e01e8344e8c836973effbf39fd4b28bd353a99adf505fb1e4ce.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\bbac7d0318fe0669d8be61ff604a0ecbd13ad12b050c40d84bb2e8ebd91a3339.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\f32fe837098172f48dc1a9b768a4ae91c3979a8c3d1e9a11fb102c8cdd6db5d5.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\5bc67ae2ef34801cde3ec61b9553cf35a116067d9333f7f67a08a4907770a124.json'
+
+./src/app/shared/header/header.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\c3953c711d82ce69142ad6904e8190400f3df5625cbba672517925a63a663e6a.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\c097a96dc5c682a1d76cfb8816584d93665109422c05c932ad36193b35996338.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\cc3effdd85cae84d67228b4c52e1098308768a77251967d841d40ffd96fa10c9.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\be176347509ac82000a1841b8f16bf5a78c1d61b937f038d99330620fb530898.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/my-teams/my-teams.component.html:6:55 - error NG5002: Unexpected closing tag "b". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags
+
+6         <b>{{ activeMatchesCount() }}</b>&nbsp;active </b>&nbsp;teams
+                                                        ~~~~
+
+  src/app/user/my-teams/my-teams.component.ts:74:16
+    74   templateUrl: './my-teams.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component MyTeamsComponent.
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\cc693055ee58022add00e29e7acc49fa752d9e55aab7d87d2c980933079e1f8c.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\ee05c88c4dacb41b8f37c9ea00ba6e2a2c7dd12d7ba58e103afdd500df8e627f.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+Error: src/app/user/user.module.ts:19:5 - error NG6001: The class 'FeedbackComponent' is listed in the declarations of the NgModule 'UserModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     FeedbackComponent,
+       ~~~~~~~~~~~~~~~~~
+
+  src/app/user/feedback/feedback.component.ts:18:14
+    18 export class FeedbackComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~
+    'FeedbackComponent' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\f758dd1a0a163cf3ecd1d7069c1852a0dda88daea3cb0f2282e0f9251e30ecc4.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\f1025048337b0eb0277e20943f12c7348eb101b0a5c43a32a2c54aa25b164bf1.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\f426bfd57f02c42d9a2beb1ab9d3cd42f5b6b6cf884f616721ee3c04a5d04479.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\db56ec04f50e5037c4b28623bdcabc99e7a38cdd589e5b2100a69610a4b7b73c.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/user/my-teams/my-teams.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\86f322941663d6b10745a1b161eab3e8aa60b2f6defdf0665ad3b2ebad16823b.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains errors, which may affect components that depend on this NgModule.
+
+36     LineoutsModule
+       ~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/core/services/api.service.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\f66a4e55c68196a2d62853157d5fcf0aaef25a96905b7c3ddb4bbfb45ef1809c.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/core/services/api.service.ts:18:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+18     return this.http.post(`${this.BASE}/user/user-auth/signup`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:22:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+22     return this.http.post(`${this.BASE}/user/user-auth/verify-mobile-otp`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:26:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+26     return this.http.post(`${this.BASE}/user/user-auth/verify-email-otp`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:30:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+30     return this.http.post(`${this.BASE}/user/user-auth/resend-otp`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:34:64 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+34     return this.http.get<ApiDataResponse<UserProfile>>(`${this.BASE}/user/user-auth/profile`);
+                                                                  ~~~~
+
+
+Error: src/app/core/services/api.service.ts:38:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+38     return this.http.post(`${this.BASE}/user/user-auth/delete-account`, {});
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:42:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+42     return this.http.post(`${this.BASE}/user/user-auth/confirm-delete-account`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:46:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+46     return this.http.post(`${this.BASE}/user/user-auth/change-mobile`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:50:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+50     return this.http.post(`${this.BASE}/user/user-auth/verify-mobile-change`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:54:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+54     return this.http.post(`${this.BASE}/user/user-auth/change-email`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:58:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+58     return this.http.post(`${this.BASE}/user/user-auth/verify-email-change`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:62:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+62     return this.http.post(`${this.BASE}/user/user-auth/forgot-password`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:66:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+66     return this.http.post(`${this.BASE}/user/user-auth/reset-password`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:70:34 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+70     return this.http.get(`${this.BASE}/admin/feedback/feedback-get`);
+                                    ~~~~
+
+
+Error: src/app/core/services/api.service.ts:74:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+74     return this.http.post(`${this.BASE}/admin/feedback/user-post`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:78:69 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+78     return this.http.get<ApiListResponse<FeedbackQuestion>>(`${this.BASE}/admin/feedback/user-questions`);
+                                                                       ~~~~
+
+
+Error: src/app/core/services/api.service.ts:82:35 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+82     return this.http.post(`${this.BASE}/admin/feedback/user-answers`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:86:60 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+86     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/countries/get-all`);
+                                                              ~~~~
+
+
+Error: src/app/core/services/api.service.ts:90:60 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+90     return this.http.get<ApiDataResponse<Country>>(`${this.BASE}/user/countries/${encodeURIComponent(name)}`);
+                                                              ~~~~
+
+
+Error: src/app/core/services/api.service.ts:94:69 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+94     return this.http.get<ApiListResponse<SubscriptionPlan>>(`${this.BASE}/user/plans`);
+                                                                       ~~~~
+
+
+Error: src/app/core/services/api.service.ts:99:54 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+99   return this.http.get<StripeConfigResponse>(`${this.BASE}/user/deposite/stripe/config`);
+                                                        ~~~~
+
+
+Error: src/app/core/services/api.service.ts:103:51 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+103   return this.http.post<BuyCoinsResponse>(`${this.BASE}/user/deposite/buy-coins`, data);
+                                                      ~~~~
+
+
+Error: src/app/core/services/api.service.ts:107:59 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+107     return this.http.get<ApiListResponse<Banner>>(`${this.BASE}/user/banner`);
+                                                              ~~~~
+
+
+Error: src/app/core/services/api.service.ts:111:59 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+111     return this.http.get<ApiListResponse<Series>>(`${this.BASE}/user/series`);
+                                                              ~~~~
+
+
+Error: src/app/core/services/api.service.ts:115:56 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+115     return this.http.get<TodayLineupsResponse>(`${this.BASE}/user/lineup/today-lineups`);
+                                                           ~~~~
+
+
+Error: src/app/core/services/api.service.ts:119:64 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+119     return this.http.get<ApiDataResponse<MatchDetail>>(`${this.BASE}/user/matches/${matchId}`);
+                                                                   ~~~~
+
+
+Error: src/app/core/services/api.service.ts:124:15 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+124       `${this.BASE}/user/teams/generate-teams`,
+                  ~~~~
+
+
+Error: src/app/core/services/api.service.ts:131:60 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+131     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/teams/generate-matches`);
+                                                               ~~~~
+
+
+Error: src/app/core/services/api.service.ts:135:34 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+135     return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}`);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:139:34 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+139     return this.http.get(`${this.BASE}/user/teams/team-players/${id}`);
+                                     ~~~~
+
+
+Error: src/app/core/services/api.service.ts:143:60 - error TS2339: Property 'BASE' does not exist on type 'ApiService'.
+
+143     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/deposite/my-transactions`);
+                                                               ~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/core/services/api.service.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\14ba598b4b02bc1616e265790ee378f5a801f8d41a4204f3b3514b14a7b421e7.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/core/services/api.service.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\ae88d75a22bc95bc7fd0502d770b340c551896d85c61191cc7e43c5dbbda9b36.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/core/services/admin.service.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\63e08f13a8fde13edd4ecc2f08c63253edeaa3426d9ead2ac6157fc2263e7506.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/core/services/admin.service.ts:16:35 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+16     return this.http.post(`${this.BASE}/admin/admin-auth/login`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:20:35 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+20     return this.http.post(`${this.BASE}/admin/sportmonks/fixtures`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:24:35 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+24     return this.http.post(`${this.BASE}/admin/sportmonks/matches/toggle`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:28:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+28     return this.http.get(`${this.BASE}/admin/sportmonks/series/active`);
+                                    ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:32:35 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+32     return this.http.post(`${this.BASE}/admin/country/create`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:36:37 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+36     return this.http.delete(`${this.BASE}/admin/country/${id}`);
+                                       ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:40:36 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+40     return this.http.patch(`${this.BASE}/admin/country/${id}/toggle`, {});
+                                      ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:44:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+44     return this.http.get(`${this.BASE}/admin/country/get`);
+                                    ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:48:35 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+48     return this.http.post(`${this.BASE}/admin/banners`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:52:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+52     return this.http.get(`${this.BASE}/admin/banners`);
+                                    ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:56:36 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+56     return this.http.patch(`${this.BASE}/admin/banners/${id}`, data);
+                                      ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:60:37 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+60     return this.http.delete(`${this.BASE}/admin/banners/${id}`);
+                                       ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:64:35 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+64     return this.http.post(`${this.BASE}/admin/subscription`, data);
+                                     ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:68:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+68     return this.http.get(`${this.BASE}/admin/subscription`);
+                                    ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:72:36 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+72     return this.http.patch(`${this.BASE}/admin/subscription/${id}`, data);
+                                      ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:76:37 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+76     return this.http.delete(`${this.BASE}/admin/subscription/${id}`);
+                                       ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:80:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+80     return this.http.get(`${this.BASE}/admin/admin-reports/overview`);
+                                    ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:84:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+84     return this.http.get(`${this.BASE}/admin/admin-reports/geography`);
+                                    ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:88:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+88     return this.http.get(`${this.BASE}/admin/admin-reports/pack-buyers`);
+                                    ~~~~
+
+
+Error: src/app/core/services/admin.service.ts:92:34 - error TS2339: Property 'BASE' does not exist on type 'AdminService'.
+
+92     return this.http.get(`${this.BASE}/admin/admin-reports/activity-dormancy`);
+                                    ~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/core/services/admin.service.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\a11b48c63c0ca8367def66e112a7ae76b21f5c30faf4c00e864503420d0a0aa3.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/terms/terms.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\9e04582c1db8415d7e6caf18b245bb63655dc93ed5e5d2646622dd0019f4a300.json'
+
+Error: src/app/pages/terms/terms.component.ts:5:16 - error NG2008: Could not find template file './terms.component.html'.
+
+5   templateUrl: './terms.component.html',
+                 ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/pages/policy/policy.component.ts:5:16 - error NG2008: Could not find template file './policy.component.html'.
+
+5   templateUrl: './policy.component.html',
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/pages/terms/terms.component.ts:5:16 - error NG2008: Could not find template file './terms.component.html'.
+
+5   templateUrl: './terms.component.html',
+                 ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/refund/refund.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\3275fe23a4c9d6f0b10b593a24e54a6d1e8d60ea85ad5f8ed5a19eff105bc273.json'
+
+./src/app/pages/terms/terms.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\f03e8463525646f9043db576230dc451033943ab24fa08261f73294d556e1bfe.json'
+
+Error: src/app/pages/policy/policy.component.ts:5:16 - error NG2008: Could not find template file './policy.component.html'.
+
+5   templateUrl: './policy.component.html',
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/pages/refund/refund.component.ts:5:16 - error NG2008: Could not find template file './refund.component.html'.
+
+5   templateUrl: './refund.component.html',
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/policy/policy.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\7196c9e601e0db7082bcea867015b868ebad668412db31ac9312261e8619d57b.json'
+
+./src/app/pages/terms/terms.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\f7adee1e2aea00812ad1d4f43777bb61229c33efec2f69926a8f744dbd67254b.json'
+
+./src/app/pages/policy/policy.component.css?ngResource - Error: Module build failed (from ./node_modules/css-loader/dist/cjs.js):
+Error: Can't resolve '../terms/terms.component.css' in 'D:\ciyash\pick2winWeb\src\app\pages\policy'
+
+Error: Module not found: Error: Can't resolve 'D:/ciyash/pick2winWeb/src/app/pages/terms/terms.component.css?ngResource' in 'D:\ciyash\pick2winWeb'
+
+Error: src/app/pages/refund/refund.component.ts:5:16 - error NG2008: Could not find template file './refund.component.html'.
+
+5   templateUrl: './refund.component.html',
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: The loader "D:/ciyash/pick2winWeb/src/app/pages/terms/terms.component.css" didn't return a string.
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/policy/policy.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\034fb2b11f5b7ef584e7f75900f25ee7e957b38ea5c8805d703419e0991a2342.json'
+
+./src/app/pages/terms/terms.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\4fe2f10cbd29a7aff879bebd446ca6136dd71c0d05033aff125ac811d8145350.json'
+
+Error: src/app/pages/refund/refund.component.ts:5:16 - error NG2008: Could not find template file './refund.component.html'.
+
+5   templateUrl: './refund.component.html',
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/terms/terms.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\b1418af065411a0963851329a1b3cbe4f4047389208d9beb28ad1fa126203150.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/policy/policy.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\7ac5105326e47c47c0e0ec5ce8a48a17c2f6b37047982fcafd157d90a4932667.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/refund/refund.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\a1fd7b1b7ec4771553389c8c2545fc29e61a3dbaeef66fa1c0b68ddec31b2c1c.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\102981b2cbfa323c6a25bbc7d5c29f43997bbabf58f65761ab3a56eccaa388c4.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\8ed85a77e21694dd600f2607af576799f44283caa874b8884775ad06632d4b7b.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\9eb1d28d3f8bafde6e1a315a47d1cc2995e25ca998ea3f336939c38d28c4fcbd.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\c992e8362e82e4a844bba49bf543bf3b1f3c5dc9076ce5f18cde68b194b32b31.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\cfa0824652d4515f758bf743807aac33ad247a43a96c7761fd907d044568b25e.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\0d6779f0d2cb3d16c4304b41b9f82914d7f02e530c1b1e5f07729b793217e79e.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\d9a478ab790591210a41ba2b43164633a9bc87c27b840b1d1b0b35916978bf50.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\338c24131093b59640df5d907bd527f568b960618f709d5383f57f6fbbf6d514.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\cdb6a3b3bcd37c0bad57c414af5c0b17d590b2d9aa11dede510965dd3a65febe.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\9b8c7814cc357ccfd050610eeafa91563b0cde41bdc983554fcc959fa459c07e.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1d52a01b9ca738f9b3c32e9326b1915c3e905b9a1153b723d0f36b62187b66f2.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+./src/app/pages/pricing/pricing.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\664f85cd69873db2036aa7a3b422ae90670686d59db33a4b5a02e8c07d518aa3.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\3b32610c8e8aede4dcd6be6698016e319b16b4119314bae511688ae1ff2d8b74.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\2617ac559431f651f5029dc7bff886eae5838cf545b34cd16d963fd4ed1da681.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\e0db8e015d0ff645d13349cf6e76fb484e395b40a8745aa23704f95fd932b90a.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1147696c45182d7902610e5efbf03f35feb238e8a4a3eae2b739c56be063e42b.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\6584ddd96873620c721ea35246b447d63bb73d20b63357fa87216a5693bacd37.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\2b3187c0d9b5da9b0e099c22f505dcf5214130b37e73a27074bd85a9696660ee.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\6c904c7689adce4dfed9eef68669f862a5defbb7b6ba2e4c6dffe0c80595e3ac.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1bef9036b813894db0192727a4ce91f9de78f3fd8d4e984e638e86b842c6e31b.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\75b40140ef3af2c9beeb46d874887992feda0e2798302810bf17c8bb04b4f9d8.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\2e00db3d05f52f998e953a2fb134d24db8ae3efbbe32cdd1ba3cadcc188f8633.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\306bfc4d71cc097b3727b4bf5a233d8d93b0d97b3cd5710d35567460a9c3af67.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\bc8b821fbed3ac777fcf16a0746306a292505a929ec97ca1abfeed150e520c14.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/signup/signup.component.ts:449:20 - error TS2339: Property 'ageFromDate' does not exist on type 'SignupComponent'.
+
+449   const age = this.ageFromDate(value);
+                       ~~~~~~~~~~~
+
+
+Error: src/app/auth/signup/signup.component.ts:556:47 - error TS2551: Property 'passwordStrengthLabel' does not exist on type 'SignupComponent'. Did you mean 'passwordStrength'?
+
+556   return { state: 'valid', message: `✓ ${this.passwordStrengthLabel} password` };
+                                                  ~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/auth/signup/signup.component.ts:759:7
+    759   get passwordStrength() {
+              ~~~~~~~~~~~~~~~~
+    'passwordStrength' is declared here.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\c70ff759391825a06ec258e28cfbbc0a9285973c5705f2eaba25d933838fad82.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\ce7c51ce769c6403a796e71b8fcf289f00e6d9776d27f02dd050ee502acb5270.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\d21cfbd143c390a74b624d72523eff09d97a0d2e2e9627065235c6ac9e7026df.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\0e29b2c46b0f40bf9cbcc2251da10971dad1c2c1ac7b719f6ab5eb4357b8d7f3.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\013a7bd37fac1a404e7f03283a5cf9387c781f6fd1c078b0ae63fdbea33e459c.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\a613a56a7280db2c4ba610767a825cba9f40281d9cf467df2787cbb3ba2fd15b.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\4893a721384c46e83e23829a307f4cc1b376bb0e23d46e63b38ff4b88cf9a004.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\15e76cac675a266aa02cde4a0ade538d3b80132ff8869bd54123369b899ac722.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\ca9ab85f0669a9d1748f913d4e74351fcfce42768105782fdc74ac0c5d55c276.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\918a79d0de454c6f4987c5cb4fb7d51df23cad13f2c437af2afdb639a9e38d02.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\cf5e8e2f22b76885ff03e2bbf4583a586ba53da7bd33e5dc8484c2b057d78550.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\3861193e184dbd7211e80608ab8c59b67bc599d7df76cf46b0f160b83116c556.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/app.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\9d7380f934492986deebd0ca727d7a7f8f8890f1c0d04d08f4d49c9e9f6316c4.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\284e0ddd7b10962a3469eb5d439b1f1ea0391b80639a6b811fdd0d49177997bd.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/app.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\c0fa50a802cecc3e1e482dde8dd351b9e6c4508f701e94ba1e6ca98b41a400c8.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\45e3abd46e188b2dcf3021c80badc2380ce85e5f290bb408841afcfcfac0c2c2.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\525edd856a962bfd547362c8266e80330c90d0ffc21c16e17c5be6dc90f4a23a.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\fc82898f2c6c63bbcf14ca9b2a923d8040f78c23f4a29c02e91e8f4cb47af351.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/signup/signup.component.html:65:16 - error TS2339: Property 'dialLabel' does not exist on type 'SignupComponent'.
+
+65             {{ dialLabel || 'Code' }}
+                  ~~~~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+Error: src/app/auth/signup/signup.component.html:69:82 - error TS2339: Property 'mobileRangeText' does not exist on type 'SignupComponent'.
+
+69         <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - SMS verification required - VoIP / virtual numbers blocked.</div>
+                                                                                    ~~~~~~~~~~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\114a8cfddea2e131325ab199d083187b0073f1fbfeaad3e75ee0a535d4391c0e.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/signup/signup.component.html:65:16 - error TS2339: Property 'dialLabel' does not exist on type 'SignupComponent'.
+
+65             {{ dialLabel || 'Code' }}
+                  ~~~~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+Error: src/app/auth/signup/signup.component.html:69:82 - error TS2339: Property 'mobileRangeText' does not exist on type 'SignupComponent'.
+
+69         <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - SMS verification required - VoIP / virtual numbers blocked.</div>
+                                                                                    ~~~~~~~~~~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\0396410ec28b88a56cd8c78285ea11b2020c0def5981dafe04888fda52bd595e.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/signup/signup.component.html:64:16 - error TS2339: Property 'dialLabel' does not exist on type 'SignupComponent'.
+
+64             {{ dialLabel || 'Code' }}
+                  ~~~~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+Error: src/app/auth/signup/signup.component.html:68:82 - error TS2339: Property 'mobileRangeText' does not exist on type 'SignupComponent'.
+
+68         <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - SMS verification required - VoIP / virtual numbers blocked.</div>
+                                                                                    ~~~~~~~~~~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\8f086abc33b6234d104be41d0752deb320576437c93e66cec0d531c0c933c418.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\7bec0d4758997067ce66cf1445cfd2b1566d7d0e52ed724625d0fa88c87a9113.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\ea370afacdebe61234f12d6e655172a819899adc55943adbad9a8fc81dbfb3b9.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/signup/signup.component.html:9:38 - error NG5002: Unexpected closing tag "h2". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags
+
+9     <h4>SET UP <em>your</em> ACCOUNT.</h2>
+                                       ~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+Error: src/app/auth/signup/signup.component.html:123:3 - error NG5002: Unexpected closing tag "div". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags
+
+123   </div>
+      ~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\cc065eac8a2be29be8967ff1244e0df7e512d58a2e628a880a5d7aaca94df7ea.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/signup/signup.component.html:9:38 - error NG5002: Unexpected closing tag "h4". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags
+
+9     <h2>SET UP <em>your</em> ACCOUNT.</h4>
+                                       ~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+Error: src/app/auth/signup/signup.component.html:123:3 - error NG5002: Unexpected closing tag "div". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags
+
+123   </div>
+      ~~~~~~
+
+  src/app/auth/signup/signup.component.ts:180:16
+    180   templateUrl: './signup.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component SignupComponent.
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\526b570b1a07438a2ba499d3d45f88bd1e45bc3bbaa2dfa3deac98efbfb7286e.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\aa2ca06326c57ac0f9a590249c616655127e7dbae97fb2fe469451c4a9ebf49e.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\90563004bef5b313cca48a8ec66f88a676c39aa229c3994b8ffce4624a913985.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/signup/signup.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\4168913ed4bbf107536d80d6f5564ca7028c24624351ab1dc4afa7224ad1357e.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\bb4eaf4ff205304521469ad176fb265b2108c386aa296687c7a1133a320cbf47.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\7e0836d3f2255b1f50659141e7db18e533e67850dc23c770936f8ef196c0ac79.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:63:7 - error TS2345: Argument of type '"war"' is not assignable to parameter of type '"success" | "error"'.
+
+63       'war',
+         ~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\ab5186d0a81ca124c48a9589541cd45c27b19eef7d6c989047e81ae9da40e310.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:63:7 - error TS2345: Argument of type '"warning"' is not assignable to parameter of type '"success" | "error"'.
+
+63       'warning',
+         ~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\6bf3073d7759acdc21587cd81c045ab19ab36ff553ef36a9f39ab0f87161fc8c.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:135:12 - error TS2339: Property 'verifyForgotOtp' does not exist on type 'ApiService'.
+
+135   this.api.verifyForgotOtp({ email, otp }).subscribe({
+               ~~~~~~~~~~~~~~~
+
+
+Error: src/app/auth/login/login.component.ts:136:12 - error TS7006: Parameter 'res' implicitly has an 'any' type.
+
+136     next: (res) => {
+               ~~~
+
+
+Error: src/app/auth/login/login.component.ts:141:13 - error TS7006: Parameter 'err' implicitly has an 'any' type.
+
+141     error: (err) => {
+                ~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\596634db8a491cf35d04fdaf5a812f70e943769500c1315e6385bc710881545e.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:135:12 - error TS2339: Property 'verifyForgotOtp' does not exist on type 'ApiService'.
+
+135   this.api.verifyForgotOtp({ email, otp }).subscribe({
+               ~~~~~~~~~~~~~~~
+
+
+Error: src/app/auth/login/login.component.ts:141:13 - error TS7006: Parameter 'err' implicitly has an 'any' type.
+
+141     error: (err) => {
+                ~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\28182f4a6cee71f7ec59f9b826daf48600fd9c1dd7eefa996417c3d56056d434.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:135:12 - error TS2339: Property 'verifyForgotOtp' does not exist on type 'ApiService'.
+
+135   this.api.verifyForgotOtp({ email, otp }).subscribe({
+               ~~~~~~~~~~~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\0d3733b3c3304ea922e3151f15877e1661ff6d9556f8f31ce8627a63984b10cc.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:135:12 - error TS2339: Property 'verif' does not exist on type 'ApiService'.
+
+135   this.api.verif({ email, otp }).subscribe({
+               ~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\b4e0c31521614fa2f4e94d509151e5b64e75f12179cd581178ea9365d8ffda48.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\39ede61425a57a2a21b43914e150a8283728ad4a3dac31c4a655719b241fdf49.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:135:36 - error TS2345: Argument of type '{ email: string; otp: string; }' is not assignable to parameter of type '{ email: string; }'.
+  Object literal may only specify known properties, and 'otp' does not exist in type '{ email: string; }'.
+
+135   this.api.forgotPassword({ email, otp }).subscribe({
+                                       ~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\bcf9e65223741611438da04f76455217f5ff2a3cfe62bfe4a91c425c974ef2b8.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+
+√ Browser application bundle generation complete.
+
+./src/app/auth/login/login.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\54151dda27b05a63de67501ad1a5334d47199e706d254f55b92c21ddbe94cb94.json'
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+Error: src/app/auth/login/login.component.ts:135:12 - error TS2339: Property 'verif' does not exist on type 'ApiService'.
+
+135   this.api.verif({ email, otp }).subscribe({
+               ~~~~~
+
+
+
+√ Browser application bundle generation complete.
+
+./src/app/lineouts/all-series-cover/all-series-cover.component.ts - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/tools/babel/webpack-loader.js):
+Error: EPERM: operation not permitted, open 'D:\ciyash\pick2winWeb\.angular\cache\16.2.16\babel-webpack\1daa2852e19b5d19fe52440c22f8b740910cdccb5561f4a965c161592a37fe1d.json'
+
+

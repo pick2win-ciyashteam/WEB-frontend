@@ -10,7 +10,7 @@ export class AdminService {
 
   // private BASE = 'https://pick2win-backend-website.onrender.com/api';
 
-  private BASE = 'http://187.124.173.183/api';
+  private BASE = 'https://pick2win.io/backend/api';
 
   constructor(private http: HttpClient) { }
 

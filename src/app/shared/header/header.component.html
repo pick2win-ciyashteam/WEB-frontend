@@ -12,7 +12,7 @@
 
     <nav class="primary">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-      <a routerLink="/uctinfo" routerLinkActive="active">UCT Guide</a>
+      <a routerLink="/uctguide" routerLinkActive="active">UCT Guide</a>
       <a *ngIf="loggedIn$ | async" routerLink="/lineouts" routerLinkActive="active">Lineouts</a>
       <a routerLink="/pricing" routerLinkActive="active">Pricing</a>
       <!-- <a routerLink="/about" routerLinkActive="active">About</a> -->
@@ -55,7 +55,7 @@
 
   <nav class="drawer-nav">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
-    <a routerLink="/uctinfo" routerLinkActive="active" (click)="closeMenu()">UCT Guide</a>
+    <a routerLink="/uctguide" routerLinkActive="active" (click)="closeMenu()">UCT Guide</a>
     <a *ngIf="loggedIn$ | async" routerLink="/lineouts" routerLinkActive="active" (click)="closeMenu()">Lineouts</a>
     <a routerLink="/pricing" routerLinkActive="active" (click)="closeMenu()">Pricing</a>
     <!-- <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a> -->
