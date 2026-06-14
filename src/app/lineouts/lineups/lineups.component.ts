@@ -45,6 +45,7 @@ interface MatchDayGroup {
 export class LineupsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly todayRefreshMs = 60000;
+  private balanceFocusTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly loggedIn$ = this.authService.loggedIn$;
   isLoggedIn = this.authService.isLoggedIn();
@@ -52,6 +53,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   loadingMatches = true;
   matchesError = '';
   coinBalance = 0;
+  showBalanceRequired = false;
   showSeriesCoverage = false;
   readonly showUctButtonForTesting = false;
 
@@ -87,6 +89,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.balanceFocusTimer) {
+      clearTimeout(this.balanceFocusTimer);
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -251,7 +257,36 @@ canRunUct(match: LineoutMatch): boolean {
       return;
     }
 
+    if (!this.hasCoinsForUct()) {
+      this.focusBalanceCard();
+      return;
+    }
+
     this.openCreateUct(match);
+  }
+
+  private hasCoinsForUct(): boolean {
+    return Number(this.coinBalance || 0) > 0;
+  }
+
+  private focusBalanceCard(): void {
+    this.showBalanceRequired = true;
+
+    setTimeout(() => {
+      document.getElementById('lineoutsBalanceCard')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    });
+
+    if (this.balanceFocusTimer) {
+      clearTimeout(this.balanceFocusTimer);
+    }
+
+    this.balanceFocusTimer = setTimeout(() => {
+      this.showBalanceRequired = false;
+      this.balanceFocusTimer = null;
+    }, 4200);
   }
 
   private storeCreateUctContext(match: LineoutMatch): void {

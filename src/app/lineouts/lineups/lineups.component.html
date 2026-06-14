@@ -10,7 +10,12 @@
             <span>ANY MATCH · ANY LEAGUE</span>
           </div>
 
-          <a class="balance-card" routerLink="/user/profile" title="Your coin balance">
+          <a
+            id="lineoutsBalanceCard"
+            class="balance-card"
+            [class.balance-card-alert]="showBalanceRequired"
+            routerLink="/user/profile"
+            title="Your coin balance">
             <div class="balance-icon">
               <span>P2W</span>
             </div>
@@ -20,6 +25,7 @@
                 <strong>{{ coinBalance }}</strong>
                 <span>Coins</span>
               </div>
+              <div class="balance-warning" *ngIf="showBalanceRequired">Coins required to run UCT</div>
             </div>
           </a>
         </div>

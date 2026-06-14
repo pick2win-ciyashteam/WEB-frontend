@@ -66,6 +66,12 @@
   box-shadow: 0 14px 32px rgba(0,15,30,0.28);
 }
 
+.balance-card.balance-card-alert {
+  border-color: #ffef9a;
+  box-shadow: 0 0 0 4px rgba(244,180,0,0.20), 0 18px 40px rgba(244,180,0,0.24);
+  animation: balanceAttention 0.85s ease-in-out infinite alternate;
+}
+
 .balance-icon {
   width: 42px;
   height: 42px;
@@ -107,6 +113,26 @@
   align-items: baseline;
   gap: 7px;
   margin-top: 2px;
+}
+
+.balance-warning {
+  margin-top: 5px;
+  color: #ffef9a;
+  font-family: var(--f-mono);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@keyframes balanceAttention {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-2px);
+  }
 }
 
 .balance-amount strong {
