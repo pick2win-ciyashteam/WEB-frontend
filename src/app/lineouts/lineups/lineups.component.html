@@ -91,7 +91,12 @@
                 <div class="tc-bot">
                   <div class="tc-time">
                     <div class="tc-clock">{{ matchDayStamp(match) }} &middot; {{ formatKickoff(match) }}</div>
-                    <div class="tc-rel">{{ matchDetailLine(match) }}</div>
+                    <div class="tc-rel">
+                      <ng-container *ngIf="kickoffCountdown(match); else todayStartedLabel">
+                        Kicks off in <span class="kickoff-highlight">{{ kickoffCountdown(match) }}</span>
+                      </ng-container>
+                      <ng-template #todayStartedLabel>{{ kickoffStartedLabel(match) }}</ng-template>{{ match.venue ? ' - ' + match.venue : '' }}
+                    </div>
                   </div>
                   <button
                     class="tc-uct"
@@ -142,7 +147,12 @@
                     </div>
                     <div class="uc-time">
                       {{ matchDayStamp(match) }} &middot; {{ formatKickoff(match) }} &middot;
-                      <span>{{ kickoffInfo(match) }}{{ match.venue ? ' &middot; ' + match.venue : '' }}</span>
+                      <span>
+                        <ng-container *ngIf="kickoffCountdown(match); else upcomingStartedLabel">
+                          Kicks off in <span class="kickoff-highlight">{{ kickoffCountdown(match) }}</span>
+                        </ng-container>
+                        <ng-template #upcomingStartedLabel>{{ kickoffStartedLabel(match) }}</ng-template>{{ match.venue ? ' &middot; ' + match.venue : '' }}
+                      </span>
                     </div>
                   </div>
 

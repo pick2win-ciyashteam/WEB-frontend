@@ -115,6 +115,12 @@
   margin-top: 2px;
 }
 
+.kickoff-highlight {
+  color: #f4b400;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+}
+
 .balance-warning {
   margin-top: 5px;
   color: #ffef9a;
@@ -975,6 +981,12 @@
   .series-toggle-helper {
     display: none;
   }
+}
+
+.tc-rel .kickoff-highlight,
+.uc-time .kickoff-highlight {
+  color: #f4b400 !important;
+  font-weight: 950;
 }
 
 @media (max-width: 380px) {

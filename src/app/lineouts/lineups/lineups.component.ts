@@ -168,6 +168,16 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   kickoffInfo(match: LineoutMatch): string {
+    const countdown = this.kickoffCountdown(match);
+
+    if (countdown) {
+      return `Kicks off ${countdown}`;
+    }
+
+    return this.kickoffStartedLabel(match);
+  }
+
+  kickoffStartedLabel(match: LineoutMatch): string {
     const kickoffMs = new Date(match.kickoffISO).getTime();
     const diffMs = kickoffMs - Date.now();
 
@@ -175,22 +185,31 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return this.isLive(match) ? 'In progress' : 'Match started';
     }
 
+    return '';
+  }
+
+  kickoffCountdown(match: LineoutMatch): string {
+    const kickoffMs = new Date(match.kickoffISO).getTime();
+    const diffMs = kickoffMs - Date.now();
+
+    if (diffMs <= 0) {
+      return '';
+    }
+
     const totalMinutes = Math.ceil(diffMs / 60000);
     const days = Math.floor(totalMinutes / 1440);
     const hours = Math.floor((totalMinutes % 1440) / 60);
     const minutes = totalMinutes % 60;
 
-    let label = '';
-
     if (days > 0) {
-      label = `Kicks off in ${days}d ${hours}h`;
-    } else if (hours > 0) {
-      label = `Kicks off in ${hours}h ${minutes}m`;
-    } else {
-      label = `Kicks off in ${minutes}m`;
+      return `${days}d ${hours}h`;
     }
 
-    return label;
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+
+    return `${minutes}m`;
   }
 
   openMatch(match: LineoutMatch): void {
