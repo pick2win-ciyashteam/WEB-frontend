@@ -62,7 +62,7 @@
           <div class="mb-count-pill">{{ match.teamsGenerated || 0 }} teams</div>
           <button class="mb-csv" type="button" *ngIf="canAccessTeams(match)" (click)="downloadMatchTeams(match); $event.stopPropagation()">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
-            CSV
+            TXT
           </button>
           <span class="mb-expired-pill" *ngIf="!canAccessTeams(match)">Teams expired</span>
           <span class="mb-chev" *ngIf="canAccessTeams(match)">v</span>
@@ -109,7 +109,7 @@
           <div class="mb-count-pill">{{ detailMatch.teamsGenerated || previewTeams.length }} teams</div>
           <button class="mb-csv" type="button" *ngIf="canAccessTeams(detailMatch)" (click)="downloadMatchTeams(detailMatch)">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
-            CSV
+            TXT
           </button>
         </div>
       </div>

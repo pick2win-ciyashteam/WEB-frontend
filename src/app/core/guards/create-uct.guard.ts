@@ -1,7 +1,11 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, CanDeactivateFn, Router } from '@angular/router';
 import { map, catchError, of } from 'rxjs';
 import { ApiService } from '../services/api.service';
+
+export interface PendingGenerationComponent {
+  canDeactivate: () => boolean;
+}
 
 export const createUctGuard: CanActivateFn = (route) => {
   const api = inject(ApiService);
@@ -66,6 +70,10 @@ export const createUctGuard: CanActivateFn = (route) => {
       }))
     )
   );
+};
+
+export const preventPendingUctGenerationGuard: CanDeactivateFn<PendingGenerationComponent> = (component) => {
+  return component.canDeactivate();
 };
 
 function isTruthy(value: any): boolean {

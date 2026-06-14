@@ -59,7 +59,7 @@ paymentSucceeded = false;
 
     this.api.getSubscriptionPlans().subscribe({
       next: (res) => {
-        console.log('subscription plans:', res);
+        // console.log('subscription plans:', res);
 
         if (res?.success && Array.isArray(res.data) && res.data.length) {
           this.plans = [...res.data].sort((a, b) => a.sort_order - b.sort_order);

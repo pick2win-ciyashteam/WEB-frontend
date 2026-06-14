@@ -230,14 +230,14 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     const shouldRefreshAfterPayment = this.route.snapshot.queryParamMap.has('refresh');
 
     this.profileService.loadProfile(true).subscribe(profile => {
-      console.log('Profile component data:', profile);
+      // console.log('Profile component data:', profile);
     });
 
     if (shouldRefreshAfterPayment) {
       clearTimeout(this.profileRefreshTimer);
       this.profileRefreshTimer = setTimeout(() => {
         this.profileService.loadProfile(true).subscribe(profile => {
-          console.log('Profile component refreshed data:', profile);
+          // console.log('Profile component refreshed data:', profile);
         });
       }, 1200);
     }

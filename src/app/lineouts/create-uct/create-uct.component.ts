@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, switchMap, takeUntil } from 'rxjs';
@@ -301,6 +301,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
+    if (this.submitting) {
+      return;
+    }
+
     this.router.navigate(['/lineouts']);
   }
 
@@ -322,6 +326,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   prevStep(): void {
+    if (this.submitting) {
+      return;
+    }
+
     if (this.step > 1) {
       this.setActiveStep(this.step - 1);
     } else {
@@ -442,6 +450,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.isCaptaincyGoalkeeperBlocked(player, this.cvcIds)) {
+      this.showAlert('Goalkeeper limit reached', 'Only one goalkeeper can be selected for captaincy.', 'warning');
+      return;
+    }
+
     if (this.cvcIds.has(player.id)) {
       this.cvcIds.delete(player.id);
       return;
@@ -458,6 +471,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   canSelectCvc(player: UctPlayer): boolean {
     if (this.cvcIds.has(player.id)) return true;
     if (this.mandates.get(player.id) === 'NO') return false;
+    if (this.isCaptaincyGoalkeeperBlocked(player, this.cvcIds)) return false;
     return this.cvcIds.size < this.maxCvc;
   }
 
@@ -485,6 +499,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.isCaptaincyGoalkeeperBlocked(player, this.cAndVcCaptaincyIds())) {
+      this.showAlert('Goalkeeper limit reached', 'Only one goalkeeper can be selected for captaincy.', 'warning');
+      return;
+    }
+
     if (this.captainIds.has(player.id)) {
       this.captainIds.delete(player.id);
       return;
@@ -509,6 +528,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
     if (this.captainIds.has(player.id)) {
       this.showAlert('Already Captain', 'A player cannot be both Captain and Vice-Captain.', 'warning');
+      return;
+    }
+    if (this.isCaptaincyGoalkeeperBlocked(player, this.cAndVcCaptaincyIds())) {
+      this.showAlert('Goalkeeper limit reached', 'Only one goalkeeper can be selected for captaincy.', 'warning');
       return;
     }
     if (!this.captainIds.size) {
@@ -541,6 +564,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.captainIds.has(player.id)) return true;
     if (this.mandates.get(player.id) === 'NO') return false;
     if (this.viceCaptainIds.has(player.id)) return false;
+    if (this.isCaptaincyGoalkeeperBlocked(player, this.cAndVcCaptaincyIds())) return false;
     if (this.captainIds.size >= this.maxCaptains) return false;
 
     return this.viceCaptainIds.size <= this.maxViceForCaptainCount(this.captainIds.size + 1);
@@ -550,6 +574,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.viceCaptainIds.has(player.id)) return true;
     if (this.mandates.get(player.id) === 'NO') return false;
     if (this.captainIds.has(player.id)) return false;
+    if (this.isCaptaincyGoalkeeperBlocked(player, this.cAndVcCaptaincyIds())) return false;
 
     return this.viceCaptainIds.size < this.maxViceForCurrentCaptains();
   }
@@ -644,6 +669,33 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.uctAlert = null;
   }
 
+  canDeactivate(): boolean {
+    return !this.submitting;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  preventRefreshWhileSubmitting(event: BeforeUnloadEvent): void {
+    if (!this.submitting) {
+      return;
+    }
+
+    event.preventDefault();
+    event.returnValue = '';
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  preventRefreshShortcutsWhileSubmitting(event: KeyboardEvent): void {
+    if (!this.submitting) {
+      return;
+    }
+
+    const key = event.key.toLowerCase();
+
+    if (key === 'f5' || ((event.ctrlKey || event.metaKey) && key === 'r')) {
+      event.preventDefault();
+    }
+  }
+
   confirmGenerateTeams(): void {
     if (!this.canGenerate) {
       return;
@@ -673,14 +725,14 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.startGeneratingStatus();
 
     const payload = this.buildSubmitPayload();
-    console.log('Generate UCT request payload:', payload);
-    console.log('Generate UCT request payload JSON:', JSON.stringify(payload, null, 2));
+    // console.log('Generate UCT request payload:', payload);
+    // console.log('Generate UCT request payload JSON:', JSON.stringify(payload, null, 2));
 
     this.api.createUctTeams(payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          console.log('Generate UCT backend response:', res);
+          // console.log('Generate UCT backend response:', res);
           this.stopGeneratingStatus();
           this.submitting = false;
 
@@ -692,7 +744,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           this.resetAfterSubmitFailure(res?.message || 'Unable to generate UCT teams. Please try again.');
         },
         error: (err) => {
-          console.error('Generate UCT backend error:', err);
+          // console.error('Generate UCT backend error:', err);
           this.stopGeneratingStatus();
           this.submitting = false;
           this.resetAfterSubmitFailure(err?.error?.message || err?.error?.error || 'Unable to generate UCT teams. Please try again.');
@@ -863,6 +915,20 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return String(player.position || '').toUpperCase() === 'GK';
   }
 
+  private cAndVcCaptaincyIds(): Set<number> {
+    return new Set([...this.captainIds, ...this.viceCaptainIds]);
+  }
+
+  private isCaptaincyGoalkeeperBlocked(player: UctPlayer, selectedIds: Set<number>): boolean {
+    if (!this.isGoalkeeper(player) || selectedIds.has(player.id)) {
+      return false;
+    }
+
+    return this.availablePool.some(candidate =>
+      selectedIds.has(candidate.id) && this.isGoalkeeper(candidate)
+    );
+  }
+
   private mandateGoalkeeperCount(value: Exclude<Mandate, 'NA'>): number {
     return this.availablePool.filter(player => this.mandates.get(player.id) === value && this.isGoalkeeper(player)).length;
   }
@@ -1009,17 +1075,17 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('Create UCT player pools:', {
-      matchId: this.detail.match.id,
-      homeTeam: this.detail.home_team.name,
-      homePlayingXi: this.detail.home_team.playing_xi,
-      homeSubstitutes: this.detail.home_team.substitutes,
-      homeAvailablePool: this.homeAvailablePool,
-      awayTeam: this.detail.away_team.name,
-      awayPlayingXi: this.detail.away_team.playing_xi,
-      awaySubstitutes: this.detail.away_team.substitutes,
-      awayAvailablePool: this.awayAvailablePool
-    });
+    // console.log('Create UCT player pools:', {
+    //   matchId: this.detail.match.id,
+    //   homeTeam: this.detail.home_team.name,
+    //   homePlayingXi: this.detail.home_team.playing_xi,
+    //   homeSubstitutes: this.detail.home_team.substitutes,
+    //   homeAvailablePool: this.homeAvailablePool,
+    //   awayTeam: this.detail.away_team.name,
+    //   awayPlayingXi: this.detail.away_team.playing_xi,
+    //   awaySubstitutes: this.detail.away_team.substitutes,
+    //   awayAvailablePool: this.awayAvailablePool
+    // });
   }
 
   private toUctPlayers(players: MatchPlayer[] | null | undefined, side: 'home' | 'away'): UctPlayer[] {

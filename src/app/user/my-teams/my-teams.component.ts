@@ -110,7 +110,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
 
   this.api.GetMyTeams().subscribe({
     next: (res: any) => {
-      console.log('My Teams matches response:', res);
+      // console.log('My Teams matches response:', res);
       const data = Array.isArray(res?.data) ? res.data : [];
 
       this.matches = data.map((m: any) => {
@@ -201,16 +201,13 @@ private openMatchFromQueryParam(): void {
 
   this.api.MatchByTeams(match.id).subscribe({
     next: (res: any) => {
-      console.log('My Teams download response:', res);
+      // console.log('My Teams download response:', res);
 
       const generatedTeams = this.generatedTeamsFromResponse(res);
 
       if (generatedTeams.length) {
-        // TXT format kept for future use:
-        // const text = generatedTeams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team)).join('\n\n');
-        // this.downloadText(text, this.makeTeamFileName(match, 'txt'));
-        const rows = this.teamCsvRows(generatedTeams, match);
-        this.downloadCSV(rows, this.makeTeamFileName(match, 'csv'));
+        const text = this.teamTextBlocks(generatedTeams);
+        this.downloadText(text, this.makeTeamFileName(match, 'txt'));
         return;
       }
 
@@ -248,8 +245,8 @@ private openMatchFromQueryParam(): void {
         };
       });
 
-      const fileName = this.makeTeamFileName(match, 'csv');
-      this.downloadCSV(this.withCsvHeader(match, rows.length || match.teamsGenerated || 0, this.objectRowsToCsvRows(rows)), fileName);
+      const text = this.objectRowsToTextBlocks(rows);
+      this.downloadText(text, this.makeTeamFileName(match, 'txt'));
     }
   });
 }
@@ -313,7 +310,6 @@ private withCsvHeader(match: GeneratedMatch, totalTeams: number, rows: string[][
     [`League: ${match.league || 'N/A'}`],
     [`Generated: ${this.csvMatchDate(match)} , ${match.generatedAt || '-'}`],
     [`Total: ${totalTeams || match.teamsGenerated || 0} teams`],
-    ['================================================'],
     [],
     ...rows
   ];
@@ -360,12 +356,12 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     this.api.MatchByTeams(match.id).subscribe({
       next: (res: any) => {
-        console.log('My Teams match teams response:', res);
+        // console.log('My Teams match teams response:', res);
 
         const generatedTeams = this.generatedTeamsFromResponse(res);
 
         if (generatedTeams.length) {
-          console.log('My teams response:', res);
+          // console.log('My teams response:', res);
           this.previewTeams = generatedTeams.map((team: ApiGeneratedTeam) => this.mapGeneratedTeam(team));
           this.selectedMatch = {
             ...match,
@@ -416,7 +412,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     this.api.TeamsByPlayers(teamId).subscribe({
       next: (res: any) => {
-        console.log('My Teams team players response:', res);
+        // console.log('My Teams team players response:', res);
 
         const players = Array.isArray(res?.players) ? res.players : [];
 
@@ -633,7 +629,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       const players = previewTeam.players;
       const combination = `${players.filter(player => player.team === 'home').length} X ${players.filter(player => player.team === 'away').length}`;
 
-      rows.push(['UCT Team:', String(team.team_no)]);
+      rows.push(['Team:', String(team.team_no)]);
       rows.push(['Combination:', combination]);
       rows.push([]);
       rows.push(['', 'Player', 'Role', 'C/VC']);
@@ -667,10 +663,14 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return '.';
   }
 
+  private teamTextBlocks(teams: ApiGeneratedTeam[]): string {
+    return teams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team)).join('\r\n\r\n');
+  }
+
   private teamTextBlock(team: ApiGeneratedTeam): string {
-    const players = Array.isArray(team.players) ? team.players : [];
-    const previewPlayers = players.map(player => this.mapPreviewPlayer(player));
-    const combination = `${previewPlayers.filter(player => player.team === 'home').length} X ${previewPlayers.filter(player => player.team === 'away').length}`;
+    const previewTeam = this.mapGeneratedTeam(team);
+    const previewPlayers = previewTeam.players;
+    const combination = `${previewTeam.homeCount} X ${previewTeam.awayCount}`;
     const playerWidth = Math.max(16, ...previewPlayers.map(player => player.name.length));
 
     const lines = [
@@ -681,13 +681,52 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     ];
 
     previewPlayers.forEach((player, index) => {
-      const cap = player.captain || '.';
+      const cap = this.csvCaptainLabel(player, previewTeam);
       lines.push(
         `${String(index + 1).padEnd(4)}${player.name.padStart(playerWidth)}    ${player.pos.padEnd(4)}    ${cap}`
       );
     });
 
-    return lines.join('\n');
+    return lines.join('\r\n');
+  }
+
+  private objectRowsToTextBlocks(rows: Record<string, unknown>[]): string {
+    if (!rows.length) {
+      return '';
+    }
+
+    return rows.map((row, index) => {
+      const teamNo = String(row['Team'] || `T${index + 1}`).replace(/^T/i, '');
+      const split = String(row['Split'] || '').replace('-', ' X ');
+      const playerGroups = [
+        ['GK', String(row['GK Players'] || '')],
+        ['DEF', String(row['Defenders'] || '')],
+        ['MID', String(row['Midfielders'] || '')],
+        ['FWD', String(row['Forwards'] || '')]
+      ];
+      const captain = String(row['Captain'] || '');
+      const viceCaptain = String(row['Vice-Captain'] || '');
+      const players = playerGroups.flatMap(([role, names]) =>
+        names.split(' / ').filter(Boolean).map(name => ({ name, role }))
+      );
+      const playerWidth = Math.max(16, ...players.map(player => player.name.length));
+      const lines = [
+        `UCT Team:  ${teamNo}`,
+        `Combination:  ${split}`,
+        '',
+        `${''.padEnd(4)}${'Player'.padStart(playerWidth)}    ${'Role'.padEnd(4)}    C/VC`
+      ];
+
+      players.forEach((player, playerIndex) => {
+        const cap = player.name === captain ? 'C' : (player.name === viceCaptain ? 'VC' : '.');
+
+        lines.push(
+          `${String(playerIndex + 1).padEnd(4)}${player.name.padStart(playerWidth)}    ${player.role.padEnd(4)}    ${cap}`
+        );
+      });
+
+      return lines.join('\r\n');
+    }).join('\r\n\r\n');
   }
 
   private shortName(name: string): string {

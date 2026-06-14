@@ -12,7 +12,7 @@ import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
 import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component';
 import { AllSeriesCoverComponent } from '../lineouts/all-series-cover/all-series-cover.component';
-import { createUctGuard } from '../core/guards/create-uct.guard';
+import { createUctGuard, preventPendingUctGenerationGuard } from '../core/guards/create-uct.guard';
 
 const routes: Routes = [
   {
@@ -35,7 +35,8 @@ const routes: Routes = [
 {
   path: 'lineouts/create-uct/:id',
   component: CreateUctComponent,
-  canActivate: [createUctGuard]
+  canActivate: [createUctGuard],
+  canDeactivate: [preventPendingUctGenerationGuard]
 },
   {
     path: 'lineouts/all-series-cover',
