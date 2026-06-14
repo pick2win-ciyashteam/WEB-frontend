@@ -204,9 +204,15 @@ export class LineupsComponent implements OnInit, OnDestroy {
     return this.isGenerated(match) || this.canRunUct(match);
   }
 
-  canRunUct(match: LineoutMatch): boolean {
-    return !this.isGenerated(match) && (this.showUctButtonForTesting || match.lineupReady);
-  }
+canRunUct(match: LineoutMatch): boolean {
+  const kickoffTime = new Date(match.kickoffISO).getTime();
+  const matchStarted = Number.isFinite(kickoffTime) && Date.now() >= kickoffTime;
+
+  return !this.isGenerated(match)
+    && !this.isLive(match)
+    && !matchStarted
+    && (this.showUctButtonForTesting || match.lineupReady);
+}
 
   handleMatchAction(match: LineoutMatch): void {
     if (!this.canOpenMatch(match)) {

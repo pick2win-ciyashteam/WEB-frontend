@@ -12,6 +12,7 @@ import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
 import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component';
 import { AllSeriesCoverComponent } from '../lineouts/all-series-cover/all-series-cover.component';
+import { createUctGuard } from '../core/guards/create-uct.guard';
 
 const routes: Routes = [
   {
@@ -31,10 +32,11 @@ const routes: Routes = [
     redirectTo: 'lineouts',
     pathMatch: 'full'
   },
-  {
-    path: 'lineouts/create-uct/:id',
-    component: CreateUctComponent
-  },
+{
+  path: 'lineouts/create-uct/:id',
+  component: CreateUctComponent,
+  canActivate: [createUctGuard]
+},
   {
     path: 'lineouts/all-series-cover',
     component: AllSeriesCoverComponent

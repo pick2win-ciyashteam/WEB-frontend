@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
+import { ActivatedRoute } from '@angular/router';
 
 type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
 
@@ -93,7 +94,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
   filteredMatches: GeneratedMatch[] = [];
   private expiryTimer: any;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService,  private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.loadMatches();
@@ -137,7 +138,8 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
       });
 
       this.applyDateFilter();
-      this.loadingMatches = false;
+this.openMatchFromQueryParam();
+this.loadingMatches = false;
     },
     error: () => {
       this.matches = [];
@@ -168,6 +170,28 @@ openDatePicker(input: HTMLInputElement): void {
 
   const pickerInput = input as HTMLInputElement & { showPicker?: () => void };
   pickerInput.showPicker?.();
+}
+
+
+private openMatchFromQueryParam(): void {
+  const matchId = this.route.snapshot.queryParamMap.get('match');
+
+  if (!matchId) {
+    return;
+  }
+
+  const match = this.matches.find(m => String(m.id) === String(matchId));
+
+  if (!match) {
+    return;
+  }
+
+  this.selectedDate = match.startDate || '';
+  this.applyDateFilter();
+
+  if (this.canAccessTeams(match)) {
+    this.openMatchTeams(match);
+  }
 }
 
   downloadMatchTeams(match: GeneratedMatch) {
