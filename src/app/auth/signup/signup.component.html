@@ -63,7 +63,14 @@
             <span *ngIf="selectedCountry?.flag" class="dial-flag">{{ selectedCountry?.flag }}</span>
             {{ dialLabel || 'Code' }}
           </div>
-          <input type="tel" formControlName="mobile" placeholder="Mobile number" [attr.maxlength]="mobileLimit" inputmode="numeric" (input)="onMobileInput($event)">
+          <input
+            type="tel"
+            formControlName="mobile"
+            placeholder="Mobile number"
+            [attr.maxlength]="mobileLimit"
+            inputmode="numeric"
+            (input)="onMobileInput($event)"
+            (keydown.space)="$event.preventDefault()">
         </div>
         <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - SMS verification required - VoIP / virtual numbers blocked.</div>
         <div class="field-msg" [ngClass]="mobileValidation.state">{{ mobileValidation.message }}</div>
@@ -71,7 +78,12 @@
 
       <div [ngClass]="fieldClass('email')">
         <label>Email address <span>*</span></label>
-        <input type="email" formControlName="email" placeholder="you@example.com">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          (input)="sanitizeSignupEmail()"
+          (keydown.space)="$event.preventDefault()">
         <div class="hint">No disposable, temporary, or aliased emails.</div>
         <div class="field-msg" [ngClass]="emailValidation.state">{{ emailValidation.message }}</div>
       </div>
@@ -79,7 +91,12 @@
       <div [ngClass]="fieldClass('password')">
         <label>Password <span>*</span></label>
         <div class="password-wrap">
-          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="At least 8 characters">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="At least 8 characters"
+            (input)="sanitizeSignupPassword()"
+            (keydown.space)="$event.preventDefault()">
           <button
             type="button"
             class="password-toggle"

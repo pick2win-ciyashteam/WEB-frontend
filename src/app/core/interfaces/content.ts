@@ -235,6 +235,13 @@ export interface MatchDetail {
     is_active: number;
     lineupavailable: number;
     lineup_status: string;
+    venue_name?: string;
+    venue_city?: string;
+    hometeamname?: string;
+    awayteamname?: string;
+    home_team_name?: string;
+    away_team_name?: string;
+    match_name?: string;
   };
   home_team: MatchTeam;
   away_team: MatchTeam;

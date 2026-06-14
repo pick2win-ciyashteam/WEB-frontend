@@ -222,7 +222,12 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   openCreateUct(match: LineoutMatch): void {
-    this.router.navigate(['/lineouts/create-uct', match.id]);
+    this.storeCreateUctContext(match);
+    this.router.navigate(['/lineouts/create-uct', match.id], {
+      state: {
+        lineoutMatch: this.createUctContext(match)
+      }
+    });
   }
 
   openViewTeams(match: LineoutMatch): void {
@@ -241,6 +246,27 @@ export class LineupsComponent implements OnInit, OnDestroy {
     }
 
     this.openCreateUct(match);
+  }
+
+  private storeCreateUctContext(match: LineoutMatch): void {
+    try {
+      sessionStorage.setItem(`lineout-match-${match.id}`, JSON.stringify(this.createUctContext(match)));
+    } catch {
+      // Non-critical; create UCT still loads core match details by id.
+    }
+  }
+
+  private createUctContext(match: LineoutMatch): Record<string, string> {
+    return {
+      id: match.id,
+      homeName: match.home.name,
+      awayName: match.away.name,
+      homeCode: match.home.code,
+      awayCode: match.away.code,
+      venue: match.venue,
+      series: match.league,
+      kickoffISO: match.kickoffISO
+    };
   }
 
   openLogin(): void {

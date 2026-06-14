@@ -1692,6 +1692,16 @@ h1 em,
   text-transform: uppercase;
 }
 
+.notice-icon.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
+  font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+}
+
 .uct-confirm-notice p {
   margin: 0;
   color: var(--paper);
@@ -1772,6 +1782,10 @@ h1 em,
 
 .uct-confirm-actions .ghost-btn,
 .uct-confirm-actions .primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: auto;
   min-width: 104px;
   min-height: 44px;
@@ -3440,5 +3454,323 @@ h1 em,
   .uct-match-meta b {
     color: #fff;
     font-size: 17px;
+  }
+}
+
+/* Mobile confirmation modal: green final action and easier scroll. */
+@media (max-width: 640px) {
+  .uct-confirm-modal {
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+    padding: max(12px, env(safe-area-inset-top)) 10px max(18px, env(safe-area-inset-bottom)) !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .uct-confirm-card {
+    max-height: calc(100dvh - 30px) !important;
+    overflow-y: auto !important;
+    padding-bottom: 18px !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(11, 204, 142, .75) rgba(255, 255, 255, .08);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .uct-confirm-card::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .uct-confirm-card::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(11, 204, 142, .75);
+  }
+
+  .uct-confirm-actions .primary-btn.generate {
+    color: #031323 !important;
+    border: 0 !important;
+    background: linear-gradient(135deg, #22c55e, #0bcc8e) !important;
+    box-shadow: 0 12px 28px rgba(11, 204, 142, .28) !important;
+  }
+
+  .uct-confirm-actions .primary-btn.generate:disabled {
+    color: rgba(255, 255, 255, .72) !important;
+    background: rgba(91, 176, 230, .2) !important;
+    box-shadow: none !important;
+  }
+
+  .uct-confirm-actions .primary-btn.generate .material-symbols-outlined {
+    color: inherit !important;
+    font-size: 17px !important;
+  }
+}
+
+/* Mobile confirmation modal contrast fix. */
+@media (max-width: 640px) {
+  .uct-confirm-card,
+  .uct-confirm-card p,
+  .uct-confirm-card h2,
+  .uct-confirm-notice p,
+  .uct-confirm-notice strong,
+  .modal-confirm span,
+  .modal-confirm span b {
+    color: #ffffff !important;
+  }
+
+  .uct-confirm-notices {
+    border-color: rgba(91, 176, 230, .32) !important;
+    background: rgba(2, 10, 18, .22) !important;
+  }
+
+  .uct-confirm-notice {
+    border-bottom-color: rgba(255, 255, 255, .12) !important;
+  }
+
+  .uct-confirm-notice p {
+    font-size: 12px !important;
+    font-weight: 850 !important;
+    line-height: 1.42 !important;
+  }
+
+  .uct-confirm-notice .gold {
+    color: #f4b400 !important;
+  }
+
+  .uct-confirm-footnote {
+    color: #c8d6e0 !important;
+  }
+
+  .uct-confirm-actions .ghost-btn {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, .22) !important;
+  }
+}
+
+/* Final scoped responsive rules for UCT match summary only. */
+.uct-match-card,
+.uct-match-card * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.uct-match-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.uct-match-title {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+  font-size: initial !important;
+  line-height: 1 !important;
+}
+
+.uct-title-team {
+  display: grid !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+}
+
+.uct-title-team strong {
+  display: block !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  color: inherit !important;
+  font-family: var(--f-display) !important;
+  font-size: clamp(38px, 4.8vw, 60px) !important;
+  font-weight: 950 !important;
+  line-height: .88 !important;
+  letter-spacing: 0 !important;
+}
+
+.uct-title-team small {
+  display: block !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  color: var(--paper-2) !important;
+  font-family: var(--f-body) !important;
+  font-size: clamp(13px, 1.25vw, 16px) !important;
+  font-weight: 850 !important;
+  line-height: 1.12 !important;
+  text-transform: none !important;
+}
+
+.uct-match-title b {
+  font-size: clamp(14px, 1.5vw, 18px) !important;
+}
+
+.uct-match-meta,
+.uct-match-meta div,
+.uct-match-meta-grid {
+  min-width: 0 !important;
+}
+
+.uct-match-meta b {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+@media (max-width: 640px) {
+  .uct-match-card {
+    width: 100% !important;
+    gap: 10px !important;
+    margin: 10px 0 12px !important;
+    padding: 12px !important;
+  }
+
+  .uct-match-kicker {
+    gap: 6px !important;
+    font-size: 8.5px !important;
+    letter-spacing: .1em !important;
+  }
+
+  .uct-match-kicker .material-symbols-outlined {
+    font-size: 15px !important;
+  }
+
+  .uct-match-title {
+    gap: 7px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .uct-title-team {
+    gap: 4px !important;
+  }
+
+  .uct-title-team strong {
+    font-size: clamp(22px, 8vw, 30px) !important;
+    line-height: .9 !important;
+  }
+
+  .uct-title-team small {
+    font-size: clamp(9px, 3vw, 11px) !important;
+    line-height: 1.1 !important;
+  }
+
+  .uct-match-title b {
+    font-size: 13px !important;
+  }
+
+  .uct-match-meta-grid {
+    width: 100% !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px 12px !important;
+  }
+
+  .uct-match-meta,
+  .uct-match-meta:nth-child(odd) {
+    grid-template-columns: 22px minmax(0, 1fr) !important;
+    min-height: 42px !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    border-top: 0 !important;
+  }
+
+  .uct-match-meta .material-symbols-outlined {
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 7px !important;
+    font-size: 15px !important;
+  }
+
+  .uct-match-meta small {
+    font-size: 7.5px !important;
+    letter-spacing: .1em !important;
+  }
+
+  .uct-match-meta b {
+    margin-top: 2px !important;
+    font-size: 11.5px !important;
+    line-height: 1.18 !important;
+  }
+}
+
+/* Mobile-only visual polish for the match summary card. */
+@media (max-width: 640px) {
+  .uct-match-card {
+    gap: 12px !important;
+    margin: 12px 0 14px !important;
+    padding: 14px !important;
+    border: 1px solid rgba(91, 176, 230, .28) !important;
+    border-radius: 14px !important;
+    background:
+      radial-gradient(circle at 0 0, rgba(91, 176, 230, .18), transparent 46%),
+      linear-gradient(180deg, #061d33 0%, #031323 100%) !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, .18) !important;
+  }
+
+  .uct-match-kicker {
+    color: #f4b400 !important;
+    font-size: 7.5px !important;
+    letter-spacing: .12em !important;
+  }
+
+  .uct-match-title {
+    grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) !important;
+    gap: 8px !important;
+    padding-bottom: 11px !important;
+    border-bottom-color: rgba(255, 255, 255, .1) !important;
+  }
+
+  .uct-title-team strong {
+    font-size: clamp(23px, 7.6vw, 29px) !important;
+    line-height: .9 !important;
+  }
+
+  .uct-title-team small {
+    color: #aebfce !important;
+    font-size: clamp(8.5px, 2.8vw, 10px) !important;
+    font-weight: 800 !important;
+  }
+
+  .away-title {
+    text-align: right !important;
+  }
+
+  .uct-match-title b {
+    display: grid !important;
+    place-items: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 999px !important;
+    color: #eaf6ff !important;
+    background: rgba(255, 255, 255, .07) !important;
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+  }
+
+  .uct-match-meta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .uct-match-meta,
+  .uct-match-meta:nth-child(odd) {
+    min-height: 44px !important;
+    gap: 7px !important;
+    padding: 7px !important;
+    border: 1px solid rgba(255, 255, 255, .07) !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, .035) !important;
+  }
+
+  .uct-match-meta .material-symbols-outlined {
+    width: 21px !important;
+    height: 21px !important;
+    font-size: 14px !important;
+  }
+
+  .uct-match-meta small {
+    font-size: 6.8px !important;
+    letter-spacing: .09em !important;
+  }
+
+  .uct-match-meta b {
+    color: #fff !important;
+    font-size: 10.5px !important;
+    line-height: 1.16 !important;
   }
 }

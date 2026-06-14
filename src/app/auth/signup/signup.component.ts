@@ -262,6 +262,7 @@ onCountryChange() {
 }
 
 continueStep1() {
+  this.sanitizeSignupFields();
   this.form.markAllAsTouched();
   this.errorMessage = '';
   this.successMessage = '';
@@ -277,11 +278,11 @@ continueStep1() {
 
   const payload = {
     fullname: this.form.value.name || '',
-    email: this.form.value.email || '',
-    mobile: this.form.value.mobile || '',
+    email: this.withoutSpaces(this.form.value.email || ''),
+    mobile: this.onlyDigits(this.form.value.mobile || '').slice(0, this.mobileLimit),
     country: this.form.value.country || '',
     date_of_birth: this.form.value.dob || '',
-    password: this.form.value.password || ''
+    password: this.withoutSpaces(this.form.value.password || '')
   };
 
   this.loading = true;
@@ -671,10 +672,7 @@ verifyMobile() {
     },
     error: (err) => {
       this.loading = false;
-      this.errorMessage =
-        err?.error?.message ||
-        err?.error?.error ||
-        'OTP verification failed. Please try again.';
+      this.handleOtpVerifyError(err, 'mobile');
     }
   });
 }
@@ -705,10 +703,7 @@ verifyEmail() {
     },
     error: (err) => {
       this.loading = false;
-      this.errorMessage =
-        err?.error?.message ||
-        err?.error?.error ||
-        'Email OTP verification failed. Please try again.';
+      this.handleOtpVerifyError(err, 'email');
     }
   });
 }
@@ -744,6 +739,28 @@ resendOtp(type: 'mobile' | 'email') {
         'Unable to resend OTP. Please try again.';
     }
   });
+}
+
+private handleOtpVerifyError(err: any, type: 'mobile' | 'email'): void {
+  const backendMessage = String(err?.error?.message || err?.error?.error || '').trim();
+  const expiredText = backendMessage.toLowerCase();
+
+  if (expiredText.includes('expired') || expiredText.includes('expire')) {
+    if (type === 'mobile') {
+      this.mobileOtp = ['', '', '', '', '', ''];
+      this.errorMessage = 'Mobile OTP expired. Please tap Resend SMS to get a new code.';
+    } else {
+      this.emailOtp = ['', '', '', '', '', ''];
+      this.errorMessage = 'Email OTP expired. Please tap Resend email to get a new code.';
+    }
+
+    setTimeout(() => this.focusOtp(type), 100);
+    return;
+  }
+
+  this.errorMessage =
+    backendMessage ||
+    `${type === 'mobile' ? 'Mobile' : 'Email'} OTP verification failed. Please try again.`;
 }
 
   otpMove(event: any, index: number, type: 'mobile' | 'email') {
@@ -908,7 +925,7 @@ validateMobileByCountry(): boolean {
 }
 
 onMobileInput(event: any) {
-  let value = event.target.value.replace(/\D/g, '');
+  let value = this.onlyDigits(event.target.value);
 
   if (value.length > this.mobileLimit) {
     value = value.slice(0, this.mobileLimit);
@@ -916,6 +933,38 @@ onMobileInput(event: any) {
 
   this.form.patchValue({ mobile: value }, { emitEvent: false });
   this.form.get('mobile')?.updateValueAndValidity({ emitEvent: false });
+}
+
+sanitizeSignupEmail(): void {
+  const emailCtrl = this.form.get('email');
+  const cleanEmail = this.withoutSpaces(emailCtrl?.value || '');
+
+  if (emailCtrl?.value !== cleanEmail) {
+    emailCtrl?.setValue(cleanEmail, { emitEvent: false });
+  }
+}
+
+sanitizeSignupPassword(): void {
+  const passwordCtrl = this.form.get('password');
+  const cleanPassword = this.withoutSpaces(passwordCtrl?.value || '');
+
+  if (passwordCtrl?.value !== cleanPassword) {
+    passwordCtrl?.setValue(cleanPassword, { emitEvent: false });
+  }
+}
+
+private sanitizeSignupFields(): void {
+  this.onMobileInput({ target: { value: this.form.value.mobile || '' } });
+  this.sanitizeSignupEmail();
+  this.sanitizeSignupPassword();
+}
+
+private withoutSpaces(value: string): string {
+  return String(value || '').replace(/\s+/g, '');
+}
+
+private onlyDigits(value: string): string {
+  return String(value || '').replace(/\D/g, '');
 }
 
 private mobileNumberValidator(control: AbstractControl | null): ValidationErrors | null {

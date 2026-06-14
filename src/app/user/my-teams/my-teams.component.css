@@ -973,6 +973,38 @@
   margin: 16px;
 }
 
+@media (min-width: 901px) {
+  .preview-modal {
+    inset: 10px 20px;
+  }
+
+  .preview-pitch {
+    overflow-y: auto;
+  }
+
+  .pitch-field {
+    min-height: 560px;
+    padding-inline: 34px;
+  }
+
+  .pitch-line {
+    justify-content: space-around;
+    gap: 12px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .pitch-player {
+    width: 82px;
+  }
+
+  .pp-plate {
+    max-width: 82px;
+    padding-inline: 7px;
+    font-size: 10.5px;
+  }
+}
+
 @media (max-width: 900px) {
   .myteams-toolbar,
   .mb-h {

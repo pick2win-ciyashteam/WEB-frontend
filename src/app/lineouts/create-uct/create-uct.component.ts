@@ -260,13 +260,44 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   matchLocationLabel(detail: MatchDetail): string {
     const source = detail.match as unknown as Record<string, unknown>;
+    const venueName = String(source['venue_name'] || '').trim();
+    const venueCity = String(source['venue_city'] || '').trim();
+
+    if (venueName || venueCity) {
+      return [venueName, venueCity].filter(Boolean).join(', ');
+    }
+
     const value = source['venue'] || source['location'] || source['stadium'] || source['ground'];
 
     return String(value || 'Venue TBC');
   }
 
+  matchTeamCode(detail: MatchDetail, side: 'home' | 'away'): string {
+    const team = side === 'home' ? detail.home_team : detail.away_team;
+    const source = detail.match as unknown as Record<string, unknown>;
+    const code = side === 'home'
+      ? this.firstValue(source, ['home_team_name', 'homeTeamShortName'])
+      : this.firstValue(source, ['away_team_name', 'awayTeamShortName']);
+
+    return code || team.short_name || this.shortCodeFromName(this.matchTeamFullName(detail, side));
+  }
+
+  matchTeamFullName(detail: MatchDetail, side: 'home' | 'away'): string {
+    const team = side === 'home' ? detail.home_team : detail.away_team;
+    const source = detail.match as unknown as Record<string, unknown>;
+    const fullName = side === 'home'
+      ? this.firstValue(source, ['hometeamname', 'homeTeamName'])
+      : this.firstValue(source, ['awayteamname', 'awayTeamName']);
+
+    return fullName || team.name || team.short_name || 'TBD';
+  }
+
+  matchSeriesLabel(detail: MatchDetail): string {
+    return String(detail.match.seriesname || '').trim() || 'Football';
+  }
+
   teamAccent(side: 'home' | 'away'): string {
-    return side === 'home' ? '#020a12' : '#1fb6ff';
+    return side === 'home' ? '#f8fafc' : '#31b8ff';
   }
 
   goBack(): void {
@@ -739,6 +770,28 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     const date = new Date(value);
 
     return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  private firstValue(source: Record<string, unknown>, keys: string[]): string {
+    for (const key of keys) {
+      const value = String(source[key] || '').trim();
+
+      if (value) {
+        return value;
+      }
+    }
+
+    return '';
+  }
+
+  private shortCodeFromName(name: string): string {
+    return String(name || 'TBD')
+      .split(/\s+/)
+      .filter(Boolean)
+      .map(part => part[0])
+      .join('')
+      .slice(0, 3)
+      .toUpperCase() || 'TBD';
   }
 
   private buildSubmitPayload(): UctGeneratePayload {

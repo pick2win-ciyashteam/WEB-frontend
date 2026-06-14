@@ -185,7 +185,7 @@ openDatePicker(input: HTMLInputElement): void {
         // TXT format kept for future use:
         // const text = generatedTeams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team)).join('\n\n');
         // this.downloadText(text, this.makeTeamFileName(match, 'txt'));
-        const rows = this.teamCsvRows(generatedTeams);
+        const rows = this.teamCsvRows(generatedTeams, match);
         this.downloadCSV(rows, this.makeTeamFileName(match, 'csv'));
         return;
       }
@@ -225,7 +225,7 @@ openDatePicker(input: HTMLInputElement): void {
       });
 
       const fileName = this.makeTeamFileName(match, 'csv');
-      this.downloadCSV(rows, fileName);
+      this.downloadCSV(this.withCsvHeader(match, rows.length || match.teamsGenerated || 0, this.objectRowsToCsvRows(rows)), fileName);
     }
   });
 }
@@ -281,6 +281,47 @@ downloadCSV(rows: any[], fileName: string) {
   link.click();
 
   URL.revokeObjectURL(link.href);
+}
+
+private withCsvHeader(match: GeneratedMatch, totalTeams: number, rows: string[][] = []): string[][] {
+  return [
+    [`PICK2WIN - UCT - ${match.title || 'Teams'}`],
+    [`League: ${match.league || 'N/A'}`],
+    [`Generated: ${this.csvMatchDate(match)} , ${match.generatedAt || '-'}`],
+    [`Total: ${totalTeams || match.teamsGenerated || 0} teams`],
+    ['================================================'],
+    [],
+    ...rows
+  ];
+}
+
+private csvMatchDate(match: GeneratedMatch): string {
+  const value = match.startTimeISO || match.startDate || match.matchDate || '';
+
+  if (!value) {
+    return '-';
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString();
+}
+
+private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
+  if (!rows.length) {
+    return [];
+  }
+
+  const headers = Object.keys(rows[0]);
+
+  return [
+    headers,
+    ...rows.map(row => headers.map(header => String(row[header] ?? '')))
+  ];
 }
 
   openMatchTeams(match: GeneratedMatch) {
@@ -560,8 +601,8 @@ downloadCSV(rows: any[], fileName: string) {
     };
   }
 
-  private teamCsvRows(teams: ApiGeneratedTeam[]): string[][] {
-    const rows: string[][] = [];
+  private teamCsvRows(teams: ApiGeneratedTeam[], match?: GeneratedMatch): string[][] {
+    const rows: string[][] = match ? this.withCsvHeader(match, teams.length) : [];
 
     teams.forEach((team, teamIndex) => {
       const previewTeam = this.mapGeneratedTeam(team);

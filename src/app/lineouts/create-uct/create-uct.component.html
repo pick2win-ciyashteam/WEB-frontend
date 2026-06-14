@@ -46,9 +46,15 @@
         </div>
 
         <div class="uct-match-title">
-          <span [style.color]="teamAccent('home')">{{ d.home_team.short_name || d.home_team.name }}</span>
+          <span class="uct-title-team home-title" [style.color]="teamAccent('home')">
+            <strong>{{ matchTeamCode(d, 'home') }}</strong>
+            <small>{{ matchTeamFullName(d, 'home') }}</small>
+          </span>
           <b>vs</b>
-          <span [style.color]="teamAccent('away')">{{ d.away_team.short_name || d.away_team.name }}</span>
+          <span class="uct-title-team away-title" [style.color]="teamAccent('away')">
+            <strong>{{ matchTeamCode(d, 'away') }}</strong>
+            <small>{{ matchTeamFullName(d, 'away') }}</small>
+          </span>
         </div>
 
         <div class="uct-match-meta-grid">
@@ -80,7 +86,7 @@
             <span class="material-symbols-outlined series-icon" aria-hidden="true">emoji_events</span>
             <div>
               <small>Series</small>
-              <b>{{ d.match.seriesname || 'Football' }}</b>
+              <b>{{ matchSeriesLabel(d) }}</b>
             </div>
           </div>
         </div>
@@ -667,15 +673,15 @@
 
     <div class="uct-confirm-notices" aria-label="UCT responsibility notices">
       <div class="uct-confirm-notice">
-        <span class="notice-icon" aria-hidden="true">user</span>
+        <span class="notice-icon material-symbols-outlined" aria-hidden="true">person</span>
         <p>The User Configuration Teams (UCT) feature generates teams based on the selections and configurations provided by you.</p>
       </div>
       <div class="uct-confirm-notice">
-        <span class="notice-icon" aria-hidden="true">shield</span>
+        <span class="notice-icon material-symbols-outlined" aria-hidden="true">shield</span>
         <p><strong>PICK2WIN</strong> does not recommend, influence, modify, or validate any user configuration selections. All selections are made solely by the user, and teams are generated accordingly.</p>
       </div>
       <div class="uct-confirm-notice">
-        <span class="notice-icon" aria-hidden="true">info</span>
+        <span class="notice-icon material-symbols-outlined" aria-hidden="true">info</span>
         <p>Please review your configuration carefully. <strong class="gold">Once team generation is completed, the generated teams cannot be modified or regenerated for the same lineup.</strong></p>
       </div>
     </div>
@@ -688,8 +694,9 @@
     <div class="uct-confirm-actions">
       <button class="ghost-btn" type="button" (click)="closeGenerateConfirm()">← Cancel</button>
       <button class="primary-btn generate" type="button" [disabled]="submitting || !generateConsent" (click)="confirmGenerateTeams()">
-        {{ submitting ? 'Generating...' : 'Confirm & Generate 20 Teams →' }}
-        <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
+        <span class="material-symbols-outlined" aria-hidden="true">{{ submitting ? 'progress_activity' : 'bolt' }}</span>
+        {{ submitting ? 'Generating...' : 'Confirm & Generate 20 Teams' }}
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
       </button>
     </div>
 
