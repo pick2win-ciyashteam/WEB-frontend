@@ -62,7 +62,7 @@
                     [class.live]="match.lineupReady && !isGenerated(match)"
                     [class.waiting]="!match.lineupReady && !isGenerated(match)"
                     [class.generated]="isGenerated(match)">
-                    {{ isGenerated(match) ? 'UCT Generated' : (match.lineupReady ? '⚡ Lineup Released' : 'Waiting for Lineup') }}
+                    {{ isGenerated(match) ? '✓ UCT Generated' : (match.lineupReady ? '⚡ Lineup Released' : '⏳ Waiting for Lineup') }}
                   </span>
                 </div>
 
@@ -84,8 +84,8 @@
 
                 <div class="tc-bot">
                   <div class="tc-time">
-                    <div class="tc-clock">{{ formatKickoff(match) }}</div>
-                    <div class="tc-rel">{{ kickoffInfo(match) }}{{ match.venue ? ' · ' + match.venue : '' }}</div>
+                    <div class="tc-clock">{{ matchDayStamp(match) }} &middot; {{ formatKickoff(match) }}</div>
+                    <div class="tc-rel">{{ matchDetailLine(match) }}</div>
                   </div>
                   <button
                     class="tc-uct"
@@ -123,14 +123,21 @@
                     <div class="uc-league">{{ match.league }}</div>
                     <div class="uc-teams">
                       <span class="uc-team">
-                        <span class="uc-swatch" [style.background]="match.home.color"></span>{{ match.home.code }}
+                        <span class="uc-swatch" [style.background]="match.home.color"></span>
+                        <span class="uc-code">{{ match.home.code }}</span>
+                        <span class="uc-name">{{ match.home.name }}</span>
                       </span>
                       <span class="uc-vs">vs</span>
                       <span class="uc-team">
-                        <span class="uc-swatch" [style.background]="match.away.color"></span>{{ match.away.code }}
+                        <span class="uc-swatch" [style.background]="match.away.color"></span>
+                        <span class="uc-code">{{ match.away.code }}</span>
+                        <span class="uc-name">{{ match.away.name }}</span>
                       </span>
                     </div>
-                    <div class="uc-time">{{ formatKickoff(match) }} · <span>{{ kickoffInfo(match) }}</span></div>
+                    <div class="uc-time">
+                      {{ matchDayStamp(match) }} &middot; {{ formatKickoff(match) }} &middot;
+                      <span>{{ kickoffInfo(match) }}{{ match.venue ? ' &middot; ' + match.venue : '' }}</span>
+                    </div>
                   </div>
 
                   <div class="uc-right">
@@ -139,7 +146,7 @@
                       [class.live]="match.lineupReady && !isGenerated(match)"
                       [class.waiting]="!match.lineupReady && !isGenerated(match)"
                       [class.generated]="isGenerated(match)">
-                      {{ isGenerated(match) ? 'UCT Generated' : (match.lineupReady ? 'Lineup Ready' : 'Waiting for Lineup') }}
+                      {{ isGenerated(match) ? '✓ UCT Generated' : (match.lineupReady ? 'Lineup Ready' : '⏳ Waiting for Lineup') }}
                     </span>
                     <button
                       class="uc-uct"

@@ -288,7 +288,9 @@
     <div class="home-cta-block">
       <a routerLink="/lineouts" class="home-cta-btn pulsing">
         <span class="home-cta-pulse"></span>
-        <span class="home-cta-text">Today's Lineouts</span>
+        <span class="home-cta-text">
+          {{ (loggedIn$ | async) ? "Today's Match Lineouts" : "Sign up Access today's Lineouts" }}
+        </span>
         <span class="home-cta-arrow">-&gt;</span>
       </a>
 

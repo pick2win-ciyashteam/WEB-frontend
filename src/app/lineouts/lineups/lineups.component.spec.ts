@@ -108,6 +108,90 @@ describe('LineupsComponent', () => {
     expect(component.readyAndNotGeneratedCount).toBe(0);
   });
 
+  it('maps all active backend series matches and shows venue details', () => {
+    const backendMatches = [
+      seriesMatch({
+        id: 240002,
+        provider_match_id: '19609133',
+        start_time: '2026-06-14T11:05:00.000Z',
+        lineupavailable: 1,
+        venue_name: 'Los Angeles Stadium',
+        venue_city: 'Inglewood',
+        seriesname: 'World Cup',
+        hometeamname: 'United States',
+        awayteamname: 'Paraguay',
+        home_team_name: 'USA',
+        away_team_name: 'PAR'
+      }),
+      seriesMatch({
+        id: 210009,
+        provider_match_id: '19609158',
+        start_time: '2026-06-14T11:30:00.000Z',
+        venue_name: 'Houston Stadium',
+        venue_city: 'Houston',
+        seriesname: 'World Cup',
+        home_team_name: 'GER',
+        away_team_name: 'CUW'
+      }),
+      seriesMatch({
+        id: 210010,
+        provider_match_id: '19609138',
+        start_time: '2026-06-14T14:30:00.000Z',
+        venue_name: 'Dallas Stadium',
+        venue_city: 'Arlington',
+        seriesname: 'World Cup',
+        home_team_name: 'NED',
+        away_team_name: 'JPN'
+      }),
+      seriesMatch({
+        id: 210011,
+        provider_match_id: '19609157',
+        start_time: '2026-06-14T17:30:00.000Z',
+        venue_name: 'Philadelphia Stadium',
+        venue_city: 'Philadelphia',
+        seriesname: 'World Cup',
+        home_team_name: 'CIV',
+        away_team_name: 'ECU'
+      })
+    ];
+
+    (component as any).matches = (component as any).mapSeriesMatches([{
+      id: 1692855,
+      seriesid: '732',
+      name: 'World Cup',
+      season: null,
+      start_date: null,
+      end_date: null,
+      created_at: '2026-06-14T00:40:52.000Z',
+      status: 'active',
+      is_selected: 1,
+      total_matches: 4,
+      matches: backendMatches
+    }]);
+
+    expect(component.visibleMatches.length).toBe(4);
+    expect(component.visibleMatches[0].league).toBe('World Cup');
+    expect(component.visibleMatches[0].venue).toBe('Los Angeles Stadium, Inglewood');
+    expect(component.visibleMatches.map(match => match.home.code)).toEqual(['USA', 'GER', 'NED', 'CIV']);
+    expect(component.visibleMatches[0].home.name).toBe('United States');
+    expect(component.visibleMatches[0].away.name).toBe('Paraguay');
+  });
+
+  it('uses match_name as a full-name fallback when full team fields are missing', () => {
+    setMatches([seriesMatch({
+      home_team_name: 'GER',
+      away_team_name: 'CUW',
+      hometeamname: undefined,
+      awayteamname: undefined,
+      match_name: 'Germany vs Curacao'
+    })]);
+
+    expect(component.visibleMatches[0].home.code).toBe('GER');
+    expect(component.visibleMatches[0].home.name).toBe('Germany');
+    expect(component.visibleMatches[0].away.code).toBe('CUW');
+    expect(component.visibleMatches[0].away.name).toBe('Curacao');
+  });
+
   function setMatches(matches: any[]): void {
     (component as any).matches = (component as any).mapSeriesMatches([{
       id: 1,

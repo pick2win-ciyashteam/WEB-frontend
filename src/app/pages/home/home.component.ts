@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   showSplash = true;
   showLaunchModal = false;
   showTodayLineupsCta = false;
+  loggedIn$ = this.authService.loggedIn$;
 
   private timer: any;
   private bannerTimer: any;

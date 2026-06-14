@@ -28,6 +28,7 @@ interface LineoutMatch {
   generatedAt?: string | null;
   venue: string;
   status: string;
+  active: boolean;
 }
 
 interface MatchDayGroup {
@@ -163,10 +164,9 @@ export class LineupsComponent implements OnInit, OnDestroy {
   kickoffInfo(match: LineoutMatch): string {
     const kickoffMs = new Date(match.kickoffISO).getTime();
     const diffMs = kickoffMs - Date.now();
-    const prefix = `${this.shortDayLabel(new Date(match.kickoffISO))} \u2022 ${this.formatKickoff(match)}`;
 
     if (diffMs <= 0) {
-      return `${prefix} \u2022 Match started`;
+      return this.isLive(match) ? 'In progress' : 'Match started';
     }
 
     const totalMinutes = Math.ceil(diffMs / 60000);
@@ -184,7 +184,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
       label = `Kicks off in ${minutes}m`;
     }
 
-    return `${prefix} \u2022 ${label}`;
+    return label;
   }
 
   openMatch(match: LineoutMatch): void {
@@ -281,6 +281,14 @@ export class LineupsComponent implements OnInit, OnDestroy {
       day: '2-digit',
       month: 'short'
     }).format(new Date(match.kickoffISO));
+  }
+
+  matchDayStamp(match: LineoutMatch): string {
+    return this.shortDayLabel(new Date(match.kickoffISO));
+  }
+
+  matchDetailLine(match: LineoutMatch): string {
+    return [this.kickoffInfo(match), match.venue].filter(Boolean).join(' - ');
   }
 
   todayGroupLabel(): string {
@@ -399,24 +407,36 @@ export class LineupsComponent implements OnInit, OnDestroy {
   private mapMatch(series: Series, match: Match): LineoutMatch | null {
     const kickoffISO = match.start_time || match.matchdate;
 
-    if (!kickoffISO || !match.is_active) {
+    if (!kickoffISO || this.isInactiveMatch(match)) {
       return null;
     }
 
+    const homeName = this.teamDisplayName(match, 'home');
+    const awayName = this.teamDisplayName(match, 'away');
+
     return {
       id: String(match.id || match.provider_match_id),
-      league: series.name,
+      league: match.seriesname || series.name,
       country: series.season || series.status || 'Football',
-      home: this.createTeam(match.home_team_name, match.home_team_logo),
-      away: this.createTeam(match.away_team_name, match.away_team_logo),
+      home: this.createTeam(
+        homeName,
+        match.home_team_logo,
+        match.home_team_name || match.hometeamname
+      ),
+      away: this.createTeam(
+        awayName,
+        match.away_team_logo,
+        match.away_team_name || match.awayteamname
+      ),
       kickoffISO,
       lineupReady: this.isLineupAvailable(match),
       lineupJustReleased: this.isLineupAvailable(match),
       teamsGenerated: this.hasGeneratedTeams(match),
       generatedTeamsCount: Number(match.generated_teams_count ?? 0),
       generatedAt: match.generated_at ?? null,
-      venue: match.status || 'Scheduled',
-      status: match.status || 'Scheduled'
+      venue: this.formatVenue(match),
+      status: match.status || 'Scheduled',
+      active: true
     };
   }
 
@@ -439,7 +459,59 @@ export class LineupsComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    return new Date(match.kickoffISO).getTime() > Date.now();
+    return match.active;
+  }
+
+  private isInactiveMatch(match: Match): boolean {
+    const value = this.firstMatchValue(match, ['is_active', 'isActive', 'active']);
+
+    if (value === undefined || value === null) {
+      return false;
+    }
+
+    if (typeof value === 'boolean') {
+      return !value;
+    }
+
+    if (typeof value === 'number') {
+      return value === 0;
+    }
+
+    return ['0', 'false', 'no', 'inactive', 'disabled'].includes(this.normalizedText(value));
+  }
+
+  private formatVenue(match: Match): string {
+    const venueName = String(this.firstMatchValue(match, ['venue_name', 'venueName', 'venue']) || '').trim();
+    const venueCity = String(this.firstMatchValue(match, ['venue_city', 'venueCity', 'city']) || '').trim();
+
+    return [venueName, venueCity].filter(Boolean).join(', ');
+  }
+
+  private teamDisplayName(match: Match, side: 'home' | 'away'): string {
+    const directName = String(
+      side === 'home'
+        ? this.firstMatchValue(match, ['hometeamname', 'homeTeamNameFull', 'home_full_name'])
+        : this.firstMatchValue(match, ['awayteamname', 'awayTeamNameFull', 'away_full_name'])
+    ).trim();
+
+    if (directName && directName !== 'undefined' && directName !== 'null') {
+      return directName;
+    }
+
+    const matchName = String(this.firstMatchValue(match, ['match_name', 'matchName']) || '').trim();
+    const teams = matchName.split(/\s+vs\s+/i).map(team => team.trim()).filter(Boolean);
+
+    if (teams.length >= 2) {
+      return side === 'home' ? teams[0] : teams[1];
+    }
+
+    const shortName = String(
+      side === 'home'
+        ? this.firstMatchValue(match, ['home_team_name', 'homeTeamName'])
+        : this.firstMatchValue(match, ['away_team_name', 'awayTeamName'])
+    ).trim();
+
+    return shortName || 'TBD';
   }
 
   private isLineupAvailable(match: Match): boolean {
@@ -583,9 +655,9 @@ export class LineupsComponent implements OnInit, OnDestroy {
     return typeof value === 'object' && value !== null;
   }
 
-  private createTeam(name: string, logo?: string): LineoutTeam {
+  private createTeam(name: string, logo?: string, codeSource?: string): LineoutTeam {
     return {
-      code: this.teamCode(name),
+      code: this.teamCode(codeSource || name),
       name,
       color: this.teamColor(name),
       logo

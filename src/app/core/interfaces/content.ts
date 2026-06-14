@@ -172,6 +172,12 @@ export interface Match {
   lineupavailable: number;
   lineup_status: string;
   is_active: number;
+  venue_name?: string;
+  venue_city?: string;
+  seriesname?: string;
+  hometeamname?: string;
+  awayteamname?: string;
+  match_name?: string;
   home_team_name: string;
   away_team_name: string;
   home_team_logo: string;
