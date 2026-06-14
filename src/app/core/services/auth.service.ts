@@ -5,7 +5,7 @@ import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { ProfileService } from './profile.service';
 
-const API = 'https://pick2win-backend-website.onrender.com/api/user/';
+const API = 'https://pick2win.io/backend/api';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -30,7 +30,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(
-      API + 'user-auth/login',
+      API + '/user/user-auth/login',
       {
         email: email,
         password: password,
@@ -63,7 +63,7 @@ export class AuthService {
 
     this.clearSession();
 
-    this.http.post(API + 'user-auth/logout', {}, logoutOptions).subscribe({
+    this.http.post(API + '/user/user-auth/logout', {}, logoutOptions).subscribe({
       next: (res) => {
         console.log('logout:', res);
       },
