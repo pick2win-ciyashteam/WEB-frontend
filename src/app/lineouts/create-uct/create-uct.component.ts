@@ -41,6 +41,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   submitError = '';
   showGenerateConfirm = false;
   showCaptainModeConfirm = false;
+  showPlayingXi = false;
   generateConsent = false;
   mandateMode: Mandate = 'NA';
   pendingCaptainMode: CaptainMode | null = null;
@@ -306,6 +307,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.router.navigate(['/lineouts']);
+  }
+
+  togglePlayingXi(): void {
+    this.showPlayingXi = !this.showPlayingXi;
   }
 
   nextStep(): void {

@@ -879,6 +879,24 @@ h1 em,
   background: rgba(255, 255, 255, .04);
 }
 
+.substitute-section-title.xi-toggle {
+  cursor: pointer;
+}
+
+.substitute-section-title.xi-toggle:hover,
+.substitute-section-title.xi-toggle.open {
+  border-color: rgba(91, 176, 230, .42);
+  background: rgba(91, 176, 230, .08);
+}
+
+.xi-toggle-icon {
+  transition: transform .18s ease;
+}
+
+.xi-toggle.open .xi-toggle-icon {
+  transform: rotate(180deg);
+}
+
 .substitute-section-title .material-symbols-outlined {
   color: var(--blue);
 }

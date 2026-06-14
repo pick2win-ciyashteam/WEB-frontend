@@ -206,7 +206,7 @@ private openMatchFromQueryParam(): void {
       const generatedTeams = this.generatedTeamsFromResponse(res);
 
       if (generatedTeams.length) {
-        const text = this.teamTextBlocks(generatedTeams);
+        const text = this.teamTextBlocks(generatedTeams, match);
         this.downloadText(text, this.makeTeamFileName(match, 'txt'));
         return;
       }
@@ -245,7 +245,10 @@ private openMatchFromQueryParam(): void {
         };
       });
 
-      const text = this.objectRowsToTextBlocks(rows);
+      const text = [
+        this.teamTextHeader(match, rows.length || match.teamsGenerated || 0),
+        this.objectRowsToTextBlocks(rows)
+      ].join('\r\n\r\n');
       this.downloadText(text, this.makeTeamFileName(match, 'txt'));
     }
   });
@@ -663,8 +666,26 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return '.';
   }
 
-  private teamTextBlocks(teams: ApiGeneratedTeam[]): string {
-    return teams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team)).join('\r\n\r\n');
+  private teamTextBlocks(teams: ApiGeneratedTeam[], match?: GeneratedMatch): string {
+    const blocks = teams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team));
+
+    if (!match) {
+      return blocks.join('\r\n\r\n');
+    }
+
+    return [
+      this.teamTextHeader(match, teams.length),
+      ...blocks
+    ].join('\r\n\r\n');
+  }
+
+  private teamTextHeader(match: GeneratedMatch, totalTeams: number): string {
+    return [
+      `PICK2WIN · UCT · ${match.title || 'Teams'}`,
+      `League: ${match.league || 'N/A'}`,
+      `Generated: ${this.csvMatchDate(match)}, ${match.generatedAt || '-'}`,
+      `Total: ${totalTeams || match.teamsGenerated || 0} teams`
+    ].join('\r\n');
   }
 
   private teamTextBlock(team: ApiGeneratedTeam): string {
@@ -677,7 +698,8 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       `UCT Team:  ${team.team_no}`,
       `Combination:  ${combination}`,
       '',
-      `${''.padEnd(4)}${'Player'.padStart(playerWidth)}    ${'Role'.padEnd(4)}    C/VC`
+      `${''.padEnd(4)}${'Player'.padStart(playerWidth)}    ${'Role'.padEnd(4)}    C/VC`,
+      ''
     ];
 
     previewPlayers.forEach((player, index) => {
@@ -714,7 +736,8 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         `UCT Team:  ${teamNo}`,
         `Combination:  ${split}`,
         '',
-        `${''.padEnd(4)}${'Player'.padStart(playerWidth)}    ${'Role'.padEnd(4)}    C/VC`
+        `${''.padEnd(4)}${'Player'.padStart(playerWidth)}    ${'Role'.padEnd(4)}    C/VC`,
+        ''
       ];
 
       players.forEach((player, playerIndex) => {

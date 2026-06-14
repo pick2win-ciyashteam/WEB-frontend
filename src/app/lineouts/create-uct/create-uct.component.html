@@ -125,13 +125,20 @@
           <span class="selection-pill">{{ selectedSubIds.size }} / {{ maxSubs }} selected</span>
         </div>
 
-        <div class="substitute-section-title playing-title">
+        <button
+          class="substitute-section-title playing-title xi-toggle"
+          type="button"
+          [class.open]="showPlayingXi"
+          [attr.aria-expanded]="showPlayingXi"
+          aria-controls="playingXiPanel"
+          (click)="togglePlayingXi()">
           <span class="material-symbols-outlined" aria-hidden="true">groups</span>
           <b>Playing XI</b>
-          <!-- <small>11 players</small> -->
-        </div>
+          <small>{{ showPlayingXi ? 'Hide players' : 'Show players' }}</small>
+          <span class="material-symbols-outlined xi-toggle-icon" aria-hidden="true">expand_more</span>
+        </button>
 
-        <div class="team-pool-grid locked-xi-grid">
+        <div class="team-pool-grid locked-xi-grid" id="playingXiPanel" *ngIf="showPlayingXi">
           <article class="team-pool locked-pool">
             <div class="team-pool-head">
               <h3><span class="team-color home"></span>{{ d.home_team.name }}</h3>
