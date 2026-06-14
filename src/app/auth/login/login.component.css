@@ -536,6 +536,13 @@
   box-shadow: 0 0 0 4px rgba(244, 180, 0, 0.1);
 }
 
+.forgot-modal input[readonly] {
+  cursor: not-allowed;
+  color: var(--paper-2);
+  border-color: rgba(99, 179, 237, 0.2);
+  background: rgba(99, 179, 237, 0.08);
+}
+
 .forgot-security {
   display: inline-flex;
   align-items: center;

@@ -54,6 +54,7 @@ export class LoginComponent {
   openForgotPassword(event?: Event) {
   event?.preventDefault();
   this.hideToast();
+  this.sanitizeLoginEmail();
 
   const emailCtrl = this.loginForm.get('email');
   emailCtrl?.markAsTouched();
@@ -66,7 +67,7 @@ export class LoginComponent {
     return;
   }
 
-  const email = emailCtrl.value.trim();
+  const email = this.withoutSpaces(emailCtrl.value || '');
 
   this.forgotForm.reset({
     email,
@@ -90,6 +91,7 @@ export class LoginComponent {
   }
 
   sendForgotOtp(isResend = false) {
+    this.sanitizeForgotEmail();
     const emailCtrl = this.forgotForm.get('email');
     emailCtrl?.markAsTouched();
 
@@ -100,7 +102,7 @@ export class LoginComponent {
 
     this.forgotLoading = true;
 
-    this.api.forgotPassword({ email: emailCtrl?.value || '' }).subscribe({
+    this.api.forgotPassword({ email: this.withoutSpaces(emailCtrl?.value || '') }).subscribe({
       next: (res) => {
         this.forgotLoading = false;
         this.otpSent = true;
@@ -118,6 +120,7 @@ export class LoginComponent {
   }
 
   verifyForgotOtp() {
+  this.sanitizeForgotEmail();
   const otpCtrl = this.forgotForm.get('otp');
   otpCtrl?.setValue(String(otpCtrl?.value || '').replace(/\D/g, '').slice(0, 6));
   otpCtrl?.markAsTouched();
@@ -127,7 +130,7 @@ export class LoginComponent {
     return;
   }
 
-  const email = this.forgotForm.value.email || '';
+  const email = this.withoutSpaces(this.forgotForm.value.email || '');
   const otp = otpCtrl?.value || '';
 
   this.forgotLoading = true;
@@ -149,6 +152,7 @@ export class LoginComponent {
 }
 
   resetPassword() {
+    this.sanitizeForgotEmail();
     this.forgotForm.get('email')?.markAsTouched();
     this.forgotForm.get('otp')?.markAsTouched();
     this.forgotForm.get('password')?.markAsTouched();
@@ -169,7 +173,7 @@ export class LoginComponent {
       return;
     }
 
-    const email = this.forgotForm.value.email || '';
+    const email = this.withoutSpaces(this.forgotForm.value.email || '');
     const otp = this.forgotForm.value.otp || '';
     const password = this.forgotForm.value.password || '';
 
@@ -193,12 +197,41 @@ export class LoginComponent {
   }
 
   finishForgotPassword() {
-    const email = this.forgotForm.value.email || '';
+    const email = this.withoutSpaces(this.forgotForm.value.email || '');
     this.closeForgotPassword();
     this.loginForm.patchValue({ email, password: '' });
   }
 
+  sanitizeLoginPassword(): void {
+    const passwordCtrl = this.loginForm.get('password');
+    const cleanPassword = this.withoutSpaces(passwordCtrl?.value || '');
+
+    if (passwordCtrl?.value !== cleanPassword) {
+      passwordCtrl?.setValue(cleanPassword, { emitEvent: false });
+    }
+  }
+
+  sanitizeLoginEmail(): void {
+    const emailCtrl = this.loginForm.get('email');
+    const cleanEmail = this.withoutSpaces(emailCtrl?.value || '');
+
+    if (emailCtrl?.value !== cleanEmail) {
+      emailCtrl?.setValue(cleanEmail, { emitEvent: false });
+    }
+  }
+
+  sanitizeForgotEmail(): void {
+    const emailCtrl = this.forgotForm.get('email');
+    const cleanEmail = this.withoutSpaces(emailCtrl?.value || '');
+
+    if (emailCtrl?.value !== cleanEmail) {
+      emailCtrl?.setValue(cleanEmail, { emitEvent: false });
+    }
+  }
+
   login() {
+    this.sanitizeLoginEmail();
+    this.sanitizeLoginPassword();
     this.loginForm.markAllAsTouched();
     this.hideToast();
 
@@ -209,7 +242,7 @@ export class LoginComponent {
 
     this.loading = true;
 
-    const email = this.loginForm.value.email || '';
+    const email = (this.loginForm.value.email || '').trim();
     const password = this.loginForm.value.password || '';
 
     this.authService.login(email, password).subscribe({
@@ -248,6 +281,10 @@ export class LoginComponent {
       clearTimeout(this.toastTimer);
       this.toastTimer = null;
     }
+  }
+
+  private withoutSpaces(value: string): string {
+    return String(value || '').replace(/\s+/g, '');
   }
 
   get forgotStepNumber(): number {

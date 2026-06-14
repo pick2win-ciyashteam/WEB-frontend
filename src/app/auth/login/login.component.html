@@ -20,7 +20,13 @@
       <label>Email <span>*</span></label>
       <div class="input-icon-wrap">
         <span class="material-symbols-outlined" aria-hidden="true">mail</span>
-        <input type="email" formControlName="email" placeholder="you@example.com" autocomplete="email">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          (input)="sanitizeLoginEmail()"
+          (keydown.space)="$event.preventDefault()">
       </div>
       <!-- <div class="hint">Use the email verified during signup.</div> -->
       <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
@@ -32,7 +38,13 @@
       <label>Password <span>*</span></label>
       <div class="password-field input-icon-wrap">
         <span class="material-symbols-outlined" aria-hidden="true">lock</span>
-        <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Your password" autocomplete="current-password">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Your password"
+          autocomplete="current-password"
+          (input)="sanitizeLoginPassword()"
+          (keydown.space)="$event.preventDefault()">
         <button
           type="button"
           class="password-toggle"
@@ -91,7 +103,13 @@
     <form [formGroup]="forgotForm">
       <ng-container *ngIf="forgotStep === 'email'">
         <label>Email <span>*</span></label>
-        <input type="email" formControlName="email" placeholder="you@example.com">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          readonly
+          (input)="sanitizeForgotEmail()"
+          (keydown.space)="$event.preventDefault()">
 
         <small *ngIf="forgotForm.get('email')?.touched && forgotForm.get('email')?.invalid">
           Enter valid email
