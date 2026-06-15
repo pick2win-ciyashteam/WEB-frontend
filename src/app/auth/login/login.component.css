@@ -558,6 +558,24 @@
   font-size: 19px;
 }
 
+.forgot-test-otp {
+  padding: 10px 12px;
+  border: 1px solid rgba(11, 204, 142, 0.28);
+  border-radius: 12px;
+  color: var(--paper-2);
+  background: rgba(11, 204, 142, 0.09);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.forgot-test-otp b {
+  color: var(--pitch-2);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+
 .forgot-modal .otp-code-input {
   height: 64px;
   text-align: center;

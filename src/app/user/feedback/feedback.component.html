@@ -209,6 +209,10 @@
         </div>
 
         <div class="fb-shipped-state error" *ngIf="surveySubmitError">{{ surveySubmitError }}</div>
+        <div class="fb-submit-loader" *ngIf="submittingSurvey" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <b>Submitting your votes...</b>
+        </div>
 
         <div class="fb-submit-row">
           <button type="submit" class="btn-pri-large" [disabled]="submittingSurvey || loadingQuestions || !surveyComplete">
@@ -220,7 +224,7 @@
       </form>
 
       <ng-template #surveyThanks>
-        <div class="fb-thanks">
+        <div class="fb-thanks" id="surveyThanksMessage">
           <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">how_to_vote</div>
           <h3>Votes recorded - thank you!</h3>
           <p>Your survey reference: <code>{{ surveyRef }}</code><br>Aggregate results are reviewed in the Tuesday product call. Any direct questions? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> - we reply within 48 hours.</p>
@@ -305,6 +309,10 @@
           </div>
 
           <div class="fb-shipped-state error" *ngIf="feedbackSubmitError">{{ feedbackSubmitError }}</div>
+          <div class="fb-submit-loader" *ngIf="submittingFeedback" aria-live="polite">
+            <span aria-hidden="true"></span>
+            <b>Sending your feedback...</b>
+          </div>
 
           <div class="fb-submit-row">
             <button type="submit" class="btn-pri-large" [disabled]="submittingFeedback">
@@ -316,11 +324,11 @@
         </form>
 
         <ng-template #feedbackThanks>
-          <div class="fb-thanks">
+          <div class="fb-thanks" id="feedbackThanksMessage">
             <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">check_circle</div>
             <h3>Thank you! Your feedback has been logged.</h3>
             <p>Reference ID: <code>{{ feedbackRef }}</code><br>We will review it within 48 hours and reply from <a href="mailto:support@pick2win.io">support@pick2win.io</a> if we need more details.</p>
-            <p class="fb-locked-note">One submission per user - your feedback has been logged.</p>
+            <!-- <p class="fb-locked-note">One submission per user - your feedback has been logged.</p> -->
             <button type="button" class="btn-ghost-small" (click)="resetFeedbackForm()">Submit another</button>
           </div>
         </ng-template>

@@ -115,8 +115,8 @@
           Enter valid email
         </small>
 
-    <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="verifyForgotOtp()">
-  {{ forgotLoading ? 'Verifying...' : 'Verify OTP' }}
+    <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="sendForgotOtp()">
+  {{ forgotLoading ? 'Sending...' : 'Send OTP' }}
 </button>
 
         <div class="forgot-security">
@@ -126,6 +126,10 @@
       </ng-container>
 
       <ng-container *ngIf="forgotStep === 'otp'">
+        <div class="forgot-test-otp" *ngIf="testForgotOtp">
+          Testing OTP: <b>{{ testForgotOtp }}</b>
+        </div>
+
         <label>OTP <span>*</span></label>
         <input
           class="otp-code-input"
@@ -146,8 +150,8 @@
           </button>
         </div>
 
-        <button class="forgot-primary" type="button" (click)="verifyForgotOtp()">
-          Verify OTP
+        <button class="forgot-primary" type="button" [disabled]="forgotLoading" (click)="verifyForgotOtp()">
+          Continue
         </button>
       </ng-container>
 

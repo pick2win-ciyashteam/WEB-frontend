@@ -82,7 +82,7 @@ export class FeedbackComponent implements OnInit {
           this.submittingSurvey = false;
 
           if (res?.already_submitted) {
-            this.markSurveySubmitted(res);
+            this.markSurveySubmitted(res, true);
             return;
           }
 
@@ -91,13 +91,13 @@ export class FeedbackComponent implements OnInit {
             return;
           }
 
-          this.markSurveySubmitted(res);
+          this.markSurveySubmitted(res, true);
         },
         error: (err) => {
           this.submittingSurvey = false;
 
           if (err?.error?.already_submitted) {
-            this.markSurveySubmitted(err.error);
+            this.markSurveySubmitted(err.error, true);
             return;
           }
 
@@ -149,6 +149,7 @@ export class FeedbackComponent implements OnInit {
           this.feedbackSubmitted = true;
           this.feedbackTab = 'suggest';
           form.reset();
+          this.scrollToMessage('feedbackThanksMessage');
           this.loadFeedback();
         },
         error: (err) => {
@@ -207,11 +208,24 @@ export class FeedbackComponent implements OnInit {
       && Number(formData.get('uct_rating') || 0) > 0;
   }
 
-  private markSurveySubmitted(res: any): void {
+  private markSurveySubmitted(res: any, scrollToSuccess = false): void {
     this.surveyRef = String(res?.data?.reference || res?.reference || res?.id || 'Submitted');
     this.surveySubmitted = true;
     this.feedbackTab = 'vote';
     this.surveySubmitError = '';
+
+    if (scrollToSuccess) {
+      this.scrollToMessage('surveyThanksMessage');
+    }
+  }
+
+  private scrollToMessage(id: string): void {
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }, 50);
   }
 
   private loadFeedback(): void {

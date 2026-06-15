@@ -35,6 +35,7 @@ export class LoginComponent {
   forgotModal = false;
   otpSent = false;
   forgotStep: 'email' | 'otp' | 'password' | 'success' = 'email';
+  testForgotOtp = '';
 
   toast: { type: 'success' | 'error'; message: string } | null = null;
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
@@ -77,6 +78,7 @@ export class LoginComponent {
   });
 
   this.otpSent = false;
+  this.testForgotOtp = '';
   this.forgotStep = 'email';
   this.forgotModal = true;
   this.showResetPassword = false;
@@ -86,6 +88,7 @@ export class LoginComponent {
   closeForgotPassword() {
     this.forgotModal = false;
     this.otpSent = false;
+    this.testForgotOtp = '';
     this.forgotStep = 'email';
     this.forgotForm.reset();
   }
@@ -106,6 +109,9 @@ export class LoginComponent {
       next: (res) => {
         this.forgotLoading = false;
         this.otpSent = true;
+        this.forgotForm.patchValue({ otp: '' });
+        this.forgotForm.get('otp')?.markAsUntouched();
+        this.testForgotOtp = String(res?.otp || res?.data?.otp || '');
         this.forgotStep = 'otp';
         this.showToast('success', res?.message || (isResend ? 'OTP resent to your email.' : 'OTP sent to your email.'));
       },
@@ -133,22 +139,13 @@ export class LoginComponent {
   const email = this.withoutSpaces(this.forgotForm.value.email || '');
   const otp = otpCtrl?.value || '';
 
-  this.forgotLoading = true;
+  if (!email || !otp) {
+    this.showToast('error', 'Please enter valid OTP.');
+    return;
+  }
 
-  this.api.verifyEmailOtp({ email, otp }).subscribe({
-    next: (res:any) => {
-      this.forgotLoading = false;
-      this.forgotStep = 'password';
-      this.showToast('success', res?.message || 'OTP verified successfully.');
-    },
-    error: (err:any) => {
-      this.forgotLoading = false;
-      this.showToast(
-        'error',
-        err?.error?.message || err?.error?.error || 'Invalid OTP. Please try again.'
-      );
-    }
-  });
+  this.forgotStep = 'password';
+  this.showToast('success', 'OTP added. Create your new password.');
 }
 
   resetPassword() {
@@ -312,7 +309,7 @@ export class LoginComponent {
   get forgotDescription(): string {
     const email = this.forgotForm.value.email || 'your email';
     const descriptionMap = {
-      email: 'Enter your registered email address. We will send an OTP to verify your account.',
+      email: `We will send a verification OTP to ${email}. Please check your inbox or spam folder to continue.`,
       otp: `Enter the OTP sent to ${email}.`,
       password: 'Your new password must be strong and unique.',
       success: 'Your password has been changed successfully.'
