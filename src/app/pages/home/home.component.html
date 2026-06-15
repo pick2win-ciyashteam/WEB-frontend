@@ -16,72 +16,6 @@
   </div>
 </div>
 
-<div class="launch-modal-backdrop" *ngIf="showLaunchModal">
-  <section class="launch-card launch-modal-card" role="dialog" aria-modal="true" aria-labelledby="launchModalTitle">
-    <div class="launch-card-inner">
-      <button class="launch-modal-close" type="button" aria-label="Close launch modal" (click)="closeLaunchModal()">x</button>
-
-      <div class="launch-eyebrow-row">
-        <span class="launch-pulse">
-          <span class="launch-pulse-dot"></span>
-          <span>{{ launchStatus }}</span>
-        </span>
-
-        <span class="launch-date-tag">JUNE 10, 2026 - 09:00 UTC</span>
-      </div>
-
-      <h2 class="launch-headline">
-        <span id="launchModalTitle">PICK2WIN goes <em>live</em> in</span>
-      </h2>
-
-      <p class="launch-sub">
-        The structured virtual team configuration <b>workflow tool</b> for users who create strictly
-        20 teams per match. Mark your calendar - <b>first match free</b> for every verified
-        account at launch.
-      </p>
-
-      <div class="launch-counter">
-        <div class="launch-unit">
-          <div class="launch-num">{{ days }}</div>
-          <div class="launch-lbl">Days</div>
-        </div>
-
-        <div class="launch-unit">
-          <div class="launch-num">{{ hours }}</div>
-          <div class="launch-lbl">Hours</div>
-        </div>
-
-        <div class="launch-unit">
-          <div class="launch-num">{{ minutes }}</div>
-          <div class="launch-lbl">Minutes</div>
-        </div>
-
-        <div class="launch-unit">
-          <div class="launch-num">{{ seconds }}</div>
-          <div class="launch-lbl">Seconds</div>
-        </div>
-      </div>
-
-      <div class="launch-meta">
-        <span><span class="ic material-symbols-outlined" aria-hidden="true">sports_soccer</span> <b>30 leagues</b> - Premier League - UCL - La Liga - Serie A - Bundesliga +25 more</span>
-        <span><span class="ic material-symbols-outlined" aria-hidden="true">public</span> <b>19 markets</b> - UK - EU - USA - CA - AU - NZ</span>
-        <span><span class="ic material-symbols-outlined" aria-hidden="true">redeem</span> <b>Free first match</b> for verified users at launch</span>
-      </div>
-
-      <div class="launch-cta-row">
-        <button type="button" class="launch-cta" (click)="openSignup()">
-          Reserve Free Match at Launch
-          <span class="material-symbols-outlined arrow" aria-hidden="true">arrow_forward</span>
-        </button>
-
-        <a routerLink="/about" class="launch-cta-ghost">
-          Learn about PICK2WIN
-          <span class="material-symbols-outlined arrow" aria-hidden="true">arrow_forward</span>
-        </a>
-      </div>
-    </div>
-</section>
-</div>
 
 <section class="carousel-section">
   <div class="banner-deck" id="bannerDeck">
@@ -154,6 +88,32 @@
     <button type="button" [class.active]="currentBanner === 3" aria-label="Pricing" (click)="showBanner(3)"></button>
     <button type="button" [class.active]="currentBanner === 4" aria-label="Free first match" (click)="showBanner(4)"></button>
     <button type="button" [class.active]="currentBanner === 5" aria-label="Trust" (click)="showBanner(5)"></button>
+  </div>
+</section>
+
+<section class="home-section home-about-company reveal">
+  <div class="wrap">
+    <div class="company-about-card">
+      <!-- <div class="company-about-eyebrow">ABOUT US</div> -->
+         <div class="home-hero-eyebrow"><span class="home-hero-dot"></span>ABOUT US</div>
+      <!-- <h2 class="company-about-title">PICK2WIN Technologies Private Limited</h2> -->
+      <div class="company-about-copy">
+        <p>PICK2WIN Technologies Private Limited is a technology company focused on developing innovative software products and digital solutions that enhance user experiences through intelligent automation, analytics, and decision-support capabilities.</p>
+        <p>One of our products is a football-based virtual team configuration platform that enables users to create, manage, and customize virtual football team configurations using their own preferences, strategies, insights, and requirements. The platform is designed to support team planning, player selection, analysis, and configuration management through technology-driven tools and a user-friendly experience.</p>
+        <p>At PICK2WIN, we are committed to building scalable, innovative, and reliable software solutions that empower users with greater flexibility, control, and informed decision-making through modern technology. Our focus is on delivering practical, data-driven, and user-centric products that simplify complex processes and create meaningful value for users.</p>
+      </div>
+
+      <div class="company-about-pillars">
+        <div class="company-about-pillar">
+          <span>Our Mission</span>
+          <p>To develop innovative software products and digital solutions that enhance user experiences through intelligent technology, automation, analytics, and decision-support systems.</p>
+        </div>
+        <div class="company-about-pillar">
+          <span>Our Vision</span>
+          <p>To become a trusted technology company delivering innovative digital products that help users make informed decisions, improve productivity, and achieve better outcomes through technology-driven solutions.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 

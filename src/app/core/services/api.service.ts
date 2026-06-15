@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
 import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, CheckoutSessionPayload, CheckoutSessionResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, Series, StripeConfigResponse, SubscriptionPlan, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,10 @@ export class ApiService {
   private BASE = 'https://pick2win.io/backend/api'
 
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private tokenService: TokenService
+  ) { }
 
 
   signup(data: SignupPayload): Observable<any> {
@@ -70,19 +74,19 @@ export class ApiService {
   }
 
   getFeedback(): Observable<any> {
-    return this.http.get(`${this.BASE}/admin/feedback/feedback-get`);
+    return this.http.get(`${this.BASE}/admin/feedback/feedback-get`, this.userAuthOptions());
   }
 
   postFeedback(data: FeedbackPostPayload): Observable<any> {
-    return this.http.post(`${this.BASE}/admin/feedback/user-post`, data);
+    return this.http.post(`${this.BASE}/admin/feedback/user-post`, data, this.userAuthOptions());
   }
 
   getFeedbackQuestions(): Observable<ApiListResponse<FeedbackQuestion>> {
-    return this.http.get<ApiListResponse<FeedbackQuestion>>(`${this.BASE}/admin/feedback/user-questions`);
+    return this.http.get<ApiListResponse<FeedbackQuestion>>(`${this.BASE}/admin/feedback/user-questions`, this.userAuthOptions());
   }
 
   postFeedbackAnswers(data: FeedbackAnswerPayload): Observable<any> {
-    return this.http.post(`${this.BASE}/admin/feedback/user-answers`, data);
+    return this.http.post(`${this.BASE}/admin/feedback/user-answers`, data, this.userAuthOptions());
   }
 
   getCountries(): Observable<ApiListResponse<Country>> {
@@ -144,6 +148,14 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
 
    GetPurchaseHistory(): Observable<ApiListResponse<Country>> {
     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/deposite/my-transactions`);
+  }
+
+  private userAuthOptions(): { headers?: HttpHeaders } {
+    const token = this.tokenService.getToken();
+
+    return token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
   }
 
 }

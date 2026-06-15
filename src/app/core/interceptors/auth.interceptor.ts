@@ -14,7 +14,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private tokenService: TokenService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token = this.isAdminApiRequest(request)
+    const token = this.isAdminApiRequest(request) && !this.isUserFeedbackRequest(request)
       ? this.tokenService.getAdminToken()
       : this.tokenService.getToken();
 
@@ -31,5 +31,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private isAdminApiRequest(request: HttpRequest<unknown>): boolean {
     return request.url.includes('/api/admin/');
+  }
+
+  private isUserFeedbackRequest(request: HttpRequest<unknown>): boolean {
+    return request.url.includes('/api/admin/feedback/');
   }
 }
