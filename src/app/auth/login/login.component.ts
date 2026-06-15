@@ -252,7 +252,7 @@ export class LoginComponent {
 
         setTimeout(() => {
           this.authModal.close();
-          this.router.navigate(['/user/profile']);
+          this.router.navigate(['/lineouts'], { replaceUrl: true });
         }, 1500);
       },
       error: (err) => {

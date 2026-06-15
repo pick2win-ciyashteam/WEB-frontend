@@ -82,13 +82,13 @@
         <p>A quick required survey - about a minute. Please answer every question; you will finish with a star rating. One submission per user.</p>
       </div>
 
-      <form class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (submit)="submitSurvey($event)">
+      <form #surveyForm class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (input)="updateSurveyCompletion(surveyForm)" (change)="updateSurveyCompletion(surveyForm)" (submit)="submitSurvey($event)">
         <div class="fb-q">
           <div class="fb-q-num">Q1 - Required</div>
-          <div class="fb-q-text">Overall, how do you feel about <b>UCT</b> - the engine that builds your 20 teams?</div>
+          <div class="fb-q-text">{{ questionText(1, 'Overall, how do you feel about UCT - the engine that builds your 20 teams?') }}</div>
           <div class="fb-q-options">
             <label class="fb-opt fb-opt-green">
-              <input type="radio" name="uct_sentiment" value="like" required>
+              <input type="radio" name="uct_sentiment" value="like_uct" required>
               <div class="fb-opt-body"><div class="fb-opt-title">Like UCT</div><div class="fb-opt-sub">It works well for me - generating 20 teams in one tap is the best part.</div></div>
             </label>
             <label class="fb-opt fb-opt-gold">
@@ -104,8 +104,8 @@
 
         <div class="fb-q">
           <div class="fb-q-num">Q2 - Choose at least one</div>
-          <div class="fb-q-text">What would you <b>most like us to improve</b>?</div>
-          <div class="fb-q-help">Pick as many as you like - these build our most-requested changes ranking.</div>
+          <div class="fb-q-text">{{ questionText(2, 'What would you most like us to improve?') }}</div>
+          <div class="fb-q-help">{{ questionHint(2, 'Pick as many as you like - these build our most-requested changes ranking.') }}</div>
           <div class="fb-changes">
             <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="more_leagues"><div class="fb-opt-body"><div class="fb-opt-title">More leagues / series</div></div></label>
             <label class="fb-opt fb-opt-gold"><input type="checkbox" name="uct_changes" value="remove_sub_mandate"><div class="fb-opt-body"><div class="fb-opt-title">Remove Sub, Mandate options</div></div></label>
@@ -118,7 +118,7 @@
 
         <div class="fb-q">
           <div class="fb-q-num">Q3 - Required</div>
-          <div class="fb-q-text">How often do you use <b>PICK2WIN</b>?</div>
+          <div class="fb-q-text">{{ questionText(3, 'How often do you use PICK2WIN?') }}</div>
           <div class="fb-pills">
             <label class="fb-pill"><input type="radio" name="uct_frequency" value="every_matchday" required><span>Every matchday</span></label>
             <label class="fb-pill"><input type="radio" name="uct_frequency" value="weekly"><span>A few times a week</span></label>
@@ -129,7 +129,7 @@
 
         <div class="fb-q">
           <div class="fb-q-num">Q4 - Required</div>
-          <div class="fb-q-text">How likely are you to <b>recommend PICK2WIN</b> to a friend?</div>
+          <div class="fb-q-text">{{ questionText(4, 'How likely are you to recommend PICK2WIN to a friend?') }}</div>
           <div class="fb-pills">
             <label class="fb-pill"><input type="radio" name="uct_recommend" value="very_likely" required><span>Very likely</span></label>
             <label class="fb-pill"><input type="radio" name="uct_recommend" value="maybe"><span>Maybe</span></label>
@@ -139,8 +139,8 @@
 
         <div class="fb-q">
           <div class="fb-q-num">Q5 - Required</div>
-          <div class="fb-q-text">How many teams do you usually need <b>per match</b>?</div>
-          <div class="fb-q-help">Helps us decide whether to offer custom team counts other than 20.</div>
+          <div class="fb-q-text">{{ questionText(5, 'How many teams do you usually need per match?') }}</div>
+          <div class="fb-q-help">{{ questionHint(5, 'Helps us decide whether to offer custom team counts other than 20.') }}</div>
           <div class="fb-pills">
             <label class="fb-pill"><input type="radio" name="uct_team_need" value="20" required><span>20</span></label>
             <label class="fb-pill"><input type="radio" name="uct_team_need" value="40"><span>40</span></label>
@@ -151,15 +151,15 @@
 
         <div class="fb-q">
           <div class="fb-q-num">Q6 - Required</div>
-          <div class="fb-q-text">Which <b>competitions</b> do you most want us to add or expand?</div>
-          <div class="fb-q-help">Type the leagues, cups or tournaments you would like - e.g. Champions League knockouts, Women's Super League, World Cup.</div>
+          <div class="fb-q-text">{{ questionText(6, 'Which competitions do you most want us to add or expand?') }}</div>
+          <div class="fb-q-help">{{ questionHint(6, "Type the leagues, cups or tournaments you would like - e.g. Champions League knockouts, Women's Super League, World Cup.") }}</div>
           <input type="text" class="fb-input" name="uct_competitions" required maxlength="160" placeholder="Enter the competitions you would like us to add">
         </div>
 
         <div class="fb-q">
           <div class="fb-q-num">Q7 - Required</div>
-          <div class="fb-q-text">If we add a <b>new sport</b>, which should come first?</div>
-          <div class="fb-q-help">Future sports depend on demand and sustainability - your pick guides the order.</div>
+          <div class="fb-q-text">{{ questionText(7, 'If we add a new sport, which should come first?') }}</div>
+          <div class="fb-q-help">{{ questionHint(7, 'Future sports depend on demand and sustainability - your pick guides the order.') }}</div>
           <div class="fb-pills">
             <label class="fb-pill"><input type="radio" name="uct_next_sport" value="cricket" required><span>Cricket</span></label>
             <label class="fb-pill"><input type="radio" name="uct_next_sport" value="basketball"><span>Basketball</span></label>
@@ -171,18 +171,18 @@
 
         <div class="fb-q">
           <div class="fb-q-num">Q8 - Required</div>
-          <div class="fb-q-text">Which <b>pricing</b> would suit you best?</div>
+          <div class="fb-q-text">{{ questionText(8, 'Which pricing would suit you best?') }}</div>
           <div class="fb-pills">
             <label class="fb-pill"><input type="radio" name="uct_pricing" value="current_packs" required><span>Current Coin Packs</span></label>
             <label class="fb-pill"><input type="radio" name="uct_pricing" value="pay_per_match"><span>Pay per match</span></label>
-            <label class="fb-pill"><input type="radio" name="uct_pricing" value="subscription"><span>Monthly subscription</span></label>
+            <label class="fb-pill"><input type="radio" name="uct_pricing" value="monthly_subscription"><span>Monthly subscription</span></label>
             <label class="fb-pill"><input type="radio" name="uct_pricing" value="league_series"><span>League / Series basis packs</span></label>
           </div>
         </div>
 
         <div class="fb-q">
           <div class="fb-q-num">Q9 - Required</div>
-          <div class="fb-q-text">Where do you mostly use <b>PICK2WIN</b>?</div>
+          <div class="fb-q-text">{{ questionText(9, 'Where do you mostly use PICK2WIN?') }}</div>
           <div class="fb-pills">
             <label class="fb-pill"><input type="radio" name="uct_device" value="mobile_web" required><span>Mobile browser</span></label>
             <label class="fb-pill"><input type="radio" name="uct_device" value="desktop"><span>Desktop</span></label>
@@ -191,13 +191,13 @@
 
         <div class="fb-q">
           <div class="fb-q-num">Q10 - Required</div>
-          <div class="fb-q-text">Anything you would like to add? <em>Shown to the product team.</em></div>
+          <div class="fb-q-text">{{ questionText(10, 'Anything you would like to add?') }}</div>
           <textarea class="fb-input" name="survey_comment" rows="3" maxlength="400" required placeholder="Example: Love generating 20 teams in one tap - please add more leagues and make generation faster."></textarea>
         </div>
 
         <div class="fb-q">
           <div class="fb-q-num">Q11 - Final - Required</div>
-          <div class="fb-q-text">Finally, how would you <b>rate UCT</b> right now?</div>
+          <div class="fb-q-text">{{ questionText(11, 'Finally, how would you rate UCT right now?') }}</div>
           <div class="fb-stars">
             <input type="radio" id="uct-r5" name="uct_rating" value="5" required><label for="uct-r5" title="5 - Excellent">★</label>
             <input type="radio" id="uct-r4" name="uct_rating" value="4"><label for="uct-r4" title="4 - Good">★</label>
@@ -208,31 +208,12 @@
           <div class="fb-stars-hint">Tap a star - 1 = poor, 5 = excellent - required to submit</div>
         </div>
 
-        <div class="fb-q" *ngIf="loadingQuestions || surveyLoadError || feedbackQuestions.length">
-          <div class="fb-q-num">Live PICK2WIN Questions</div>
-          <div class="fb-shipped-state" *ngIf="loadingQuestions">Loading survey questions...</div>
-          <div class="fb-shipped-state error" *ngIf="!loadingQuestions && surveyLoadError">{{ surveyLoadError }}</div>
-          <ng-container *ngIf="!loadingQuestions && !surveyLoadError">
-            <div class="fb-live-q" *ngFor="let question of feedbackQuestions; let i = index; trackBy: trackQuestion">
-              <div class="fb-q-num">Dynamic Q{{ i + 1 }} {{ question.is_mandatory ? '- Required' : '- Optional' }}</div>
-              <div class="fb-q-text">{{ question.question }}</div>
-              <div class="fb-q-help">{{ question.hint }}</div>
-              <div class="fb-q-options">
-                <label class="fb-opt" *ngFor="let option of question.options; trackBy: trackOption">
-                  <input type="radio" [name]="'question_' + question.id" [value]="option.id" [required]="!!question.is_mandatory" [checked]="selectedAnswers[question.id] === option.id" (change)="selectSurveyAnswer(question.id, option.id)">
-                  <div class="fb-opt-body"><div class="fb-opt-title">{{ option.emoji }} {{ option.label }}</div><div class="fb-opt-sub">{{ option.description }}</div></div>
-                </label>
-              </div>
-            </div>
-          </ng-container>
-        </div>
-
         <div class="fb-shipped-state error" *ngIf="surveySubmitError">{{ surveySubmitError }}</div>
 
         <div class="fb-submit-row">
-          <button type="submit" class="btn-pri-large" [disabled]="submittingSurvey || loadingQuestions">
+          <button type="submit" class="btn-pri-large" [disabled]="submittingSurvey || loadingQuestions || !surveyComplete">
             <span class="material-symbols-outlined" aria-hidden="true">task_alt</span>
-            {{ submittingSurvey ? 'Submitting...' : 'Submit My Votes' }}
+            {{ submittingSurvey ? 'Submitting...' : (surveyComplete ? 'Submit My Votes' : 'Answer all questions') }}
           </button>
           <span class="fb-sla">All questions required - finish with your rating - one submission per user</span>
         </div>
@@ -243,8 +224,7 @@
           <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">how_to_vote</div>
           <h3>Votes recorded - thank you!</h3>
           <p>Your survey reference: <code>{{ surveyRef }}</code><br>Aggregate results are reviewed in the Tuesday product call. Any direct questions? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> - we reply within 48 hours.</p>
-          <p class="fb-locked-note">One vote per user - your response has been recorded.</p>
-          <button type="button" class="btn-ghost-small" (click)="resetSurvey()">Review my votes</button>
+          <p class="fb-locked-note">One vote per user - your response has been recorded. You cannot submit the vote form again.</p>
         </div>
       </ng-template>
     </div>

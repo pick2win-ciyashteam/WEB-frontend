@@ -23,7 +23,6 @@ export class FeedbackComponent implements OnInit {
   feedbackRef = '';
   feedbackItems: UserFeedbackItem[] = [];
   feedbackQuestions: FeedbackQuestion[] = [];
-  selectedAnswers: Record<number, number> = {};
   loadingFeedback = true;
   loadingQuestions = true;
   feedbackLoadError = '';
@@ -32,6 +31,7 @@ export class FeedbackComponent implements OnInit {
   feedbackSubmitError = '';
   submittingSurvey = false;
   submittingFeedback = false;
+  surveyComplete = false;
 
   constructor(private api: ApiService) {}
 
@@ -44,55 +44,78 @@ export class FeedbackComponent implements OnInit {
     event.preventDefault();
     this.surveySubmitError = '';
 
-    const missingQuestion = this.feedbackQuestions.find(question =>
-      Number(question.is_mandatory) === 1 && !this.selectedAnswers[question.id]
-    );
-
-    if (missingQuestion) {
-      this.surveySubmitError = 'Please answer all mandatory survey questions.';
+    if (this.surveySubmitted) {
+      this.surveySubmitError = 'You have already submitted your vote.';
       return;
     }
 
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    if (!formData.getAll('uct_changes').length) {
-      this.surveySubmitError = 'Please select at least one improvement request.';
+    if (!this.isSurveyFormComplete(formData)) {
+      this.surveySubmitError = 'Please answer all required vote questions before submitting.';
       return;
     }
 
-    const comment = this.buildSurveyComment(formData);
-    const answers = Object.entries(this.selectedAnswers).map(([questionId, optionId]) => ({
-      question_id: Number(questionId),
-      option_id: Number(optionId)
-    }));
+    const rating = Number(formData.get('uct_rating') || 0);
+
+    const payload = {
+      answers: {
+        q1: String(formData.get('uct_sentiment') || ''),
+        q2: formData.getAll('uct_changes').map(String),
+        q3: String(formData.get('uct_frequency') || ''),
+        q4: String(formData.get('uct_recommend') || ''),
+        q5: String(formData.get('uct_team_need') || ''),
+        q6: String(formData.get('uct_competitions') || '').trim(),
+        q7: String(formData.get('uct_next_sport') || ''),
+        q8: String(formData.get('uct_pricing') || ''),
+        q9: String(formData.get('uct_device') || ''),
+        q10: String(formData.get('survey_comment') || '').trim(),
+        q11: rating
+      }
+    };
 
     this.submittingSurvey = true;
-    this.api.postFeedbackAnswers({ answers, comment })
+    this.api.postFeedbackAnswers(payload)
       .subscribe({
         next: (res) => {
           this.submittingSurvey = false;
-          this.surveyRef = String(res?.data?.reference || res?.reference || res?.id || this.localRef('SUR'));
-          this.surveySubmitted = true;
-          this.feedbackTab = 'suggest';
+
+          if (res?.already_submitted) {
+            this.markSurveySubmitted(res);
+            return;
+          }
+
+          if (res?.success === false) {
+            this.surveySubmitError = res?.message || 'Unable to submit survey. Please try again.';
+            return;
+          }
+
+          this.markSurveySubmitted(res);
         },
         error: (err) => {
           this.submittingSurvey = false;
+
+          if (err?.error?.already_submitted) {
+            this.markSurveySubmitted(err.error);
+            return;
+          }
+
           this.surveySubmitError = err?.error?.message || err?.error?.error || 'Unable to submit survey. Please try again.';
         }
       });
   }
 
   resetSurvey(): void {
-    this.surveySubmitted = false;
+    this.surveySubmitError = 'You have already submitted your vote.';
+  }
+
+  updateSurveyCompletion(form: HTMLFormElement): void {
+    this.surveyComplete = this.isSurveyFormComplete(new FormData(form));
   }
 
   setFeedbackTab(tab: 'vote' | 'suggest'): void {
     this.feedbackTab = tab;
-  }
-
-  selectSurveyAnswer(questionId: number, optionId: number): void {
-    this.selectedAnswers[questionId] = optionId;
   }
 
   submitFeedback(event: Event): void {
@@ -162,27 +185,33 @@ export class FeedbackComponent implements OnInit {
     return question.id;
   }
 
-  trackOption(_: number, option: { id: number }): number {
-    return option.id;
+  questionText(questionNumber: number, fallback: string): string {
+    return this.feedbackQuestions[questionNumber - 1]?.question || fallback;
   }
 
-  private buildSurveyComment(formData: FormData): string {
-    const selectedChanges = formData.getAll('uct_changes').map(String).join(', ');
-    const lines = [
-      `UCT sentiment: ${formData.get('uct_sentiment') || '-'}`,
-      `Most requested improvements: ${selectedChanges || '-'}`,
-      `Usage frequency: ${formData.get('uct_frequency') || '-'}`,
-      `Recommend: ${formData.get('uct_recommend') || '-'}`,
-      `Teams per match: ${formData.get('uct_team_need') || '-'}`,
-      `Competitions wanted: ${formData.get('uct_competitions') || '-'}`,
-      `Next sport: ${formData.get('uct_next_sport') || '-'}`,
-      `Pricing preference: ${formData.get('uct_pricing') || '-'}`,
-      `Device: ${formData.get('uct_device') || '-'}`,
-      `UCT rating: ${formData.get('uct_rating') || '-'}`,
-      `Additional comment: ${formData.get('survey_comment') || '-'}`
-    ];
+  questionHint(questionNumber: number, fallback = ''): string {
+    return this.feedbackQuestions[questionNumber - 1]?.hint || fallback;
+  }
 
-    return lines.join('\n');
+  private isSurveyFormComplete(formData: FormData): boolean {
+    return !!String(formData.get('uct_sentiment') || '')
+      && formData.getAll('uct_changes').length > 0
+      && !!String(formData.get('uct_frequency') || '')
+      && !!String(formData.get('uct_recommend') || '')
+      && !!String(formData.get('uct_team_need') || '')
+      && !!String(formData.get('uct_competitions') || '').trim()
+      && !!String(formData.get('uct_next_sport') || '')
+      && !!String(formData.get('uct_pricing') || '')
+      && !!String(formData.get('uct_device') || '')
+      && !!String(formData.get('survey_comment') || '').trim()
+      && Number(formData.get('uct_rating') || 0) > 0;
+  }
+
+  private markSurveySubmitted(res: any): void {
+    this.surveyRef = String(res?.data?.reference || res?.reference || res?.id || 'Submitted');
+    this.surveySubmitted = true;
+    this.feedbackTab = 'vote';
+    this.surveySubmitError = '';
   }
 
   private loadFeedback(): void {
@@ -208,12 +237,27 @@ export class FeedbackComponent implements OnInit {
 
     this.api.getFeedbackQuestions().subscribe({
       next: (res) => {
+        if (res?.already_submitted) {
+          this.feedbackQuestions = [];
+          this.loadingQuestions = false;
+          this.markSurveySubmitted(res);
+          return;
+        }
+
         this.feedbackQuestions = res?.success && Array.isArray(res.data)
-          ? [...res.data].sort((a, b) => a.sort_order - b.sort_order)
+          ? [...res.data].sort((a, b) => (a.sort_order - b.sort_order) || (a.id - b.id))
           : [];
+        this.surveySubmitted = false;
         this.loadingQuestions = false;
       },
       error: (err) => {
+        if (err?.error?.already_submitted) {
+          this.feedbackQuestions = [];
+          this.loadingQuestions = false;
+          this.markSurveySubmitted(err.error);
+          return;
+        }
+
         this.feedbackQuestions = [];
         this.loadingQuestions = false;
         this.surveyLoadError = err?.error?.message || 'Unable to load survey questions.';

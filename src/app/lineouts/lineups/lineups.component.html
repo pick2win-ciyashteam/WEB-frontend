@@ -14,7 +14,7 @@
             id="lineoutsBalanceCard"
             class="balance-card"
             [class.balance-card-alert]="showBalanceRequired"
-            routerLink="/user/profile"
+            [routerLink]="coinBalance > 0 ? '/user/profile' : '/pricing'"
             title="Your coin balance">
             <div class="balance-icon">
               <span>P2W</span>

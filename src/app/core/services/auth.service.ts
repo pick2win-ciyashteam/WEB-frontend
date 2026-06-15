@@ -81,7 +81,7 @@ export class AuthService {
     sessionStorage.clear();
     this.profileService.clearProfile();
     this.loggedInSubject.next(false);
-    this.router.navigate(['/']);
+    this.router.navigate(['/'], { replaceUrl: true });
   }
 
   isLoggedIn(): boolean {

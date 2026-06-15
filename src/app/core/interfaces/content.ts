@@ -3,6 +3,8 @@ export interface ApiListResponse<T> {
   data: T[];
   total?: number;
   count?: number;
+  already_submitted?: boolean;
+  message?: string;
 }
 
 export interface ApiDataResponse<T> {
@@ -119,18 +121,27 @@ export interface FeedbackQuestionOption {
 export interface FeedbackQuestion {
   id: number;
   question: string;
-  hint: string;
+  hint: string | null;
+  question_type?: string;
   is_mandatory: number;
   sort_order: number;
-  options: FeedbackQuestionOption[];
+  options?: FeedbackQuestionOption[];
 }
 
 export interface FeedbackAnswerPayload {
-  answers: Array<{
-    question_id: number;
-    option_id: number;
-  }>;
-  comment?: string;
+  answers: {
+    q1: string;
+    q2: string[];
+    q3: string;
+    q4: string;
+    q5: string;
+    q6: string;
+    q7: string;
+    q8: string;
+    q9: string;
+    q10: string;
+    q11: number;
+  };
 }
 
 export interface UctGeneratePlayer {

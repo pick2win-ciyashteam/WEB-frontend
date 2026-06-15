@@ -82,7 +82,7 @@ export class ApiService {
   }
 
   getFeedbackQuestions(): Observable<ApiListResponse<FeedbackQuestion>> {
-    return this.http.get<ApiListResponse<FeedbackQuestion>>(`${this.BASE}/admin/feedback/user-questions`, this.userAuthOptions());
+    return this.http.get<ApiListResponse<FeedbackQuestion>>(`${this.BASE}/admin/feedback/user-question`, this.userAuthOptions());
   }
 
   postFeedbackAnswers(data: FeedbackAnswerPayload): Observable<any> {
