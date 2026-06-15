@@ -15,6 +15,7 @@
             class="balance-card"
             [class.balance-card-alert]="showBalanceRequired"
             [routerLink]="coinBalance > 0 ? '/user/profile' : '/pricing'"
+            [fragment]="coinBalance > 0 ? undefined : 'coin-packs'"
             title="Your coin balance">
             <div class="balance-icon">
               <span>P2W</span>

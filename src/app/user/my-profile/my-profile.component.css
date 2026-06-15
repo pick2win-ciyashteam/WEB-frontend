@@ -34,6 +34,82 @@
   margin: 0 auto;
 }
 
+.profile-balance-card {
+  width: min(330px, 100%);
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin: 0 0 24px auto;
+  padding: 15px 18px;
+  border: 1px solid rgba(244, 180, 0, 0.42);
+  border-left: 3px solid var(--gold);
+  border-radius: 16px;
+  color: inherit;
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(244, 180, 0, 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), rgba(244, 180, 0, 0.035));
+  transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+
+.profile-balance-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(0, 15, 30, 0.28);
+}
+
+.profile-balance-card .balance-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--gold);
+  background: rgba(244, 180, 0, 0.12);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.profile-balance-card .balance-label {
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.profile-balance-card .balance-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin-top: 2px;
+}
+
+.profile-balance-card .balance-amount strong {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.profile-balance-card .balance-amount span {
+  color: var(--paper);
+  font-weight: 800;
+}
+
+.profile-balance-card .balance-warning {
+  margin-top: 5px;
+  color: #ffef9a;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .section-head {
   display: grid;
   grid-template-columns: 180px 1fr;
@@ -1221,6 +1297,32 @@ tbody tr:hover {
 @media (max-width: 640px) {
   .profile-page {
     padding: 38px 0 54px;
+  }
+
+  .profile-balance-card {
+    width: 100%;
+    grid-template-columns: 42px minmax(0, 1fr);
+    margin: 0 0 18px;
+    padding: 13px 14px;
+    border-radius: 14px;
+  }
+
+  .profile-balance-card .balance-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 11px;
+  }
+
+  .profile-balance-card .balance-label {
+    font-size: 8px;
+  }
+
+  .profile-balance-card .balance-amount strong {
+    font-size: 27px;
+  }
+
+  .profile-balance-card .balance-amount span {
+    font-size: 12px;
   }
 
   .del-modal {

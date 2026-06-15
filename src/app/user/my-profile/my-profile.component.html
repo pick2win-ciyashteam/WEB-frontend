@@ -6,6 +6,26 @@
       <h1 class="section-title"><span class="head-ic" aria-hidden="true">★</span> My <span>Space</span></h1>
     </div>
 
+    <a
+      *ngIf="profile$ | async as profile"
+      id="profileBalanceCard"
+      class="balance-card profile-balance-card reveal"
+      routerLink="/pricing"
+      fragment="coin-packs"
+      title="Buy coins">
+      <div class="balance-icon">
+        <span>P2W</span>
+      </div>
+      <div class="balance-body">
+        <div class="balance-label">My Balance</div>
+        <div class="balance-amount">
+          <strong>{{ availableCoins(profile) }}</strong>
+          <span>Coins</span>
+        </div>
+        <div class="balance-warning">Tap to view coin packs</div>
+      </div>
+    </a>
+
     <div class="myspace-stamp-row reveal">
       <div class="coin-stamp coin-stamp-rect" role="img" aria-label="1 coin equals 1 match, any match, any league">
         <svg viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
