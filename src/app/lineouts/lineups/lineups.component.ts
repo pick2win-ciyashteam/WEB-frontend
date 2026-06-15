@@ -440,7 +440,7 @@ canRunUct(match: LineoutMatch): boolean {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          // console.log('Lineups series response:', res);
+          console.log('Lineups series response:', res);
 
           this.matches = res?.success && Array.isArray(res.data)
             ? this.mapSeriesMatches(res.data)

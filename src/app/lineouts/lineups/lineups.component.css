@@ -2664,3 +2664,310 @@
     width: 100%;
   }
 }
+
+/* Mobile card balance: responsive width, stable height, centered action pills. */
+@media (max-width: 720px) {
+  .today-grid,
+  .upcoming-grid {
+    align-items: stretch !important;
+  }
+
+  .today-card {
+    min-height: 224px !important;
+    display: grid !important;
+    grid-template-rows: auto 1fr auto !important;
+  }
+
+  .upcoming-card {
+    min-height: 150px !important;
+    display: grid !important;
+    align-content: space-between !important;
+  }
+
+  .tc-top {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: start !important;
+    gap: 10px !important;
+  }
+
+  .tc-status {
+    width: min(100%, 188px) !important;
+    justify-self: center !important;
+    padding: 0 12px !important;
+    text-align: center !important;
+  }
+
+  .tc-bot {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: start !important;
+    gap: 12px !important;
+  }
+
+  .tc-uct {
+    width: min(100%, 188px) !important;
+    min-width: 188px !important;
+    justify-self: center !important;
+    padding: 0 22px !important;
+  }
+
+  .tc-rel {
+    max-width: 100% !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    line-height: 1.45 !important;
+  }
+
+  .uc-right {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 142px)) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .uc-status,
+  .uc-uct {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding-inline: 8px !important;
+    text-align: center !important;
+  }
+
+  .uc-time {
+    overflow-wrap: anywhere !important;
+    line-height: 1.45 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .today-card {
+    min-height: 232px !important;
+  }
+
+  .tc-status {
+    font-size: 7.5px !important;
+    letter-spacing: .09em !important;
+  }
+
+  .tc-uct {
+    width: min(100%, 176px) !important;
+    min-width: 176px !important;
+  }
+
+  .uc-right {
+    grid-template-columns: repeat(2, minmax(0, 134px)) !important;
+  }
+}
+
+/* Final mobile redesign for match cards. */
+@media (max-width: 720px) {
+  .today-card {
+    min-height: auto !important;
+    padding: 14px 12px !important;
+    align-content: start !important;
+    gap: 12px !important;
+  }
+
+  .tc-top {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 9px !important;
+    margin: 0 !important;
+  }
+
+  .tc-league {
+    justify-self: start !important;
+  }
+
+  .tc-status,
+  .uc-status {
+    width: min(100%, 214px) !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    font-size: 8px !important;
+    letter-spacing: .11em !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
+  }
+
+  .tc-mid {
+    margin: 0 !important;
+    padding: 2px 0 14px !important;
+  }
+
+  .tc-versus {
+    gap: 7px !important;
+  }
+
+  .tc-bot {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    gap: 12px !important;
+  }
+
+  .tc-time {
+    width: 100% !important;
+    min-width: 0 !important;
+    justify-self: stretch !important;
+  }
+
+  .tc-clock {
+    font-size: 12px !important;
+  }
+
+  .tc-rel,
+  .uc-time {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    font-size: 9px !important;
+    line-height: 1.45 !important;
+  }
+
+  .tc-uct {
+    width: min(100%, 214px) !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    padding: 0 18px !important;
+    font-size: 11px !important;
+  }
+
+  .upcoming-card {
+    min-height: auto !important;
+    padding: 13px 12px !important;
+    gap: 12px !important;
+  }
+
+  .uc-info {
+    min-width: 0 !important;
+  }
+
+  .uc-teams {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .uc-team {
+    min-width: 0 !important;
+  }
+
+  .uc-name {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .uc-right {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .uc-status,
+  .uc-uct {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    justify-self: stretch !important;
+  }
+
+  .uc-uct {
+    min-height: 32px !important;
+    padding: 0 10px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* Desktop/tablet alignment to match the cleaned mobile card behavior. */
+@media (min-width: 721px) {
+  .today-card {
+    min-height: 196px !important;
+    display: grid !important;
+    grid-template-rows: auto 1fr auto !important;
+    gap: 0 !important;
+  }
+
+  .tc-top {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 16px !important;
+  }
+
+  .tc-league {
+    justify-self: start !important;
+  }
+
+  .tc-status {
+    width: 214px !important;
+    justify-self: center !important;
+    text-align: center !important;
+  }
+
+  .tc-mid {
+    align-self: center !important;
+  }
+
+  .tc-bot {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 214px !important;
+    align-items: center !important;
+    gap: 18px !important;
+  }
+
+  .tc-time {
+    min-width: 0 !important;
+  }
+
+  .tc-rel,
+  .uc-time {
+    max-width: 100% !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.45 !important;
+  }
+
+  .tc-uct {
+    width: 214px !important;
+    min-width: 214px !important;
+    justify-self: center !important;
+    padding: 0 18px !important;
+    text-align: center !important;
+  }
+
+  .upcoming-card {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, auto) !important;
+  }
+
+  .uc-right {
+    display: grid !important;
+    grid-template-columns: 158px 132px !important;
+    align-items: center !important;
+    justify-content: end !important;
+    gap: 10px !important;
+  }
+
+  .uc-status,
+  .uc-uct {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding-inline: 10px !important;
+    text-align: center !important;
+  }
+}

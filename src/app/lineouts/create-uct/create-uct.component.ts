@@ -22,6 +22,13 @@ interface GeneratedTeam {
   viceCaptain: UctPlayer;
 }
 
+interface CreateUctContext {
+  id?: string;
+  venue?: string;
+  venue_name?: string;
+  venue_city?: string;
+}
+
 @Component({
   selector: 'app-create-uct',
   templateUrl: './create-uct.component.html',
@@ -35,6 +42,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   loading = true;
   errorMessage = '';
   detail: MatchDetail | null = null;
+  private createUctContext: CreateUctContext | null = null;
   step = 1;
   confirmed = false;
   submitting = false;
@@ -83,6 +91,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         switchMap(params => {
           this.matchId = params.get('id') || '';
+          this.createUctContext = this.getCreateUctContext(this.matchId);
           this.loading = true;
           this.errorMessage = '';
           return this.api.getMatchDetails(this.matchId);
@@ -261,16 +270,24 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   matchLocationLabel(detail: MatchDetail): string {
     const source = detail.match as unknown as Record<string, unknown>;
-    const venueName = String(source['venue_name'] || '').trim();
-    const venueCity = String(source['venue_city'] || '').trim();
+    const context = this.createUctContext as Record<string, unknown> | null;
+    const venueName = this.firstValue(source, ['venue_name', 'venueName', 'stadium', 'ground'])
+      || this.firstValue(context, ['venue_name', 'venueName']);
+    const venueCity = this.firstValue(source, ['venue_city', 'venueCity', 'city'])
+      || this.firstValue(context, ['venue_city', 'venueCity', 'city']);
 
-    if (venueName || venueCity) {
-      return [venueName, venueCity].filter(Boolean).join(', ');
+    if (venueName) {
+      return venueName;
     }
 
-    const value = source['venue'] || source['location'] || source['stadium'] || source['ground'];
+    if (venueCity) {
+      return venueCity;
+    }
 
-    return String(value || 'Venue TBC');
+    const value = this.firstValue(source, ['venue', 'location'])
+      || this.firstValue(context, ['venue', 'location']);
+
+    return value || 'Venue TBC';
   }
 
   matchTeamCode(detail: MatchDetail, side: 'home' | 'away'): string {
@@ -829,16 +846,36 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return Number.isNaN(date.getTime()) ? null : date;
   }
 
-  private firstValue(source: Record<string, unknown>, keys: string[]): string {
+  private firstValue(source: Record<string, unknown> | null | undefined, keys: string[]): string {
+    if (!source) {
+      return '';
+    }
+
     for (const key of keys) {
       const value = String(source[key] || '').trim();
 
-      if (value) {
+      if (value && value !== 'undefined' && value !== 'null') {
         return value;
       }
     }
 
     return '';
+  }
+
+  private getCreateUctContext(matchId: string): CreateUctContext | null {
+    const navigationState = history.state?.lineoutMatch as CreateUctContext | undefined;
+
+    if (navigationState?.id && String(navigationState.id) === matchId) {
+      return navigationState;
+    }
+
+    try {
+      const stored = sessionStorage.getItem(`lineout-match-${matchId}`);
+
+      return stored ? JSON.parse(stored) as CreateUctContext : null;
+    } catch {
+      return null;
+    }
   }
 
   private shortCodeFromName(name: string): string {
