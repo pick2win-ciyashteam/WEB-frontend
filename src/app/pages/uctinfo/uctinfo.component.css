@@ -1481,6 +1481,17 @@ td:nth-child(4) {
   line-height: 1.55;
 }
 
+.about-block-lead.theme-highlight {
+  color: var(--paper);
+  padding: 16px 18px;
+  border: 1px solid rgba(11, 204, 142, 0.30);
+  border-left: 3px solid var(--pitch-2);
+  border-radius: 12px;
+  background:
+    linear-gradient(90deg, rgba(11, 204, 142, 0.14), rgba(91, 176, 230, 0.06)),
+    rgba(0, 15, 30, 0.30);
+}
+
 .about-prose {
   margin-bottom: 28px;
 }
