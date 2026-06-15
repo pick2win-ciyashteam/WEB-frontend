@@ -724,19 +724,22 @@ resendOtp(type: 'mobile' | 'email') {
       this.successMessage = res?.message || `${type === 'mobile' ? 'Mobile' : 'Email'} OTP resent successfully`;
       if (type === 'mobile') {
         this.mobileOtp = ['', '', '', '', '', ''];
-        this.testMobileOtp = this.extractOtpFromResponse(res, 'mobile') || this.testMobileOtp;
+        this.testMobileOtp = this.extractOtpFromResponse(res, 'mobile');
       } else {
         this.emailOtp = ['', '', '', '', '', ''];
-        this.testEmailOtp = this.extractOtpFromResponse(res, 'email') || this.testEmailOtp;
+        this.testEmailOtp = this.extractOtpFromResponse(res, 'email');
       }
       setTimeout(() => this.focusOtp(type), 100);
     },
     error: (err) => {
       this.resending = null;
+      const backendMessage = String(err?.error?.message || err?.error?.error || '').trim();
+      const normalizedMessage = backendMessage.toLowerCase();
+
       this.errorMessage =
-        err?.error?.message ||
-        err?.error?.error ||
-        'Unable to resend OTP. Please try again.';
+        this.isOtpExpiredMessage(normalizedMessage)
+          ? this.otpExpiredMessage(type)
+          : backendMessage || 'Unable to resend OTP. Please try again.';
     }
   });
 }
@@ -745,15 +748,16 @@ private handleOtpVerifyError(err: any, type: 'mobile' | 'email'): void {
   const backendMessage = String(err?.error?.message || err?.error?.error || '').trim();
   const expiredText = backendMessage.toLowerCase();
 
-  if (expiredText.includes('expired') || expiredText.includes('expire')) {
+  if (this.isOtpExpiredMessage(expiredText)) {
     if (type === 'mobile') {
       this.mobileOtp = ['', '', '', '', '', ''];
-      this.errorMessage = 'Mobile OTP expired. Please tap Resend SMS to get a new code.';
+      this.testMobileOtp = '';
     } else {
       this.emailOtp = ['', '', '', '', '', ''];
-      this.errorMessage = 'Email OTP expired. Please tap Resend email to get a new code.';
+      this.testEmailOtp = '';
     }
 
+    this.errorMessage = this.otpExpiredMessage(type);
     setTimeout(() => this.focusOtp(type), 100);
     return;
   }
@@ -761,6 +765,18 @@ private handleOtpVerifyError(err: any, type: 'mobile' | 'email'): void {
   this.errorMessage =
     backendMessage ||
     `${type === 'mobile' ? 'Mobile' : 'Email'} OTP verification failed. Please try again.`;
+}
+
+private isOtpExpiredMessage(message: string): boolean {
+  return message.includes('expired')
+    || message.includes('expire')
+    || message.includes('session');
+}
+
+private otpExpiredMessage(type: 'mobile' | 'email'): string {
+  return type === 'mobile'
+    ? 'Mobile OTP expired. Please tap Resend SMS to get a new code.'
+    : 'Email OTP expired. Please tap Resend email to get a new code.';
 }
 
   otpMove(event: any, index: number, type: 'mobile' | 'email') {
