@@ -614,7 +614,7 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  overflow: hidden;
+  overflow: auto;
   background: rgba(1,8,15,0.88);
   backdrop-filter: blur(10px);
 }
@@ -626,23 +626,24 @@
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
   border: 1px solid rgba(91,176,230,0.38);
-  border-radius: 22px;
+  border-radius: 20px;
   background: #07131f;
   box-shadow: 0 28px 80px rgba(0,0,0,0.55);
 }
 
 .preview-h {
   display: grid;
-  grid-template-columns: minmax(80px, 1fr) minmax(180px, auto) minmax(128px, 1fr);
-  gap: 12px;
+  grid-template-columns: minmax(92px, 1fr) minmax(260px, auto) minmax(132px, 1fr);
+  gap: 16px;
   align-items: center;
-  padding: 16px 18px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--line);
   background: linear-gradient(180deg, #091f30, #071c2c);
 }
 
 .preview-h-side {
   display: grid;
+  align-items: center;
   gap: 2px;
 }
 
@@ -650,7 +651,7 @@
 .preview-h-center h3 {
   color: rgba(255,255,255,0.62);
   font-family: var(--f-mono);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -659,7 +660,7 @@
 .preview-h-side strong {
   color: #fff;
   font-family: var(--f-display);
-  font-size: 21px;
+  font-size: 19px;
   font-weight: 950;
 }
 
@@ -695,9 +696,9 @@
 }
 
 .preview-team-badge {
-  max-width: 120px;
+  max-width: 160px;
   overflow: hidden;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 7px;
   color: #fff;
   font-size: 11px;
@@ -722,17 +723,17 @@
 .preview-h-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 7px;
+  gap: 8px;
 }
 
 .preview-close,
 .preview-icon-btn {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 13px;
+  border-radius: 12px;
   color: #fff;
   background: rgba(255,255,255,0.075);
   cursor: pointer;
@@ -747,6 +748,23 @@
 .preview-pitch {
   min-height: 0;
   overflow-y: auto;
+  background: #081522;
+  scrollbar-color: var(--gold) rgba(255,255,255,0.10);
+  scrollbar-width: thin;
+}
+
+.preview-pitch::-webkit-scrollbar {
+  width: 10px;
+}
+
+.preview-pitch::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.10);
+}
+
+.preview-pitch::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(7,19,31,0.92);
+  border-radius: 999px;
+  background: var(--gold);
 }
 
 .pitch-field {
@@ -754,9 +772,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 6px;
-  min-height: 520px;
-  padding: 20px 12px 26px;
+  gap: 14px;
+  min-height: 620px;
+  padding: 28px 24px 34px;
   background:
     repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0 30px, rgba(255,255,255,0) 30px 60px),
     linear-gradient(180deg, #15904e 0%, #0c6334 100%);
@@ -798,10 +816,15 @@
 }
 
 .pitch-rlabel {
-  margin-bottom: 10px;
+  width: max-content;
+  margin: 0 auto 10px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.16);
   color: rgba(255,255,255,0.55);
   font-family: var(--f-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   letter-spacing: 0.16em;
   text-align: center;
   text-transform: uppercase;
@@ -809,9 +832,10 @@
 
 .pitch-line {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: flex-start;
-  gap: 4px;
+  column-gap: clamp(14px, 2.8vw, 34px);
+  row-gap: 6px;
   flex-wrap: wrap;
 }
 
@@ -819,7 +843,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 74px;
+  width: 92px;
+  min-width: 78px;
 }
 
 .pp-ava {
@@ -830,8 +855,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border: 2px solid rgba(255,255,255,0.9);
   border-radius: 50%;
   color: #fff;
@@ -871,7 +896,7 @@
 }
 
 .pp-plate {
-  max-width: 88px;
+  max-width: 104px;
   margin-top: 7px;
   overflow: hidden;
   padding: 3px 9px;
@@ -900,9 +925,9 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 14px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   border-top: 1px solid var(--line);
-  background: rgba(0,0,0,0.28);
+  background: linear-gradient(180deg, rgba(5,26,42,0.96), rgba(0,0,0,0.34));
 }
 
 .pv-split {
@@ -975,38 +1000,131 @@
 
 @media (min-width: 901px) {
   .preview-modal {
-    top: 18px;
+    top: 4px;
     right: auto;
-    bottom: 18px;
+    bottom: 4px;
     left: 50%;
-    width: min(880px, calc(100vw - 80px));
+    width: min(420px, calc(100vw - 32px));
+    grid-template-rows: auto minmax(0, 1fr);
     transform: translateX(-50%);
   }
 
   .preview-pitch {
-    overflow-y: auto;
+    overflow: hidden;
+  }
+
+  .preview-h {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .preview-h-center {
+    gap: 2px;
+  }
+
+  .preview-h-small {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .preview-h-side strong {
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  .preview-h-side strong span {
+    font-size: 11px;
+  }
+
+  .preview-team-badge {
+    max-width: 68px;
+    padding: 4px 7px;
+    font-size: 8.5px;
+  }
+
+  .preview-score-row {
+    gap: 5px;
+  }
+
+  .preview-score-row b {
+    font-size: 15px;
+  }
+
+  .preview-h-center h3 {
+    max-width: 150px;
+    overflow: hidden;
+    font-size: 8.5px;
+    letter-spacing: 0.06em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .preview-icon-btn,
+  .preview-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
   }
 
   .pitch-field {
-    min-height: 590px;
-    padding-inline: clamp(24px, 3.2vw, 42px);
+    height: 100%;
+    min-height: 0;
+    justify-content: space-evenly;
+    gap: 2px;
+    padding: 6px 7px;
+  }
+
+  .pitch-rlabel {
+    margin-bottom: 3px;
+    padding: 2px 7px;
+    font-size: 7.5px;
+    letter-spacing: 0.09em;
   }
 
   .pitch-line {
-    justify-content: space-around;
-    gap: 12px;
-    max-width: 760px;
+    column-gap: 8px;
+    row-gap: 3px;
+    max-width: 100%;
     margin: 0 auto;
   }
 
   .pitch-player {
-    width: 82px;
+    width: 58px;
+    min-width: 54px;
+  }
+
+  .pp-jersey {
+    width: 33px;
+    height: 33px;
+    font-size: 10px;
   }
 
   .pp-plate {
-    max-width: 82px;
-    padding-inline: 7px;
-    font-size: 10.5px;
+    max-width: 64px;
+    margin-top: 3px;
+    padding: 2px 5px;
+    font-size: 8px;
+  }
+
+  .pp-sub {
+    margin-top: 1px;
+    font-size: 7px;
+  }
+
+  .pp-cvc {
+    width: 16px;
+    height: 16px;
+    border-width: 1px;
+    font-size: 6.5px;
+  }
+
+  .preview-foot {
+    display: none;
+  }
+
+  .preview-nav {
+    display: none;
   }
 }
 
@@ -1080,63 +1198,176 @@
 
   .preview-modal {
     inset: 0;
+    height: 100dvh;
+    min-height: 100dvh;
     border: 0;
     border-radius: 0;
   }
 
+  .preview-overlay,
+  .preview-pitch {
+    overflow: hidden;
+  }
+
   .preview-h {
-    grid-template-columns: 54px 1fr 106px;
-    gap: 6px;
-    padding: max(12px, env(safe-area-inset-top)) 10px 10px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "side center actions";
+    gap: 8px;
+    min-height: 48px;
+    padding: max(7px, env(safe-area-inset-top)) 8px 7px;
   }
 
-  .preview-h-side strong {
-    font-size: 16px;
+  .preview-h-side {
+    grid-area: side;
+    display: grid;
+    align-items: center;
+    gap: 2px;
+    min-width: 38px;
   }
 
-  .preview-team-badge {
-    max-width: 64px;
-    padding-inline: 6px;
-    font-size: 9.5px;
+  .preview-h-small {
+    display: inline;
+    font-size: 7.5px;
+    letter-spacing: 0.06em;
   }
 
-  .preview-score-row {
+  .preview-h-center {
+    grid-area: center;
+    justify-items: center;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .preview-h-actions {
+    grid-area: actions;
+    align-self: center;
     gap: 5px;
   }
 
+  .preview-h-side strong {
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .preview-h-side strong span {
+    font-size: 10px;
+  }
+
+  .preview-h-center h3 {
+    display: block;
+    max-width: 100%;
+    margin-top: 2px;
+    overflow: hidden;
+    color: rgba(255,255,255,0.70);
+    font-size: 8.5px;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .preview-team-badge {
+    max-width: 54px;
+    padding: 4px 6px;
+    border-radius: 5px;
+    font-size: 8px;
+  }
+
+  .preview-score-row {
+    gap: 4px;
+    min-width: 0;
+  }
+
   .preview-score-row b {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .preview-icon-btn,
   .preview-close {
-    width: 31px;
-    height: 31px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+  }
+
+  .preview-icon-btn .material-symbols-outlined,
+  .preview-close .material-symbols-outlined {
+    font-size: 19px;
   }
 
   .pitch-field {
-    min-height: 540px;
-    padding: 12px 6px max(14px, env(safe-area-inset-bottom));
+    height: 100%;
+    min-height: 0;
+    gap: 4px;
+    padding: 7px 6px;
+  }
+
+  .pitch-rlabel {
+    margin-bottom: 4px;
+    padding: 3px 7px;
+    font-size: 8px;
+    letter-spacing: 0.11em;
+  }
+
+  .pitch-line {
+    column-gap: 8px;
+    row-gap: 3px;
   }
 
   .pitch-player {
-    width: 64px;
+    width: 56px;
+    min-width: 52px;
   }
 
   .pp-jersey {
-    width: 38px;
-    height: 38px;
-    font-size: 12px;
+    width: 34px;
+    height: 34px;
+    font-size: 10.5px;
   }
 
   .pp-plate {
-    max-width: 70px;
-    font-size: 10px;
+    max-width: 62px;
+    margin-top: 4px;
+    padding: 2px 5px;
+    font-size: 8.5px;
+    border-radius: 4px;
+  }
+
+  .pp-sub {
+    margin-top: 2px;
+    font-size: 7.5px;
+  }
+
+  .pp-cvc {
+    width: 17px;
+    height: 17px;
+    border-width: 1px;
+    font-size: 7px;
+  }
+
+  .preview-foot {
+    padding: 8px;
+  }
+
+  .pv-split {
+    min-width: 100%;
+  }
+
+  .pv-split-cap {
+    margin-bottom: 4px;
+    font-size: 8px;
+  }
+
+  .pv-split-bar {
+    height: 24px;
+    border-radius: 7px;
+  }
+
+  .pv-split-seg {
+    font-size: 9px;
   }
 
   .pitch-wm {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .pitch-wm-3 {
