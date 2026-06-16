@@ -1,4 +1,4 @@
-<div class="signup-box">
+<div class="signup-box" [class.compact-auth]="step > 1" [class.success-auth]="step === 4">
 
   <div class="signup-logo modal-brand">
     <img src="assets/logo.png" alt="Pick2Win">
@@ -179,10 +179,10 @@
 
     <p class="resend-line">
       Didn't receive it?
-      <button type="button" [disabled]="resending === 'mobile'" (click)="resendOtp('mobile')">
-        {{ resending === 'mobile' ? 'Resending...' : 'Resend SMS' }}
+      <button type="button" [disabled]="resending === 'mobile' || resendCooldown.mobile > 0" (click)="resendOtp('mobile')">
+        {{ resendButtonLabel('mobile') }}
       </button>
-      <span>- Code expires in 10 min</span>
+      <span>- OTP expires in 10 min</span>
     </p>
 
     <button class="btn-block verify-btn" type="button" [disabled]="loading || !isOtpComplete('mobile')" (click)="verifyMobile()">
@@ -233,10 +233,10 @@
 
     <p class="resend-line">
       Didn't receive it?
-      <button type="button" [disabled]="resending === 'email'" (click)="resendOtp('email')">
-        {{ resending === 'email' ? 'Resending...' : 'Resend email' }}
+      <button type="button" [disabled]="resending === 'email' || resendCooldown.email > 0" (click)="resendOtp('email')">
+        {{ resendButtonLabel('email') }}
       </button>
-      <span>- Check your spam folder</span>
+      <span>- Check your inbox/spam folder</span>
     </p>
 
     <button class="btn-block verify-btn" type="button" [disabled]="loading || !isOtpComplete('email')" (click)="verifyEmail()">
@@ -256,8 +256,8 @@
       <div class="vp-line done"></div>
       <div class="vp-step done"><span class="vp-num">✓</span><span>Done</span></div>
     </div>
-    <div class="success-circle material-symbols-outlined" aria-hidden="true">check</div>
-    <h2>You're <em>in.</em></h2>
+    <!-- <div class="success-circle material-symbols-outlined" aria-hidden="true">check</div>
+    <h2>You're <em>in.</em></h2> -->
     <p class="sub">Mobile and email verified. Your PICK2WIN account is live.</p>
 
     <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>

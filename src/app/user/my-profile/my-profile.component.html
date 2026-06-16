@@ -4,27 +4,33 @@
   <div class="wrap">
     <div class="section-head reveal">
       <h1 class="section-title"><span class="head-ic" aria-hidden="true">★</span> My <span>Space</span></h1>
-    </div>
+      <div class="myspace-top-cta" *ngIf="showTodayLineupsCta">
+        <a routerLink="/lineouts" class="lineouts-teaser-btn primary pulsing">
+          <span class="cta-live-dot" aria-hidden="true"></span>
+          Today's Match Lineouts
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </a>
+      </div>
 
-    <a
-      *ngIf="profile$ | async as profile"
-      id="profileBalanceCard"
-      class="balance-card profile-balance-card reveal"
-      routerLink="/pricing"
-      fragment="coin-packs"
-      title="Buy coins">
-      <div class="balance-icon">
-        <span>P2W</span>
-      </div>
-      <div class="balance-body">
-        <div class="balance-label">My Balance</div>
-        <div class="balance-amount">
-          <strong>{{ availableCoins(profile) }}</strong>
-          <span>Coins</span>
+      <a
+        *ngIf="profile$ | async as profile"
+        id="profileBalanceCard"
+        class="balance-card profile-balance-card"
+        routerLink="/pricing"
+        title="Buy coins">
+        <div class="balance-icon">
+          <span>P2W</span>
         </div>
-        <div class="balance-warning">Tap to view coin packs</div>
-      </div>
-    </a>
+        <div class="balance-body">
+          <div class="balance-label">My Balance</div>
+          <div class="balance-amount">
+            <strong>{{ availableCoins(profile) }}</strong>
+            <span>Coins</span>
+          </div>
+          <div class="balance-warning">Tap to view coin packs</div>
+        </div>
+      </a>
+    </div>
 
     <div class="myspace-stamp-row reveal">
       <div class="coin-stamp coin-stamp-rect" role="img" aria-label="1 coin equals 1 match, any match, any league">
@@ -45,14 +51,6 @@
         <h3 class="myspace-stamp-title">1 coin = 1 match UCT generation.</h3>
         <p class="myspace-stamp-sub">Every coin in your wallet covers one match across any league or competition PICK2WIN supports. Same price, any league.</p>
       </div>
-    </div>
-
-    <div class="myspace-top-cta" *ngIf="showTodayLineupsCta">
-      <a routerLink="/lineouts" class="lineouts-teaser-btn primary pulsing">
-        <span class="cta-live-dot" aria-hidden="true"></span>
-        Today's Match Lineouts
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-      </a>
     </div>
 
     <div class="profile-tabs reveal" role="tablist">

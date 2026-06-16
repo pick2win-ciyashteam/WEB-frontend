@@ -120,7 +120,7 @@
 
 .section-title {
   margin: 18px 0 0;
-  font-size: clamp(30px, 5vw, 52px);
+  font-size: clamp(20px, 5vw, 32px);
   line-height: 1.02;
   text-transform: uppercase;
   font-weight: 900;
@@ -1338,12 +1338,12 @@ em {
 
   .pricing-header-row {
     display: grid;
-    gap: 22px;
+    gap: 14px;
   }
 
   .coin-stamp {
-    width: 128px;
-    height: 128px;
+    width: 132px;
+    height: 66px;
   }
 
   .coin-policy-grid,
@@ -1359,15 +1359,42 @@ em {
 
 @media (max-width: 640px) {
   .pricing-page {
-    padding: 46px 0 58px;
+    padding: 34px 0 52px;
   }
 
   .wrap {
-    width: min(100% - 28px, 1200px);
+    width: min(100% - 24px, 1200px);
+  }
+
+  .pricing-header-row {
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .pricing-eyebrow {
+    padding: 6px 12px;
+    font-size: 9px;
+    letter-spacing: 0.13em;
   }
 
   .section-title {
-    font-size: clamp(27px, 10vw, 38px);
+    margin-top: 12px;
+    font-size: clamp(24px, 8.4vw, 31px);
+    line-height: 1;
+  }
+
+  .head-ic {
+    font-size: 0.66em;
+  }
+
+  .coin-stamp {
+    width: 108px;
+    height: 54px;
+    margin-top: 2px;
+  }
+
+  .credit-packs {
+    margin-bottom: 26px;
   }
 
   .coin-policy-head {
@@ -1402,6 +1429,48 @@ em {
 
   .credit-pack {
     min-height: 0;
+    padding: 22px 20px 24px;
+    border-radius: 14px;
+  }
+
+  .credit-pack-name {
+    font-size: 17px;
+  }
+
+  .credit-pack-sub {
+    margin-top: 7px;
+    font-size: 9.5px;
+  }
+
+  .credit-pack-coins {
+    min-height: 46px;
+    margin-top: 14px;
+  }
+
+  .credit-pack-num {
+    font-size: 44px;
+  }
+
+  .credit-pack-matches {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  .credit-pack-matches::after {
+    margin: 14px 0 14px;
+  }
+
+  .credit-pack-price {
+    min-height: 44px;
+  }
+
+  .credit-pack-amount {
+    font-size: 35px;
+  }
+
+  .credit-pack-cur {
+    margin-top: 7px;
+    font-size: 18px;
   }
 
   .pricing-note-h,

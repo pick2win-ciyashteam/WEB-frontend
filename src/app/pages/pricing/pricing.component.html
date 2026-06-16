@@ -5,8 +5,8 @@
     <div class="pricing-header-row reveal">
       <div class="section-head">
         <span class="pricing-eyebrow">PRICING - COIN PACKS</span>
-        <h1 class="h-display section-title"><span class="head-ic material-symbols-outlined" aria-hidden="true">paid</span> Flexible <span class="italic-accent">coin-based</span> access</h1>
-        <p class="pricing-subhead">Pay only for the matches you actually run. One coin, one match - no subscriptions, no lock-in.</p>
+        <h3 class="h-display section-title"><span class="head-ic material-symbols-outlined" aria-hidden="true">paid</span> All Coin Packs in <span class="italic-accent">PICK2WIN</span></h3>
+        <!-- <p class="pricing-subhead">Pay only for the matches you actually run. One coin, one match - no subscriptions, no lock-in.</p> -->
       </div>
 
       <div class="coin-stamp coin-stamp-rect" role="img" aria-label="1 coin equals 1 match, any match, any league">
@@ -21,6 +21,55 @@
           <line x1="46" y1="66" x2="194" y2="66" stroke="currentColor" stroke-width="1" opacity="0.4"/>
           <text x="120" y="88" text-anchor="middle" class="cs-arc" opacity="0.95">ANY MATCH - ANY LEAGUE</text>
         </svg>
+      </div>
+    </div>
+
+     <div id="coin-packs" class="pricing-packs-anchor"></div>
+
+    <div class="pack-status" *ngIf="loading">Loading latest coin packs...</div>
+    <div class="pack-status error" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
+    <div class="pack-status success" *ngIf="paymentMessage">{{ paymentMessage }}</div>
+    <div class="pack-status error" *ngIf="paymentError">{{ paymentError }}</div>
+
+    <div class="credit-packs reveal" *ngIf="!loading && plans.length">
+      <div
+        class="credit-pack"
+        *ngFor="let plan of plans; trackBy: trackPlan"
+        [class.popular]="plan.is_popular"
+        [class.value]="plan.is_pro">
+        <div class="credit-pack-badge" *ngIf="badgeLabel(plan)">{{ badgeLabel(plan) }}</div>
+        <div class="credit-pack-name">{{ plan.name }}</div>
+        <div class="credit-pack-sub">{{ plan.subtitle }}</div>
+        <div class="credit-pack-coins">
+          <span class="credit-pack-num">{{ plan.coins }}</span>
+          <span class="credit-pack-cred-label">coins</span>
+        </div>
+        <p class="credit-pack-matches"><b>{{ plan.matches }} matches</b> of UCT workflow</p>
+        <div class="credit-pack-price">
+          <span class="credit-pack-cur">{{ plan.currency_symbol }}</span>
+          <span class="credit-pack-amount">{{ plan.price | number:'1.0-0' }}</span>
+        </div>
+        <div class="credit-pack-per">
+          &asymp; <b>{{ plan.currency_symbol }}{{ plan.price_per_coin | number:'1.2-2' }}</b> per coin<span *ngIf="isLowestPricePerCoin(plan)"> - lowest</span>
+        </div>
+        <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPlan(plan)">
+          {{ isPurchasing(plan) ? 'Opening Stripe...' : 'Buy ' + plan.coins + ' Coins' }}
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </button>
+        <div class="credit-pack-foot">{{ plan.validity_days }} days validity - one-time purchase</div>
+      </div>
+    </div>
+
+     <div class="no-expiry-banner reveal">
+      <div class="no-expiry-icon">365</div>
+      <div>
+        <div class="no-expiry-tag">365-DAY VALIDITY - ALL PACKS</div>
+        <h3 class="no-expiry-h">Every pack is valid for <em>365 days from purchase.</em></h3>
+        <p class="no-expiry-sub">All packs carry the <b>same 365-day validity</b>, counted from your <b>most recent purchase</b>. Each new pack you buy refreshes the clock on your whole remaining balance. <b>365 means exactly 365 days</b> - not 12 months, not "1 calendar year", not adjusted for leap years.</p>
+        <div class="no-expiry-future">
+          <span class="no-expiry-future-tag">WHAT IF YOU BUY MORE THAN ONE PACK</span>
+          <p>Your coins always live as a <b>single combined balance</b>. Buy a new pack while you still have active coins and your remaining coins <b>merge into the new pack</b> - the whole balance is then revalidated for a <b>fresh 365 days</b> from that purchase date. You can view your combined balance and its expiry inside <b>My Space - Active Coin Lots</b>.</p>
+        </div>
       </div>
     </div>
 
@@ -118,54 +167,6 @@
       </a>
     </div>
 
-    <div class="no-expiry-banner reveal">
-      <div class="no-expiry-icon">365</div>
-      <div>
-        <div class="no-expiry-tag">365-DAY VALIDITY - ALL PACKS</div>
-        <h3 class="no-expiry-h">Every pack is valid for <em>365 days from purchase.</em></h3>
-        <p class="no-expiry-sub">All packs carry the <b>same 365-day validity</b>, counted from your <b>most recent purchase</b>. Each new pack you buy refreshes the clock on your whole remaining balance. <b>365 means exactly 365 days</b> - not 12 months, not "1 calendar year", not adjusted for leap years.</p>
-        <div class="no-expiry-future">
-          <span class="no-expiry-future-tag">WHAT IF YOU BUY MORE THAN ONE PACK</span>
-          <p>Your coins always live as a <b>single combined balance</b>. Buy a new pack while you still have active coins and your remaining coins <b>merge into the new pack</b> - the whole balance is then revalidated for a <b>fresh 365 days</b> from that purchase date. You can view your combined balance and its expiry inside <b>My Space - Active Coin Lots</b>.</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="coin-packs" class="pricing-packs-anchor"></div>
-
-    <div class="pack-status" *ngIf="loading">Loading latest coin packs...</div>
-    <div class="pack-status error" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
-    <div class="pack-status success" *ngIf="paymentMessage">{{ paymentMessage }}</div>
-    <div class="pack-status error" *ngIf="paymentError">{{ paymentError }}</div>
-
-    <div class="credit-packs reveal" *ngIf="!loading && plans.length">
-      <div
-        class="credit-pack"
-        *ngFor="let plan of plans; trackBy: trackPlan"
-        [class.popular]="plan.is_popular"
-        [class.value]="plan.is_pro">
-        <div class="credit-pack-badge" *ngIf="badgeLabel(plan)">{{ badgeLabel(plan) }}</div>
-        <div class="credit-pack-name">{{ plan.name }}</div>
-        <div class="credit-pack-sub">{{ plan.subtitle }}</div>
-        <div class="credit-pack-coins">
-          <span class="credit-pack-num">{{ plan.coins }}</span>
-          <span class="credit-pack-cred-label">coins</span>
-        </div>
-        <p class="credit-pack-matches"><b>{{ plan.matches }} matches</b> of UCT workflow</p>
-        <div class="credit-pack-price">
-          <span class="credit-pack-cur">{{ plan.currency_symbol }}</span>
-          <span class="credit-pack-amount">{{ plan.price | number:'1.0-0' }}</span>
-        </div>
-        <div class="credit-pack-per">
-          &asymp; <b>{{ plan.currency_symbol }}{{ plan.price_per_coin | number:'1.2-2' }}</b> per coin<span *ngIf="isLowestPricePerCoin(plan)"> - lowest</span>
-        </div>
-        <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPlan(plan)">
-          {{ isPurchasing(plan) ? 'Opening Stripe...' : 'Buy ' + plan.coins + ' Coins' }}
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-        </button>
-        <div class="credit-pack-foot">{{ plan.validity_days }} days validity - one-time purchase</div>
-      </div>
-    </div>
 
     <div class="pricing-table-wrap reveal" *ngIf="!loading && plans.length">
       <div class="pricing-table-head">

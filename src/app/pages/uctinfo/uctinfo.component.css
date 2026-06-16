@@ -1926,3 +1926,163 @@ td:nth-child(4) {
     width: 100%;
   }
 }
+
+.real-screen-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+  margin-top: 30px;
+}
+
+.uct-screen-card {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(91, 176, 230, 0.18);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(91, 176, 230, 0.11), transparent 36%),
+    linear-gradient(180deg, rgba(9, 31, 48, 0.92), rgba(3, 20, 33, 0.96));
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.28);
+}
+
+.uct-screen-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-top: 3px solid rgba(244, 180, 0, 0.7);
+  pointer-events: none;
+}
+
+.uct-screen-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px 12px;
+}
+
+.uct-screen-top span,
+.uct-screen-top b {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.uct-screen-top span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 38px;
+  height: 28px;
+  border: 1px solid rgba(244, 180, 0, 0.36);
+  border-radius: 999px;
+  color: var(--gold);
+  background: rgba(244, 180, 0, 0.08);
+}
+
+.uct-screen-top b {
+  color: var(--paper-2);
+}
+
+.uct-screen-image-wrap {
+  margin: 0 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(2, 10, 18, 0.55);
+}
+
+.uct-screen-image-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.uct-screen-card figcaption {
+  padding: 16px 18px 18px;
+}
+
+.uct-screen-card .uct-mockup-label,
+.uct-screen-card .uct-mockup-desc {
+  max-width: none;
+  text-align: left;
+}
+
+.uct-screen-card .uct-mockup-desc {
+  margin-top: 7px;
+  font-size: 13px;
+}
+
+.confirm-screen-card {
+  grid-column: 1 / -1;
+  width: min(560px, 100%);
+  justify-self: center;
+}
+
+@media (min-width: 1180px) {
+  .real-screen-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .real-screen-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .confirm-screen-card {
+    grid-column: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .real-screen-grid {
+    gap: 16px;
+    margin-top: 22px;
+  }
+
+  .uct-screen-card {
+    border-radius: 14px;
+  }
+
+  .uct-screen-top {
+    padding: 13px 14px 10px;
+  }
+
+  .uct-screen-top span,
+  .uct-screen-top b {
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .uct-screen-top span {
+    min-width: 34px;
+    height: 25px;
+  }
+
+  .uct-screen-image-wrap {
+    margin: 0 12px;
+    border-radius: 10px;
+  }
+
+  .uct-screen-card figcaption {
+    padding: 13px 14px 15px;
+  }
+
+  .uct-screen-card .uct-mockup-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+
+  .uct-screen-card .uct-mockup-desc {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+}

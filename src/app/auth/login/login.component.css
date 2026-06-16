@@ -304,21 +304,77 @@
 @media (max-width: 520px) {
   .login-box {
     width: 100%;
-    padding: 28px 20px 24px;
+    padding: 22px 18px 20px;
     border-radius: 18px;
   }
 
   .login-logo {
-    margin-bottom: 22px;
+    margin-bottom: 14px;
+  }
+
+  .login-logo img {
+    height: 34px;
   }
 
   .login-box h2 {
-    font-size: 34px;
+    font-size: 30px;
+  }
+
+  .login-box p {
+    margin-bottom: 10px;
+    font-size: 13px;
   }
 
   .login-options {
     align-items: flex-start;
     flex-direction: column;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .login-footer {
+    margin-top: 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-height: 720px) {
+  .login-box {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .login-logo {
+    margin-bottom: 10px;
+  }
+
+  .login-logo img {
+    height: 32px;
+  }
+
+  .login-box h2 {
+    font-size: clamp(28px, 5vw, 34px);
+  }
+
+  .login-box p {
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+
+  .login-box form {
+    gap: 9px;
+  }
+
+  .login-box input {
+    height: 42px;
+  }
+
+  .login-box button[type="submit"] {
+    height: 44px;
+  }
+
+  .login-footer {
+    margin-top: 13px;
   }
 }
 
@@ -492,11 +548,60 @@
   .forgot-modal {
     width: 100%;
     max-height: calc(100vh - 60px);
-    padding: 48px 18px 24px;
+    padding: 44px 18px 22px;
   }
 
   .forgot-step-pill {
     left: 18px;
+  }
+}
+
+@media (max-height: 720px) {
+  .forgot-modal {
+    padding: 42px 18px 18px;
+  }
+
+  .forgot-head {
+    gap: 12px;
+  }
+
+  .forgot-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .forgot-icon span {
+    font-size: 25px;
+  }
+
+  .forgot-modal h3 {
+    font-size: 24px;
+  }
+
+  .forgot-modal p {
+    margin-bottom: 14px;
+    font-size: 12.5px;
+  }
+
+  .forgot-modal form {
+    gap: 9px;
+    margin-top: 14px;
+  }
+
+  .forgot-modal input {
+    height: 46px;
+    border-radius: 11px;
+  }
+
+  .forgot-modal .otp-code-input {
+    height: 52px;
+    font-size: 24px;
+  }
+
+  .forgot-primary {
+    height: 46px;
+    font-size: 14px;
   }
 }
 

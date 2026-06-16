@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Country } from 'src/app/core/interfaces/content';
 import { AuthModalService } from '../../core/services/auth-modal.service';
@@ -180,7 +180,7 @@ function strictPasswordValidator(control: AbstractControl): ValidationErrors | n
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent {
+export class SignupComponent implements OnDestroy {
 
   step = 1;
   showPassword = false;
@@ -211,6 +211,9 @@ countriesLoading = false;
 
   loading = false;
 resending: 'mobile' | 'email' | null = null;
+readonly resendCooldownSeconds = 60;
+resendCooldown: Record<'mobile' | 'email', number> = { mobile: 0, email: 0 };
+private resendCooldownTimers: Partial<Record<'mobile' | 'email', ReturnType<typeof setInterval>>> = {};
 errorMessage = '';
 successMessage = '';
 
@@ -230,6 +233,11 @@ successMessage = '';
   openLogin() {
     this.authModal.open('login');
   }
+
+ngOnDestroy(): void {
+  this.clearResendCooldown('mobile');
+  this.clearResendCooldown('email');
+}
 
 openDatePicker(input: HTMLInputElement): void {
   input.focus();
@@ -296,6 +304,7 @@ continueStep1() {
       this.emailOtp = ['', '', '', '', '', ''];
       this.testMobileOtp = this.extractOtpFromResponse(res, 'mobile');
       this.testEmailOtp = this.extractOtpFromResponse(res, 'email');
+      this.startResendCooldown('mobile');
 
       setTimeout(() => this.focusOtp('mobile'), 100);
     },
@@ -312,6 +321,42 @@ continueStep1() {
 focusOtp(type: 'mobile' | 'email') {
   const first = document.querySelector<HTMLInputElement>(`.${type}-otp-0`);
   first?.focus();
+}
+
+resendButtonLabel(type: 'mobile' | 'email'): string {
+  if (this.resending === type) {
+    return 'Resending...';
+  }
+
+  const action = type === 'mobile' ? 'Resend SMS' : 'Resend OTP';
+  const seconds = this.resendCooldown[type];
+
+  return seconds > 0 ? `${action} in ${seconds}s` : action;
+}
+
+private startResendCooldown(type: 'mobile' | 'email'): void {
+  this.clearResendCooldown(type);
+  this.resendCooldown[type] = this.resendCooldownSeconds;
+
+  this.resendCooldownTimers[type] = setInterval(() => {
+    const next = Math.max(0, this.resendCooldown[type] - 1);
+    this.resendCooldown[type] = next;
+
+    if (next === 0) {
+      this.clearResendCooldown(type);
+    }
+  }, 1000);
+}
+
+private clearResendCooldown(type: 'mobile' | 'email'): void {
+  const timer = this.resendCooldownTimers[type];
+
+  if (timer) {
+    clearInterval(timer);
+    delete this.resendCooldownTimers[type];
+  }
+
+  this.resendCooldown[type] = 0;
 }
 
 trackByIndex(index: number): number {
@@ -668,6 +713,7 @@ verifyMobile() {
       this.successMessage = res?.message || 'Mobile verified successfully';
       this.testEmailOtp = this.extractOtpFromResponse(res, 'email') || this.testEmailOtp;
       this.step = 3;
+      this.startResendCooldown('email');
       setTimeout(() => this.focusOtp('email'), 100);
     },
     error: (err) => {
@@ -709,6 +755,10 @@ verifyEmail() {
 }
 
 resendOtp(type: 'mobile' | 'email') {
+  if (this.resending === type || this.resendCooldown[type] > 0) {
+    return;
+  }
+
   this.errorMessage = '';
   this.successMessage = '';
   this.resending = type;
@@ -729,6 +779,7 @@ resendOtp(type: 'mobile' | 'email') {
         this.emailOtp = ['', '', '', '', '', ''];
         this.testEmailOtp = this.extractOtpFromResponse(res, 'email');
       }
+      this.startResendCooldown(type);
       setTimeout(() => this.focusOtp(type), 100);
     },
     error: (err) => {
@@ -775,8 +826,8 @@ private isOtpExpiredMessage(message: string): boolean {
 
 private otpExpiredMessage(type: 'mobile' | 'email'): string {
   return type === 'mobile'
-    ? 'Mobile OTP expired. Please tap Resend SMS to get a new code.'
-    : 'Email OTP expired. Please tap Resend email to get a new code.';
+    ? 'Mobile OTP expired. Please tap Resend SMS to get a new OTP.'
+    : 'Email OTP expired. Please tap Resend email to get a new OTP.';
 }
 
   otpMove(event: any, index: number, type: 'mobile' | 'email') {
