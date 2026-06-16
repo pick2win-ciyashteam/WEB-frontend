@@ -784,12 +784,12 @@ em {
   font-weight: 700;
   letter-spacing: 0;
   text-transform: none;
-  box-shadow: 0 6px 18px rgba(215,38,56,0.30);
+  /* box-shadow: 0 6px 18px rgba(215,38,56,0.30); */
 }
 
 .credit-pack-cta:hover:not(:disabled) {
-  background: var(--acid-deep);
-  box-shadow: 0 10px 26px rgba(215,38,56,0.45);
+  background: var(--gold);
+  box-shadow: 0 10px 26px rgba(162, 215, 38, 0.45);
 }
 
 .credit-pack-cta:disabled {
