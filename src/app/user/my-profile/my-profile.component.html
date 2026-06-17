@@ -158,10 +158,8 @@
                 <th>Pack</th>
                 <th>Purchased</th>
                 <th>Coins</th>
-                <th>Used</th>
                 <th>Remaining</th>
                 <th>Expires</th>
-                <!-- <th>Days Left</th> -->
                 <th>Status</th>
               </tr>
             </thead>
@@ -170,11 +168,9 @@
                 <td>⭐{{ profile.subscription.plan_name }}</td>
                 <td>{{ subscriptionPurchased(profile) }}</td>
                 <td>{{ profile.subscription.matches_allowed }}</td>
-                <td>{{ profile.subscription.matches_used }}</td>
                 <td class="col-coins">{{ availableCoins(profile) }}</td>
                 <td>{{ subscriptionExpires(profile) }}</td>
                 <td style="color:#0bcc8e;">{{ subscriptionDaysLeft(profile) }} left</td>
-                <!-- <td><span class="profile-status-pill" [ngClass]="subscriptionStatusClass(profile)">{{ subscriptionStatus(profile) }}</span></td> -->
               </tr>
               <ng-template #noActiveSubscription>
                 <tr>

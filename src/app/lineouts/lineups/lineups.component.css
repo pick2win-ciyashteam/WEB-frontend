@@ -3235,3 +3235,40 @@
     letter-spacing: 0.08em;
   }
 }
+
+/* Desktop only: keep UCT Locked the same footprint as Waiting for Lineup. */
+@media (min-width: 721px) {
+  .today-card {
+    grid-template-columns: minmax(0, 1fr) 158px 158px !important;
+  }
+
+  .uc-right {
+    grid-template-columns: 158px 158px !important;
+  }
+
+  .today-card-status,
+  .uc-status,
+  .tc-uct,
+  .uc-uct {
+    width: 158px !important;
+    min-width: 158px !important;
+    max-width: 158px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    justify-self: stretch !important;
+    align-self: center !important;
+    text-align: center !important;
+  }
+
+  .tc-uct,
+  .uc-uct {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+  }
+}
