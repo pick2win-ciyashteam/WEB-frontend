@@ -509,14 +509,15 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   private mapTeamCard(team: ApiPlayer, teamNumber: number): PreviewTeam {
     const side = team.team_side === 'team_a' ? 'home' : 'away';
 
-    const player: PreviewPlayer = {
-      id: team.id,
-      name: team.name,
-      short: this.shortName(team.name),
-      pos: team.role || 'MID',
-      team: side,
-      captain: team.captain
-    };
+ const player: PreviewPlayer = {
+  id: team.id,
+  name: team.original_name || team.name,
+  short: this.shortName(team.original_name || team.name),
+  pos: team.role || 'MID',
+  team: side,
+  captain: team.captain,
+  logo: team.player_image || team.image || team.photo || team.logo || null
+};
 
     return {
       id: team.id,
@@ -594,18 +595,18 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   private mapPreviewPlayer(player: ApiPlayer): PreviewPlayer {
-    const displayName = player.original_name || player.name;
+  const displayName = player.original_name || player.name;
 
-    return {
-      id: player.id,
-      name: displayName,
-      short: this.shortName(displayName),
-      pos: player.role || 'MID',
-      team: this.playerTeam(player),
-      captain: player.cap || player.captain,
-      logo: player.player_image || player.logo || player.elogo || player.image || player.photo || null
-    };
-  }
+  return {
+    id: player.id,
+    name: displayName,
+    short: this.shortName(displayName),
+    pos: player.role || 'MID',
+    team: this.playerTeam(player),
+    captain: player.cap || player.captain,
+    logo: player.player_image || player.image || player.photo || player.logo || null
+  };
+}
 
   private playerTeam(player: ApiPlayer): 'home' | 'away' {
     if (player.team_side) {

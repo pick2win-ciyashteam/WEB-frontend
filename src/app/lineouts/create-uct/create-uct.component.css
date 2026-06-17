@@ -4336,6 +4336,38 @@ h1 em,
 @media (max-width: 640px) {
   .flow-actions {
     min-height: 0 !important;
-    background: #061c2e !important;
+    background: #fdfeff !important;
+  }
+}
+
+
+/* ONLY MOBILE - Match card + bottom back/next */
+@media only screen and (max-width: 640px) {
+  .flow-actions {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 999 !important;
+    margin: 0 !important;
+    padding: 10px 14px !important;
+    background: #fff !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+
+  .flow-actions-info,
+  .action-selection-summary {
+    display: none !important;
+  }
+
+  .flow-actions-buttons {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .flow-panel {
+    padding-bottom: 90px !important;
   }
 }

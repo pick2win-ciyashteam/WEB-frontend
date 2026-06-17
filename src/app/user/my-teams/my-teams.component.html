@@ -153,12 +153,18 @@
 
           <div class="t-card-cv">
             <div class="cv-pill">
-              <div class="cv-avatar" [style.background]="team.captain ? teamColor(team.captain.team) : null">{{ team.captain ? playerInitials(team.captain) : 'C' }}</div>
+              <div class="cv-avatar" [style.background]="team.captain && !team.captain.logo ? teamColor(team.captain.team) : null">
+  <img *ngIf="team.captain?.logo; else capInitials" [src]="team.captain?.logo" [alt]="team.captain?.name">
+  <ng-template #capInitials>{{ team.captain ? playerInitials(team.captain) : 'C' }}</ng-template>
+</div>
               <div class="cv-badge">C</div>
               <div class="cv-name">{{ team.captain?.name || 'N/A' }}</div>
             </div>
             <div class="cv-pill vc">
-              <div class="cv-avatar" [style.background]="team.viceCaptain ? teamColor(team.viceCaptain.team) : null">{{ team.viceCaptain ? playerInitials(team.viceCaptain) : 'VC' }}</div>
+            <div class="cv-avatar" [style.background]="team.viceCaptain && !team.viceCaptain.logo ? teamColor(team.viceCaptain.team) : null">
+  <img *ngIf="team.viceCaptain?.logo; else vcInitials" [src]="team.viceCaptain?.logo" [alt]="team.viceCaptain?.name">
+  <ng-template #vcInitials>{{ team.viceCaptain ? playerInitials(team.viceCaptain) : 'VC' }}</ng-template>
+</div>
               <div class="cv-badge vc">VC</div>
               <div class="cv-name">{{ team.viceCaptain?.name || 'N/A' }}</div>
             </div>
@@ -241,7 +247,10 @@
                 <div class="pp-ava">
                   <div class="pp-cvc c" *ngIf="isCaptain(player)">C</div>
                   <div class="pp-cvc vc" *ngIf="isViceCaptain(player)">VC</div>
-                  <div class="pp-jersey" [style.background]="teamColor(player.team)">{{ playerInitials(player) }}</div>
+                  <div class="pp-jersey" [style.background]="!player.logo ? teamColor(player.team) : null">
+  <img *ngIf="player.logo; else pitchInitials" [src]="player.logo" [alt]="player.name">
+  <ng-template #pitchInitials>{{ playerInitials(player) }}</ng-template>
+</div>
                 </div>
                 <div class="pp-plate" [style.background]="teamColor(player.team)">{{ player.name }}</div>
                 <div class="pp-sub">{{ teamCode(player.team) }}</div>
