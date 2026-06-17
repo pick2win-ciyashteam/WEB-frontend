@@ -31,7 +31,7 @@
           </a>
         </div>
 
-        <div class="try-free-note">
+        <div class="try-free-note" *ngIf="showTryFreeNote">
           <span class="try-free-icon">🎁</span>
           <div>Try your first match free — continue only if you like it, <b>no pressure to buy.</b></div>
         </div>
@@ -62,10 +62,10 @@
                 (click)="openMatch(match)"
                 (keydown.enter)="openMatch(match)"
                 (keydown.space)="openMatch(match)">
-                <div class="tc-top">
-                  <div class="tc-league">{{ match.league }}</div>
+                <div class="uc-info today-card-info">
+                  <div class="uc-league">{{ match.league }}</div>
                   <span
-                    class="tc-status"
+                    class="uc-status today-card-status"
                     [class.live]="match.lineupReady && !isGenerated(match)"
                     [class.waiting]="!match.lineupReady && !isGenerated(match)"
                     [class.generated]="isGenerated(match)">
@@ -99,6 +99,13 @@
                       <ng-template #todayStartedLabel>{{ kickoffStartedLabel(match) }}</ng-template>{{ match.venue ? ' - ' + match.venue : '' }}
                     </div>
                   </div>
+                  <span
+                    class="uc-status today-card-action-status"
+                    [class.live]="match.lineupReady && !isGenerated(match)"
+                    [class.waiting]="!match.lineupReady && !isGenerated(match)"
+                    [class.generated]="isGenerated(match)">
+                    {{ isGenerated(match) ? 'âœ“ UCT Generated' : (match.lineupReady ? 'Lineup Ready' : 'â³ Waiting for Lineup') }}
+                  </span>
                   <button
                     class="tc-uct"
                     type="button"

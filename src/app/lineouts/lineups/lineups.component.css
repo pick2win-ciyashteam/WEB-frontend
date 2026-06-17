@@ -2891,45 +2891,196 @@
   }
 }
 
-/* Desktop/tablet alignment to match the cleaned mobile card behavior. */
-@media (min-width: 721px) {
+/* Mobile: make Today's match cards match the compact Upcoming card layout. */
+@media (max-width: 720px) {
   .today-card {
-    min-height: 196px !important;
+    min-height: auto !important;
     display: grid !important;
-    grid-template-rows: auto 1fr auto !important;
-    gap: 0 !important;
+    grid-template-columns: 1fr !important;
+    align-content: start !important;
+    gap: 12px !important;
+    padding: 13px 12px !important;
   }
 
-  .tc-top {
+  .today-card-info {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+    justify-items: stretch !important;
+  }
+
+  .today-card-status {
+    display: none !important;
+  }
+
+  .today-card .tc-mid {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 0 !important;
+  }
+
+  .today-card .tc-versus {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
     align-items: center !important;
-    gap: 16px !important;
+    gap: 6px !important;
+    margin-top: 10px !important;
   }
 
-  .tc-league {
+  .today-card .tc-team {
+    min-width: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+  }
+
+  .today-card .tc-team:last-child {
+    justify-content: flex-end !important;
+    text-align: right !important;
+  }
+
+  .today-card .tc-swatch {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 2px !important;
+  }
+
+  .today-card .tc-code {
+    font-size: 18px !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .today-card .tc-name {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    font-size: 10px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .today-card .tc-vs {
+    margin: 0 !important;
+    align-self: center !important;
+  }
+
+  .today-card .tc-bot {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    justify-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .today-card .tc-time {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .today-card .tc-clock,
+  .today-card .tc-rel {
+    display: inline !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    color: var(--paper-2) !important;
+    font-family: var(--f-mono) !important;
+    font-size: 9px !important;
+    font-weight: 850 !important;
+    line-height: 1.45 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .today-card .tc-clock::after {
+    content: "  \00b7";
+    color: var(--paper-3);
+  }
+
+  .today-card .tc-rel {
+    margin-left: 5px !important;
+  }
+
+  .today-card .today-card-action-status {
+    display: inline-flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 32px !important;
+    justify-self: stretch !important;
+    padding: 0 8px !important;
+    font-size: 8px !important;
+    letter-spacing: .09em !important;
+    text-align: center !important;
+  }
+
+  .today-card .tc-uct {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 32px !important;
+    padding: 0 10px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* Desktop/tablet alignment to match the cleaned mobile card behavior. */
+@media (min-width: 721px) {
+  .today-card-action-status {
+    display: none !important;
+  }
+
+  .today-card {
+    min-height: 96px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 158px 132px !important;
+    grid-template-rows: auto auto auto !important;
+    align-items: center !important;
+    column-gap: 10px !important;
+    row-gap: 0 !important;
+    padding: 16px 18px !important;
+  }
+
+  .today-card-info {
+    display: contents !important;
+  }
+
+  .today-card-info .uc-league {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
     justify-self: start !important;
   }
 
-  .tc-status {
-    width: 214px !important;
-    justify-self: center !important;
+  .today-card-status {
+    grid-column: 2 !important;
+    grid-row: 1 / 4 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    padding-inline: 10px !important;
     text-align: center !important;
   }
 
   .tc-mid {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
     align-self: center !important;
+    margin: 10px 0 0 !important;
+    padding: 0 !important;
+    border-bottom: 0 !important;
   }
 
   .tc-bot {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 214px !important;
-    align-items: center !important;
-    gap: 18px !important;
+    display: contents !important;
   }
 
   .tc-time {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
     min-width: 0 !important;
+    margin-top: 9px !important;
   }
 
   .tc-rel,
@@ -2942,11 +3093,58 @@
     line-height: 1.45 !important;
   }
 
+  .today-card .tc-versus {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .today-card .tc-team {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-width: 0 !important;
+  }
+
+  .today-card .tc-swatch {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 2px !important;
+  }
+
+  .today-card .tc-code {
+    font-size: 18px !important;
+    letter-spacing: 0 !important;
+  }
+
+  .today-card .tc-name {
+    max-width: 160px !important;
+  }
+
+  .today-card .tc-clock,
+  .today-card .tc-rel {
+    display: inline !important;
+    font-size: 11.5px !important;
+  }
+
+  .today-card .tc-clock::after {
+    content: "  \00b7";
+    color: var(--paper-3);
+  }
+
+  .today-card .tc-rel {
+    margin: 0 0 0 6px !important;
+  }
+
   .tc-uct {
-    width: 214px !important;
-    min-width: 214px !important;
-    justify-self: center !important;
-    padding: 0 18px !important;
+    grid-column: 3 !important;
+    grid-row: 1 / 4 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    padding: 0 10px !important;
     text-align: center !important;
   }
 
@@ -2969,5 +3167,71 @@
     max-width: 100% !important;
     padding-inline: 10px !important;
     text-align: center !important;
+  }
+}
+
+/* Stable status rendering: avoid mobile emoji/mojibake glyph issues. */
+.tc-status,
+.uc-status,
+.today-card .today-card-status,
+.today-card .today-card-action-status {
+  gap: 5px !important;
+  font-size: 0 !important;
+}
+
+.tc-status::before,
+.uc-status::before {
+  content: "hourglass_top";
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Material Symbols Outlined';
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.tc-status::after,
+.uc-status::after {
+  content: "Waiting for Lineup";
+  font-family: var(--f-mono);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.tc-status.live::before,
+.uc-status.live::before {
+  content: "bolt";
+}
+
+.tc-status.live::after,
+.uc-status.live::after {
+  content: "Lineup Ready";
+}
+
+.tc-status.generated::before,
+.uc-status.generated::before {
+  content: "check_circle";
+}
+
+.tc-status.generated::after,
+.uc-status.generated::after {
+  content: "UCT Generated";
+}
+
+@media (max-width: 720px) {
+  .tc-status::before,
+  .uc-status::before {
+    font-size: 12px;
+  }
+
+  .tc-status::after,
+  .uc-status::after {
+    font-size: 7.5px;
+    letter-spacing: 0.08em;
   }
 }

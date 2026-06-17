@@ -53,6 +53,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   loadingMatches = true;
   matchesError = '';
   coinBalance = 0;
+  totalCoinBalance: number | null = null;
   showBalanceRequired = false;
   showSeriesCoverage = false;
   readonly showUctButtonForTesting = false;
@@ -78,6 +79,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
           this.profileService.loadProfile().pipe(takeUntil(this.destroy$)).subscribe();
         } else {
           this.coinBalance = 0;
+          this.totalCoinBalance = null;
         }
       });
 
@@ -85,6 +87,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(profile => {
         this.coinBalance = Number(profile?.coins?.coins ?? 0);
+        this.totalCoinBalance = profile ? Number(profile.coins?.total_coins ?? 0) : null;
       });
   }
 
@@ -133,6 +136,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
 
   get readyAndNotGeneratedCount(): number {
     return this.todayMatches.filter(match => this.canRunUct(match)).length;
+  }
+
+  get showTryFreeNote(): boolean {
+    return this.isLoggedIn && this.totalCoinBalance !== null && this.totalCoinBalance <= 0;
   }
 
   get upcomingMatchCount(): number {
