@@ -3526,3 +3526,60 @@ button.home-banner-card {
     display: none;
   }
 }
+
+/* Final mobile density pass for long marketing sections. */
+@media (max-width: 640px) {
+  .carousel-section,
+  .home-section,
+  .versus-section {
+    padding: 24px 0 !important;
+  }
+
+  .home-about-company {
+    padding-top: 32px !important;
+  }
+
+  .home-hero-card,
+  .company-about-card,
+  .about-block,
+  .parallel-card,
+  .disclosure-card,
+  .about-cta {
+    padding: 18px 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .home-hero-title,
+  .company-about-title,
+  .about-block-h,
+  .cmp-title,
+  .window-title,
+  .parallel-title,
+  .about-cta-h {
+    font-size: clamp(24px, 8vw, 32px) !important;
+    line-height: 1.08 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .home-hero-lead,
+  .window-sub,
+  .parallel-sub,
+  .cmp-sub,
+  .about-block p,
+  .company-about-copy p,
+  .disclosure-text {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+  }
+
+  .home-hero-flow,
+  .home-hero-chips,
+  .feat-grid-3,
+  .journey-track,
+  .parallel-impact-grid,
+  .disclosure-grid {
+    gap: 10px !important;
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
+  }
+}

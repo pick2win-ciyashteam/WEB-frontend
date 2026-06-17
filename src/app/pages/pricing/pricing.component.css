@@ -1744,3 +1744,62 @@ em {
     min-height: 230px;
   }
 }
+
+/* Final mobile density pass for pricing. */
+@media (max-width: 640px) {
+  .pricing-page {
+    padding-top: 32px !important;
+  }
+
+  .section-head,
+  .coin-policy-head,
+  .free-first-head,
+  .pricing-note-head {
+    margin-bottom: 16px !important;
+  }
+
+  .section-title,
+  .coin-policy-title,
+  .ff-title,
+  .pricing-note-title,
+  .ar-title {
+    font-size: clamp(24px, 8vw, 32px) !important;
+    line-height: 1.08 !important;
+  }
+
+  .free-banner,
+  .no-expiry-banner,
+  .pricing-table-wrap,
+  .credit-intro,
+  .credit-benefits,
+  .pricing-note,
+  .pricing-commitments,
+  .account-ready-block,
+  .credit-pack {
+    padding: 16px 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .credit-packs,
+  .credit-benefits,
+  .pricing-commitments-grid,
+  .ar-grid {
+    gap: 10px !important;
+  }
+
+  .credit-pack-num {
+    font-size: 36px !important;
+  }
+
+  .credit-pack-amount {
+    font-size: 30px !important;
+  }
+
+  .ff-desc,
+  .pricing-note-copy,
+  .credit-pack li,
+  .credit-intro p {
+    font-size: 12.5px !important;
+    line-height: 1.45 !important;
+  }
+}

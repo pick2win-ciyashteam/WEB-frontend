@@ -225,3 +225,40 @@
     font-size: 24px;
   }
 }
+
+/* Final mobile density pass for legal/policy documents. */
+@media (max-width: 640px) {
+  .pol-container {
+    padding: 24px 12px 46px !important;
+  }
+
+  .pol-doc {
+    padding: 16px 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .pol-doc-title {
+    font-size: clamp(22px, 7vw, 28px) !important;
+    line-height: 1.1 !important;
+  }
+
+  .pol-doc-meta {
+    margin-bottom: 14px !important;
+  }
+
+  .pol-section {
+    margin-bottom: 13px !important;
+    padding-bottom: 13px !important;
+  }
+
+  .pol-section h4 {
+    margin-bottom: 5px !important;
+    font-size: 14px !important;
+    line-height: 1.25 !important;
+  }
+
+  .pol-section p {
+    font-size: 12.5px !important;
+    line-height: 1.48 !important;
+  }
+}

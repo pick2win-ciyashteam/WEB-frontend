@@ -2086,3 +2086,217 @@ td:nth-child(4) {
     line-height: 1.45;
   }
 }
+
+/* Final desktop/tablet alignment: less empty top space, tighter UCT guide rhythm. */
+.uct-page {
+  padding: 72px 0 78px !important;
+}
+
+.uct-panel-intro {
+  max-width: 720px !important;
+  margin: 0 auto 34px !important;
+}
+
+.uct-panel-intro-title {
+  font-size: clamp(40px, 4.7vw, 56px) !important;
+  line-height: 1.06 !important;
+  font-weight: 950 !important;
+}
+
+.uct-panel-intro-sub {
+  max-width: 52ch !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+}
+
+.about-block,
+.about-closing,
+.uct-mr-card {
+  max-width: 1080px !important;
+  margin-bottom: 24px !important;
+  padding: clamp(22px, 3vw, 34px) !important;
+  border-radius: 16px !important;
+}
+
+.about-block-h,
+.about-closing-h {
+  font-size: clamp(28px, 3.2vw, 38px) !important;
+  line-height: 1.1 !important;
+}
+
+.about-block-lead {
+  margin-bottom: 14px !important;
+  font-size: 15.5px !important;
+  line-height: 1.45 !important;
+}
+
+.about-prose p,
+.macro-flow > p,
+.formation-card > p {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.fact-grid,
+.steps-grid,
+.summary-grid,
+.constraint-grid,
+.split-grid,
+.formation-grid,
+.macro-grid {
+  gap: 12px !important;
+}
+
+.fact-card,
+.step-card,
+.summary-card,
+.macro-step,
+.split-grid > div,
+.constraint-grid > div {
+  padding: 16px !important;
+  border-radius: 12px !important;
+}
+
+@media (min-width: 1024px) {
+  .uct-page {
+    padding-top: 64px !important;
+  }
+
+  .uct-panel-intro {
+    margin-bottom: 30px !important;
+  }
+}
+
+/* Final mobile density pass: reduce hero height, huge text, and scrolling fatigue. */
+@media (max-width: 640px) {
+  .uct-page {
+    padding: 32px 0 52px !important;
+  }
+
+  .wrap {
+    width: min(100% - 22px, 1180px) !important;
+  }
+
+  .uct-panel-intro {
+    margin: 0 auto 18px !important;
+    padding: 0 2px !important;
+  }
+
+  .uct-panel-intro-title {
+    max-width: 100% !important;
+    font-size: clamp(28px, 9vw, 38px) !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .uct-panel-intro-sub {
+    max-width: 32ch !important;
+    margin-top: 10px !important;
+    font-size: 13px !important;
+    line-height: 1.42 !important;
+  }
+
+  .about-block,
+  .about-closing,
+  .uct-mr-card,
+  .info-block,
+  .pledge-card,
+  .engine-hero {
+    margin-bottom: 16px !important;
+    margin-top: 0 !important;
+    padding: 16px 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .about-block-eyebrow,
+  .mini-section-title,
+  .table-label {
+    font-size: 8px !important;
+    letter-spacing: .1em !important;
+    line-height: 1.25 !important;
+  }
+
+  .about-block-h,
+  .info-block h2,
+  .pledge-card h2,
+  .engine-hero h1,
+  .uct-panel-intro-title,
+  .uct-panel-intro-title em {
+    font-size: clamp(24px, 7.8vw, 32px) !important;
+    line-height: 1.08 !important;
+  }
+
+  .about-block-h {
+    margin-top: 8px !important;
+  }
+
+  .about-block-lead,
+  .about-prose p,
+  .block-lead,
+  .engine-hero p,
+  .macro-flow > p,
+  .formation-card > p,
+  .about-closing p {
+    margin-top: 8px !important;
+    font-size: 12.5px !important;
+    line-height: 1.48 !important;
+  }
+
+  .fact-grid,
+  .steps-grid,
+  .summary-grid,
+  .constraint-grid,
+  .split-grid,
+  .formation-grid,
+  .macro-grid,
+  .mode-grid,
+  .comparison-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .fact-card,
+  .step-card,
+  .summary-card,
+  .macro-step,
+  .formation-card,
+  .split-grid > div,
+  .constraint-grid > div {
+    min-height: 0 !important;
+    padding: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .fact-card b,
+  .summary-card b,
+  .split-grid b,
+  .constraint-grid b,
+  .macro-step b {
+    font-size: clamp(18px, 6vw, 24px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .fact-card p,
+  .step-card p,
+  .summary-card p,
+  .macro-step p,
+  .formation-grid p,
+  .split-grid p,
+  .constraint-grid p {
+    margin-top: 5px !important;
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+  }
+
+  .macro-flow,
+  .formation-card {
+    margin-top: 12px !important;
+    padding: 14px !important;
+  }
+
+  .macro-arrow {
+    min-height: 12px !important;
+    font-size: 14px !important;
+    transform: rotate(90deg) !important;
+  }
+}

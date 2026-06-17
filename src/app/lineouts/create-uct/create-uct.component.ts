@@ -77,6 +77,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   readonly minCvc = 2;
   readonly maxCaptains = 4;
   readonly maxViceCaptains = 5;
+  readonly positionLimits: Record<string, { min: number; max: number }> = {
+    GK: { min: 1, max: 1 },
+    DEF: { min: 2, max: 6 },
+    MID: { min: 2, max: 5 },
+    FWD: { min: 1, max: 3 }
+  };
 
   constructor(
     private api: ApiService,
@@ -372,6 +378,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.cvcIds.delete(player.id);
       this.captainIds.delete(player.id);
       this.viceCaptainIds.delete(player.id);
+      this.refreshActionBarLayout();
       return;
     }
 
@@ -381,6 +388,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.selectedSubIds.add(player.id);
+    this.refreshActionBarLayout();
   }
 
   isSubstituteDisabled(player: UctPlayer): boolean {
@@ -429,6 +437,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       if (value === 'YES') {
         this.cvcIds.delete(player.id);
       }
+      this.refreshActionBarLayout();
       return;
     }
 
@@ -453,6 +462,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.mandates.set(player.id, value);
+    this.refreshActionBarLayout();
 
     if (value === 'NO') {
       this.cvcIds.delete(player.id);
@@ -479,6 +489,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (this.cvcIds.has(player.id)) {
       this.cvcIds.delete(player.id);
+      this.refreshActionBarLayout();
+      return;
+    }
+
+    if (this.isCaptaincyPositionCapReached(player, this.cvcIds)) {
+      this.showPositionCapAlert(player);
       return;
     }
 
@@ -488,12 +504,14 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.cvcIds.add(player.id);
+    this.refreshActionBarLayout();
   }
 
   canSelectCvc(player: UctPlayer): boolean {
     if (this.cvcIds.has(player.id)) return true;
     if (this.mandates.get(player.id) === 'NO') return false;
     if (this.isCaptaincyGoalkeeperBlocked(player, this.cvcIds)) return false;
+    if (this.isCaptaincyPositionCapReached(player, this.cvcIds)) return false;
     return this.cvcIds.size < this.maxCvc;
   }
 
@@ -528,6 +546,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (this.captainIds.has(player.id)) {
       this.captainIds.delete(player.id);
+      this.refreshActionBarLayout();
+      return;
+    }
+
+    if (this.isCaptaincyPositionCapReached(player, this.cAndVcCaptaincyIds())) {
+      this.showPositionCapAlert(player);
       return;
     }
 
@@ -541,6 +565,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.captainIds.add(player.id);
+    this.refreshActionBarLayout();
   }
 
   toggleViceCaptain(player: UctPlayer): void {
@@ -563,6 +588,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (this.viceCaptainIds.has(player.id)) {
       this.viceCaptainIds.delete(player.id);
+      this.refreshActionBarLayout();
+      return;
+    }
+
+    if (this.isCaptaincyPositionCapReached(player, this.cAndVcCaptaincyIds())) {
+      this.showPositionCapAlert(player);
       return;
     }
 
@@ -572,6 +603,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.viceCaptainIds.add(player.id);
+    this.refreshActionBarLayout();
   }
 
   isCandVcMatrixValid(): boolean {
@@ -587,6 +619,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.mandates.get(player.id) === 'NO') return false;
     if (this.viceCaptainIds.has(player.id)) return false;
     if (this.isCaptaincyGoalkeeperBlocked(player, this.cAndVcCaptaincyIds())) return false;
+    if (this.isCaptaincyPositionCapReached(player, this.cAndVcCaptaincyIds())) return false;
     if (this.captainIds.size >= this.maxCaptains) return false;
 
     return this.viceCaptainIds.size <= this.maxViceForCaptainCount(this.captainIds.size + 1);
@@ -597,6 +630,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.mandates.get(player.id) === 'NO') return false;
     if (this.captainIds.has(player.id)) return false;
     if (this.isCaptaincyGoalkeeperBlocked(player, this.cAndVcCaptaincyIds())) return false;
+    if (this.isCaptaincyPositionCapReached(player, this.cAndVcCaptaincyIds())) return false;
 
     return this.viceCaptainIds.size < this.maxViceForCurrentCaptains();
   }
@@ -933,6 +967,13 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.uctAlert = { title, message, type };
   }
 
+  private refreshActionBarLayout(): void {
+    requestAnimationFrame(() => {
+      const actions = document.querySelector('.flow-actions');
+      actions?.getBoundingClientRect();
+    });
+  }
+
   private setActiveStep(step: number): void {
     this.step = step;
     this.scrollToStepView(step);
@@ -968,6 +1009,43 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     return this.availablePool.some(candidate =>
       selectedIds.has(candidate.id) && this.isGoalkeeper(candidate)
+    );
+  }
+
+  private isCaptaincyPositionCapReached(player: UctPlayer, selectedIds: Set<number>): boolean {
+    if (selectedIds.has(player.id)) {
+      return false;
+    }
+
+    const position = this.normalizedPosition(player);
+
+    if (position === 'GK') {
+      return false;
+    }
+
+    const limit = this.positionLimits[position];
+
+    if (!limit) {
+      return false;
+    }
+
+    const selectedPlayers = this.availablePool.filter(candidate => selectedIds.has(candidate.id));
+
+    return this.positionCount(selectedPlayers, position) >= limit.max;
+  }
+
+  private showPositionCapAlert(player: UctPlayer): void {
+    const position = this.normalizedPosition(player);
+    const limit = this.positionLimits[position];
+
+    if (!limit) {
+      return;
+    }
+
+    this.showAlert(
+      `${position} limit reached`,
+      `${position} allows minimum ${limit.min} and maximum ${limit.max} players. Remove one ${position} player before selecting another.`,
+      'warning'
     );
   }
 
@@ -1029,9 +1107,9 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     const fullPool = this.rotated(this.availablePool.filter(player => !excludedIds.has(player.id)), seed + 7);
 
     this.ensurePosition(team, selectedIds, 'GK', fullPool);
-    this.ensurePositionCount(team, selectedIds, 'DEF', 2, fullPool);
-    this.ensurePositionCount(team, selectedIds, 'MID', 2, fullPool);
-    this.ensurePositionCount(team, selectedIds, 'FWD', 1, fullPool);
+    this.ensurePositionCount(team, selectedIds, 'DEF', this.positionLimits['DEF'].min, fullPool);
+    this.ensurePositionCount(team, selectedIds, 'MID', this.positionLimits['MID'].min, fullPool);
+    this.ensurePositionCount(team, selectedIds, 'FWD', this.positionLimits['FWD'].min, fullPool);
     this.fillSide(team, selectedIds, 'home', targetHomeCount, homePool);
     this.fillSide(team, selectedIds, 'away', targetAwayCount, awayPool);
     this.fillTeam(team, selectedIds, fullPool);
@@ -1044,13 +1122,13 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const player = pool.find(item => item.position === position && !selectedIds.has(item.id));
+    const player = pool.find(item => this.normalizedPosition(item) === position && !selectedIds.has(item.id));
     if (player) this.addUnique(team, selectedIds, player);
   }
 
   private ensurePositionCount(team: UctPlayer[], selectedIds: Set<number>, position: string, count: number, pool: UctPlayer[]): void {
-    while (team.filter(player => player.position === position).length < count) {
-      const player = pool.find(item => item.position === position && !selectedIds.has(item.id));
+    while (this.positionCount(team, position) < count) {
+      const player = pool.find(item => this.normalizedPosition(item) === position && !selectedIds.has(item.id));
       if (!player) return;
       this.addUnique(team, selectedIds, player);
     }
@@ -1058,7 +1136,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private fillSide(team: UctPlayer[], selectedIds: Set<number>, side: 'home' | 'away', count: number, pool: UctPlayer[]): void {
     while (team.filter(player => player.teamSide === side).length < count && team.length < 11) {
-      const player = pool.find(item => !selectedIds.has(item.id));
+      const player = pool.find(item => !selectedIds.has(item.id) && this.canAddPosition(team, item));
       if (!player) return;
       this.addUnique(team, selectedIds, player);
     }
@@ -1066,7 +1144,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private fillTeam(team: UctPlayer[], selectedIds: Set<number>, pool: UctPlayer[]): void {
     while (team.length < 11) {
-      const player = pool.find(item => !selectedIds.has(item.id));
+      const player = pool.find(item => !selectedIds.has(item.id) && this.canAddPosition(team, item));
       if (!player) return;
       this.addUnique(team, selectedIds, player);
     }
@@ -1104,6 +1182,25 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       team.push(player);
       selectedIds.add(player.id);
     }
+  }
+
+  private canAddPosition(team: UctPlayer[], player: UctPlayer): boolean {
+    const position = this.normalizedPosition(player);
+    const limit = this.positionLimits[position];
+
+    if (!limit) {
+      return true;
+    }
+
+    return this.positionCount(team, position) < limit.max;
+  }
+
+  private positionCount(players: UctPlayer[], position: string): number {
+    return players.filter(player => this.normalizedPosition(player) === position).length;
+  }
+
+  private normalizedPosition(player: UctPlayer): string {
+    return String(player.position || '').trim().toUpperCase();
   }
 
   private rotated(players: UctPlayer[], seed: number): UctPlayer[] {

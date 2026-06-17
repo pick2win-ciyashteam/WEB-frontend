@@ -568,3 +568,49 @@
     gap: 4px;
   }
 }
+
+/* Final mobile density pass. */
+@media (max-width: 560px) {
+  .about-page {
+    padding: 32px 0 52px !important;
+  }
+
+  .wrap {
+    width: min(100% - 22px, 1200px) !important;
+  }
+
+  .section-head {
+    margin-bottom: 16px !important;
+  }
+
+  .section-title,
+  .about-hero h1,
+  .about-block-h,
+  .company-contact-title {
+    font-size: clamp(24px, 8vw, 32px) !important;
+    line-height: 1.08 !important;
+  }
+
+  .about-hero,
+  .about-block,
+  .signup-nudge,
+  .company-contact {
+    margin-bottom: 16px !important;
+    padding: 16px 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .about-hero p,
+  .about-prose p,
+  .feat-card p,
+  .company-contact-row .val {
+    font-size: 12.5px !important;
+    line-height: 1.48 !important;
+  }
+
+  .feat-grid-3,
+  .explore-grid,
+  .company-contact-grid {
+    gap: 10px !important;
+  }
+}
