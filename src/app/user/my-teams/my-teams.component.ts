@@ -49,6 +49,26 @@ interface ApiGeneratedTeam {
   players: ApiPlayer[];
 }
 
+interface ApiPreviewPlayer {
+  name: string;
+  role?: PlayerPosition;
+  image?: string | null;
+}
+
+interface ApiTeamsPreview {
+  substitutes?: ApiPreviewPlayer[];
+  mandate_yes?: ApiPreviewPlayer[];
+  cvc_players?: ApiPreviewPlayer[];
+  captains?: ApiPreviewPlayer[];
+  vice_captains?: ApiPreviewPlayer[];
+  substitutes_count?: number;
+  mandate_yes_count?: number;
+  mandate_no_count?: number;
+  cvc_count?: number;
+  captain_count?: number;
+  vice_captain_count?: number;
+}
+
 interface PreviewPlayer {
   id: number;
   name: string;
@@ -195,18 +215,15 @@ private openMatchFromQueryParam(): void {
 }
 
   downloadMatchTeams(match: GeneratedMatch) {
-  if (!this.canAccessTeams(match)) {
-    return;
-  }
-
   this.api.MatchByTeams(match.id).subscribe({
     next: (res: any) => {
       // console.log('My Teams download response:', res);
 
       const generatedTeams = this.generatedTeamsFromResponse(res);
+      const responsePreview = this.teamsPreviewFromResponse(res);
 
       if (generatedTeams.length) {
-        const text = this.teamTextBlocks(generatedTeams, match);
+        const text = this.teamTextBlocks(generatedTeams, match, responsePreview);
         this.downloadText(text, this.makeTeamFileName(match, 'txt'));
         return;
       }
@@ -247,8 +264,9 @@ private openMatchFromQueryParam(): void {
 
       const text = [
         this.teamTextHeader(match, rows.length || match.teamsGenerated || 0),
+        this.previewTextBlock(responsePreview),
         this.objectRowsToTextBlocks(rows)
-      ].join('\r\n\r\n');
+      ].filter(Boolean).join('\r\n\r\n');
       this.downloadText(text, this.makeTeamFileName(match, 'txt'));
     }
   });
@@ -573,6 +591,16 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return [];
   }
 
+  private teamsPreviewFromResponse(res: any): ApiTeamsPreview | null {
+    const preview = res?.preview || res?.data?.preview;
+
+    if (!preview || typeof preview !== 'object') {
+      return null;
+    }
+
+    return preview;
+  }
+
   private buildPreviewFromPlayers(teamId: number, apiPlayers: ApiPlayer[]): PreviewTeam {
     const players: PreviewPlayer[] = apiPlayers.map(player => this.mapPreviewPlayer(player));
 
@@ -667,26 +695,99 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return '.';
   }
 
-  private teamTextBlocks(teams: ApiGeneratedTeam[], match?: GeneratedMatch): string {
+  private teamTextBlocks(teams: ApiGeneratedTeam[], match?: GeneratedMatch, preview?: ApiTeamsPreview | null): string {
     const blocks = teams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team));
 
     if (!match) {
-      return blocks.join('\r\n\r\n');
+      return [
+        this.previewTextBlock(preview),
+        ...blocks
+      ].filter(Boolean).join('\r\n\r\n');
     }
 
     return [
       this.teamTextHeader(match, teams.length),
+      this.previewTextBlock(preview),
       ...blocks
-    ].join('\r\n\r\n');
+    ].filter(Boolean).join('\r\n\r\n');
   }
 
   private teamTextHeader(match: GeneratedMatch, totalTeams: number): string {
     return [
-      `PICK2WIN · UCT · ${match.title || 'Teams'}`,
+      `PICK2WIN - UCT - ${match.title || 'Teams'}`,
       `League: ${match.league || 'N/A'}`,
       `Generated: ${this.csvMatchDate(match)}, ${match.generatedAt || '-'}`,
       `Total: ${totalTeams || match.teamsGenerated || 0} teams`
     ].join('\r\n');
+  }
+
+  private previewTextBlock(preview?: ApiTeamsPreview | null): string {
+    if (!preview) {
+      return '';
+    }
+
+    const substitutes = Array.isArray(preview.substitutes) ? preview.substitutes : [];
+    const mandateYes = Array.isArray(preview.mandate_yes) ? preview.mandate_yes : [];
+    const cvcPlayers = Array.isArray(preview.cvc_players) ? preview.cvc_players : [];
+    const captains = Array.isArray(preview.captains) ? preview.captains : [];
+    const viceCaptains = Array.isArray(preview.vice_captains) ? preview.vice_captains : [];
+
+    if (
+      !substitutes.length &&
+      !mandateYes.length &&
+      !cvcPlayers.length &&
+      !captains.length &&
+      !viceCaptains.length &&
+      preview.substitutes_count == null &&
+      preview.mandate_yes_count == null &&
+      preview.cvc_count == null &&
+      preview.captain_count == null &&
+      preview.vice_captain_count == null
+    ) {
+      return '';
+    }
+
+    return [
+      'Preview',
+      this.previewModeText(preview),
+      this.previewGroupText('Substitutes', substitutes, preview.substitutes_count),
+      this.previewGroupText('Mandate Yes', mandateYes, preview.mandate_yes_count),
+      this.previewGroupText('CVC Players', cvcPlayers, preview.cvc_count),
+      this.previewGroupText('Captains', captains, preview.captain_count),
+      this.previewGroupText('Vice Captains', viceCaptains, preview.vice_captain_count)
+    ].filter(Boolean).join('\r\n');
+  }
+
+  private previewModeText(preview: ApiTeamsPreview): string {
+    const cvcPlayers = Array.isArray(preview.cvc_players) ? preview.cvc_players : [];
+    const captains = Array.isArray(preview.captains) ? preview.captains : [];
+    const viceCaptains = Array.isArray(preview.vice_captains) ? preview.vice_captains : [];
+
+    if (cvcPlayers.length || Number(preview.cvc_count || 0) > 0) {
+      return 'Mode: CVC mode';
+    }
+
+    if (
+      captains.length ||
+      viceCaptains.length ||
+      Number(preview.captain_count || 0) > 0 ||
+      Number(preview.vice_captain_count || 0) > 0
+    ) {
+      return 'Mode: C & VC mode';
+    }
+
+    return '';
+  }
+
+  private previewGroupText(label: string, players: ApiPreviewPlayer[], count?: number): string {
+    const total = count ?? players.length;
+    const lines = [`${label}: ${total}`];
+
+    players.forEach((player, index) => {
+      lines.push(`${index + 1}. ${player.name || '-'}${player.role ? ` (${player.role})` : ''}`);
+    });
+
+    return lines.join('\r\n');
   }
 
   private teamTextBlock(team: ApiGeneratedTeam): string {

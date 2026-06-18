@@ -60,7 +60,7 @@
 
         <div class="mb-stats">
           <div class="mb-count-pill">{{ match.teamsGenerated || 0 }} teams</div>
-          <button class="mb-csv" type="button" *ngIf="canAccessTeams(match)" (click)="downloadMatchTeams(match); $event.stopPropagation()">
+          <button class="mb-csv" type="button" (click)="downloadMatchTeams(match); $event.stopPropagation()">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
             TXT
           </button>
@@ -107,7 +107,7 @@
 
         <div class="mb-stats">
           <div class="mb-count-pill">{{ detailMatch.teamsGenerated || previewTeams.length }} teams</div>
-          <button class="mb-csv" type="button" *ngIf="canAccessTeams(detailMatch)" (click)="downloadMatchTeams(detailMatch)">
+          <button class="mb-csv" type="button" (click)="downloadMatchTeams(detailMatch)">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
             TXT
           </button>
