@@ -18,6 +18,414 @@
   --f-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 }
 
+/* Reference UCT guide additions from the supplied static HTML. */
+.formation-reference {
+  display: block;
+}
+
+.formation-group {
+  margin-top: 18px;
+}
+
+.formation-group-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--paper-2);
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.formation-group-label .material-symbols-outlined {
+  color: var(--pitch-2);
+  font-size: 17px;
+}
+
+.formation-group.balanced .material-symbols-outlined {
+  color: var(--gold);
+}
+
+.formation-group.defensive .material-symbols-outlined {
+  color: var(--blue);
+}
+
+.formation-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.formation-chip-row span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(11,204,142,0.40);
+  border-radius: 999px;
+  color: var(--paper);
+  background: rgba(11,204,142,0.10);
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+
+.formation-group.balanced .formation-chip-row span {
+  border-color: rgba(244,180,0,0.40);
+  background: rgba(244,180,0,0.10);
+}
+
+.formation-group.defensive .formation-chip-row span {
+  border-color: rgba(91,176,230,0.40);
+  background: rgba(91,176,230,0.10);
+}
+
+.formation-note,
+.centered-note {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: var(--paper-2);
+  background: rgba(0,0,0,0.20);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.centered-note {
+  text-align: center;
+}
+
+.keeper-captaincy {
+  margin-top: 18px;
+  border-color: rgba(20,184,166,0.32);
+  border-left: 3px solid #14B8A6;
+  background: rgba(20,184,166,0.07);
+}
+
+.uct-six-steps {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.config-alert {
+  max-width: none;
+  width: 100%;
+  margin-top: 20px;
+  border-color: rgba(244,180,0,0.32);
+  border-left: 3px solid var(--gold);
+  background: rgba(244,180,0,0.06);
+}
+
+.config-alert a {
+  display: inline-flex;
+  margin-top: 8px;
+  color: var(--gold);
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.cta-offer {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto 24px;
+  padding: 10px 18px;
+  border: 1px solid rgba(244,180,0,0.42);
+  border-radius: 999px;
+  background: rgba(244,180,0,0.12);
+}
+
+.cta-offer-pct {
+  color: var(--gold);
+  font-family: var(--f-display);
+  font-size: 22px;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.cta-offer-div {
+  width: 1px;
+  height: 22px;
+  background: rgba(255,255,255,0.20);
+}
+
+.cta-offer-cap {
+  color: var(--paper-2);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.guide-note,
+.captaincy-reminder {
+  margin-top: 24px;
+  padding: 16px 18px;
+  border: 1px solid rgba(244,180,0,0.28);
+  border-left: 3px solid var(--gold);
+  border-radius: 12px;
+  color: var(--paper-2);
+  background: rgba(244,180,0,0.06);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.structure-position-grid,
+.structure-splits-grid,
+.rule-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.structure-position-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.structure-splits-grid {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  margin-top: 14px;
+}
+
+.structure-pos-card,
+.structure-split-card,
+.rule-grid > div {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(11,60,93,0.22);
+}
+
+.structure-pos-card.danger {
+  border-left: 3px solid var(--acid);
+  background: rgba(215,38,56,0.08);
+}
+
+.structure-pos-card span,
+.structure-split-card span {
+  display: block;
+  color: var(--gold);
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.structure-pos-card b,
+.structure-split-card b {
+  display: block;
+  margin-top: 8px;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.structure-pos-card p,
+.structure-split-card p,
+.rule-grid p,
+.captaincy-reminder p {
+  margin: 8px 0 0;
+  color: var(--paper-2);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.rule-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 16px;
+}
+
+.rule-grid b {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--gold);
+  font-family: var(--f-mono);
+}
+
+.rule-grid span {
+  display: block;
+  color: var(--paper);
+  font-weight: 800;
+}
+
+.success-card {
+  margin-top: 18px;
+  border-color: rgba(11,204,142,0.32);
+  border-left: 3px solid var(--pitch-2);
+  background: rgba(11,204,142,0.07);
+}
+
+/* Exact UCT-guide card tuning for access, workflow, goalkeeper, captaincy and why-20 sections. */
+.access-step {
+  padding: 22px;
+  border-top: 0;
+  background: rgba(11,60,93,0.20);
+}
+
+.access-step-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.access-step-top b {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--gold);
+  font-family: var(--f-mono);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.access-step-top .material-symbols-outlined {
+  color: var(--paper);
+  font-size: 24px;
+}
+
+.access-step h3 {
+  margin-top: 0;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.workflow-reference {
+  justify-content: center;
+  margin: 0 0 24px;
+  padding: 22px;
+  border-radius: 12px;
+  background: rgba(11,60,93,0.18);
+}
+
+.workflow-reference span {
+  border-radius: 6px;
+}
+
+.workflow-reference span b {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 6px;
+  border-radius: 5px;
+  color: var(--ink);
+  background: var(--gold);
+  font-size: 11px;
+}
+
+.keeper-captaincy b,
+.confirm-card.info b,
+.confirm-card:not(.config-alert) b {
+  color: var(--paper);
+}
+
+.captaincy-compare {
+  margin-bottom: 20px;
+}
+
+.captaincy-compare td:first-child {
+  color: var(--paper);
+  font-weight: 800;
+}
+
+.compare-tag {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.compare-tag.gold {
+  color: var(--gold);
+  background: rgba(244,180,0,0.12);
+}
+
+.compare-tag.blue {
+  color: var(--blue);
+  background: rgba(91,176,230,0.12);
+}
+
+.captaincy-mode-card p b {
+  color: var(--paper);
+}
+
+.captaincy-mode-card ul {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.captaincy-mode-card li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--paper-2);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.captaincy-mode-card li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .58em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.captaincy-compare table {
+  min-width: 760px;
+}
+
+.why-20-reference {
+  text-align: center;
+}
+
+.why-20-reference .mini-section-title {
+  color: #B768E6;
+  letter-spacing: .20em;
+}
+
+.why-20-reference p {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.why-20-reference p:first-of-type {
+  color: var(--paper);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.why-20-reference em {
+  color: #B768E6;
+  font-style: italic;
+}
+
 .uct-page {
   color: var(--paper);
   padding: 116px 0 104px;
@@ -2089,7 +2497,7 @@ td:nth-child(4) {
 
 /* Final desktop/tablet alignment: less empty top space, tighter UCT guide rhythm. */
 .uct-page {
-  padding: 72px 0 78px !important;
+  padding: 30px 0 78px !important;
 }
 
 .uct-panel-intro {
@@ -2298,5 +2706,23 @@ td:nth-child(4) {
     min-height: 12px !important;
     font-size: 14px !important;
     transform: rotate(90deg) !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .uct-six-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 1099px) {
+  .uct-six-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .uct-six-steps {
+    grid-template-columns: 1fr !important;
   }
 }

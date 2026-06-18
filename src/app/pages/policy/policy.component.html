@@ -1,13 +1,15 @@
 <app-header></app-header>
 
-<main class="pol-page">
+<main class="pol-page privacy-page">
   <div class="pol-container">
-    <div class="pol-top">
-      <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">description</span>
-      <span class="pol-eyebrow">PICK2WIN &middot; Legal</span>
-    </div>
-    <h1 class="pol-mast">PICK2WIN <em>policies</em></h1>
-    <p class="pol-intro">The terms that govern your use of PICK2WIN. <a routerLink="/" class="pol-back">&larr; Back to app</a></p>
+    <section class="pol-hero">
+      <div class="pol-top">
+        <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">{{ pageIcon }}</span>
+        <span class="pol-eyebrow">PICK2WIN - Privacy</span>
+      </div>
+      <h1 class="pol-mast">{{ docTitle }} <em>and data use</em></h1>
+      <p class="pol-intro">How account, verification, payment, and UCT workflow data is handled.</p>
+    </section>
 
     <nav class="pol-tabbar" aria-label="PICK2WIN policy pages">
       <a class="pol-tab" routerLink="/terms">Terms &amp; Conditions</a>
@@ -15,23 +17,17 @@
       <a class="pol-tab" routerLink="/refund">Refund Policy</a>
     </nav>
 
-    <article class="pol-panel active" id="privacy">
-      <h3 class="pol-doc-title">Privacy Policy</h3>
-      <p class="pol-doc-meta">Last updated 8 June 2026 &middot; PICK2WIN Technologies Pvt Ltd</p>
+    <article class="pol-panel active">
+      <h3 class="pol-doc-title">{{ docTitle }}</h3>
+      <p class="pol-doc-meta">{{ docMeta }}</p>
 
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 1</span>What we collect</h4><p>Account details you provide: full name, date of birth, country of residence, mobile number, email address and a securely hashed password. We also record usage needed to run the service (matches you configure, coin balance and purchase history) and limited technical data (device / IP signals) for fraud prevention.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 2</span>Why we collect it</h4><p>To verify eligibility (18+, one account per user), prevent fraud and multi-accounting, deliver UCT generations, process payments, and provide support. We do not sell your personal data.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 3</span>Verification data</h4><p>One-time passcodes are sent by SMS and email to confirm ownership of your number and address. Device and IP signals are used only for fraud and abuse detection.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 4</span>Payments</h4><p>All payments are processed by <strong>Stripe</strong>. We never see or store full card numbers or CVV &mdash; that data goes directly to Stripe under PCI-DSS. We retain only the minimum record (pack, amount, date, reference) needed for billing and refunds.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 5</span>Sharing with processors</h4><p>We share the minimum data required with service providers acting on our behalf: Stripe (payments), our SMS / email provider (verification), and our football-data provider (lineups). These providers are bound by contract and may not use your data for their own purposes.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 6</span>Cookies &amp; local storage</h4><p>We use essential cookies / local storage to keep you signed in and remember in-session state. We do not run third-party advertising trackers.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 7</span>Data retention &amp; account deletion</h4><p>We keep your data while your account is active. If you delete your account, your personal data is <strong>erased</strong> and the account cannot be reclaimed; limited transaction records may be retained where required by law (e.g. tax / anti-fraud). Deletion is permanent and any unused coins are forfeited (see Refund Policy &sect;5).</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 8</span>Your rights</h4><p>Subject to applicable law, you may request access to, correction of, export of, or erasure of your personal data. Contact us to exercise these rights.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 9</span>Security</h4><p>We use encryption in transit, hashed passwords, and access controls. No system is perfectly secure, but we work to protect your data and to notify you of material incidents where required.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 10</span>Contact</h4><p>Privacy questions or requests? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a>.</p></div>
+      <div class="pol-section" *ngFor="let section of sections; let i = index" [attr.id]="'privacy-' + (i + 1)">
+        <h4><span class="sec-num">{{ i + 1 }}</span>{{ section.title }}</h4>
+        <p [innerHTML]="section.body"></p>
+      </div>
     </article>
 
-    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd &middot; All rights reserved &middot; support@pick2win.io</div>
+    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd - All rights reserved - support@pick2win.io</div>
   </div>
 </main>
 

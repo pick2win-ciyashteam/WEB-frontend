@@ -1,21 +1,21 @@
 <app-header></app-header>
 
-<div class="home-splash" *ngIf="showSplash" role="status" aria-live="polite">
-  <button class="splash-skip" type="button" (click)="closeSplash()">Skip</button>
-
+<!-- Launch flash screen: first screen before entering Home. -->
+<div class="home-splash" *ngIf="showSplash" role="dialog" aria-modal="true" aria-label="PICK2WIN launching soon">
   <div class="splash-content">
     <div class="splash-mark">
       <img src="assets/logo.png" alt="PICK2WIN">
     </div>
-    <div class="splash-eyebrow">PICK2WIN UCT</div>
-    <p>Where skill matters more.</p>
-
-    <div class="splash-progress" aria-hidden="true">
-      <span></span>
+    <div class="splash-eyebrow"><span></span>LAUNCHING SOON</div>
+    <h1>Where <em>skill</em> matters more.</h1>
+    <div class="splash-date">
+      <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
+      Launching <b>24 June 2026</b>
     </div>
+
+    <button class="splash-preview" type="button" (click)="closeSplash()">Preview the site -&gt;</button>
   </div>
 </div>
-
 
 <section class="carousel-section">
   <div class="banner-deck" id="bannerDeck">
@@ -26,7 +26,9 @@
         <p class="banner-body">A structured workflow tool that takes your configuration inputs and produces <b>20 structured football teams per match</b> in a few seconds, once official lineups release.</p>
         <a routerLink="/uctguide" class="banner-cta">What is UCT -&gt;</a>
       </div>
-      <div class="banner-visual"><span class="emoji-big">⚽</span></div>
+      <div class="banner-visual">
+        <span class="banner-real-icon banner-football-icon" aria-hidden="true">&#9917;</span>
+      </div>
     </article>
 
     <article class="banner tone-uct" [class.active]="currentBanner === 1">
@@ -36,18 +38,53 @@
         <p class="banner-body">Four simple screens after lineups release. Your inputs drive the output. <b>20 teams in a few seconds.</b> No editing chaos, no last-minute panic.</p>
         <a routerLink="/uctguide" class="banner-cta">See the workflow -&gt;</a>
       </div>
-      <div class="banner-visual"><span class="emoji-big">⚙️</span></div>
+      <div class="banner-visual">
+        <div class="p3d-icon p3d-gift" aria-hidden="true">
+          <span></span><i></i><b></b>
+        </div>
+      </div>
     </article>
 
     <article class="banner tone-coverage" [class.active]="currentBanner === 2">
       <div>
-        <div class="banner-eyebrow">Covering the World's Top Football Leagues & Tournaments 
-        </div>
+        <div class="banner-eyebrow">Covering the World's Top Football Leagues &amp; Tournaments</div>
         <h3 class="banner-h">Premier League to <em>FIFA World Cup 2026.</em></h3>
         <p class="banner-body">Premier League, UCL, La Liga, Serie A, Bundesliga, Ligue 1, MLS, plus 23 more competitions <b>including FIFA World Cup 2026.</b> All covered by every coin pack.</p>
         <a routerLink="/lineouts" class="banner-cta">See series -&gt;</a>
       </div>
-      <div class="banner-visual"><span class="emoji-big">🏆</span></div>
+      <div class="banner-visual">
+        <svg class="winning-cup-svg" viewBox="0 0 220 220" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="cupGoldMain" x1="35" y1="28" x2="168" y2="164" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#ff8a35"/>
+              <stop offset="0.48" stop-color="#ffbd3f"/>
+              <stop offset="1" stop-color="#fff06a"/>
+            </linearGradient>
+            <linearGradient id="cupGoldDark" x1="82" y1="114" x2="138" y2="178" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#ffc33f"/>
+              <stop offset="1" stop-color="#f0a000"/>
+            </linearGradient>
+            <linearGradient id="cupBaseGrad" x1="48" y1="155" x2="172" y2="202" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#c76078"/>
+              <stop offset="1" stop-color="#68466d"/>
+            </linearGradient>
+            <filter id="cupSoftShadow" x="-30%" y="-30%" width="160%" height="170%">
+              <feDropShadow dx="0" dy="18" stdDeviation="12" flood-color="#000000" flood-opacity="0.3"/>
+              <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#f4b400" flood-opacity="0.2"/>
+            </filter>
+          </defs>
+          <g filter="url(#cupSoftShadow)">
+            <path d="M62 67c-23 0-36 12-36 32 0 22 18 36 41 39" fill="none" stroke="#ffc945" stroke-width="12" stroke-linecap="round"/>
+            <path d="M158 67c23 0 36 12 36 32 0 22-18 36-41 39" fill="none" stroke="#ffc945" stroke-width="12" stroke-linecap="round"/>
+            <path d="M61 37h98v56c0 35-22 61-49 61S61 128 61 93V37z" fill="url(#cupGoldMain)"/>
+            <path d="M86 141h48v39H86z" fill="url(#cupGoldDark)"/>
+            <path d="M65 176h90c9 0 16 7 16 16v13H49v-13c0-9 7-16 16-16z" fill="url(#cupBaseGrad)"/>
+            <rect x="82" y="190" width="56" height="18" rx="5" fill="#ffd65a"/>
+            <circle cx="137" cy="58" r="14" fill="#fff1a6" opacity="0.58"/>
+            <path d="M78 47h62" stroke="#fff6bd" stroke-width="8" stroke-linecap="round" opacity="0.25"/>
+          </g>
+        </svg>
+      </div>
     </article>
 
     <article class="banner tone-wc" [class.active]="currentBanner === 3">
@@ -57,17 +94,25 @@
         <p class="banner-body">Starter, Basic, Standard, and Pro packs. Every pack is valid for <b>365 days from purchase</b>. Buy once, use UCT whenever supported lineups are available.</p>
         <a routerLink="/pricing" class="banner-cta">See pricing -&gt;</a>
       </div>
-      <div class="banner-visual"><span class="emoji-big">💳</span></div>
+      <div class="banner-visual">
+        <div class="p3d-icon p3d-card" aria-hidden="true">
+          <span></span><i></i><b></b>
+        </div>
+      </div>
     </article>
 
     <article class="banner tone-free" [class.active]="currentBanner === 4">
       <div>
-        <div class="banner-eyebrow">NEW USERS - FREE FIRST MATCH</div>
-        <h3 class="banner-h">Your first UCT is <em>on us.</em></h3>
-        <p class="banner-body">Sign up, verify mobile + email, generate your first UCT <b>free</b>, no card needed. One per verified account. The fastest way to feel how the workflow saves time.</p>
-        <button type="button" class="banner-cta" (click)="openSignup()">Get started -&gt;</button>
+        <div class="banner-eyebrow">FIFA WC 2026 - LAUNCH OFFER</div>
+        <h3 class="banner-h">30% off every <em>coin pack.</em></h3>
+        <p class="banner-body">Limited-period launch pricing across Starter, Basic, Standard and Pro. <b>1 coin = 1 match</b>, any supported league or series.</p>
+        <a routerLink="/pricing" class="banner-cta">See offer -&gt;</a>
       </div>
-      <div class="banner-visual"><span class="emoji-big">🎁</span></div>
+      <div class="banner-visual">
+        <div class="p3d-icon p3d-gift" aria-hidden="true">
+          <span></span><i></i><b></b>
+        </div>
+      </div>
     </article>
 
     <article class="banner tone-skill" [class.active]="currentBanner === 5">
@@ -77,7 +122,11 @@
         <p class="banner-body">PICK2WIN Technologies Pvt Ltd, supported markets, Stripe payments, dual OTP verification at signup, and clear positioning on what we do and what we do not.</p>
         <a routerLink="/trust" class="banner-cta">Read Trust -&gt;</a>
       </div>
-      <div class="banner-visual"><span class="emoji-big">🛡️</span></div>
+      <div class="banner-visual">
+        <div class="p3d-icon p3d-shield" aria-hidden="true">
+          <span></span><i></i><b></b>
+        </div>
+      </div>
     </article>
   </div>
 
@@ -86,41 +135,35 @@
     <button type="button" [class.active]="currentBanner === 1" aria-label="Four-step workflow" (click)="showBanner(1)"></button>
     <button type="button" [class.active]="currentBanner === 2" aria-label="Coverage" (click)="showBanner(2)"></button>
     <button type="button" [class.active]="currentBanner === 3" aria-label="Pricing" (click)="showBanner(3)"></button>
-    <button type="button" [class.active]="currentBanner === 4" aria-label="Free first match" (click)="showBanner(4)"></button>
+    <button type="button" [class.active]="currentBanner === 4" aria-label="Launch offer" (click)="showBanner(4)"></button>
     <button type="button" [class.active]="currentBanner === 5" aria-label="Trust" (click)="showBanner(5)"></button>
   </div>
 </section>
 
-<section class="home-section home-about-company reveal">
-  <div class="wrap">
-    <div class="company-about-card">
-         <div class="home-hero-eyebrow"><span class="home-hero-dot"></span>ABOUT US</div>
-      <div class="company-about-copy">
-        <p>PICK2WIN Technologies Private Limited is a technology company focused on developing innovative software products and digital solutions that enhance user experiences through intelligent automation, analytics, and decision-support capabilities.</p>
-        <p>One of our products is a football-based virtual team configuration platform that enables users to create, manage, and customize virtual football team configurations using their own preferences, strategies, insights, and requirements. The platform is designed to support team planning, player selection, analysis, and configuration management through technology-driven tools and a user-friendly experience.</p>
-        <p>At PICK2WIN, we are committed to building scalable, innovative, and reliable software solutions that empower users with greater flexibility, control, and informed decision-making through modern technology. Our focus is on delivering practical, data-driven, and user-centric products that simplify complex processes and create meaningful value for users.</p>
-      </div>
 
-      <div class="company-about-pillars">
-        <div class="company-about-pillar">
-          <span>Our Mission</span>
+<section class="home-section home-first reveal">
+  <div class="wrap">
+    <div class="home-hero-card home-about-card">
+      <div class="home-hero-eyebrow"><span class="home-hero-dot"></span>ABOUT US</div>
+      <p class="home-about-p">PICK2WIN Technologies Private Limited is a technology company focused on developing innovative software products and digital solutions that enhance user experiences through intelligent automation, analytics, and decision-support capabilities.</p>
+      <p class="home-about-p">One of our products is a football-based virtual team configuration platform that enables users to create, manage, and customize virtual football team configurations using their own preferences, strategies, insights, and requirements. The platform is designed to support team planning, player selection, analysis, and configuration management through technology-driven tools and a user-friendly experience.</p>
+      <p class="home-about-p">At PICK2WIN, we are committed to building scalable, innovative, and reliable software solutions that empower users with greater flexibility, control, and informed decision-making through modern technology. Our focus is on delivering practical, data-driven, and user-centric products that simplify complex processes and create meaningful value for users.</p>
+      <div class="home-about-grid">
+        <div class="home-about-tile">
+          <h3>Our Mission</h3>
           <p>To develop innovative software products and digital solutions that enhance user experiences through intelligent technology, automation, analytics, and decision-support systems.</p>
         </div>
-        <div class="company-about-pillar">
-          <span>Our Vision</span>
+        <div class="home-about-tile">
+          <h3>Our Vision</h3>
           <p>To become a trusted technology company delivering innovative digital products that help users make informed decisions, improve productivity, and achieve better outcomes through technology-driven solutions.</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="home-section home-first reveal">
-  <div class="wrap">
     <div class="home-hero-card">
       <div class="home-hero-eyebrow"><span class="home-hero-dot"></span>WHAT IS PICK2WIN</div>
-      <h1 class="home-hero-title">Football fantasy team configuration - <em>20 teams in seconds</em>.</h1>
-      <p class="home-hero-lead">PICK2WIN is a <b>virtual team-configuration tool</b> for multi-entry fantasy football. When official lineups drop, you set your strategy - <b>substitutes, mandates, captaincy</b> - and PICK2WIN turns it into <b>20 football-valid teams per match in seconds</b>. The pre-match window goes to reading the game, not hand-building lineups. It doesn't predict results or guarantee outcomes - every final decision stays yours.</p>
+      <h1 class="home-hero-title">Football fantasy team configuration - <em>20 teams per match</em>, in seconds.</h1>
+      <p class="home-hero-lead">PICK2WIN is a <b>virtual team-configuration tool</b> for fantasy football that works <b>one match at a time</b> - in any league or series. When official lineups drop, you set your strategy (<b>substitutes, mandates, captaincy</b>) and PICK2WIN turns it into <b>20 football-valid teams for that single match</b>, built only from the players in that fixture - both teams. It's not about picking one "best" team from everyone; it's 20 structured combinations, per match. It doesn't predict results or guarantee outcomes - every final decision stays yours.</p>
 
       <div class="home-hero-flow" aria-label="How PICK2WIN works in 3 steps">
         <div class="home-hero-flow-step">
@@ -151,7 +194,7 @@
       <div class="home-hero-chips">
         <span class="home-hero-chip">Post-lineup workflow</span>
         <span class="home-hero-chip">20 teams per match</span>
-        <span class="home-hero-chip">Frees ~45 min</span>
+        <span class="home-hero-chip">Frees up your pre-match window</span>
         <span class="home-hero-chip">1 coin = 1 match</span>
         <span class="home-hero-chip">Not a prediction engine</span>
       </div>
@@ -160,6 +203,7 @@
         <span>What is UCT</span>
         <span class="home-hero-arrow">-&gt;</span>
       </a>
+      <div class="home-hero-mark" aria-hidden="true"><span class="material-symbols-outlined">settings</span></div>
     </div>
 
     <div class="home-banner-stack">
@@ -211,18 +255,18 @@
         </div>
       </a>
 
-      <button type="button" class="home-banner-card" (click)="openSignup()">
-        <div class="home-banner-icon">FREE</div>
+      <a routerLink="/pricing" class="home-banner-card">
+        <div class="home-banner-icon"><span class="material-symbols-outlined" aria-hidden="true">emoji_events</span></div>
         <div class="home-banner-body">
-          <div class="home-banner-eyebrow">NEW USERS - FREE FIRST MATCH</div>
-          <h3 class="home-banner-title">Your first UCT is on us.</h3>
-          <p class="home-banner-sub">Sign up, verify mobile + email, generate free, no card needed. One per verified account.</p>
+          <div class="home-banner-eyebrow">FIFA WC 2026 - LAUNCH OFFER</div>
+          <h3 class="home-banner-title">30% off every coin pack.</h3>
+          <p class="home-banner-sub">Limited-period FIFA World Cup 2026 pricing across Starter, Basic, Standard and Pro - while it lasts.</p>
         </div>
         <div class="home-banner-action">
-          <span class="home-banner-cta">Get started</span>
+          <span class="home-banner-cta">See offer</span>
           <span class="home-banner-arrow">-&gt;</span>
         </div>
-      </button>
+      </a>
 
       <a routerLink="/trust" class="home-banner-card">
         <div class="home-banner-icon">OK</div>
@@ -280,6 +324,43 @@
             <h4>Platform-Independent</h4>
             <p>Take the structured teams to <em>any</em> third-party fantasy app you choose. Scoring rules, salary caps, and contest formats stay with that platform - PICK2WIN's scope is the configuration workflow, not the contest itself.</p>
             <div class="feat-foot">PLATFORM-INDEPENDENT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-section home-showcase reveal">
+  <div class="wrap">
+    <div class="showcase-card">
+      <div class="showcase-head">
+        <div class="showcase-eyebrow"><span class="home-hero-dot"></span>SEE IT IN ACTION</div>
+        <h2 class="showcase-title">One screen. <em>Every match, every lineout.</em></h2>
+        <p class="showcase-sub">When official lineups drop, your matches light up as <b>Lineup Released</b>. One tap on <b>Run UCT</b> turns a single configuration into 20 structured teams - all tracked against your coin balance.</p>
+      </div>
+      <div class="showcase-board" aria-label="PICK2WIN lineouts screen preview">
+        <div class="showcase-toolbar">
+          <span class="showcase-dot green"></span>
+          <span class="showcase-dot gold"></span>
+          <span class="showcase-dot red"></span>
+          <b>Lineouts - UCT Ready</b>
+        </div>
+        <div class="showcase-grid">
+          <div class="showcase-panel">
+            <span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span>
+            <strong>Lineup Released</strong>
+            <p>Official starting XI and substitutes are available for the selected fixture.</p>
+          </div>
+          <div class="showcase-panel">
+            <span class="material-symbols-outlined" aria-hidden="true">play_circle</span>
+            <strong>Run UCT</strong>
+            <p>Open the 4-step configuration: substitutes, mandates, captaincy and review.</p>
+          </div>
+          <div class="showcase-panel hot">
+            <span class="material-symbols-outlined" aria-hidden="true">folder_open</span>
+            <strong>My Teams</strong>
+            <p>Preview your 20 generated teams and download the TXT before kickoff.</p>
           </div>
         </div>
       </div>
@@ -406,7 +487,7 @@
       <div class="parallel-impact-grid">
         <div class="parallel-impact-item"><span class="pi-ic">01</span><div class="pi-label">Executed one by one</div><p class="pi-text">Matches kicking off at the same time are processed <b>sequentially</b> - each runs through its own configuration and generates its own 20 structured teams in seconds.</p></div>
         <div class="parallel-impact-item"><span class="pi-ic">02</span><div class="pi-label">All teams in My Teams, match-wise</div><p class="pi-text">Every generated team lands in <b>My Teams</b>, organised match by match - no spreadsheets, no screenshots, nothing to juggle.</p></div>
-        <div class="parallel-impact-item"><span class="pi-ic">03</span><div class="pi-label">Download &amp; preview till kickoff</div><p class="pi-text">Download each match's teams as CSV and <b>preview</b> them right up until that match starts.</p></div>
+        <div class="parallel-impact-item"><span class="pi-ic">03</span><div class="pi-label">Download &amp; preview till kickoff</div><p class="pi-text">Download each match's teams as TXT and <b>preview</b> them right up until that match starts.</p></div>
         <div class="parallel-impact-item"><span class="pi-ic">04</span><div class="pi-label">Real impact: coverage + time</div><p class="pi-text">Across 3-4 simultaneous matches that's 60-80 teams - built in <b>minutes</b> with UCT instead of an impossible manual scramble.</p></div>
       </div>
     </div>
@@ -432,46 +513,15 @@
       <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">03</span> Captain rotation</div><div class="vs-val vs-val-manual">Manual tracking across 20 teams - spreadsheet or memory</div><div class="vs-val vs-val-uct">Automated - CVC rotation or C-and-VC structured modes</div></div>
       <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">04</span> Player exposure balancing</div><div class="vs-val vs-val-manual">Mental math - easy to over-stack one player</div><div class="vs-val vs-val-uct">Engine-balanced across all 20 teams - Mandate controls</div></div>
       <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">05</span> Formation variation</div><div class="vs-val vs-val-manual">Trial-and-error - usually 1 or 2 shapes</div><div class="vs-val vs-val-uct">4 fixed splits: 4-7 / 5-6 / 6-5 / 7-4</div></div>
-      <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">06</span> Output</div><div class="vs-val vs-val-manual">One team at a time - build-edit-build cycle</div><div class="vs-val vs-val-uct">20 structured teams in one tap - CSV export</div></div>
+      <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">06</span> Output</div><div class="vs-val vs-val-manual">One team at a time - build-edit-build cycle</div><div class="vs-val vs-val-uct">20 structured teams in one tap - TXT export</div></div>
       <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">07</span> Risk under pressure</div><div class="vs-val vs-val-manual">High - duplicate picks, missed captain swaps, wrong formations</div><div class="vs-val vs-val-uct">Validated - football-real constraints enforced</div></div>
       <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">08</span> Sweet-spot window use</div><div class="vs-val vs-val-manual">Most of the 60-75 min window spent on mechanical team-building</div><div class="vs-val vs-val-uct">Configuration takes minutes, generation takes seconds</div></div>
       <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">09</span> Football structure validity</div><div class="vs-val vs-val-manual">Self-checked - easy to break quotas or 7-from-one-team limits</div><div class="vs-val vs-val-uct">Engine-enforced - no broken structures - max 7 per real team</div></div>
       <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">10</span> Configuration reuse</div><div class="vs-val vs-val-manual">Mandates, captaincy &amp; overlap re-thought for every team</div><div class="vs-val vs-val-uct">Set once - applied consistently across all 20 teams</div></div>
-      <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">11</span> Where teams live</div><div class="vs-val vs-val-manual">Your own spreadsheets, notes, or app screenshots</div><div class="vs-val vs-val-uct">"My Teams" view - all matches together - CSV export before kickoff</div></div>
+      <div class="vs-row"><div class="vs-attr"><span class="vs-attr-ic">11</span> Where teams live</div><div class="vs-val vs-val-manual">Your own spreadsheets, notes, or app screenshots</div><div class="vs-val vs-val-uct">"My Teams" view - all matches together - TXT export before kickoff</div></div>
     </div>
 
     <p class="cmp-footer-note">PICK2WIN doesn't predict football. It turns <b>your reading of the game</b> into structured output - saving the 45 minutes you'd otherwise spend on mechanical work.</p>
-  </div>
-</section>
-
-<section class="home-section home-acc-green reveal">
-  <div class="wrap">
-    <div class="about-x">
-      <div class="about-block reveal">
-        <div class="about-block-eyebrow"><span class="num">?</span> - IS PICK2WIN FOR YOU?</div>
-        <h2 class="about-block-h">Be sure it's the <em>right fit</em> before you start.</h2>
-        <div class="fit-grid">
-          <div class="fit-col fit-yes">
-            <div class="fit-head"><span class="fit-ic">YES</span> A great fit if...</div>
-            <ul class="fit-list">
-              <li>You build <b>20 or more teams</b> for a single match</li>
-              <li>You think in <b>coverage</b> - spreading risk across the match</li>
-              <li>You rotate captains, hedge picks, and vary formations</li>
-              <li>You're tired of racing the lineup clock by hand</li>
-            </ul>
-          </div>
-          <div class="fit-col fit-no">
-            <div class="fit-head"><span class="fit-ic">NO</span> Not for you if...</div>
-            <ul class="fit-list">
-              <li>You enter only <b>one or two teams</b> per match</li>
-              <li>You pick by <b>player favouritism</b> rather than coverage</li>
-              <li>You want predictions, tips, or guaranteed results</li>
-              <li>You prefer to build every team manually</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -524,6 +574,99 @@
           <span>Norway</span><span>Denmark</span><span>Finland</span><span>Austria</span>
           <span>Belgium</span><span>Portugal</span><span>Poland</span><span>United States</span>
           <span>Canada</span><span>Australia</span><span>New Zealand</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-section home-acc-green reveal">
+  <div class="wrap">
+    <div class="about-x">
+      <div class="about-block reveal">
+        <div class="about-block-eyebrow"><span class="num">?</span> - IS PICK2WIN FOR YOU?</div>
+        <h2 class="about-block-h">Be sure it's the <em>right fit</em> before you start.</h2>
+        <div class="fit-grid">
+          <div class="fit-col fit-yes">
+            <div class="fit-head"><span class="fit-ic">YES</span> A great fit if...</div>
+            <ul class="fit-list">
+              <li>You build <b>20 or more teams</b> for a single match</li>
+              <li>You think in <b>coverage</b> - spreading risk across the match</li>
+              <li>You rotate captains, hedge picks, and vary formations</li>
+              <li>You're tired of racing the lineup clock by hand</li>
+            </ul>
+          </div>
+          <div class="fit-col fit-no">
+            <div class="fit-head"><span class="fit-ic">NO</span> Not for you if...</div>
+            <ul class="fit-list">
+              <li>You enter only <b>one or two teams</b> per match</li>
+              <li>You pick by <b>player favouritism</b> rather than coverage</li>
+              <li>You want predictions, tips, or guaranteed results</li>
+              <li>You prefer to build every team manually</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-section home-acc-red reveal">
+  <div class="wrap">
+    <div class="disclosure-grid">
+      <div class="disclosure-card disclosure-card-warn">
+        <div class="disclosure-icon-wrap"><span class="disclosure-icon">!</span></div>
+        <div class="disclosure-body">
+          <div class="disclosure-eyebrow">WHERE PICK2WIN'S JOB ENDS</div>
+          <h3 class="disclosure-title">Generation is the scope.</h3>
+          <p class="disclosure-text">PICK2WIN compresses the build phase - turning your configuration into <b>20 structured teams in seconds</b>. The moment they're generated, PICK2WIN's job is done, and what you do with those teams afterward is entirely your own choice.</p>
+        </div>
+      </div>
+      <div class="disclosure-card disclosure-card-info">
+        <div class="disclosure-icon-wrap"><span class="disclosure-icon"><span class="material-symbols-outlined" aria-hidden="true">download</span></span></div>
+        <div class="disclosure-body">
+          <div class="disclosure-eyebrow">SAVE YOUR TEAMS - BEFORE KICKOFF</div>
+          <h3 class="disclosure-title">Export the TXT before kickoff.</h3>
+          <p class="disclosure-text">Teams clear from <b>My Teams</b> at kickoff, so download the TXT export before then. The full save, coin and run rules live in the UCT Guide. <a routerLink="/uctguide">Read the save rules -&gt;</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-section home-launch-section reveal">
+  <div class="wrap">
+    <div class="launch-band-card">
+      <div class="launch-band-eyebrow"><span class="ls-pulse-dot"></span> LAUNCHING SOON - 24 JUNE 2026</div>
+      <h2 class="launch-band-title">Be ready the moment <em>lineouts go live.</em></h2>
+      <p class="launch-band-sub">We launch in</p>
+      <div class="countdown" aria-label="Launch countdown">
+        <div class="cd-unit"><div class="cd-num">{{ days }}</div><div class="cd-label">Days</div></div>
+        <div class="cd-unit"><div class="cd-num">{{ hours }}</div><div class="cd-label">Hours</div></div>
+        <div class="cd-unit"><div class="cd-num">{{ minutes }}</div><div class="cd-label">Minutes</div></div>
+        <div class="cd-unit"><div class="cd-num">{{ seconds }}</div><div class="cd-label">Seconds</div></div>
+      </div>
+      <div class="launch-offer">
+        <span class="launch-offer-badge"><span class="material-symbols-outlined" aria-hidden="true">emoji_events</span> FIFA WC 2026 - LAUNCH OFFER</span>
+        <div class="launch-offer-main"><span class="launch-offer-pct">30% OFF</span> every coin pack</div>
+        <p class="launch-offer-cap">Discounted coin packs for a limited period at launch - 1 coin = 1 match - any league, any series.</p>
+        <a routerLink="/pricing" class="launch-offer-cta">See the launch offer -&gt;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-section home-acc-green reveal">
+  <div class="wrap">
+    <div class="about-x">
+      <div class="about-cta reveal">
+        <h2 class="about-cta-h">Start during the FIFA World Cup 2026 launch offer.</h2>
+        <p class="about-cta-sub">Every coin pack is <b>30% off</b> for a limited period - <b>no subscription, no auto-renewal</b>. Pay only for the matches you actually run.</p>
+        <div class="about-cta-actions">
+          <button type="button" class="about-cta-btn" (click)="openSignup()">
+            <span class="material-symbols-outlined" aria-hidden="true">emoji_events</span>
+            Sign up - get 30% off -&gt;
+          </button>
         </div>
       </div>
     </div>

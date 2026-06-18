@@ -10,16 +10,13 @@
     </div>
 
     <div class="faq-legend reveal" aria-label="FAQ category legend">
-      <span><i class="legend-positive" aria-hidden="true"></i> Good to know</span>
-      <span><i class="legend-important" aria-hidden="true"></i> Important</span>
-      <span><i class="legend-critical" aria-hidden="true"></i> Please note</span>
-      <span><i class="legend-general" aria-hidden="true"></i> General info</span>
+      <span *ngFor="let legend of legends"><i [class]="legend.className" aria-hidden="true"></i> {{ legend.label }}</span>
     </div>
 
     <div class="faq-list reveal">
       <details class="faq faq-positive" open (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 01</span><span class="q">Is my first UCT really free?</span><span class="plus"></span></summary>
-        <div class="a">Yes - every new verified account gets <strong>one free UCT generation</strong>. No coin needed, no card needed. After that, you'll need to purchase a coin pack to continue. Email and mobile must both be verified with a 6-digit OTP before the free match can be claimed.</div>
+        <summary><span class="idx">/ 01</span><span class="q">Is the FIFA World Cup 2026 offer really 30% off?</span><span class="plus"></span></summary>
+        <div class="a">Yes - for a limited period during the FIFA World Cup 2026 launch, every coin pack is <strong>30% off</strong> its regular price (for example, the Starter pack is $10.50 instead of $15.00). The offer applies to the current launch packs only and may be modified, withdrawn, or revert to regular pricing without prior notice.</div>
       </details>
 
       <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
@@ -28,8 +25,8 @@
       </details>
 
       <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 03</span><span class="q">Can I create multiple accounts to claim the free match again?</span><span class="plus"></span></summary>
-        <div class="a">No. PICK2WIN enforces <strong>one mobile = one email = one account</strong> with device fingerprint deduplication, VoIP blocking, and disposable-email blocking. Multi-account abuse - including using fake mobile numbers or temporary emails to claim repeated free matches - results in <strong>permanent suspension</strong> of all linked accounts. This rule protects honest users and keeps the free-match offer sustainable.</div>
+        <summary><span class="idx">/ 03</span><span class="q">Can I create multiple accounts?</span><span class="plus"></span></summary>
+        <div class="a">No. PICK2WIN enforces <strong>one mobile = one email = one account</strong> with device fingerprint deduplication, VoIP blocking, and disposable-email blocking. Multi-account abuse - including using fake mobile numbers or temporary emails to evade this rule - results in <strong>permanent suspension</strong> of all linked accounts. This protects honest users and keeps the platform fair.</div>
       </details>
 
       <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
@@ -54,7 +51,7 @@
 
       <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
         <summary><span class="idx">/ 08</span><span class="q">Can I buy more than one coin pack and combine them?</span><span class="plus"></span></summary>
-        <div class="a">Yes - you can buy any of the four packs (Starter 10 / Basic 25 / Standard 50 / Pro 100) as many times as you like, and your coins always live as a <strong>single combined balance</strong>. Buying a new pack while you still have active coins triggers the <strong>Active Pack Merge</strong>: your remaining coins merge into the new pack and the whole balance is revalidated for a fresh 365 days from that purchase date. So topping up doesn't just add coins - it also extends the validity of the coins you already had. Track your combined balance and its expiry in <strong>My Space &rarr; Active Coin Lots</strong>.</div>
+        <div class="a">Yes - you can buy any of the four packs (Starter 5 / Basic 10 / Standard 25 / Pro 50) as many times as you like, and your coins always live as a <strong>single combined balance</strong>. Buying a new pack while you still have active coins triggers the <strong>Active Pack Merge</strong>: your remaining coins merge into the new pack and the whole balance is revalidated for a fresh 365 days from that purchase date. So topping up doesn't just add coins - it also extends the validity of the coins you already had. Track your combined balance and its expiry in <strong>My Space &rarr; Active Coin Lots</strong>.</div>
       </details>
 
       <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
@@ -118,23 +115,23 @@
       </details>
 
       <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 21</span><span class="q">Can I use PICK2WIN's teams directly in my fantasy app?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN produces <strong>reference structures</strong>, not direct submissions. The 20 generated teams use football-real position rules (1 GK, 2-6 DEF, 2-5 MID, 1-3 FWD) and formation splits (4-7 / 5-6 / 6-5 / 7-4). You take that output to <strong>whichever third-party fantasy app you use</strong> and adapt it to that app's specific salary caps, scoring rules, and contest format. PICK2WIN handles the configuration workflow; the contest mechanics stay with your fantasy app.</div>
+        <summary><span class="idx">/ 21</span><span class="q">Can I use PICK2WIN's teams directly elsewhere?</span><span class="plus"></span></summary>
+        <div class="a">PICK2WIN produces <strong>reference structures</strong>, not direct submissions. The 20 generated teams use football-real position rules (1 GK, 2-6 DEF, 2-5 MID, 1-3 FWD) and formation splits (4-7 / 5-6 / 6-5 / 7-4). Once they're generated, what you do with that output is entirely your own choice - PICK2WIN's scope is the configuration workflow, and it ends at delivery of your 20 teams.</div>
       </details>
 
       <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 22</span><span class="q">Do I still need to enter the teams into my fantasy app myself?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Yes.</strong> PICK2WIN is a configuration workflow tool - it does not connect to or auto-submit on third-party fantasy teams. After generation, you download a CSV with all 20 teams, then submit them to your chosen fantasy app yourself. The CSV is the durable artifact: keep it safe, you'll need it for entry.</div>
+        <summary><span class="idx">/ 22</span><span class="q">Does PICK2WIN submit or enter the teams for me?</span><span class="plus"></span></summary>
+        <div class="a"><strong>No.</strong> PICK2WIN is a configuration workflow tool - it does not connect to, integrate with, or auto-submit anywhere outside itself. After generation, you download a TXT with all 20 teams; from there, what you do with them is entirely your own choice. The TXT is the durable artifact - keep it safe.</div>
       </details>
 
       <details class="faq" (toggle)="closeOtherFaqs($event)">
         <summary><span class="idx">/ 23</span><span class="q">What happens to my teams after the match kicks off?</span><span class="plus"></span></summary>
-        <div class="a">Your 20 teams stay fully viewable in <strong>My Teams</strong> - with team preview and CSV download - right up until the match kicks off. <strong>At kickoff the 20 teams are cleared to save storage</strong>: only a lightweight match-details record (teams, league, date) remains in My Teams, and the preview and CSV download are no longer available. This keeps the platform lean rather than holding millions of teams forever. Because of this, <strong>your downloaded CSV becomes your only lasting copy</strong> - download it before kickoff.</div>
+        <div class="a">Your 20 teams stay fully viewable in <strong>My Teams</strong> - with team preview and TXT download - right up until the match kicks off. <strong>At kickoff the 20 teams are cleared to save storage</strong>: only a lightweight match-details record (teams, league, date) remains in My Teams, and the preview and TXT download are no longer available. This keeps the platform lean rather than holding millions of teams forever. Because of this, <strong>your downloaded TXT becomes your only lasting copy</strong> - download it before kickoff.</div>
       </details>
 
       <details class="faq" (toggle)="closeOtherFaqs($event)">
         <summary><span class="idx">/ 24</span><span class="q">How long does PICK2WIN store my generated teams?</span><span class="plus"></span></summary>
-        <div class="a">Your 20 teams are stored and fully accessible in <em>My Teams</em> from the moment they are generated until the match's kickoff. At kickoff the team data is dropped (only the match-details record is kept), so generated teams are not retained beyond kickoff. <strong>The CSV download is the durable copy</strong> - download it as soon as generation completes and keep it safe.</div>
+        <div class="a">Your 20 teams are stored and fully accessible in <em>My Teams</em> from the moment they are generated until the match's kickoff. At kickoff the team data is dropped (only the match-details record is kept), so generated teams are not retained beyond kickoff. <strong>The TXT download is the durable copy</strong> - download it as soon as generation completes and keep it safe.</div>
       </details>
 
       <details class="faq" (toggle)="closeOtherFaqs($event)">
@@ -144,7 +141,7 @@
 
       <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
         <summary><span class="idx">/ 26</span><span class="q">Does UCT predict match outcomes or guarantee any results?</span><span class="plus"></span></summary>
-        <div class="a"><strong>No. UCT does not predict match outcomes, player performance, or fantasy points, and PICK2WIN does not guarantee favourable outcomes, ranking positions, or contest success.</strong> The 20 teams UCT produces are <strong>structured combinations</strong> built strictly from your configuration inputs (Substitute - Mandate - Captaincy - Generate) - not predicted winners. Final participation decisions, contest entry choices, and any outcome of those entries on third-party platforms always remain fully your responsibility.</div>
+        <div class="a"><strong>No. UCT does not predict match outcomes, player performance, or fantasy points, and PICK2WIN does not guarantee favourable outcomes, ranking positions, or any form of success.</strong> The 20 teams UCT produces are <strong>structured combinations</strong> built strictly from your configuration inputs (Substitute - Mandate - Captaincy - Generate) - not predicted winners. Final participation decisions, how you choose to use the teams, and any outcome that follows always remain fully your responsibility.</div>
       </details>
 
       <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
@@ -159,27 +156,32 @@
 
       <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
         <summary><span class="idx">/ 29</span><span class="q">What happens if a lineup is updated after I've already generated my teams?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN relies on third-party football data providers, and in rare cases a lineup may be updated <em>after</em> users have already generated their UCT teams - a player removed from or added to the Playing XI, or a lineup correction from the data provider.<br><br><strong>Our approach:</strong> users who haven't yet generated will automatically see the latest available lineup. Users who have already generated may see a <strong>notification or broadcast message under <em>My Teams</em></strong>.<br><br><strong>Important:</strong> UCT generation completed using the lineup information available at the time of generation. Lineup updates received later do <strong>NOT</strong> automatically trigger UCT regeneration, additional UCT runs, or additional coin deductions. The purpose of the notification is purely informational. <a routerLink="/trust">Read the full Transparency Notice -&gt;</a></div>
+        <div class="a">PICK2WIN relies on third-party football data providers, and in rare cases a lineup may be updated <em>after</em> users have already generated their UCT teams - a player removed from or added to the Playing XI, or a lineup correction from the data provider.<br><br><strong>Our approach:</strong> users who haven't yet generated will automatically see the latest available lineup. Users who have already generated can still follow the lineup info shown on their target platform.<br><br><strong>Important:</strong> UCT generation completed using the lineup information available at the time of generation. Lineup updates received later do <strong>NOT</strong> automatically trigger UCT regeneration, additional UCT runs, or additional coin deductions. <a routerLink="/trust">Read the full Transparency Notice -&gt;</a></div>
       </details>
 
       <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 30</span><span class="q">What if a player shows on PICK2WIN but not in my fantasy app?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Always follow your fantasy app's player list - not PICK2WIN's.</strong> If you've generated 20 UCTs on PICK2WIN and find one or more players don't appear in your fantasy contest app's playing XI when you try to replicate the teams, your fantasy app is the source of truth. Adjust your final contest entry to match what your fantasy app shows.<br><br>This mismatch is <strong>rare</strong> - in the vast majority of matches PICK2WIN's playing XI matches your fantasy app's exactly. Mismatches happen only when our third-party football API provider publishes incorrect or delayed lineup data (late injury, surprise rotation), which is outside our direct control. If you spot a persistent mismatch, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with the match details.</div>
+        <summary><span class="idx">/ 30</span><span class="q">What if a player shows on PICK2WIN but not where I use the teams?</span><span class="plus"></span></summary>
+        <div class="a"><strong>Always follow the player list shown wherever you actually use the teams - not PICK2WIN's.</strong> If you've generated 20 UCTs on PICK2WIN and find one or more players don't appear in the playing XI when you go to replicate the teams, that list is the source of truth - adjust to match it.<br><br>This mismatch is <strong>rare</strong> - in the vast majority of matches PICK2WIN's playing XI matches exactly. Mismatches happen only when our third-party football API provider publishes incorrect or delayed lineup data (late injury, surprise rotation), which is outside our direct control. If you spot a persistent mismatch, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with the match details.</div>
+      </details>
+
+      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
+        <summary><span class="idx">/ 31</span><span class="q">What if the 20 teams don't match what I configured?</span><span class="plus"></span></summary>
+        <div class="a">UCT is built to honour your configuration <strong>exactly</strong> - your Substitute, Mandate and Captaincy choices all carry through to the 20 teams. If you ever see a genuine mismatch between what you set and what you received - for example, you marked a player as <strong>Captain (C)</strong> but they appear as captain in <strong>none</strong> of your 20 teams - that's a fault, not expected behaviour.<br><br>Email <a href="mailto:support@pick2win.io?subject=UCT%20Configuration%20Mismatch">support@pick2win.io</a> straight away and attach your <strong>downloaded TXT file</strong> - it carries the match and configuration details, so we can investigate quickly. (This is different from a lineup-data mismatch above: it's specifically about UCT honouring <em>your</em> inputs.)</div>
       </details>
 
       <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 31</span><span class="q">Which countries can use PICK2WIN?</span><span class="plus"></span></summary>
+        <summary><span class="idx">/ 32</span><span class="q">Which countries can use PICK2WIN?</span><span class="plus"></span></summary>
         <div class="a">PICK2WIN currently supports users from <strong>19 markets worldwide</strong>:<br>• <strong>UK &amp; Ireland</strong> - United Kingdom, Ireland<br>• <strong>Western Europe</strong> - Germany, France, Spain, Italy, Netherlands, Belgium, Austria, Portugal<br>• <strong>Nordic</strong> - Sweden, Norway, Denmark, Finland<br>• <strong>Central Europe</strong> - Poland<br>• <strong>North America</strong> - United States, Canada<br>• <strong>Oceania</strong> - Australia, New Zealand<br><br>All billing is in <strong>USD</strong>. Supported countries may be modified based on operational, compliance, and payment-provider requirements.</div>
       </details>
 
       <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 32</span><span class="q">Which leagues and competitions does PICK2WIN cover (including FIFA World Cup 2026)?</span><span class="plus"></span></summary>
+        <summary><span class="idx">/ 33</span><span class="q">Which leagues and competitions does PICK2WIN cover (including FIFA World Cup 2026)?</span><span class="plus"></span></summary>
         <div class="a">PICK2WIN covers <strong>football competitions across three tiers</strong> - including the Premier League, UEFA Champions League, La Liga, Serie A, Bundesliga, Ligue 1, MLS, Eredivisie, Liga Portugal, Brasileirao, and major international tournaments. <strong>Yes - the FIFA World Cup 2026 is included</strong> in coin-pack coverage. One coin = one UCT generation for any covered match across any covered competition, including World Cup fixtures. Full league list is in the Lineouts tab.</div>
       </details>
 
       <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 33</span><span class="q">Who is PICK2WIN built for, and why doesn't it use salary caps?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN is built for <strong>multi-entry fantasy users</strong> - the ones who manually create 20+ teams per match, rotate captains, hedge formations across 4-7 / 5-6 / 6-5 / 7-4 splits, and balance player exposure across both real teams. The platform compresses that manual workflow into a 4-step process (Substitute -> Mandate -> Captaincy -> Generate) that completes in a few seconds.<br><br>PICK2WIN deliberately <strong>does not use salary caps, budgets, or app-specific scoring rules</strong> because those mechanics belong to your fantasy app - they vary across every third-party fantasy contest platform. PICK2WIN focuses purely on the football-side configuration workflow; you adapt the output to whichever app you play on. <strong>Two separate things: workflow tool vs. contest engine.</strong></div>
+        <summary><span class="idx">/ 34</span><span class="q">Who is PICK2WIN built for, and why doesn't it use salary caps?</span><span class="plus"></span></summary>
+        <div class="a">PICK2WIN is built for <strong>users who manually create 20+ teams per match</strong> - the ones who rotate captains, hedge formations across 4-7 / 5-6 / 6-5 / 7-4 splits, and vary their selections across both real teams in the fixture. It compresses that manual per-match workflow into a 4-step process (Substitute -> Mandate -> Captaincy -> Generate) that completes in a few seconds.<br><br>PICK2WIN deliberately <strong>does not use salary caps, budgets, or scoring rules</strong> because those mechanics sit outside PICK2WIN and are not part of its scope. PICK2WIN focuses purely on the football-side configuration workflow; once your 20 teams are generated, what you do with them is entirely your own choice.</div>
       </details>
     </div>
   </div>

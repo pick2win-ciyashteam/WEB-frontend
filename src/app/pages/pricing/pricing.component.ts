@@ -9,6 +9,19 @@ import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
 
+interface PricingPack {
+  name: string;
+  subtitle: string;
+  coins: number;
+  matches: number;
+  regularPrice: string;
+  offerPrice: string;
+  perCoin: string;
+  saveText: string;
+  tone: string;
+  bestValue?: boolean;
+}
+
 @Component({
   selector: 'app-pricing',
   templateUrl: './pricing.component.html',
@@ -26,6 +39,53 @@ export class PricingComponent implements OnInit, OnDestroy {
   plans: SubscriptionPlan[] = [];
   generatedStateLoaded = false;
   hasGeneratedAnyUct = false;
+  pricingPacks: PricingPack[] = [
+    {
+      name: 'Starter Pack',
+      subtitle: 'First time / Casual',
+      coins: 5,
+      matches: 5,
+      regularPrice: '15.00',
+      offerPrice: '10.50',
+      perCoin: '2.10',
+      saveText: '',
+      tone: 'pk-green'
+    },
+    {
+      name: 'Basic Pack',
+      subtitle: 'Regular weekly user',
+      coins: 10,
+      matches: 10,
+      regularPrice: '27.50',
+      offerPrice: '19.25',
+      perCoin: '1.93',
+      saveText: 'save 8%',
+      tone: 'pk-blue'
+    },
+    {
+      name: 'Standard Pack',
+      subtitle: 'Multi-league active user',
+      coins: 25,
+      matches: 25,
+      regularPrice: '62.50',
+      offerPrice: '43.75',
+      perCoin: '1.75',
+      saveText: 'save 17%',
+      tone: 'pk-purple'
+    },
+    {
+      name: 'Pro Pack',
+      subtitle: 'Heavy season-long user',
+      coins: 50,
+      matches: 50,
+      regularPrice: '112.50',
+      offerPrice: '78.75',
+      perCoin: '1.58',
+      saveText: 'save 25%',
+      tone: 'pk-orange',
+      bestValue: true
+    }
+  ];
   private stripePublishableKey = '';
 
   stripe: any;
@@ -108,6 +168,17 @@ paymentSucceeded = false;
 
   openLogin(): void {
     this.authModal.open('login');
+  }
+
+  buyStaticPack(coins: number): void {
+    const plan = this.plans.find(item => Number(item.coins) === coins);
+
+    if (!plan) {
+      this.paymentError = 'This coin pack is not available from backend yet. Please try again later.';
+      return;
+    }
+
+    this.buyPlan(plan);
   }
 
   async buyPlan(plan: SubscriptionPlan): Promise<void> {
@@ -261,6 +332,10 @@ closeCheckout(): void {
     return plan.id;
   }
 
+  packTone(index: number): string {
+    return ['pk-green', 'pk-blue', 'pk-purple', 'pk-orange'][index] || 'pk-green';
+  }
+
   isPurchasing(plan: SubscriptionPlan): boolean {
     return this.purchasingPlanId === plan.id;
   }
@@ -287,6 +362,20 @@ closeCheckout(): void {
     }
 
     return '';
+  }
+
+  launchRegularPrice(plan: SubscriptionPlan): number {
+    const price = Number(plan.price || 0);
+    return price > 0 ? price / 0.7 : 0;
+  }
+
+  launchSaving(plan: SubscriptionPlan): number {
+    return Math.max(0, this.launchRegularPrice(plan) - Number(plan.price || 0));
+  }
+
+  launchSavePercent(plan: SubscriptionPlan): number {
+    const regularPrice = this.launchRegularPrice(plan);
+    return regularPrice > 0 ? (this.launchSaving(plan) / regularPrice) * 100 : 0;
   }
 
   perCoinText(plan: SubscriptionPlan): string {

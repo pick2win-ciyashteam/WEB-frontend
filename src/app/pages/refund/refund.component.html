@@ -1,13 +1,15 @@
 <app-header></app-header>
 
-<main class="pol-page">
+<main class="pol-page refund-page">
   <div class="pol-container">
-    <div class="pol-top">
-      <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">description</span>
-      <span class="pol-eyebrow">PICK2WIN &middot; Legal</span>
-    </div>
-    <h1 class="pol-mast">PICK2WIN <em>policies</em></h1>
-    <p class="pol-intro">The terms that govern your use of PICK2WIN. <a routerLink="/" class="pol-back">&larr; Back to app</a></p>
+    <section class="pol-hero">
+      <div class="pol-top">
+        <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">{{ pageIcon }}</span>
+        <span class="pol-eyebrow">PICK2WIN - Refunds</span>
+      </div>
+      <h1 class="pol-mast">{{ docTitle }} <em>for coin packs</em></h1>
+      <p class="pol-intro">How one-time coin purchases, consumed UCT generations, and technical failures are handled.</p>
+    </section>
 
     <nav class="pol-tabbar" aria-label="PICK2WIN policy pages">
       <a class="pol-tab" routerLink="/terms">Terms &amp; Conditions</a>
@@ -15,21 +17,17 @@
       <a class="pol-tab active" routerLink="/refund">Refund Policy</a>
     </nav>
 
-    <article class="pol-panel active" id="refund">
-      <h3 class="pol-doc-title">Refund Policy</h3>
-      <p class="pol-doc-meta">Last updated 8 June 2026 &middot; PICK2WIN Technologies Pvt Ltd</p>
+    <article class="pol-panel active">
+      <h3 class="pol-doc-title">{{ docTitle }}</h3>
+      <p class="pol-doc-meta">{{ docMeta }}</p>
 
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 1</span>One-time purchases</h4><p>Coin packs are one-time purchases. There are no subscriptions and nothing is ever charged automatically &mdash; you choose when to buy another pack.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 2</span>Coin validity &amp; Active Pack Merge</h4><p>Your coins live as a single combined balance valid for <strong>365 days from your most recent purchase</strong>. Buying a new pack while you still hold active coins merges your remaining coins into the new pack and revalidates the whole balance for a fresh 365 days from that purchase date. Coins already expired before a new purchase stay forfeited.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 3</span>Completed generations are non-refundable</h4><p>Once a UCT generation completes successfully, the coin is consumed and the workflow is complete. Consumed coins and completed generations are non-refundable.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 4</span>Match changes &amp; third-party actions</h4><p>Refunds are not provided for cancelled, postponed, abandoned or rescheduled matches, lineup changes, reduced fixture schedules, or the actions of any third-party fantasy platform. PICK2WIN&rsquo;s responsibility ends at delivery of your 20 teams.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 5</span>Account deletion forfeits unused coins</h4><p>If you voluntarily delete your account, <strong>unused coins are permanently forfeited</strong> and balances are non-refundable. Use your coins before requesting deletion. Once processed, balances are removed and recovery is not possible.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 6</span>Verified technical failure</h4><p>The only exception: if your payment succeeded but a UCT <strong>completely failed to generate due to a technical issue on our side</strong>, contact support &mdash; we will restore the coin or issue a refund after verification.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 7</span>Chargebacks</h4><p>Please contact us before raising a chargeback so we can resolve the issue. Chargebacks raised in bad faith on consumed coins may lead to account suspension.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 8</span>Contact</h4><p>Refund questions? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> &mdash; we reply within 48 hours.</p></div>
+      <div class="pol-section" *ngFor="let section of sections; let i = index" [attr.id]="'refund-' + (i + 1)">
+        <h4><span class="sec-num">{{ i + 1 }}</span>{{ section.title }}</h4>
+        <p [innerHTML]="section.body"></p>
+      </div>
     </article>
 
-    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd &middot; All rights reserved &middot; support@pick2win.io</div>
+    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd - All rights reserved - support@pick2win.io</div>
   </div>
 </main>
 

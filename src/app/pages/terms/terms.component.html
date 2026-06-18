@@ -2,12 +2,14 @@
 
 <main class="pol-page">
   <div class="pol-container">
-    <div class="pol-top">
-      <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">description</span>
-      <span class="pol-eyebrow">PICK2WIN &middot; Legal</span>
-    </div>
-    <h1 class="pol-mast">PICK2WIN <em>policies</em></h1>
-    <p class="pol-intro">The terms that govern your use of PICK2WIN. <a routerLink="/" class="pol-back">&larr; Back to app</a></p>
+    <section class="pol-hero">
+      <div class="pol-top">
+        <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">{{ pageIcon }}</span>
+        <span class="pol-eyebrow">PICK2WIN - Legal</span>
+      </div>
+      <h1 class="pol-mast">{{ docTitle }} <em>for UCT users</em></h1>
+      <p class="pol-intro">Clear rules for using PICK2WIN, buying coins, and generating User Configuration Teams.</p>
+    </section>
 
     <nav class="pol-tabbar" aria-label="PICK2WIN policy pages">
       <a class="pol-tab active" routerLink="/terms">Terms &amp; Conditions</a>
@@ -15,23 +17,17 @@
       <a class="pol-tab" routerLink="/refund">Refund Policy</a>
     </nav>
 
-    <article class="pol-panel active" id="terms">
-      <h3 class="pol-doc-title">Terms &amp; Conditions</h3>
-      <p class="pol-doc-meta">Last updated 8 June 2026 &middot; PICK2WIN Technologies Pvt Ltd</p>
+    <article class="pol-panel active">
+      <h3 class="pol-doc-title">{{ docTitle }}</h3>
+      <p class="pol-doc-meta">{{ docMeta }}</p>
 
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 1</span>Acceptance &amp; eligibility</h4><p>By creating a PICK2WIN account you confirm you are <strong>18 years or older</strong>, legally permitted to use the platform in your jurisdiction, and that you accept these Terms, the Privacy Policy and the Refund Policy. PICK2WIN is not intended for minors.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 2</span>What PICK2WIN is &mdash; and is not</h4><p>PICK2WIN is a <strong>virtual team-configuration tool</strong>. Its UCT engine turns your own inputs into 20 structured teams per match. PICK2WIN is <strong>not</strong> a betting, gambling or real-money gaming service, does <strong>not</strong> predict match outcomes, does <strong>not</strong> guarantee any result, and pays out no winnings. You decide how to use the generated teams elsewhere.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 3</span>Accounts &amp; verification</h4><p>Each user may hold <strong>one account only</strong>. Both a mobile number and an email address must be verified; disposable email and VoIP / virtual numbers are blocked. Creating multiple accounts &mdash; including to re-claim the free first match &mdash; leads to <strong>permanent ban</strong> and forfeiture of any balance.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 4</span>Coins &amp; generation</h4><p>One coin equals one match UCT generation. Every verified user receives <strong>one free first match</strong>. Once a generation completes, the 20 teams are <strong>final</strong> &mdash; they cannot be edited, regenerated or undone, and the match locks. Coin packs are one-time purchases with no subscription or auto-renewal.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 5</span>Acceptable use</h4><p>You agree not to scrape, automate, resell, or commercially redistribute the service or its output, not to attempt to bypass verification or rate limits, and not to interfere with the platform&rsquo;s operation. We may suspend or terminate accounts that breach these terms.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 6</span>Intellectual property</h4><p>The PICK2WIN name, UCT engine, interface and content are owned by PICK2WIN Technologies Pvt Ltd. You retain ownership of the inputs you provide; you receive a personal, non-transferable right to use the teams generated for you.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 7</span>Disclaimers &amp; limitation of liability</h4><p>The service is provided &ldquo;as is&rdquo;. Football data is sourced from third-party providers and may change; PICK2WIN is not liable for lineup changes, cancellations, third-party platform actions, or how you use the generated teams. To the maximum extent permitted by law, our aggregate liability is limited to the amount you paid in the preceding 12 months.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 8</span>Changes to these terms</h4><p>We may update these Terms. Coins you have already purchased remain usable under the terms in force at the time of purchase; future changes never retroactively shorten the validity of coins you already hold or change a pack you already paid for.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 9</span>Governing law</h4><p>These Terms are governed by the laws of India, with exclusive jurisdiction of the courts of Bengaluru, Karnataka.</p></div>
-      <div class="pol-section"><h4><span class="sec-num">&rarr; 10</span>Contact</h4><p>Questions about these Terms? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a>.</p></div>
+      <div class="pol-section" *ngFor="let section of sections; let i = index" [attr.id]="'terms-' + (i + 1)">
+        <h4><span class="sec-num">{{ i + 1 }}</span>{{ section.title }}</h4>
+        <p [innerHTML]="section.body"></p>
+      </div>
     </article>
 
-    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd &middot; All rights reserved &middot; support@pick2win.io</div>
+    <div class="pol-foot">&copy; 2026 PICK2WIN Technologies Pvt Ltd - All rights reserved - support@pick2win.io</div>
   </div>
 </main>
 
