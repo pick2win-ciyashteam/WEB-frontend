@@ -10,7 +10,7 @@ import { ProfileService } from 'src/app/core/services/profile.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class  HeaderComponent {
 
   isMenuOpen = false;
   hideNotice = localStorage.getItem('p2w_region_dismiss') === '1';
