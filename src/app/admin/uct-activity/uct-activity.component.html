@@ -1,0 +1,288 @@
+<section class="uct-view">
+  <div class="info-banner">
+    <span aria-hidden="true">!</span>
+    <span>UCT = a user spends 1 coin to generate 20 fantasy teams for a match (1 coin = 1 UCT). Below: today's live activity, per-fixture drill-down, activity over time, the coin ledger, and the latest generations.</span>
+    <button class="lk" type="button" (click)="downloadFullReportCsv()">CSV report</button>
+  </div>
+
+  <div class="state-message loading" *ngIf="loading">Loading UCT activity...</div>
+  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="sec-title">Today at a glance</div>
+  <div class="kpi-grid">
+    <article class="kpi p">
+      <div class="lbl">UCTs used today</div>
+      <div class="val">{{ formatNumber(overview?.kpis?.ucts_used_today) }}</div>
+      <div class="delta">successful - 1 coin each (1:1)</div>
+    </article>
+    <article class="kpi b">
+      <div class="lbl">Active fixtures</div>
+      <div class="val">{{ formatNumber(overview?.kpis?.active_fixtures) }}</div>
+      <div class="delta">matches generating today</div>
+    </article>
+    <article class="kpi r">
+      <div class="lbl">Retry attempts</div>
+      <div class="val">{{ formatNumber(activity?.summary?.failed_refunded || overview?.kpis?.failed_refunded) }}</div>
+      <div class="delta">generation retried - no coin charged</div>
+    </article>
+    <article class="kpi n">
+      <div class="lbl">Cancelled runs</div>
+      <div class="val">{{ formatNumber(overview?.kpis?.failed_refunded) }}</div>
+      <div class="delta">exited Run UCT - no coin charged</div>
+    </article>
+  </div>
+
+  <div class="sec-title">Today's fixtures</div>
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Fixtures today - UCT usage</h3>
+        <p class="ph-sub">{{ matches.length }} fixtures today - <b>{{ formatNumber(overview?.today_matches?.total_ucts_today) }}</b> users used UCT - <b>{{ formatNumber(overview?.today_matches?.total_ucts_today) }}</b> coins consumed today (1 user = 1 UCT = 1 coin per match)</p>
+      </div>
+      <button class="lk" type="button" (click)="downloadFixturesCsv()">CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Match</th>
+            <th>League / Series</th>
+            <th>Status</th>
+            <th class="num">Users used UCT</th>
+            <th class="num">Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let match of matches" (click)="selectMatch(match)" [class.selected]="selectedMatchId === match.id">
+            <td class="cell-main">{{ match.match }}</td>
+            <td>{{ match.series }}</td>
+            <td><span class="tag" [ngClass]="statusClass(match.status)"><span class="dotv"></span>{{ match.status }}</span></td>
+            <td class="num purple">{{ formatNumber(match.ucts_used) }}</td>
+            <td class="num">{{ match.share_pct }}%</td>
+          </tr>
+          <tr class="total-row">
+            <td>{{ matches.length }} matches today</td>
+            <td></td>
+            <td></td>
+            <td class="num purple">{{ formatNumber(overview?.today_matches?.total_ucts_today) }}</td>
+            <td class="num">{{ totalFixtureShare || 100 }}%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="panel" *ngIf="drilldown as detail">
+    <div class="panel-head">
+      <div>
+        <h3>Fixture drill-down</h3>
+        <p class="ph-sub">Pick a fixture to see its UCTs, who's generating by country, and the lineup -> kickoff build-up - 1 coin = 1 UCT</p>
+      </div>
+    </div>
+
+    <div class="match-tabs">
+      <button *ngFor="let match of matches" type="button" [class.active]="selectedMatchId === match.id" (click)="selectMatch(match)">
+        {{ match.match }}
+      </button>
+    </div>
+
+    <div class="drill-grid">
+      <div>
+        <div class="match-title-row">
+          <span class="tag" [ngClass]="statusClass(detail.match.status)"><span class="dotv"></span>{{ detail.match.status }}</span>
+          <h2>{{ detail.match.home_team }} vs {{ detail.match.away_team }}</h2>
+        </div>
+        <p class="ph-sub">{{ detail.match.series }} - {{ formatTime(detail.match.start_time) }}</p>
+        <div class="mini-card p">
+          <div class="lbl">UCTs used</div>
+          <div class="val">{{ formatNumber(detail.match.ucts_used) }}</div>
+          <div class="delta">1 coin = 1 UCT - each generates 20 teams</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="subhead">Users by country - this fixture</div>
+        <div class="country-bars">
+          <div class="country-bar" *ngFor="let row of detail.users_region_wise; let i = index">
+            <div>
+              <b>{{ row.country }}</b>
+              <span><strong>{{ formatNumber(row.users) }}</strong> users - {{ row.pct }}%</span>
+            </div>
+            <div class="track"><i [style.width.%]="row.pct" [style.background]="countryColor(i)"></i></div>
+          </div>
+          <div class="empty-row" *ngIf="!detail.users_region_wise?.length">No country data for this fixture.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-head">
+      <span>UCT build-up - lineups + kickoff - <b>{{ detail.match.home_team }} vs {{ detail.match.away_team }}</b></span>
+      <b>{{ detail.match.ucts_used }} UCTs - lineups T-75m - KO {{ formatTime(detail.match.start_time) }}</b>
+    </div>
+    <p class="ph-sub chart-copy">UCTs generated from lineup release to kickoff - lineup time varies per fixture via Sportmonks.</p>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 900 250" preserveAspectRatio="none" role="img" aria-label="UCT build up chart">
+        <line class="grid-line" x1="40" y1="60" x2="860" y2="60"></line>
+        <line class="grid-line" x1="40" y1="110" x2="860" y2="110"></line>
+        <line class="grid-line" x1="40" y1="160" x2="860" y2="160"></line>
+        <line class="axis-line" x1="40" y1="210" x2="860" y2="210"></line>
+        <line class="kickoff-line" x1="860" y1="42" x2="860" y2="216"></line>
+        <polygon [attr.points]="buildAreaPolygon()"></polygon>
+        <polyline [attr.points]="buildPolyline()"></polyline>
+        <circle *ngFor="let point of buildPoints; let i = index" [attr.cx]="buildPointX(i)" [attr.cy]="buildPointY(point)" r="4"></circle>
+      </svg>
+      <div class="chart-labels">
+        <span *ngFor="let point of buildPoints">{{ point.label }}</span>
+      </div>
+    </div>
+  </article>
+
+  <div class="sec-title">Trends &amp; accounting</div>
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>UCT activity over time</h3>
+        <p class="ph-sub">Choose a year then a month (Jan-Dec) - the current month is month-to-date - 1 coin = 1 UCT - download matches the selection</p>
+      </div>
+      <button class="lk" type="button" (click)="downloadActivityCsv()">CSV (selected)</button>
+    </div>
+
+    <div class="filter-block">
+      <span>Year</span>
+      <button type="button" class="chip-f" *ngFor="let year of years" [class.active]="selectedYear === year" (click)="setYear(year)">{{ year }}</button>
+    </div>
+    <div class="filter-block">
+      <span>Month</span>
+      <button type="button" class="chip-f" *ngFor="let month of months" [class.active]="selectedMonth === month.value" (click)="setMonth(month.value)">{{ month.label }}</button>
+    </div>
+
+    <div class="report-strip">
+      <b>{{ selectedMonthLabel }} {{ selectedYear }}</b>
+      <span>{{ activity?.range?.start_date || '-' }} -> {{ activity?.range?.end_date || '-' }}</span>
+      <span>{{ formatNumber(activity?.summary?.total_ucts) }} successful UCTs</span>
+      <span>{{ formatNumber(activity?.summary?.total_ucts) }} coins consumed</span>
+      <span>{{ formatNumber(activity?.summary?.failed_refunded) }} retries/cancelled</span>
+      <span>{{ formatNumber(activity?.summary?.avg_per_day) }} avg/day</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th class="num">UCTs - coins consumed</th>
+            <th class="num">Retries</th>
+            <th class="num">Cancelled</th>
+            <th class="num">Completion rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of dailyBreakdown">
+            <td class="cell-main mono">{{ dateOnly(row.date) }}</td>
+            <td class="num purple">{{ formatNumber(row.ucts) }}</td>
+            <td class="num gold">{{ formatNumber(row.failed_refunded) }}</td>
+            <td class="num red">{{ formatNumber(row.failed_refunded) }}</td>
+            <td class="num green">{{ row.success_rate_pct }}%</td>
+          </tr>
+          <tr class="total-row">
+            <td>{{ selectedMonthLabel }} {{ selectedYear }} total</td>
+            <td class="num purple">{{ formatNumber(activity?.summary?.total_ucts) }}</td>
+            <td class="num gold">{{ formatNumber(activity?.summary?.failed_refunded) }}</td>
+            <td class="num red">{{ formatNumber(activity?.summary?.failed_refunded) }}</td>
+            <td class="num green">{{ activity?.summary?.success_rate_pct || 0 }}%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Coins reconciliation</h3>
+        <p class="ph-sub">Lifetime ledger - coins purchased must equal coins consumed + expired + still in wallets</p>
+      </div>
+      <div class="panel-actions">
+        <span class="tag" [class.ok]="overview?.coins_reconciliation?.is_balanced" [class.bad]="overview?.coins_reconciliation && !overview?.coins_reconciliation?.is_balanced">
+          <span class="dotv"></span>{{ overview?.coins_reconciliation?.is_balanced ? 'Balanced' : 'Needs review' }}
+        </span>
+        <button class="lk" type="button" (click)="downloadLedgerCsv()">CSV</button>
+      </div>
+    </div>
+
+    <div class="ledger-cards">
+      <div class="ledger-card y">
+        <span>Coins purchased</span>
+        <b>{{ formatNumber(overview?.coins_reconciliation?.coins_purchased) }}</b>
+        <small>from pack sales (lifetime)</small>
+      </div>
+      <div class="ledger-card p">
+        <span>Coins consumed</span>
+        <b>{{ formatNumber(overview?.coins_reconciliation?.coins_consumed) }}</b>
+        <small>UCTs generated</small>
+      </div>
+      <div class="ledger-card r">
+        <span>Coins expired</span>
+        <b>{{ formatNumber(overview?.coins_reconciliation?.coins_expired) }}</b>
+        <small>365-day lapse</small>
+      </div>
+      <div class="ledger-card g">
+        <span>Coins in wallets</span>
+        <b>{{ formatNumber(overview?.coins_reconciliation?.coins_in_wallets) }}</b>
+        <small>unused - still valid</small>
+      </div>
+    </div>
+
+    <div class="stack-bar" aria-label="Coins reconciliation distribution">
+      <i class="consumed" [style.width.%]="consumedPct"></i>
+      <i class="expired" [style.width.%]="expiredPct"></i>
+      <i class="wallets" [style.width.%]="walletsPct"></i>
+    </div>
+    <div class="stack-legend">
+      <span><i class="consumed"></i>Consumed {{ consumedPct }}%</span>
+      <span><i class="expired"></i>Expired {{ expiredPct }}%</span>
+      <span><i class="wallets"></i>In wallets {{ walletsPct }}%</span>
+      <b>Σ = {{ formatNumber(coinsPurchased) }} purchased</b>
+    </div>
+  </article>
+
+  <article class="panel latest-panel">
+    <div class="panel-head">
+      <div>
+        <h3>Latest generations</h3>
+        <p class="ph-sub">Newest UCT runs with user, fixture, country, coins, time, and result.</p>
+      </div>
+      <button class="lk" type="button" (click)="downloadLatestCsv()">CSV</button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="admin-table latest-table">
+        <thead>
+          <tr>
+            <th>UCT ID</th>
+            <th>User</th>
+            <th>Match</th>
+            <th>Country</th>
+            <th class="num">Coins</th>
+            <th class="num">Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of recentGenerations">
+            <td class="cell-main mono">{{ item.uct_id }}</td>
+            <td>{{ item.fullname }}</td>
+            <td>{{ item.match }}</td>
+            <td>{{ item.country }}</td>
+            <td class="num gold">{{ formatNumber(item.coins_used) }}</td>
+            <td class="num">{{ timeAgo(item.time_ago_sec) }}</td>
+            <td><span class="tag ok">{{ item.status }} - {{ formatNumber(item.coins_used) }} coin</span></td>
+          </tr>
+          <tr *ngIf="!recentGenerations.length">
+            <td colspan="7" class="empty-row">No latest UCT generations found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

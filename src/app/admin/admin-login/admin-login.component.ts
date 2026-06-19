@@ -11,9 +11,9 @@ import { AdminAuthService } from 'src/app/core/services/admin-auth.service';
 export class AdminLoginComponent {
 
   loginForm = this.fb.group({
-    email: ['admin@pick2win.io', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
-    twoFactorCode: ['', [Validators.pattern(/^\d{6}$/)]]
+    twoFaCode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
   });
 
   loading = false;
@@ -35,7 +35,7 @@ export class AdminLoginComponent {
       input.value = value;
     }
 
-    this.loginForm.get('twoFactorCode')?.setValue(value, { emitEvent: false });
+    this.loginForm.get('twoFaCode')?.setValue(value, { emitEvent: false });
   }
 
   login(): void {
@@ -52,8 +52,9 @@ export class AdminLoginComponent {
 
     const email = this.loginForm.value.email || '';
     const password = this.loginForm.value.password || '';
+    const twoFaCode = this.loginForm.value.twoFaCode || '';
 
-    this.adminAuthService.login(email, password).subscribe({
+    this.adminAuthService.login(email, password, twoFaCode).subscribe({
       next: (res) => {
         this.loading = false;
 

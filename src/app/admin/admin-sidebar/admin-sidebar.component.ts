@@ -1,0 +1,45 @@
+import { Component, EventEmitter, Output } from '@angular/core';
+
+interface AdminNavItem {
+  label: string;
+  icon: string;
+  route?: string;
+  group: string;
+  badge?: string;
+}
+
+@Component({
+  selector: 'app-admin-sidebar',
+  templateUrl: './admin-sidebar.component.html',
+  styleUrls: ['./admin-sidebar.component.css']
+})
+export class AdminSidebarComponent {
+  @Output() logoutClicked = new EventEmitter<void>();
+
+  navItems: AdminNavItem[] = [
+    { label: 'Dashboard', icon: '▦', route: '/admin/dashboard', group: 'Overview' },
+    { label: 'User Management', icon: '👤', route: '/admin/users', group: 'Users & Countries' },
+    { label: 'Countries', icon: '🌍', route: '/admin/countries', group: 'Users & Countries' },
+    { label: 'UCT Activity', icon: '⚡', route: '/admin/uct-activity', group: 'Product', badge: 'live' },
+    { label: 'Votes & Feedback', icon: '💬', route: '/admin/votes-feedback', group: 'Product' },
+    { label: 'Coin Packs', icon: '🪙', route: '/admin/add-subscription', group: 'Monetization' },
+    { label: 'Revenue', icon: '💵', group: 'Finance' },
+    { label: 'Expenses', icon: '📉', group: 'Finance' },
+    { label: 'Profit', icon: '📈', group: 'Finance' },
+    { label: 'Payments', icon: '💳', route: '/admin/pack-buyers', group: 'Finance' },
+    { label: 'Leagues / Series', icon: '🏆', route: '/admin/series-manager', group: 'Catalog' },
+    { label: 'Admins & Team', icon: '🔐', group: 'Administration' },
+    { label: 'Activity Log', icon: '📝', route: '/admin/activity-dormancy', group: 'Administration' },
+    { label: 'System & Integrations', icon: '🛠️', group: 'System' }
+  ];
+
+  visibleGroup(index: number): string | null {
+    const item = this.navItems[index];
+    const previous = this.navItems[index - 1];
+    return !previous || previous.group !== item.group ? item.group : null;
+  }
+
+  logout(): void {
+    this.logoutClicked.emit();
+  }
+}

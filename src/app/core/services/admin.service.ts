@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminBannerCreatePayload, AdminCountryCreatePayload, AdminFixturesPayload, AdminLoginPayload, AdminMatchTogglePayload, AdminSubscriptionCreatePayload } from '../interfaces/admin';
+import { AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLoginPayload, AdminMatchTogglePayload, AdminSubscriptionCreatePayload, AdminUsersQuery } from '../interfaces/admin';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +40,42 @@ export class AdminService {
     return this.http.patch(`${this.BASE}/admin/country/${id}/toggle`, {});
   }
 
+  updateCountry(id: number | string, data: Partial<AdminCountryCreatePayload>): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/country/${id}`, data);
+  }
+
   getCountries(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/country/get`);
+  }
+
+  getAdminReportsCountries(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/countries`);
+  }
+
+  getAdminReportsUctOverview(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/uct-overview`);
+  }
+
+  getAdminReportsUctMatchDrilldown(matchId: number | string): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/uct-match-drilldown`, {
+      params: this.cleanParams({ match_id: matchId })
+    });
+  }
+
+  getAdminReportsUctActivityList(params: { period?: string; page?: number; limit?: number; year?: number; month?: number } = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/uct-activity-list`, {
+      params: this.cleanParams({ period: 'today', page: 1, limit: 20, ...params })
+    });
+  }
+
+  getAdminReportsVotesSummary(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/votes-summary`);
+  }
+
+  getAdminReportsVotesList(params: { vote?: string; page?: number; limit?: number } = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/votes-list`, {
+      params: this.cleanParams({ page: 1, limit: 20, ...params })
+    });
   }
 
   createBanner(data: AdminBannerCreatePayload): Observable<any> {
@@ -80,6 +114,42 @@ export class AdminService {
     return this.http.get(`${this.BASE}/admin/admin-reports/overview`);
   }
 
+  getAdminReportsDashboard(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/dashboard`);
+  }
+
+  getAdminReportsUsers(params: AdminUsersQuery = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/users`, { params: this.cleanParams({ ...params }) });
+  }
+
+  getAdminReportsCoinExpiry(window: AdminCoinExpiryWindow = '30d'): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/coin-expiry`, { params: this.cleanParams({ window }) });
+  }
+
+  notifyCoinExpiryUser(id: number | string, window: AdminCoinExpiryWindow): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/reports/coin-expiry/${id}/notify`, { window });
+  }
+
+  broadcastCoinExpiry(window: AdminCoinExpiryWindow): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/reports/coin-expiry/broadcast`, { window });
+  }
+
+  updateAdminUser(id: number | string, data: Record<string, unknown>): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/users/${id}`, data);
+  }
+
+  suspendAdminUser(id: number | string): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/users/${id}/suspend`, {});
+  }
+
+  restoreAdminUser(id: number | string): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/users/${id}/restore`, {});
+  }
+
+  deleteAdminUser(id: number | string): Observable<any> {
+    return this.http.delete(`${this.BASE}/admin/users/${id}`);
+  }
+
   getAdminReportsGeography(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/admin-reports/geography`);
   }
@@ -90,5 +160,15 @@ export class AdminService {
 
   getAdminReportsActivityDormancy(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/admin-reports/activity-dormancy`);
+  }
+
+  private cleanParams(params: Record<string, unknown>): Record<string, string> {
+    return Object.entries(params).reduce((acc, [key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        acc[key] = String(value);
+      }
+
+      return acc;
+    }, {} as Record<string, string>);
   }
 }

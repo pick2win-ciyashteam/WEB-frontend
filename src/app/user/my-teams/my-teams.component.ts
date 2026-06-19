@@ -225,6 +225,10 @@ private openMatchFromQueryParam(): void {
 }
 
   downloadMatchTeams(match: GeneratedMatch) {
+  if (!this.canAccessTeams(match)) {
+    return;
+  }
+
   this.api.MatchByTeams(match.id).subscribe({
     next: (res: any) => {
       // console.log('My Teams download response:', res);

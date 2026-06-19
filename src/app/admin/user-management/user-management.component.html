@@ -1,0 +1,283 @@
+<section class="users-view">
+  <div class="kpi-grid">
+    <article class="kpi">
+      <div class="lbl">Total users</div>
+      <div class="val">{{ reports?.kpis?.total_users || 0 }}</div>
+      <div class="delta flat">active + idle</div>
+    </article>
+    <article class="kpi g">
+      <div class="lbl">Active accounts</div>
+      <div class="val">{{ reports?.kpis?.active_accounts || 0 }}</div>
+      <div class="delta flat">purchased a pack</div>
+    </article>
+    <article class="kpi m">
+      <div class="lbl">Idle users</div>
+      <div class="val">{{ reports?.kpis?.idle_users || 0 }}</div>
+      <div class="delta flat">no pack purchased</div>
+    </article>
+    <article class="kpi r">
+      <div class="lbl">Deleted</div>
+      <div class="val">{{ reports?.kpis?.deleted || 0 }}</div>
+      <div class="delta flat">closed accounts</div>
+    </article>
+  </div>
+
+  <div class="state-message loading" *ngIf="loading">Loading users...</div>
+  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="state-message ok" *ngIf="actionMessage">{{ actionMessage }}</div>
+
+  <article class="panel users-panel">
+    <div class="panel-head">
+      <div>
+        <h3>Users</h3>
+        <p class="ph-sub">{{ users.length }} of {{ pagination?.total || users.length }} rows shown</p>
+      </div>
+
+      <div class="panel-tools">
+        <div class="filters">
+          <button
+            *ngFor="let filter of statusFilters"
+            class="chip-f"
+            type="button"
+            [class.active]="status === filter.value"
+            (click)="setStatus(filter.value)">
+            {{ filter.label }}
+          </button>
+        </div>
+        <select class="inp" [(ngModel)]="country" (change)="applyFilters()">
+          <option value="">{{ countriesLoading ? 'Loading countries...' : 'All countries' }}</option>
+          <option *ngFor="let item of countries" [value]="item">{{ item }}</option>
+        </select>
+        <button class="lk csv-link" type="button" (click)="downloadCsv()">⤓ CSV</button>
+      </div>
+    </div>
+
+    <!-- Search is available through the sticky admin header; this keeps the card aligned with the reference UI. -->
+    <div class="search-row compact-search">
+      <input class="inp search-inp" type="search" placeholder="Search user, email, country..." [(ngModel)]="search" (keyup.enter)="applyFilters()">
+      <button class="btn sm" type="button" (click)="applyFilters()">Search</button>
+      <button class="btn ghost sm" type="button" (click)="resetFilters()">Reset</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Country</th>
+            <th>Packs purchased</th>
+            <th class="num">Coins</th>
+            <th>Joined</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>
+              <div class="cell-main">{{ user.fullname }}</div>
+              <div class="cell-sub">{{ user.user_code }} · {{ user.email }}</div>
+            </td>
+            <td><div class="cell-main country">{{ user.country || '-' }}</div></td>
+            <td>
+              <div class="packchips" *ngIf="user.packs_purchased?.length; else noPack">
+                <span class="pchip" *ngFor="let pack of user.packs_purchased">
+                  <span aria-hidden="true">{{ packIcon(pack) }}</span>
+                  {{ pack }}
+                </span>
+              </div>
+              <ng-template #noPack><span class="pchip no-pack">No pack</span></ng-template>
+            </td>
+            <td class="num mono">{{ user.coins || 0 }}</td>
+            <td class="mono">{{ dateOnly(user.joined) }}</td>
+            <td><span class="tag" [ngClass]="statusClass(user.status)"><span class="dotv"></span>{{ titleCase(user.status) }}</span></td>
+            <td class="t-actions">
+              <button class="lk" type="button" (click)="openUser(user)">View</button>
+            </td>
+          </tr>
+          <tr *ngIf="!loading && !users.length">
+            <td colspan="7" class="empty">No users match this filter.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pager" *ngIf="pagination">
+      <span>Page {{ pagination.page }} of {{ pagination.total_pages }}</span>
+      <div>
+        <button class="btn ghost sm" type="button" (click)="previousPage()" [disabled]="page <= 1">Prev</button>
+        <button class="btn ghost sm" type="button" (click)="nextPage()" [disabled]="page >= pagination.total_pages">Next</button>
+      </div>
+    </div>
+  </article>
+
+  <article class="panel expiry-panel">
+    <div class="panel-head">
+      <div>
+        <h3>Coin expiry &amp; reminders</h3>
+        <p class="ph-sub">
+          {{ expiryReports?.users_in_window || 0 }} users in the selected window ·
+          {{ expiryReports?.coins_still_to_use || 0 }} coins still to be used
+        </p>
+      </div>
+      <button class="lk" type="button" (click)="downloadExpiryCsv()">⤓ CSV</button>
+    </div>
+
+    <div class="expiry-note">
+      <span aria-hidden="true">⏳</span>
+      <b>Coins expire 365 days after the latest purchase.</b>
+      Users paid for these coins, so pick2win auto-sends an on-site pop-up
+      <b>30 days</b> and again <b>15 days</b> before expiry, nudging them to use their balance before it lapses.
+      Buying a new pack merges the balance and resets expiry to that date + 365.
+    </div>
+
+    <div class="kpi-grid expiry-kpis">
+      <article class="kpi b">
+        <div class="lbl">Reminder · 30 days before</div>
+        <div class="val">{{ expiryReports?.summary?.reminder_30d || 0 }}</div>
+        <div class="delta flat">users auto-notified</div>
+      </article>
+      <article class="kpi p">
+        <div class="lbl">Reminder · 15 days before</div>
+        <div class="val">{{ expiryReports?.summary?.reminder_15d || 0 }}</div>
+        <div class="delta flat">users auto-notified</div>
+      </article>
+      <article class="kpi m">
+        <div class="lbl">Already expired</div>
+        <div class="val">{{ expiryReports?.summary?.already_expired || 0 }}</div>
+        <div class="delta flat">users · balance lapsed</div>
+      </article>
+      <article class="kpi r">
+        <div class="lbl">Coins expired · all-time</div>
+        <div class="val">{{ expiryReports?.summary?.coins_expired_all_time || 0 }}</div>
+        <div class="delta flat">count · across all users</div>
+      </article>
+    </div>
+
+    <div class="record-line">
+      <span class="rl-ico" aria-hidden="true">🗂️</span>
+      <b>Expired-coins record</b>
+      <span>— <b class="loss-val">{{ expiryReports?.summary?.coins_expired_all_time || 0 }}</b> coins lapsed all-time</span>
+      <span class="cell-sub">(count only, across all users)</span>
+    </div>
+
+    <div class="filters expiry-filters">
+      <button
+        *ngFor="let item of expiryWindows"
+        class="chip-f"
+        type="button"
+        [class.active]="expiryWindow === item.value"
+        (click)="setExpiryWindow(item.value)">
+        {{ item.label }}
+      </button>
+    </div>
+
+    <div class="state-message loading" *ngIf="expiryLoading">Loading coin expiry reports...</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th class="num">Coins left</th>
+            <th>Last purchase</th>
+            <th>Expiry date</th>
+            <th>Days left</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of expiryUsers">
+            <td>
+              <div class="cell-main">{{ user.fullname }}</div>
+              <div class="cell-sub">{{ user.user_code }} · {{ user.country }}</div>
+            </td>
+            <td class="num mono coins-left">{{ user.coins_left }}</td>
+            <td class="mono">{{ dateOnly(user.last_purchase_date) }}</td>
+            <td class="mono">{{ dateOnly(user.expiry_date) }}</td>
+            <td>
+              <span class="tag" [ngClass]="expiryDayClass(user.days_left)">
+                {{ expiryDayText(user.days_left) }}
+              </span>
+            </td>
+            <td class="t-actions">
+              <button class="lk" type="button" (click)="notifyExpiryUser(user)">Notify</button>
+            </td>
+          </tr>
+          <tr *ngIf="!expiryLoading && !expiryUsers.length">
+            <td colspan="6" class="empty">No users in this expiry window.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="add-row">
+      <button class="btn sm broadcast" type="button" (click)="broadcastExpiry()">📣 Broadcast expiry pop-up</button>
+      <span class="cell-sub">
+        Sends the on-site expiry pop-up to all {{ expiryReports?.users_in_window || 0 }} users in this window so they spend the coins they paid for.
+      </span>
+    </div>
+  </article>
+</section>
+
+<div class="modal" *ngIf="selectedUser || editingUser">
+  <div class="modal-box">
+    <button class="mx" type="button" (click)="closeModal()">×</button>
+
+    <ng-container *ngIf="selectedUser as user">
+      <h3>{{ user.fullname }}</h3>
+      <div class="cell-sub">{{ user.user_code }} · {{ user.email }}</div>
+
+      <div class="kv">
+        <div><div class="k">Country</div><div class="v">{{ user.country }}</div></div>
+        <div><div class="k">Status</div><div class="v"><span class="tag" [ngClass]="statusClass(user.status)">{{ user.status }}</span></div></div>
+        <div><div class="k">Coin balance</div><div class="v">{{ user.coins }}</div></div>
+        <div><div class="k">Joined</div><div class="v">{{ formatDate(user.joined) }}</div></div>
+        <div><div class="k">Packs</div><div class="v">{{ packsText(user) }}</div></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn sm" type="button" (click)="startEdit(user)" [disabled]="user.status === 'deleted'">Edit</button>
+        <button class="btn danger sm" type="button" (click)="suspendUser(user)" *ngIf="user.status !== 'deleted' && user.status !== 'suspended'">Suspend</button>
+        <button class="btn ghost sm" type="button" (click)="closeModal()">Close</button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editingUser as user">
+      <h3>Edit user</h3>
+      <div class="form-grid">
+        <label>Full name <input class="inp" [(ngModel)]="user.fullname"></label>
+        <label>Email <input class="inp" [(ngModel)]="user.email"></label>
+        <label>Country <input class="inp" [(ngModel)]="user.country"></label>
+        <label>Coins <input class="inp" type="number" [(ngModel)]="user.coins"></label>
+        <label>Status
+          <select class="inp" [(ngModel)]="user.status">
+            <option value="active">active</option>
+            <option value="idle">idle</option>
+            <option value="suspended">suspended</option>
+            <option value="deleted">deleted</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn sm" type="button" (click)="saveEdit()" [disabled]="actionLoading">Save changes</button>
+        <button class="btn ghost sm" type="button" (click)="closeModal()">Cancel</button>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<div class="modal" *ngIf="confirmDialog as dialog">
+  <div class="modal-box confirm-box">
+    <button class="mx" type="button" (click)="cancelConfirm()">×</button>
+    <h3>{{ dialog.title }}</h3>
+    <p class="confirm-message">{{ dialog.message }}</p>
+
+    <div class="modal-actions">
+      <button class="btn sm" type="button" [class.danger]="dialog.danger" (click)="confirmAction()" [disabled]="actionLoading">
+        {{ dialog.confirmText }}
+      </button>
+      <button class="btn ghost sm" type="button" (click)="cancelConfirm()">Cancel</button>
+    </div>
+  </div>
+</div>

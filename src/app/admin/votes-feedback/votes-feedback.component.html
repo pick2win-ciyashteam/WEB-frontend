@@ -1,0 +1,248 @@
+<section class="votes-view">
+  <div class="top-tabs" role="tablist" aria-label="Votes feedback views">
+    <button [class.active]="activeView === 'survey'" type="button" (click)="setView('survey')"><span aria-hidden="true">📊</span> Votes survey</button>
+    <button [class.active]="activeView === 'feedback'" type="button" (click)="setView('feedback')"><span aria-hidden="true">📝</span> Detailed feedback</button>
+  </div>
+
+  <div class="info-banner">
+    <span aria-hidden="true">💬</span>
+    <span>{{ infoText }}</span>
+  </div>
+
+  <div class="state-message loading" *ngIf="loading">Loading votes and feedback...</div>
+  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <ng-container *ngIf="activeView === 'survey'">
+  <div class="kpi-grid">
+    <article class="kpi y">
+      <div class="lbl">Total responses</div>
+      <div class="val">{{ formatNumber(totalResponses) }}</div>
+      <div class="delta">one submission per user</div>
+    </article>
+    <article class="kpi g">
+      <div class="lbl">Avg UCT rating</div>
+      <div class="val">{{ summary?.insight?.avg_rating || 0 }} / 5</div>
+      <div class="delta">Q11 - {{ formatNumber(totalResponses) }} rated</div>
+    </article>
+    <article class="kpi b">
+      <div class="lbl">Like UCT</div>
+      <div class="val">{{ summary?.kpis?.like_uct?.pct || 0 }}%</div>
+      <div class="delta">{{ formatNumber(summary?.kpis?.like_uct?.count) }} users - Q1</div>
+    </article>
+    <article class="kpi p">
+      <div class="lbl">Would recommend</div>
+      <div class="val">—</div>
+      <div class="delta">Q4 data not received from API</div>
+    </article>
+  </div>
+
+  <div class="summary-strip">
+    <b>{{ formatNumber(totalResponses) }} responses</b>
+    <span>+{{ formatNumber(summary?.insight?.likes_vs_last_period) }} vs last period</span>
+    <span>{{ summary?.kpis?.like_uct?.pct || 0 }}% Like UCT</span>
+    <span>{{ summary?.kpis?.want_changes?.pct || 0 }}% want changes</span>
+    <span>avg rating {{ summary?.insight?.avg_rating || 0 }}/5</span>
+  </div>
+
+  <div class="cards-grid">
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Q1 - Overall feeling about UCT</h3>
+          <p class="ph-sub">The engine that builds your 20 teams</p>
+        </div>
+        <span class="pill">share of votes</span>
+      </div>
+      <div class="feel-grid">
+        <div class="donut" [style.background]="donutStyle">
+          <div><b>{{ summary?.how_users_feel?.like_uct_pct || 0 }}%</b><span>Like UCT</span></div>
+        </div>
+        <div class="legend-list">
+          <div *ngFor="let row of feelBreakdown; let i = index">
+            <i [style.background]="colors[i]"></i>
+            <b>{{ row.label }}</b>
+            <strong>{{ formatNumber(row.count) }}</strong>
+            <span>{{ row.pct }}%</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Q2 - Most-requested improvements</h3>
+          <p class="ph-sub">Multi-select - ranked by share of users who picked it</p>
+        </div>
+      </div>
+      <div class="bar-list" *ngIf="requestedChanges.length; else noChanges">
+        <div *ngFor="let row of requestedChanges; let i = index">
+          <div><b>{{ row.label || row.title || row.change || 'Requested change' }}</b><span>{{ formatNumber(row.count) }} - {{ row.pct || 0 }}%</span></div>
+          <div class="track"><i [style.width.%]="row.pct || 0" [style.background]="colors[i]"></i></div>
+        </div>
+      </div>
+      <ng-template #noChanges>
+        <div class="empty-box">No requested changes yet.</div>
+      </ng-template>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Q11 - UCT rating</h3>
+          <p class="ph-sub">1 = poor - 5 = excellent</p>
+        </div>
+        <span class="pill">{{ summary?.insight?.avg_rating || 0 }} / 5 avg</span>
+      </div>
+      <div class="bar-list rating-list">
+        <div *ngFor="let row of ratingRows; let i = index">
+          <div><b>{{ stars(row.rating) }}</b><span>{{ formatNumber(row.count) }} - {{ row.pct }}%</span></div>
+          <div class="track"><i [style.width.%]="row.pct" [style.background]="colors[i]"></i></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Q4 - Likely to recommend</h3>
+          <p class="ph-sub">Likely to recommend</p>
+        </div>
+        <span class="pill">share of votes</span>
+      </div>
+      <div class="bar-list"><div *ngFor="let row of surveyBars['q4']"><div><b>{{ row.label }}</b><span>{{ formatNumber(row.count) }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><div><h3>Q5 - Teams needed per match</h3><p class="ph-sub">Guides custom team counts (other than 20)</p></div></div>
+      <div class="bar-list"><div *ngFor="let row of surveyBars['q5']"><div><b>{{ row.label }}</b><span>{{ formatNumber(row.count) }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><div><h3>Q7 - Which new sport first</h3><p class="ph-sub">Guides the order of future sports</p></div></div>
+      <div class="bar-list"><div *ngFor="let row of surveyBars['q7']"><div><b>{{ row.label }}</b><span>{{ formatNumber(row.count) }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><h3>Q8 - Preferred pricing</h3><span class="pill">share of votes</span></div>
+      <div class="bar-list"><div *ngFor="let row of surveyBars['q8']"><div><b>{{ row.label }}</b><span>{{ formatNumber(row.count) }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><h3>Q3 - How often they use PICK2WIN</h3><span class="pill">share of votes</span></div>
+      <div class="bar-list"><div *ngFor="let row of surveyBars['q3']"><div><b>{{ row.label }}</b><span>{{ formatNumber(row.count) }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><h3>Q9 - Where they mostly play</h3><span class="pill">device</span></div>
+      <div class="bar-list"><div *ngFor="let row of surveyBars['q9']"><div><b>{{ row.label }}</b><span>{{ formatNumber(row.count) }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><div><h3>Q6 - Competitions to add / expand</h3><p class="ph-sub">Free text - top requested</p></div></div>
+      <div class="tag-cloud"><span class="tag info" *ngFor="let tag of competitionTags">{{ tag }}</span></div>
+    </article>
+  </div>
+  </ng-container>
+
+  <ng-container *ngIf="activeView === 'feedback'">
+  <div class="kpi-grid">
+    <article class="kpi y">
+      <div class="lbl">Total submissions</div>
+      <div class="val">14</div>
+      <div class="delta">free-form feedback</div>
+    </article>
+    <article class="kpi b">
+      <div class="lbl">New - unreviewed</div>
+      <div class="val">4</div>
+      <div class="delta">awaiting triage</div>
+    </article>
+    <article class="kpi r">
+      <div class="lbl">Blockers</div>
+      <div class="val">3</div>
+      <div class="delta">stopping users · act first</div>
+    </article>
+    <article class="kpi g">
+      <div class="lbl">Resolved</div>
+      <div class="val">2</div>
+      <div class="delta">closed out</div>
+    </article>
+  </div>
+
+  <div class="detail-grid">
+    <article class="panel">
+      <div class="panel-head">
+        <h3>By category</h3>
+        <span class="pill">share of submissions</span>
+      </div>
+      <div class="bar-list"><div *ngFor="let row of detailedCategory"><div><b>{{ row.label }}</b><span>{{ row.count }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <h3>By importance</h3>
+        <span class="pill">blockers first</span>
+      </div>
+      <div class="bar-list"><div *ngFor="let row of detailedImportance"><div><b>{{ row.label }}</b><span>{{ row.count }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+    </article>
+  </div>
+
+  <article class="panel">
+    <div class="panel-head">
+      <h3>Where in PICK2WIN</h3>
+      <span class="pill">location of the issue / idea</span>
+    </div>
+    <div class="bar-list"><div *ngFor="let row of detailedLocation"><div><b>{{ row.label }}</b><span>{{ row.count }} · {{ row.pct }}%</span></div><div class="track"><i [style.width.%]="row.pct" [style.background]="row.color"></i></div></div></div>
+  </article>
+
+  <article class="panel feedback-panel">
+    <div class="panel-head feedback-head">
+      <div>
+        <h3>Submissions inbox</h3>
+        <p class="ph-sub">{{ filteredDetailedItems.length }} of 14 submissions shown · reply target 48h</p>
+      </div>
+      <div class="filters">
+        <button type="button" [class.active]="selectedDetailedFilter === 'all'" (click)="setDetailedFilter('all')">All 14</button>
+        <button type="button" [class.active]="selectedDetailedFilter === 'new'" (click)="setDetailedFilter('new')">New 4</button>
+        <button type="button" [class.active]="selectedDetailedFilter === 'reviewing'" (click)="setDetailedFilter('reviewing')">Reviewing 4</button>
+        <button type="button" [class.active]="selectedDetailedFilter === 'planned'" (click)="setDetailedFilter('planned')">Planned 3</button>
+        <button type="button" [class.active]="selectedDetailedFilter === 'resolved'" (click)="setDetailedFilter('resolved')">Resolved 2</button>
+        <button class="lk" type="button" (click)="downloadCsv()">Excel (CSV)</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Subject &amp; suggestion</th>
+            <th>Category</th>
+            <th>Importance</th>
+            <th>Where</th>
+            <th>From</th>
+            <th>Status</th>
+            <th class="num">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredDetailedItems">
+            <td class="cell-main">
+              {{ item.subject }}
+              <small>{{ item.body }}</small>
+            </td>
+            <td><span class="tag info">{{ item.category }}</span></td>
+            <td><span class="tag" [ngClass]="item.importance === 'Stopping me using it' ? 'bad' : item.importance === 'Would really help' ? 'warn' : 'info'">{{ item.importance }}</span></td>
+            <td>{{ item.where }}</td>
+            <td class="cell-main">{{ item.user }}<small>{{ item.email }}</small></td>
+            <td><span class="select-pill">{{ item.status }}</span></td>
+            <td class="num mono">{{ dateOnly(item.date) }}</td>
+          </tr>
+          <tr *ngIf="!filteredDetailedItems.length">
+            <td colspan="7" class="empty-row">No submissions in this status.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+  </ng-container>
+</section>

@@ -15,7 +15,7 @@
       id="adminEmail"
       type="email"
       formControlName="email"
-      placeholder="admin@pick2win.io"
+      placeholder="Enter Email"
       autocomplete="username">
     <p class="field-err" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
       Enter valid admin email.
@@ -48,11 +48,11 @@
       id="admin2fa"
       inputmode="numeric"
       maxlength="6"
-      formControlName="twoFactorCode"
+      formControlName="twoFaCode"
       placeholder="6-digit code"
       autocomplete="one-time-code"
       (input)="normalizeTwoFactor($event)">
-    <p class="field-err" *ngIf="loginForm.get('twoFactorCode')?.touched && loginForm.get('twoFactorCode')?.invalid">
+    <p class="field-err" *ngIf="loginForm.get('twoFaCode')?.touched && loginForm.get('twoFaCode')?.invalid">
       Enter a 6-digit 2FA code.
     </p>
 

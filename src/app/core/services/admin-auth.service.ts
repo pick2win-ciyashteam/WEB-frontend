@@ -20,8 +20,8 @@ export class AdminAuthService {
     this.loggedInSubject.next(this.isLoggedIn());
   }
 
-  login(email: string, password: string): Observable<any> {
-    return this.adminService.login({ email, password }).pipe(
+  login(email: string, password: string, twoFaCode: string): Observable<any> {
+    return this.adminService.login({ email, password, twoFaCode }).pipe(
       tap(res => {
         const token =
           res?.token ||

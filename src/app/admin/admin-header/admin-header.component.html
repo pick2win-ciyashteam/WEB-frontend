@@ -1,0 +1,38 @@
+<header class="topbar">
+  <button class="menu-btn" type="button" aria-label="Open admin menu" (click)="menuClicked.emit()">
+    <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+  </button>
+
+  <div class="tb-title">
+    <div class="crumb">{{ crumb }}</div>
+    <h2>{{ title }}</h2>
+  </div>
+
+  <div class="search">
+    <span class="si" aria-hidden="true">🔎</span>
+    <input type="search" placeholder="Search users, emails...">
+  </div>
+
+  <div class="tb-right">
+    <div class="fx-chip" title="Latest USD to INR. Edit to set the live rate.">
+      <span class="fx-ic" aria-hidden="true">💱</span>
+      <span class="fx-l">USD→INR</span>
+      <span class="fx-eq">₹</span>
+      <input class="fx-in mono" type="number" step="0.01" min="0" value="95.36" (blur)="formatFxInput($event)">
+      <span class="fx-div"></span>
+      <span class="fx-note mono">as of 9 Jun 2026</span>
+    </div>
+
+    <div class="admin-chip" title="Manage admins">
+      <div class="av">LN</div>
+      <div class="ac-txt">
+        <b>Lakshmi Narayana P</b>
+        <small>admin@pick2win.io</small>
+      </div>
+    </div>
+    <button class="btn ghost sm logout" type="button" (click)="logoutClicked.emit()">
+      <span aria-hidden="true">🚪</span>
+      Logout
+    </button>
+  </div>
+</header>

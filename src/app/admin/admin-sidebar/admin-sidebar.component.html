@@ -1,0 +1,29 @@
+<aside class="sidebar">
+  <div class="sb-brand">
+    <span class="sb-dot" aria-hidden="true"></span>
+    <div>
+      <b>PICK2WIN</b>
+      <span>WEBSITE ADMIN</span>
+    </div>
+  </div>
+
+  <nav class="sb-nav" aria-label="Admin navigation">
+    <ng-container *ngFor="let item of navItems; let i = index">
+      <div class="nav-group" *ngIf="visibleGroup(i)">{{ visibleGroup(i) }}</div>
+      <a *ngIf="item.route; else navButton" class="nav-item" [routerLink]="item.route" routerLinkActive="active">
+        <span class="ic" aria-hidden="true">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+        <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
+      </a>
+      <ng-template #navButton>
+        <button class="nav-item nav-button" type="button">
+          <span class="ic" aria-hidden="true">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+          <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
+        </button>
+      </ng-template>
+    </ng-container>
+  </nav>
+
+  <div class="sb-foot">v1.0 · build 2026.06 <br>support@pick2win.io</div>
+</aside>

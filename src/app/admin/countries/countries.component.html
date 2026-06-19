@@ -1,0 +1,141 @@
+<section class="countries-view">
+  <div class="state-message loading" *ngIf="loading">Loading countries...</div>
+  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="state-message ok" *ngIf="actionMessage">{{ actionMessage }}</div>
+
+  <article class="panel country-total-panel">
+    <div class="panel-head">
+      <h3>Total users by country</h3>
+      <span class="tag mut mono">{{ formatNumber(reports?.total_users_overall) }} users</span>
+    </div>
+
+    <div class="donut-wrap">
+      <div class="donut" [style.background]="donutGradient">
+        <div class="donut-c">
+          <div class="dc-v">{{ formatNumber(reports?.total_users_overall) }}</div>
+          <div class="dc-l">Total users</div>
+        </div>
+      </div>
+
+      <div class="country-legend">
+        <div class="dleg-row" *ngFor="let row of topCountries; let i = index">
+          <i [style.background]="colorAt(i)"></i>
+          <span class="dl-n"><b>{{ countryCode(row.country) }}</b> {{ row.country }}</span>
+          <span class="dl-v">{{ formatNumber(row.total_users) }}</span>
+          <span class="dl-p">{{ row.share_pct }}%</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="panel">
+    <div class="panel-head">
+      <h3>Country breakdown</h3>
+      <span class="panel-actions">
+        <button class="lk" type="button" (click)="downloadCsv()">⤓ CSV</button>
+        <span class="tag info mono">total · active · idle</span>
+      </span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th class="num">Total users</th>
+            <th class="num">Coin buyers</th>
+            <th class="num">No pack</th>
+            <th class="num">Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of breakdown">
+            <td class="cell-main"><b>{{ countryCode(row.country) }}</b> {{ row.country }}</td>
+            <td class="num mono">{{ formatNumber(row.total_users) }}</td>
+            <td class="num mono buyer">{{ formatNumber(row.coin_buyers) }}</td>
+            <td class="num mono">{{ formatNumber(row.no_pack) }}</td>
+            <td class="num mono share">{{ row.share_pct }}%</td>
+          </tr>
+          <tr class="total-row" *ngIf="reports?.totals">
+            <td class="cell-main">Total · {{ reports?.total_countries || breakdown.length }} countries</td>
+            <td class="num mono">{{ formatNumber(reports?.totals?.total_users) }}</td>
+            <td class="num mono buyer">{{ formatNumber(reports?.totals?.coin_buyers) }}</td>
+            <td class="num mono">{{ formatNumber(reports?.totals?.no_pack) }}</td>
+            <td class="num mono">100%</td>
+          </tr>
+          <tr *ngIf="!loading && !breakdown.length">
+            <td colspan="5" class="empty">No country reports found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Manage countries</h3>
+        <p class="ph-sub">Source of truth — the website loads supported countries from here. Add, update, toggle, or remove a country.</p>
+      </div>
+      <span class="panel-actions">
+        <button class="lk" type="button" (click)="downloadCsv()">⤓ CSV</button>
+        <span class="tag mut mono">{{ countries.length }} countries</span>
+      </span>
+    </div>
+
+    <div class="mkt-countries">
+      <div class="mkt-chip" *ngFor="let country of managedCountries; let i = index" [class.off]="!country.is_active">
+        <i [style.background]="colorAt(i)"></i>
+        <b>{{ country.code }}</b>
+        <span>{{ country.name }}</span>
+        <small>{{ formatNumber(country.users) }}</small>
+        <button type="button" title="Edit" (click)="editCountry(country)">edit</button>
+        <button type="button" title="Toggle" (click)="toggleCountry(country)">{{ country.is_active ? 'off' : 'on' }}</button>
+        <button type="button" title="Remove" (click)="deleteCountry(country)">×</button>
+      </div>
+    </div>
+
+    <div class="add-row">
+      <input class="inp flag-in" [(ngModel)]="newCountry.flag" placeholder="🌐">
+      <input class="inp" [(ngModel)]="newCountry.name" placeholder="New country name">
+      <input class="inp short-in" [(ngModel)]="newCountry.code" placeholder="Code">
+      <input class="inp short-in" [(ngModel)]="newCountry.dial_code" placeholder="+1">
+      <button class="btn sm" type="button" (click)="createCountry()" [disabled]="actionLoading">+ Add country</button>
+    </div>
+  </article>
+</section>
+
+<div class="modal" *ngIf="editingCountry as country">
+  <div class="modal-box">
+    <button class="mx" type="button" (click)="closeModal()">×</button>
+    <h3>Edit country</h3>
+    <div class="form-grid">
+      <label>Name <input class="inp" [(ngModel)]="country.name"></label>
+      <label>Code <input class="inp" [(ngModel)]="country.code"></label>
+      <label>Dial code <input class="inp" [(ngModel)]="country.dial_code"></label>
+      <label>Flag <input class="inp" [(ngModel)]="country.flag"></label>
+      <label>Status
+        <select class="inp" [(ngModel)]="country.is_active">
+          <option [ngValue]="1">Active</option>
+          <option [ngValue]="0">Inactive</option>
+        </select>
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn sm" type="button" (click)="saveCountry()" [disabled]="actionLoading">Save changes</button>
+      <button class="btn ghost sm" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" *ngIf="confirmDialog as dialog">
+  <div class="modal-box confirm-box">
+    <button class="mx" type="button" (click)="closeModal()">×</button>
+    <h3>{{ dialog.title }}</h3>
+    <p class="confirm-message">{{ dialog.message }}</p>
+    <div class="modal-actions">
+      <button class="btn sm" type="button" [class.danger]="dialog.danger" (click)="confirmAction()" [disabled]="actionLoading">{{ dialog.confirmText }}</button>
+      <button class="btn ghost sm" type="button" (click)="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>

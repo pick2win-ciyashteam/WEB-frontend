@@ -1,6 +1,7 @@
 export interface AdminLoginPayload {
   email: string;
   password: string;
+  twoFaCode: string;
 }
 
 export interface AdminFixturesPayload {
@@ -154,6 +155,337 @@ export interface AdminGeographyReports {
   total_markets: number;
   totals: AdminGeographyTotals;
   data: AdminGeographyMarket[];
+}
+
+export interface AdminDashboardGlance {
+  total_users: number;
+  total_growth_wk: string;
+  active_purchased: number;
+  active_growth_wk: string;
+  idle_no_pack: number;
+  ucts_used_today: number;
+  users_today: number;
+}
+
+export interface AdminDashboardLifecycle {
+  deleted_accounts: number;
+  active_rate_pct: number;
+  verified_users: number;
+}
+
+export interface AdminDashboardCountry {
+  country: string;
+  users: number;
+  pct: number;
+}
+
+export interface AdminDashboardActivity {
+  type: string;
+  fullname: string;
+  country: string;
+  plan_name: string | null;
+  coins: number | null;
+  match_label?: string;
+  time_ago_sec: number;
+  created_at: string;
+}
+
+export interface AdminDashboardTodayMatchItem {
+  id: number;
+  home_team: string;
+  away_team: string;
+  series: string;
+  start_time: string;
+  status: string;
+  ucts_used: number;
+  countries_active: number;
+}
+
+export interface AdminDashboardTodayMatch {
+  total_ucts_today: number;
+  matches: AdminDashboardTodayMatchItem[];
+}
+
+export interface AdminDashboardLiveReports {
+  success: boolean;
+  users_at_a_glance: AdminDashboardGlance;
+  monetization_lifecycle: AdminDashboardLifecycle;
+  top_countries_by_users: AdminDashboardCountry[];
+  recent_activity: AdminDashboardActivity[];
+  today_match: AdminDashboardTodayMatch;
+}
+
+export interface AdminUsersKpis {
+  total_users: number;
+  active_accounts: number;
+  idle_users: number;
+  deleted: number;
+}
+
+export interface AdminUsersPagination {
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+}
+
+export interface AdminUsersFilters {
+  search: string;
+  country: string;
+  status: string;
+}
+
+export interface AdminUserReportItem {
+  id: number;
+  user_code: string;
+  fullname: string;
+  email: string;
+  country: string;
+  packs_purchased: string[];
+  coins: number;
+  joined: string;
+  status: 'active' | 'idle' | 'deleted' | 'suspended' | string;
+}
+
+export interface AdminUsersReports {
+  success: boolean;
+  kpis: AdminUsersKpis;
+  pagination: AdminUsersPagination;
+  filters: AdminUsersFilters;
+  users: AdminUserReportItem[];
+}
+
+export interface AdminUsersQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  country?: string;
+  status?: string;
+}
+
+export type AdminCoinExpiryWindow = '07d' | '15d' | '30d' | 'expired';
+
+export interface AdminCoinExpirySummary {
+  reminder_30d: number;
+  reminder_15d: number;
+  already_expired: number;
+  coins_expired_all_time: number;
+}
+
+export interface AdminCoinExpiryUser {
+  id: number;
+  user_code: string;
+  fullname: string;
+  country: string;
+  coins_left: number;
+  last_purchase_date: string;
+  expiry_date: string;
+  days_left: number;
+}
+
+export interface AdminCoinExpiryReports {
+  success: boolean;
+  summary: AdminCoinExpirySummary;
+  window: AdminCoinExpiryWindow;
+  users_in_window: number;
+  coins_still_to_use: number;
+  users: AdminCoinExpiryUser[];
+}
+
+export interface AdminCountriesReportRow {
+  country: string;
+  total_users: number;
+  coin_buyers: number;
+  no_pack: number;
+  share_pct: number;
+}
+
+export interface AdminManageCountryReport {
+  country: string;
+  users: number;
+}
+
+export interface AdminCountriesReportTotals {
+  total_users: number;
+  coin_buyers: number;
+  no_pack: number;
+  share_pct: number;
+}
+
+export interface AdminCountriesReports {
+  success: boolean;
+  total_users_overall: number;
+  total_countries: number;
+  by_country: AdminCountriesReportRow[];
+  breakdown: AdminCountriesReportRow[];
+  manage_countries: AdminManageCountryReport[];
+  totals: AdminCountriesReportTotals;
+}
+
+export interface AdminUctOverviewKpis {
+  ucts_used_today: number;
+  teams_generated: number;
+  active_fixtures: number;
+  failed_refunded: number;
+}
+
+export interface AdminUctTodayMatch {
+  id: number;
+  match: string;
+  series: string;
+  status: string;
+  ucts_used: number;
+  teams_generated: number;
+  share_pct: number;
+}
+
+export interface AdminUctCoinsReconciliation {
+  coins_purchased: number;
+  coins_consumed: number;
+  coins_expired: number;
+  coins_in_wallets: number;
+  is_balanced: boolean;
+  breakdown_pct: {
+    consumed_pct: number;
+    expired_pct: number;
+    wallets_pct: number;
+  };
+}
+
+export interface AdminUctOverviewReports {
+  success: boolean;
+  kpis: AdminUctOverviewKpis;
+  today_matches: {
+    total_ucts_today: number;
+    matches: AdminUctTodayMatch[];
+  };
+  coins_reconciliation: AdminUctCoinsReconciliation;
+}
+
+export interface AdminUctDrilldownMatch {
+  id: number;
+  home_team: string;
+  away_team: string;
+  series: string;
+  start_time: string;
+  status: string;
+  ucts_used: number;
+  teams_generated: number;
+}
+
+export interface AdminUctCountryUsage {
+  country: string;
+  users: number;
+  pct: number;
+}
+
+export interface AdminUctBuildPoint {
+  label: string;
+  count: number;
+}
+
+export interface AdminUctMatchDrilldownReports {
+  success: boolean;
+  match: AdminUctDrilldownMatch;
+  users_region_wise: AdminUctCountryUsage[];
+  lineouts_to_kickoff: AdminUctBuildPoint[];
+}
+
+export interface AdminUctActivityDaily {
+  date: string;
+  ucts: number;
+  teams_generated: number;
+  failed_refunded: number;
+  success_rate_pct: number;
+}
+
+export interface AdminUctGeneration {
+  uct_id: string;
+  fullname: string;
+  match: string;
+  country: string;
+  teams: number;
+  coins_used: number;
+  time_ago_sec: number;
+  status: string;
+  created_at: string;
+}
+
+export interface AdminUctActivityListReports {
+  success: boolean;
+  period: string;
+  range: {
+    start_date: string;
+    end_date: string;
+  };
+  summary: {
+    total_ucts: number;
+    total_teams: number;
+    failed_refunded: number;
+    success_rate_pct: number;
+    avg_per_day: number;
+  };
+  daily_breakdown: AdminUctActivityDaily[];
+  pagination: AdminUsersPagination;
+  recent_generations: AdminUctGeneration[];
+}
+
+export interface AdminVotesCountPct {
+  count: number;
+  pct: number;
+}
+
+export interface AdminVotesSummaryReports {
+  success: boolean;
+  kpis: {
+    feedback_responses: number;
+    like_uct: AdminVotesCountPct;
+    want_changes: AdminVotesCountPct;
+    dislike: AdminVotesCountPct;
+  };
+  insight: {
+    sentiment_score: number;
+    likes_vs_last_period: number;
+    trend: string;
+    avg_rating: number;
+  };
+  how_users_feel: {
+    like_uct_pct: number;
+    breakdown: Array<{
+      label: string;
+      count: number;
+      pct: number;
+    }>;
+  };
+  most_requested_changes: Array<{
+    label?: string;
+    title?: string;
+    change?: string;
+    count?: number;
+    pct?: number;
+    [key: string]: any;
+  }>;
+}
+
+export interface AdminVotesFeedbackItem {
+  id: number;
+  feedback_code: string;
+  fullname: string;
+  region: string;
+  vote: 'like_uct' | 'want_changes' | 'dislike' | string;
+  vote_label: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+export interface AdminVotesListReports {
+  success: boolean;
+  pagination: AdminUsersPagination;
+  filters: {
+    vote: string;
+  };
+  feedback: AdminVotesFeedbackItem[];
 }
 
 export interface AdminPackBuyersSummary {

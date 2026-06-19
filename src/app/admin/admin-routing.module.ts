@@ -7,9 +7,13 @@ import { AddSubscriptionComponent } from './add-subscription/add-subscription.co
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminShellComponent } from './admin-shell/admin-shell.component';
+import { CountriesComponent } from './countries/countries.component';
 import { CreateBannerComponent } from './create-banner/create-banner.component';
 import { PackBuyersComponent } from './pack-buyers/pack-buyers.component';
 import { SeriesManagerComponent } from './series-manager/series-manager.component';
+import { UctActivityComponent } from './uct-activity/uct-activity.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.component';
 
 const routes: Routes = [
   {
@@ -29,6 +33,22 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: AdminDashboardComponent
+      },
+      {
+        path: 'users',
+        component: UserManagementComponent
+      },
+      {
+        path: 'countries',
+        component: CountriesComponent
+      },
+      {
+        path: 'uct-activity',
+        component: UctActivityComponent
+      },
+      {
+        path: 'votes-feedback',
+        component: VotesFeedbackComponent
       },
       {
         path: 'create-banner',

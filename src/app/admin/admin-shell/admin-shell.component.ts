@@ -5,8 +5,8 @@ import { AdminAuthService } from 'src/app/core/services/admin-auth.service';
 
 interface AdminNavItem {
   label: string;
-  icon: string;
   route: string;
+  crumb: string;
 }
 
 @Component({
@@ -18,13 +18,17 @@ export class AdminShellComponent {
   sidebarOpen = false;
 
   navItems: AdminNavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', route: '/admin/dashboard' },
-    { label: 'Series Manager', icon: 'sports_soccer', route: '/admin/series-manager' },
-    { label: 'Add Subscription', icon: 'workspace_premium', route: '/admin/add-subscription' },
-    { label: 'Pack Buyers', icon: 'payments', route: '/admin/pack-buyers' },
-    { label: 'Create Banner', icon: 'image', route: '/admin/create-banner' },
-    { label: 'Add Country', icon: 'public', route: '/admin/add-country' },
-    { label: 'Activity Dormancy', icon: 'monitoring', route: '/admin/activity-dormancy' },
+    { label: 'Dashboard', route: '/admin/dashboard', crumb: 'Overview' },
+    { label: 'User Management', route: '/admin/users', crumb: 'Users & Countries' },
+    { label: 'Countries', route: '/admin/countries', crumb: 'Users & Countries' },
+    { label: 'UCT Activity', route: '/admin/uct-activity', crumb: 'Product' },
+    { label: 'Votes & Feedback', route: '/admin/votes-feedback', crumb: 'Product' },
+    { label: 'Series Manager', route: '/admin/series-manager', crumb: 'Catalog' },
+    { label: 'Add Subscription', route: '/admin/add-subscription', crumb: 'Monetization' },
+    { label: 'Pack Buyers', route: '/admin/pack-buyers', crumb: 'Monetization' },
+    { label: 'Create Banner', route: '/admin/create-banner', crumb: 'Website' },
+    { label: 'Add Country', route: '/admin/add-country', crumb: 'Markets' },
+    { label: 'Activity Dormancy', route: '/admin/activity-dormancy', crumb: 'Reports' },
   ];
 
   constructor(
@@ -38,6 +42,10 @@ export class AdminShellComponent {
 
   get currentTitle(): string {
     return this.navItems.find(item => this.router.url.startsWith(item.route))?.label || 'Admin Panel';
+  }
+
+  get currentCrumb(): string {
+    return this.navItems.find(item => this.router.url.startsWith(item.route))?.crumb || 'Admin';
   }
 
   toggleSidebar(): void {

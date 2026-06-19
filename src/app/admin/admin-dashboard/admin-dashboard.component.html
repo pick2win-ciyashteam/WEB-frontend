@@ -1,151 +1,167 @@
-<section class="view active">
-  <div class="ph">
-    <div class="ph-title-row">
-      <span class="ph-eyebrow">Operations overview</span>
-      <h1>Admin <em>Dashboard</em></h1>
-      <p class="ph-sub">Live PICK2WIN admin reports overview.</p>
-    </div>
+<section class="dashboard-view">
+  <div class="demo-banner">
+    <span class="material-symbols-outlined" aria-hidden="true">analytics</span>
+    <span><b>Live admin dashboard.</b> Active = purchased a pack, Idle = no purchase yet, 1 coin = 1 UCT.</span>
+  </div>
 
-    <div class="ph-actions">
-      <button class="btn btn-acid" type="button" (click)="loadReports()" [disabled]="loading">
-        <span class="material-symbols-outlined" aria-hidden="true">sync</span>
-        {{ loading ? 'Loading...' : 'Refresh' }}
-      </button>
+  <div class="dash-head">
+    <div>
+      <div class="sec-title">Users &amp; engine - at a glance</div>
+      <h1>Dashboard</h1>
     </div>
+    <button class="btn" type="button" (click)="loadReports()" [disabled]="loading">
+      <span class="material-symbols-outlined" aria-hidden="true">sync</span>
+      {{ loading ? 'Loading...' : 'Refresh' }}
+    </button>
   </div>
 
   <div class="state-message loading" *ngIf="loading">Loading dashboard reports...</div>
   <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
   <div class="kpi-grid">
-    <article class="kpi accent">
-      <div class="kpi-lbl">Total Users</div>
-      <div class="kpi-val">{{ reports?.total_users?.count || 0 }}</div>
-      <div class="kpi-delta up">This week: {{ reports?.total_users?.this_week || 0 }}</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">groups</span>
+    <article class="kpi">
+      <div class="lbl">Total users</div>
+      <div class="val">{{ formatNumber(glance?.total_users) }}</div>
+      <div class="delta" [ngClass]="deltaClass(glance?.total_growth_wk)">{{ glance?.total_growth_wk || '0%' }} wk</div>
     </article>
 
-    <article class="kpi green">
-      <div class="kpi-lbl">Verified Users</div>
-      <div class="kpi-val">{{ reports?.verified?.count || 0 }}</div>
-      <div class="kpi-delta up">{{ formatPercentage(reports?.verified?.percentage) }}</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">verified_user</span>
+    <article class="kpi g">
+      <div class="lbl">Active purchased</div>
+      <div class="val">{{ formatNumber(glance?.active_purchased) }}</div>
+      <div class="delta" [ngClass]="deltaClass(glance?.active_growth_wk)">{{ glance?.active_growth_wk || '0%' }} wk</div>
     </article>
 
-    <article class="kpi amber">
-      <div class="kpi-lbl">Coin Pack Buyers</div>
-      <div class="kpi-val">{{ reports?.coin_pack_buyers?.count || 0 }}</div>
-      <div class="kpi-delta neutral">{{ formatPercentage(reports?.coin_pack_buyers?.percentage) }}</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">payments</span>
+    <article class="kpi m">
+      <div class="lbl">Idle no pack</div>
+      <div class="val">{{ formatNumber(glance?.idle_no_pack) }}</div>
+      <div class="delta flat">No purchase yet</div>
+    </article>
+
+    <article class="kpi p">
+      <div class="lbl">UCTs used today</div>
+      <div class="val">{{ formatNumber(glance?.ucts_used_today) }}</div>
+      <div class="delta flat">{{ formatNumber(glance?.users_today) }} users today</div>
+    </article>
+  </div>
+
+  <div class="sec-title">Monetization &amp; lifecycle</div>
+  <div class="kpi-grid lifecycle-grid">
+    <article class="kpi b">
+      <div class="lbl">Verified users</div>
+      <div class="val">{{ formatNumber(lifecycle?.verified_users) }}</div>
+      <div class="delta flat">Verified accounts</div>
+    </article>
+
+    <article class="kpi g">
+      <div class="lbl">Active rate</div>
+      <div class="val">{{ formatPct(lifecycle?.active_rate_pct) }}</div>
+      <div class="delta up">Pack buyer share</div>
+    </article>
+
+    <article class="kpi r">
+      <div class="lbl">Deleted accounts</div>
+      <div class="val">{{ formatNumber(lifecycle?.deleted_accounts) }}</div>
+      <div class="delta down">Closed accounts</div>
     </article>
 
     <article class="kpi">
-      <div class="kpi-lbl">Active 30D</div>
-      <div class="kpi-val">{{ reports?.active_30d?.count || 0 }}</div>
-      <div class="kpi-delta up">{{ formatPercentage(reports?.active_30d?.percentage) }}</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">trending_up</span>
-    </article>
-
-    <article class="kpi red">
-      <div class="kpi-lbl">Dormant 30D</div>
-      <div class="kpi-val">{{ reports?.dormant_30d?.count || 0 }}</div>
-      <div class="kpi-delta dn">{{ formatPercentage(reports?.dormant_30d?.percentage) }}</div>
-      <span class="material-symbols-outlined kpi-icn" aria-hidden="true">person_off</span>
+      <div class="lbl">Today total UCTs</div>
+      <div class="val">{{ formatNumber(reports?.today_match?.total_ucts_today) }}</div>
+      <div class="delta flat">{{ todayMatches.length }} matches listed</div>
     </article>
   </div>
 
-  <article class="card geography-card">
-    <div class="card-h">
-      <div>
-        <h3>Geography Reports</h3>
-        <span class="sub">Markets from backend</span>
-      </div>
-      <span class="status-pill">{{ geographyReports?.total_markets || 0 }} markets</span>
-    </div>
-    <div class="card-b">
-      <div class="geo-summary">
-        <div><span>Total users</span><b>{{ geographyReports?.totals?.total_users || 0 }}</b></div>
-        <div><span>Verified</span><b>{{ geographyReports?.totals?.verified || 0 }}</b></div>
-        <div><span>Coin buyers</span><b>{{ geographyReports?.totals?.coin_buyers || 0 }}</b></div>
-        <div><span>Active 30D</span><b>{{ geographyReports?.totals?.active_30d || 0 }}</b></div>
-        <div><span>Dormant 30D</span><b>{{ geographyReports?.totals?.dormant_30d || 0 }}</b></div>
-        <div><span>Lifetime revenue</span><b>{{ formatMoney(geographyReports?.totals?.lifetime_revenue) }}</b></div>
+  <div class="row c2">
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Top countries by users</h3>
+          <p class="ph-sub">Live country distribution</p>
+        </div>
+        <span class="tag info"><span class="dotv"></span>{{ countries.length }} markets</span>
       </div>
 
-      <div class="table-wrap">
-        <table class="geo-table">
-          <thead>
-            <tr>
-              <th>Country</th>
-              <th>Total Users</th>
-              <th>Verified</th>
-              <th>Coin Buyers</th>
-              <th>Active 30D</th>
-              <th>Dormant 30D</th>
-              <th>Lifetime Revenue</th>
-              <th>% Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let market of geographyReports?.data">
-              <td>{{ market.country }}</td>
-              <td>{{ market.total_users }}</td>
-              <td>{{ market.verified }}</td>
-              <td>{{ market.coin_buyers }}</td>
-              <td>{{ market.active_30d }}</td>
-              <td>{{ market.dormant_30d }}</td>
-              <td>{{ formatMoney(market.lifetime_revenue) }}</td>
-              <td>{{ formatPercentage(market.percentage_of_total) }}</td>
-            </tr>
-            <tr *ngIf="!loading && !geographyReports?.data?.length">
-              <td colspan="8">No geography reports found.</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="hbars" *ngIf="countries.length; else noCountries">
+        <div class="hbar" *ngFor="let country of countries">
+          <div class="hb-top">
+            <span class="hb-name">{{ country.country }}</span>
+            <span class="hb-val"><b>{{ formatNumber(country.users) }}</b> · {{ formatPct(country.pct) }}</span>
+          </div>
+          <div class="hb-track">
+            <div class="hb-fill" [style.width]="countryBarWidth(country)"></div>
+          </div>
+        </div>
       </div>
+
+      <ng-template #noCountries>
+        <div class="empty">No country data found.</div>
+      </ng-template>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Recent activity</h3>
+          <p class="ph-sub">Live event stream</p>
+        </div>
+        <span class="tag pp"><span class="dotv"></span>{{ recentActivity.length }} events</span>
+      </div>
+
+      <ul class="activity" *ngIf="recentActivity.length; else noActivity">
+        <li *ngFor="let item of recentActivity">
+          <span class="activity-ic material-symbols-outlined" aria-hidden="true">{{ activityIcon(item.type) }}</span>
+          <span class="activity-copy">
+            <b>{{ activityTitle(item) }}</b>
+            <small>{{ activityMeta(item) }}</small>
+          </span>
+          <time>{{ timeAgo(item.time_ago_sec) }}</time>
+        </li>
+      </ul>
+
+      <ng-template #noActivity>
+        <div class="empty">No recent activity found.</div>
+      </ng-template>
+    </article>
+  </div>
+
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Today's match · UCTs used</h3>
+        <p class="ph-sub">Matches currently visible to users</p>
+      </div>
+      <span class="tag ok"><span class="dotv"></span>{{ formatNumber(reports?.today_match?.total_ucts_today) }} UCTs</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Match</th>
+            <th>Series</th>
+            <th>Kickoff</th>
+            <th>Status</th>
+            <th class="num">UCTs Used</th>
+            <th class="num">Countries active</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let match of todayMatches">
+            <td>
+              <div class="cell-main">{{ match.home_team }} vs {{ match.away_team }}</div>
+              <div class="cell-sub">#{{ match.id }}</div>
+            </td>
+            <td>{{ match.series }}</td>
+            <td>{{ formatMatchTime(match.start_time) }}</td>
+            <td><span class="tag info">{{ match.status }}</span></td>
+            <td class="num">{{ formatNumber(match.ucts_used) }}</td>
+            <td class="num">{{ formatNumber(match.countries_active) }}</td>
+          </tr>
+          <tr *ngIf="!loading && !todayMatches.length">
+            <td colspan="6" class="empty">No today match data found.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </article>
-
-  <div class="two-col flip">
-    <article class="card">
-      <div class="card-h">
-        <div>
-          <h3>Quick Admin Actions</h3>
-          <span class="sub">Create records</span>
-        </div>
-      </div>
-      <div class="card-b quick-grid">
-        <a class="quick-link" routerLink="/admin/create-banner">
-          <span class="material-symbols-outlined" aria-hidden="true">image</span>
-          <b>Create Banner</b>
-          <small>Add hero or promo banner</small>
-        </a>
-        <a class="quick-link" routerLink="/admin/add-country">
-          <span class="material-symbols-outlined" aria-hidden="true">public</span>
-          <b>Add Country</b>
-          <small>Enable market and dial code</small>
-        </a>
-        <a class="quick-link" routerLink="/admin/add-subscription">
-          <span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
-          <b>Add Subscription</b>
-          <small>Create coin pack pricing</small>
-        </a>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-h">
-        <div>
-          <h3>Report Summary</h3>
-          <span class="sub">User activity</span>
-        </div>
-      </div>
-      <div class="card-b health-list">
-        <div><span>Verified percentage</span><b>{{ formatPercentage(reports?.verified?.percentage) }}</b></div>
-        <div><span>Coin buyer percentage</span><b>{{ formatPercentage(reports?.coin_pack_buyers?.percentage) }}</b></div>
-        <div><span>Active in last 30 days</span><b>{{ reports?.active_30d?.count || 0 }}</b></div>
-        <div><span>Dormant in last 30 days</span><b>{{ reports?.dormant_30d?.count || 0 }}</b></div>
-      </div>
-    </article>
-  </div>
 </section>
