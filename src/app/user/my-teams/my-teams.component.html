@@ -46,15 +46,23 @@
         <div class="mb-info">
           <div class="mb-league">{{ match.league }}</div>
           <div class="mb-teams">
-            <span class="mb-team-pill"><span class="mb-color home"></span>{{ homeName(match) }}</span>
+            <span class="mb-team-pill">
+              <span class="mb-color home"></span>
+              <span class="mb-team-code">{{ homeName(match) }}</span>
+              <span class="mb-team-full" *ngIf="homeFullName(match)">{{ homeFullName(match) }}</span>
+            </span>
             <span class="mb-vs">vs</span>
-            <span class="mb-team-pill"><span class="mb-color away"></span>{{ awayName(match) }}</span>
+            <span class="mb-team-pill">
+              <span class="mb-color away"></span>
+              <span class="mb-team-code">{{ awayName(match) }}</span>
+              <span class="mb-team-full" *ngIf="awayFullName(match)">{{ awayFullName(match) }}</span>
+            </span>
           </div>
           <div class="mb-kickoff">
             <span class="mb-rel" [class.mb-rel-past]="!canAccessTeams(match)">
               {{ canAccessTeams(match) ? match.expires : 'Match started' }}
             </span>
-            - {{ match.time }} - Generated {{ match.generatedAt }}
+            - {{ match.time }} 
           </div>
         </div>
 
@@ -95,13 +103,21 @@
           </button>
           <div class="mb-league">{{ detailMatch.league }}</div>
           <div class="mb-teams">
-            <span class="mb-team-pill"><span class="mb-color home"></span>{{ homeName(detailMatch) }}</span>
+            <span class="mb-team-pill">
+              <span class="mb-color home"></span>
+              <span class="mb-team-code">{{ homeName(detailMatch) }}</span>
+              <span class="mb-team-full" *ngIf="homeFullName(detailMatch)">{{ homeFullName(detailMatch) }}</span>
+            </span>
             <span class="mb-vs">vs</span>
-            <span class="mb-team-pill"><span class="mb-color away"></span>{{ awayName(detailMatch) }}</span>
+            <span class="mb-team-pill">
+              <span class="mb-color away"></span>
+              <span class="mb-team-code">{{ awayName(detailMatch) }}</span>
+              <span class="mb-team-full" *ngIf="awayFullName(detailMatch)">{{ awayFullName(detailMatch) }}</span>
+            </span>
           </div>
           <div class="mb-kickoff">
             <span class="mb-rel">{{ detailMatch.expires }}</span>
-            - {{ detailMatch.time }} - Generated {{ detailMatch.generatedAt }}
+            - {{ detailMatch.time }}
           </div>
         </div>
 

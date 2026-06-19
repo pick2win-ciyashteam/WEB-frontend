@@ -237,6 +237,23 @@
   min-width: 0;
 }
 
+.mb-team-code {
+  flex-shrink: 0;
+}
+
+.mb-team-full {
+  max-width: 170px;
+  overflow: hidden;
+  color: var(--paper-2);
+  font-family: var(--f-display);
+  font-size: 0.58em;
+  font-weight: 750;
+  letter-spacing: 0;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .mb-color {
   width: 10px;
   height: 10px;
