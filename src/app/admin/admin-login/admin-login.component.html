@@ -1,39 +1,68 @@
 <main class="admin-login-page">
-  <section class="admin-login-card">
-    <div class="admin-logo">
-      <img src="assets/logo.png" alt="Pick2Win">
+  <form class="login-card" [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+    <div class="login-brand">
+      <span class="dot" aria-hidden="true"></span>
+      <b>PICK2WIN<span>.io</span></b>
     </div>
 
-    <div class="admin-head">
-      <span>Admin Panel</span>
-      <h1>Sign in</h1>
-      <p>Use your admin credentials to manage matches, countries, banners, and plans.</p>
-    </div>
+    <div class="login-tag">Website Admin Console</div>
+    <h1>Sign in</h1>
+    <p class="sub">Manage the pick2win.io website - authorized administrators only.</p>
 
-    <div class="admin-alert success" *ngIf="message">{{ message }}</div>
-    <div class="admin-alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <label for="adminEmail">Email</label>
+    <input
+      class="inp"
+      id="adminEmail"
+      type="email"
+      formControlName="email"
+      placeholder="admin@pick2win.io"
+      autocomplete="username">
+    <p class="field-err" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+      Enter valid admin email.
+    </p>
 
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
-      <label>
-        <span>Email</span>
-        <input type="email" formControlName="email" placeholder="admin@pick2win.uk">
-      </label>
-      <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">Enter valid admin email.</small>
-
-      <label>
-        <span>Password</span>
-        <div class="password-row">
-          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Admin password">
-          <button type="button" (click)="showPassword = !showPassword">
-            <span class="material-symbols-outlined" aria-hidden="true">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
-          </button>
-        </div>
-      </label>
-      <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">Password is required.</small>
-
-      <button class="admin-submit" type="submit" [disabled]="loading">
-        {{ loading ? 'Signing in...' : 'Admin Sign in' }}
+    <label for="adminPass">Password</label>
+    <div class="login-password-wrap">
+      <input
+        class="inp"
+        id="adminPass"
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+        placeholder="Password"
+        autocomplete="current-password">
+      <button
+        class="pw-toggle"
+        type="button"
+        (click)="showPassword = !showPassword"
+        [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+        <span class="material-symbols-outlined" aria-hidden="true">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
       </button>
-    </form>
-  </section>
+    </div>
+    <p class="field-err" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+      Password is required.
+    </p>
+
+    <label for="admin2fa">2FA code</label>
+    <input
+      class="inp"
+      id="admin2fa"
+      inputmode="numeric"
+      maxlength="6"
+      formControlName="twoFactorCode"
+      placeholder="6-digit code"
+      autocomplete="one-time-code"
+      (input)="normalizeTwoFactor($event)">
+    <p class="field-err" *ngIf="loginForm.get('twoFactorCode')?.touched && loginForm.get('twoFactorCode')?.invalid">
+      Enter a 6-digit 2FA code.
+    </p>
+
+    <p class="login-err" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="login-ok" *ngIf="message">{{ message }}</p>
+
+    <button class="btn block" type="submit" [disabled]="loading">
+      {{ loading ? 'Signing in...' : 'Sign in ->' }}
+    </button>
+
+    <p class="login-hint">Admin console - secured admin API + real 2FA ready.</p>
+  </form>
 </main>

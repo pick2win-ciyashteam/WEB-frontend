@@ -8,8 +8,6 @@ import { AdminBannerCreatePayload, AdminCountryCreatePayload, AdminFixturesPaylo
 })
 export class AdminService {
 
-  // private BASE = 'https://pick2win-backend-website.onrender.com/api';
-
   private BASE = 'https://pick2win.io/backend/api';
 
   constructor(private http: HttpClient) { }

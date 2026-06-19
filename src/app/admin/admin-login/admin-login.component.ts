@@ -11,8 +11,9 @@ import { AdminAuthService } from 'src/app/core/services/admin-auth.service';
 export class AdminLoginComponent {
 
   loginForm = this.fb.group({
-    email: ['admin@pick2win.uk', [Validators.required, Validators.email]],
-    password: ['StrongPass123', Validators.required]
+    email: ['admin@pick2win.io', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+    twoFactorCode: ['', [Validators.pattern(/^\d{6}$/)]]
   });
 
   loading = false;
@@ -26,13 +27,24 @@ export class AdminLoginComponent {
     private router: Router
   ) { }
 
+  normalizeTwoFactor(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.replace(/\D/g, '').slice(0, 6);
+
+    if (input.value !== value) {
+      input.value = value;
+    }
+
+    this.loginForm.get('twoFactorCode')?.setValue(value, { emitEvent: false });
+  }
+
   login(): void {
     this.loginForm.markAllAsTouched();
     this.message = '';
     this.errorMessage = '';
 
     if (this.loginForm.invalid) {
-      this.errorMessage = 'Please enter valid admin email and password.';
+      this.errorMessage = 'Please enter valid admin credentials.';
       return;
     }
 
