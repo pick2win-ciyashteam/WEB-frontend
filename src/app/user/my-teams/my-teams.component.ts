@@ -58,6 +58,7 @@ interface ApiPreviewPlayer {
 interface ApiTeamsPreview {
   substitutes?: ApiPreviewPlayer[];
   mandate_yes?: ApiPreviewPlayer[];
+  mandate_no?: ApiPreviewPlayer[];
   cvc_players?: ApiPreviewPlayer[];
   captains?: ApiPreviewPlayer[];
   vice_captains?: ApiPreviewPlayer[];
@@ -65,8 +66,12 @@ interface ApiTeamsPreview {
   mandate_yes_count?: number;
   mandate_no_count?: number;
   cvc_count?: number;
+  cvc_players_count?: number;
   captain_count?: number;
+  captains_count?: number;
+  captaincy_count?: number;
   vice_captain_count?: number;
+  vice_captains_count?: number;
 }
 
 interface PreviewPlayer {
@@ -278,15 +283,30 @@ teamCodeFromTitle(title: string, side: 'home' | 'away'): string {
 }
 
 makeTeamFileName(match: any, extension = 'txt'): string {
-  const companyName = 'Pick2Win-uct';
-
-  const teamsName = (match.title || 'Teams')
-    .replace(/\s+vs\s+/gi, '-vs-')
-    .replace(/[^a-zA-Z0-9-]/g, '');
-
+  const [homeRaw, awayRaw] = String(match.title || 'TEAMA vs TEAMB').split(/\s+vs\s+/i);
+  const homeTeam = this.fileTeamSegment(homeRaw || 'TEAMA');
+  const awayTeam = this.fileTeamSegment(awayRaw || 'TEAMB');
+  const leagueName = this.fileLeagueSegment(match.league || 'League');
   const matchDate = match.startDate || new Date().toISOString().split('T')[0];
 
-  return `${companyName}-${teamsName}-${matchDate}.${extension}`;
+  return `PICK2WIN_UCT-${homeTeam}_vs_${awayTeam}-${leagueName}-${matchDate}.${extension}`;
+}
+
+private fileTeamSegment(value: string): string {
+  return String(value || 'TEAM')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .toUpperCase() || 'TEAM';
+}
+
+private fileLeagueSegment(value: string): string {
+  const compact = String(value || 'League')
+    .replace(/[^a-zA-Z0-9]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .map(part => part ? `${part.charAt(0).toUpperCase()}${part.slice(1)}` : '')
+    .join('');
+
+  return compact || 'League';
 }
 
 downloadText(content: string, fileName: string) {
@@ -728,6 +748,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     const substitutes = Array.isArray(preview.substitutes) ? preview.substitutes : [];
     const mandateYes = Array.isArray(preview.mandate_yes) ? preview.mandate_yes : [];
+    const mandateNo = Array.isArray(preview.mandate_no) ? preview.mandate_no : [];
     const cvcPlayers = Array.isArray(preview.cvc_players) ? preview.cvc_players : [];
     const captains = Array.isArray(preview.captains) ? preview.captains : [];
     const viceCaptains = Array.isArray(preview.vice_captains) ? preview.vice_captains : [];
@@ -735,27 +756,39 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     if (
       !substitutes.length &&
       !mandateYes.length &&
+      !mandateNo.length &&
       !cvcPlayers.length &&
       !captains.length &&
       !viceCaptains.length &&
       preview.substitutes_count == null &&
       preview.mandate_yes_count == null &&
+      preview.mandate_no_count == null &&
       preview.cvc_count == null &&
+      preview.cvc_players_count == null &&
       preview.captain_count == null &&
-      preview.vice_captain_count == null
+      preview.captains_count == null &&
+      preview.captaincy_count == null &&
+      preview.vice_captain_count == null &&
+      preview.vice_captains_count == null
     ) {
       return '';
     }
 
-    return [
+    const heading = [
       'Preview',
-      this.previewModeText(preview),
+      this.previewModeText(preview)
+    ].filter(Boolean).join('\r\n');
+
+    const groups = [
       this.previewGroupText('Substitutes', substitutes, preview.substitutes_count),
       this.previewGroupText('Mandate Yes', mandateYes, preview.mandate_yes_count),
-      this.previewGroupText('CVC Players', cvcPlayers, preview.cvc_count),
-      this.previewGroupText('Captains', captains, preview.captain_count),
-      this.previewGroupText('Vice Captains', viceCaptains, preview.vice_captain_count)
-    ].filter(Boolean).join('\r\n');
+      this.previewGroupText('Mandate No', mandateNo, preview.mandate_no_count),
+      this.previewGroupText('CVC Players', cvcPlayers, preview.cvc_count ?? preview.cvc_players_count),
+      this.previewGroupText('Captains', captains, preview.captain_count ?? preview.captains_count ?? captains.length),
+      this.previewGroupText('Vice Captains', viceCaptains, preview.vice_captain_count ?? preview.vice_captains_count ?? viceCaptains.length)
+    ].filter(Boolean).join('\r\n\r\n');
+
+    return [heading, groups].filter(Boolean).join('\r\n\r\n');
   }
 
   private previewModeText(preview: ApiTeamsPreview): string {
@@ -771,6 +804,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       captains.length ||
       viceCaptains.length ||
       Number(preview.captain_count || 0) > 0 ||
+      Number(preview.captaincy_count || 0) > 0 ||
       Number(preview.vice_captain_count || 0) > 0
     ) {
       return 'Mode: C & VC mode';

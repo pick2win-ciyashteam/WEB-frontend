@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentBanner = 0;
   banners: Banner[] = [];
   bannersLoading = true;
-  showSplash = true;
+  showSplash = false;
   showLaunchModal = false;
   showTodayLineupsCta = false;
   loggedIn$ = this.authService.loggedIn$;
@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private todayLineupsTimer: any;
   private splashTimer: any;
   private launchDate = new Date('2026-06-24T09:00:00Z').getTime();
+  private launchSplashStorageKey = 'pick2win_launch_splash_seen';
   private staticHomeBannerCount = 6;
 
   constructor(
@@ -62,6 +63,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateCountdown();
+    this.showSplash = this.shouldShowSplash();
     this.showLaunchModal = this.shouldShowLaunchModal();
     // Dynamic banners paused for now. Static home banners are rendered in the template.
     // this.loadBanners();
@@ -114,6 +116,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   closeSplash(): void {
     this.showSplash = false;
+    this.markSplashSeen();
     clearTimeout(this.splashTimer);
   }
 
@@ -189,5 +192,25 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private shouldShowLaunchModal(): boolean {
     return Date.now() < this.launchDate;
+  }
+
+  private shouldShowSplash(): boolean {
+    if (Date.now() >= this.launchDate) {
+      return false;
+    }
+
+    try {
+      return sessionStorage.getItem(this.launchSplashStorageKey) !== 'true';
+    } catch {
+      return true;
+    }
+  }
+
+  private markSplashSeen(): void {
+    try {
+      sessionStorage.setItem(this.launchSplashStorageKey, 'true');
+    } catch {
+      // If storage is blocked, the splash still closes for the current component instance.
+    }
   }
 }
