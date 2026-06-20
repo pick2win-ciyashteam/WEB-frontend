@@ -10,7 +10,8 @@
   </div>
 
   <div class="state-message loading" *ngIf="loading">Loading votes and feedback...</div>
-  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <!-- <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="state-message success" *ngIf="successMessage">{{ successMessage }}</div> -->
 
   <ng-container *ngIf="activeView === 'survey'">
   <div class="kpi-grid">
@@ -21,7 +22,7 @@
     </article>
     <article class="kpi g">
       <div class="lbl">Avg UCT rating</div>
-      <div class="val">{{ summary?.insight?.avg_rating || 0 }} / 5</div>
+      <div class="val">{{ summary?.kpis?.avg_uct_rating || 0 }} / 5</div>
       <div class="delta">Q11 - {{ formatNumber(totalResponses) }} rated</div>
     </article>
     <article class="kpi b">
@@ -38,10 +39,10 @@
 
   <div class="summary-strip">
     <b>{{ formatNumber(totalResponses) }} responses</b>
-    <span>+{{ formatNumber(summary?.insight?.likes_vs_last_period) }} vs last period</span>
+    <span>+{{ formatNumber(summary?.insight?.responses_vs_last_period) }} vs last period</span>
     <span>{{ summary?.kpis?.like_uct?.pct || 0 }}% Like UCT</span>
-    <span>{{ summary?.kpis?.want_changes?.pct || 0 }}% want changes</span>
-    <span>avg rating {{ summary?.insight?.avg_rating || 0 }}/5</span>
+    <span>{{ summary?.kpis?.would_recommend?.pct || 0 }}% would recommend</span>
+    <span>avg rating {{ summary?.kpis?.avg_uct_rating || 0 }}/5</span>
   </div>
 
   <div class="cards-grid">
@@ -55,7 +56,7 @@
       </div>
       <div class="feel-grid">
         <div class="donut" [style.background]="donutStyle">
-          <div><b>{{ summary?.how_users_feel?.like_uct_pct || 0 }}%</b><span>Like UCT</span></div>
+          <div><b>{{ summary?.q1_overall_feeling?.like_uct_pct || 0 }}%</b><span>Like UCT</span></div>
         </div>
         <div class="legend-list">
           <div *ngFor="let row of feelBreakdown; let i = index">
@@ -92,7 +93,7 @@
           <h3>Q11 - UCT rating</h3>
           <p class="ph-sub">1 = poor - 5 = excellent</p>
         </div>
-        <span class="pill">{{ summary?.insight?.avg_rating || 0 }} / 5 avg</span>
+        <span class="pill">{{ summary?.q11_rating?.avg_rating || 0 }} / 5 avg</span>
       </div>
       <div class="bar-list rating-list">
         <div *ngFor="let row of ratingRows; let i = index">
@@ -140,31 +141,62 @@
 
     <article class="panel">
       <div class="panel-head"><div><h3>Q6 - Competitions to add / expand</h3><p class="ph-sub">Free text - top requested</p></div></div>
-      <div class="tag-cloud"><span class="tag info" *ngFor="let tag of competitionTags">{{ tag }}</span></div>
+      <div class="tag-cloud"><span class="tag info" *ngFor="let tag of competitionTagsFromApi">{{ tag }}</span></div>
     </article>
   </div>
+
+  <article class="panel feedback-panel survey-submissions">
+    <div class="panel-head feedback-head">
+      <div>
+        <h3>Q10 - Recent submissions &amp; comments</h3>
+        <p class="ph-sub">{{ feedback.length }} of {{ formatNumber(list?.pagination?.total) }} recent submissions shown</p>
+      </div>
+      <div class="filters">
+        <button *ngFor="let option of voteOptions" type="button" [class.active]="selectedVote === option.value" (click)="setVote(option.value)">{{ option.label }}</button>
+        <button class="lk" type="button" (click)="downloadCsv()">CSV</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="admin-table survey-table">
+        <thead><tr><th>User</th><th>Country</th><th>Q1 · UCT</th><th>Q11 · Rating</th><th>Q3 · Uses</th><th>Q9</th><th>Q10 · Comment</th><th class="num">Date</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let item of feedback">
+            <td class="cell-main">{{ item.fullname }}<small>{{ item.feedback_code }}</small></td>
+            <td>{{ item.region || '-' }}</td>
+            <td><span class="tag" [ngClass]="voteClass(item.vote)">{{ item.vote_label }}</span></td>
+            <td class="stars">{{ stars(item.rating) }}</td>
+            <td>{{ humanize( item.usage_frequency) }}</td>
+            <td>{{ humanize(item.device) }}</td>
+            <td class="comment">{{ item.comment || '-' }}</td>
+            <td class="num mono">{{ dateOnly(item.date) }}</td>
+          </tr>
+          <tr *ngIf="!feedback.length"><td colspan="8" class="empty-row">No vote submissions found.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
   </ng-container>
 
   <ng-container *ngIf="activeView === 'feedback'">
   <div class="kpi-grid">
     <article class="kpi y">
       <div class="lbl">Total submissions</div>
-      <div class="val">14</div>
+      <div class="val">{{ formatNumber(detailedSummary?.kpis?.total_submissions) }}</div>
       <div class="delta">free-form feedback</div>
     </article>
     <article class="kpi b">
       <div class="lbl">New - unreviewed</div>
-      <div class="val">4</div>
+      <div class="val">{{ formatNumber(detailedSummary?.kpis?.new_unreviewed) }}</div>
       <div class="delta">awaiting triage</div>
     </article>
     <article class="kpi r">
       <div class="lbl">Blockers</div>
-      <div class="val">3</div>
+      <div class="val">{{ formatNumber(detailedSummary?.kpis?.blockers) }}</div>
       <div class="delta">stopping users · act first</div>
     </article>
     <article class="kpi g">
       <div class="lbl">Resolved</div>
-      <div class="val">2</div>
+      <div class="val">{{ formatNumber(detailedSummary?.kpis?.resolved) }}</div>
       <div class="delta">closed out</div>
     </article>
   </div>
@@ -234,7 +266,7 @@
             <td><span class="tag" [ngClass]="item.importance === 'Stopping me using it' ? 'bad' : item.importance === 'Would really help' ? 'warn' : 'info'">{{ item.importance }}</span></td>
             <td>{{ item.where }}</td>
             <td class="cell-main">{{ item.user }}<small>{{ item.email }}</small></td>
-            <td><span class="select-pill">{{ item.status }}</span></td>
+            <td><select class="select-pill" [value]="apiStatus(item.status)" [disabled]="updatingDetailedId === item.id" (change)="updateDetailedStatus(item, $event)"><option value="New">New</option><option value="Reviewing">Reviewing</option><option value="Planned">Planned</option><option value="Resolved">Resolved</option><option value="Declined">Declined</option></select></td>
             <td class="num mono">{{ dateOnly(item.date) }}</td>
           </tr>
           <tr *ngIf="!filteredDetailedItems.length">
@@ -246,3 +278,7 @@
   </article>
   </ng-container>
 </section>
+
+<div class="toast" *ngIf="toastMessage" [class.error]="toastType === 'error'" role="status">
+  <span>{{ toastType === 'success' ? '✓' : '!' }}</span>{{ toastMessage }}
+</div>

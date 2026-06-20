@@ -1,0 +1,16 @@
+:host { display:block; }
+.packs-view > .panel:nth-of-type(1), .packs-view > .panel:nth-of-type(2) { border-color:rgba(141,160,181,.30); box-shadow:0 18px 42px -34px #000; }
+.packs-view > .panel:nth-of-type(1) .head, .packs-view > .panel:nth-of-type(2) .head { align-items:flex-start; }
+.packs-view > .panel:nth-of-type(1) .controls button { min-height:34px; padding:0 15px; font-family:"JetBrains Mono",monospace; font-size:11px; }
+.packs-view > .panel:nth-of-type(1) .hero { min-height:68px; margin-top:8px; background:linear-gradient(105deg,rgba(244,180,0,.10),rgba(11,60,93,.16)); border-color:rgba(244,180,0,.20); }
+.packs-view > .panel:nth-of-type(1) tfoot td { border-top:2px solid rgba(141,160,181,.32); color:#fff; font-weight:900; }
+.country-actions { padding:7px 10px; border:1px solid rgba(141,160,181,.3); border-radius:13px; background:#071b2b; }
+.country-actions label { display:grid; gap:4px; color:#85a9c8; text-transform:uppercase; }
+.country-actions select { min-width:180px; border:0 !important; background:transparent !important; color:#fff !important; font:700 12px "JetBrains Mono",monospace; }
+.country-actions select option { color:#fff; background:#092237; font:700 12px "JetBrains Mono",monospace; }
+.country-actions select option:checked { color:#051a2a; background:#f4b400; }
+.packs-view > .panel:nth-of-type(2) tbody td:first-child { color:#fff; font-weight:900; }
+.packs-view > .panel:nth-of-type(2) tbody td { font:700 12px "JetBrains Mono",monospace; }
+.packs-view > .panel:nth-of-type(2) .total { color:#f4b400; }
+@media (max-width:760px) { .country-actions { width:100%; box-sizing:border-box; justify-content:space-between; } .country-actions select { min-width:0; max-width:210px; } }
+.toast { position:fixed; z-index:150; bottom:24px; left:50%; display:flex; align-items:center; gap:9px; max-width:min(520px,calc(100vw - 32px)); padding:12px 18px; border:1px solid #0bcc8e; border-radius:999px; color:#fff; background:#0b3c5d; box-shadow:0 16px 40px -16px #000; font-size:13px; font-weight:700; transform:translateX(-50%); }.toast span { display:grid; width:18px; height:18px; place-items:center; border-radius:50%; color:#051a2a; background:#0bcc8e; }.toast.error { border-color:#ff6b5b; background:#351820; }.toast.error span { color:#fff; background:#ff6b5b; }

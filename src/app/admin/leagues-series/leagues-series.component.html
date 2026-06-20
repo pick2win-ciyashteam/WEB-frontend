@@ -1,0 +1,54 @@
+<section class="leagues-view">
+  <div class="demo-banner">🏆 PICK2WIN operating view — every league in the website catalog. Use the form below to add a league or competition.</div>
+  <div class="state-message loading" *ngIf="loading">Loading leagues and series catalog...</div>
+  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="state-message ok" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="kpi-grid">
+    <article class="kpi g"><div class="lbl">Leagues on website</div><div class="val">{{ formatNumber(shownOnWebsite) }} <span>/ {{ formatNumber(totalLeagues) }}</span></div><div class="delta">enabled in catalog</div></article>
+    <article class="kpi b"><div class="lbl">Total leagues</div><div class="val">{{ formatNumber(totalLeagues) }}</div><div class="delta">all competitions in catalog</div></article>
+    <article class="kpi r"><div class="lbl">Hidden leagues</div><div class="val">{{ formatNumber(hiddenLeagues) }}</div><div class="delta">not shown on website</div></article>
+    <article class="kpi p"><div class="lbl">Matches · last 30 days</div><div class="val">{{ formatNumber(matches30d) }}</div><div class="delta">across all leagues</div></article>
+  </div>
+  <article class="panel series-panel">
+    <div class="panel-head"><div><h3>Series — live, upcoming &amp; complete history</h3><p class="ph-sub">{{ seriesReport?.series_list?.completed_count || 0 }} completed · {{ seriesReport?.series_list?.live_count || 0 }} live · {{ seriesReport?.series_list?.upcoming_count || 0 }} upcoming — {{ formatNumber(seriesReport?.series_list?.ucts_across_completed || 0) }} UCTs across completed series</p></div><div class="series-actions"><button class="lk" type="button" (click)="downloadSeriesCsv()" [disabled]="!series.length">⇩ CSV</button><a class="btn manager-link" routerLink="/admin/series-manager">Manage series &amp; matches</a></div></div>
+    <div class="filters"><button class="chip-f" [class.active]="seriesStatus === 'all'" type="button" (click)="loadSeries('all')">All <span>{{ seriesCounts.all }}</span></button><button class="chip-f" [class.active]="seriesStatus === 'live'" type="button" (click)="loadSeries('live')">Live <span>{{ seriesCounts.live }}</span></button><button class="chip-f" [class.active]="seriesStatus === 'upcoming'" type="button" (click)="loadSeries('upcoming')">Upcoming <span>{{ seriesCounts.upcoming }}</span></button><button class="chip-f" [class.active]="seriesStatus === 'completed'" type="button" (click)="loadSeries('completed')">Completed <span>{{ seriesCounts.completed }}</span></button></div>
+    <div class="table-wrap"><table><thead><tr><th>Series</th><th>League</th><th>Window</th><th class="num">Matches</th><th class="num">Participants</th><th class="num">UCTs used</th><th>Status</th></tr></thead><tbody><tr *ngFor="let item of series"><td><div class="cell-main">{{ item.name }}</div><div class="cell-sub">{{ item.series_code }}</div></td><td>{{ item.league || '-' }}</td><td class="cell-sub">{{ seriesWindow(item) }}</td><td class="num">{{ formatNumber(item.matches) }}</td><td class="num">{{ formatNumber(item.participants) }}</td><td class="num uct">{{ formatNumber(item.ucts_used) }}</td><td><span class="tag">{{ item.status }}</span></td></tr><tr *ngIf="seriesLoading"><td colspan="7" class="empty">Loading series...</td></tr><tr *ngIf="!seriesLoading && !series.length"><td colspan="7" class="empty">No series in this view.</td></tr></tbody></table></div>
+  </article>
+  <article class="panel">
+    <div class="panel-head"><div><h3>Leagues catalog</h3><p class="ph-sub">{{ formatNumber(totalLeagues) }} leagues / competitions · {{ formatNumber(shownOnWebsite) }} visible on the website</p></div><button class="lk" type="button" (click)="downloadCsv()" [disabled]="!leagues.length">⇩ CSV</button></div>
+    <div class="table-wrap"><table><thead><tr><th>League / competition</th><th>Region</th><th class="num">Tier</th><th class="num">Matches / 30d</th><th>Shown on website</th><th>Created</th><th></th></tr></thead><tbody>
+      <tr *ngFor="let league of leagues"><td><div class="cell-main">{{ league.name }}</div><div class="cell-sub">{{ league.league_code }}</div></td><td>{{ league.region }}</td><td class="num"><span class="tag" [class.warn]="league.tier === 'Tier 1'" [class.mut]="league.tier !== 'Tier 1'">{{ league.tier }}</span></td><td class="num">{{ formatNumber(league.matches_30d) }}</td><td><button class="visibility" [class.on]="league.is_visible" type="button" [disabled]="saving" (click)="toggleVisibility(league)" [attr.aria-label]="league.is_visible ? 'Hide from website' : 'Show on website'"></button><span class="visibility-label">{{ league.is_visible ? 'Shown' : 'Hidden' }}</span></td><td class="cell-sub">{{ league.created_at | date:'dd MMM yyyy' }}</td><td><span class="t-actions"><button class="lk" type="button" (click)="editLeague(league)">Edit</button><button class="lk danger-link" type="button" (click)="openDeleteConfirm(league)">Delete</button></span></td></tr>
+      <tr *ngIf="!loading && !leagues.length"><td colspan="7" class="empty">No leagues yet — add one below.</td></tr>
+    </tbody></table></div>
+  </article>
+  <article class="panel"><div class="panel-head"><h3>Add league / competition</h3></div><div class="form-grid">
+    <label>Name<input class="inp" [(ngModel)]="newLeague.name" placeholder="e.g. Indian Super League"></label><label>Region / country<input class="inp" [(ngModel)]="newLeague.region" placeholder="e.g. India"></label><label>Tier<select class="inp" [(ngModel)]="newLeague.tier"><option>Tier 1</option><option>Tier 2</option><option>Tier 3</option></select></label><label>Matches / 30d<input class="inp" [(ngModel)]="newLeague.matches_30d" type="number" min="0" placeholder="e.g. 20"></label>
+  </div><div class="modal-actions"><button class="btn" type="button" (click)="createLeague()" [disabled]="saving">{{ saving ? 'Adding league...' : '+ Add league' }}</button></div></article>
+</section>
+
+<div class="modal" *ngIf="editingLeague as league">
+  <div class="modal-box">
+    <button class="mx" type="button" (click)="closeModal()" [disabled]="saving">×</button>
+    <h3>Edit league / competition</h3>
+    <div class="form-grid">
+      <label>Name<input class="inp" [(ngModel)]="league.name"></label>
+      <label>Region / country<input class="inp" [(ngModel)]="league.region"></label>
+      <label>Tier<select class="inp" [(ngModel)]="league.tier"><option>Tier 1</option><option>Tier 2</option><option>Tier 3</option></select></label>
+      <label>Matches / 30d<input class="inp" [(ngModel)]="league.matches_30d" type="number" min="0"></label>
+    </div>
+    <div class="modal-actions"><button class="btn" type="button" (click)="saveLeague()" [disabled]="saving">{{ saving ? 'Saving...' : 'Save changes' }}</button><button class="btn ghost" type="button" (click)="closeModal()" [disabled]="saving">Cancel</button></div>
+  </div>
+</div>
+
+<div class="modal" *ngIf="confirmDeleteLeague as league">
+  <div class="modal-box confirm-box">
+    <button class="mx" type="button" (click)="closeModal()" [disabled]="saving">×</button>
+    <h3>Delete league</h3>
+    <p>Delete <b>{{ league.name }}</b> from the catalog? It will no longer load on the website.</p>
+    <div class="modal-actions"><button class="btn danger" type="button" (click)="deleteLeague()" [disabled]="saving">{{ saving ? 'Deleting...' : 'Delete league' }}</button><button class="btn ghost" type="button" (click)="closeModal()" [disabled]="saving">Cancel</button></div>
+  </div>
+</div>
+
+<div class="toast" *ngIf="toastMessage" [class.error]="toastType === 'error'" role="status">
+  <span>{{ toastType === 'success' ? '✓' : '!' }}</span>{{ toastMessage }}
+</div>

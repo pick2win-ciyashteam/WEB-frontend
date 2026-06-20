@@ -60,8 +60,8 @@
           </td>
           <td>{{ getLeagueName(item) }}</td>
           <td>{{ getMatchId(item) || '-' }}</td>
-          <td>{{ getMatchName(item) }}</td>
-          <td>{{ getMatchDate(item) | date:'dd-MMM-yyyy, h:mm a' }}</td>
+          <td class="match-highlight">{{ getMatchName(item) }}</td>
+          <td class="date-highlight">{{ getMatchDate(item) | date:'dd-MMM-yyyy, h:mm a' }}</td>
           <td>{{ getTeams(item) }}</td>
           <td>{{ item.match_status || item.status || '-' }}</td>
           <td>{{ getVenue(item) }}</td>

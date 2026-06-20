@@ -24,6 +24,8 @@ export class AdminShellComponent {
     { label: 'UCT Activity', route: '/admin/uct-activity', crumb: 'Product' },
     { label: 'Votes & Feedback', route: '/admin/votes-feedback', crumb: 'Product' },
     { label: 'Series Manager', route: '/admin/series-manager', crumb: 'Catalog' },
+    { label: 'Leagues / Series', route: '/admin/leagues-series', crumb: 'Catalog' },
+    { label: 'Coin Packs', route: '/admin/coin-packs', crumb: 'Monetization' },
     { label: 'Add Subscription', route: '/admin/add-subscription', crumb: 'Monetization' },
     { label: 'Pack Buyers', route: '/admin/pack-buyers', crumb: 'Monetization' },
     { label: 'Create Banner', route: '/admin/create-banner', crumb: 'Website' },

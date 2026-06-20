@@ -46,12 +46,24 @@ export class AdminAuthService {
   }
 
   logout(): void {
-    this.tokenService.clearAdmin();
-    this.loggedInSubject.next(false);
-    this.router.navigate(['/admin/login']);
+    this.adminService.logout().subscribe({
+      error: (error) => console.log('Admin logout API error:', error)
+    });
+    this.clearAdminSession();
   }
 
   isLoggedIn(): boolean {
     return !!this.tokenService.getAdminToken();
+  }
+
+  private clearAdminSession(): void {
+    this.tokenService.clearAdmin();
+    this.tokenService.clear();
+    localStorage.removeItem('user');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('pick2win_user');
+    sessionStorage.clear();
+    this.loggedInSubject.next(false);
+    this.router.navigate(['/admin/login'], { replaceUrl: true });
   }
 }

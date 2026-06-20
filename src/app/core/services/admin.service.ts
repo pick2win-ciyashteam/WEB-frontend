@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLoginPayload, AdminMatchTogglePayload, AdminSubscriptionCreatePayload, AdminUsersQuery } from '../interfaces/admin';
+import { AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLeagueCreatePayload, AdminLoginPayload, AdminMatchTogglePayload, AdminSubscriptionCreatePayload, AdminUsersQuery } from '../interfaces/admin';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,10 @@ export class AdminService {
 
   login(data: AdminLoginPayload): Observable<any> {
     return this.http.post(`${this.BASE}/admin/admin-auth/login`, data);
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/admin-auth/logout`, {});
   }
 
   getFixtures(data: AdminFixturesPayload): Observable<any> {
@@ -52,6 +56,32 @@ export class AdminService {
     return this.http.get(`${this.BASE}/admin/reports/countries`);
   }
 
+  getAdminReportsLeagues(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/leagues`);
+  }
+
+  getAdminReportsSeries(status: 'all' | 'live' | 'upcoming' | 'completed' = 'all'): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/series`, {
+      params: this.cleanParams({ status })
+    });
+  }
+
+  createAdminLeague(data: AdminLeagueCreatePayload): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/reports/leagues`, data);
+  }
+
+  updateAdminLeague(id: number | string, data: Partial<AdminLeagueCreatePayload>): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/reports/leagues/${id}`, data);
+  }
+
+  toggleAdminLeagueVisibility(id: number | string): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/reports/leagues/${id}/toggle-visibility`, {});
+  }
+
+  deleteAdminLeague(id: number | string): Observable<any> {
+    return this.http.delete(`${this.BASE}/admin/reports/leagues/${id}`);
+  }
+
   getAdminReportsUctOverview(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/reports/uct-overview`);
   }
@@ -76,6 +106,28 @@ export class AdminService {
     return this.http.get(`${this.BASE}/admin/reports/votes-list`, {
       params: this.cleanParams({ page: 1, limit: 20, ...params })
     });
+  }
+
+  getAdminReportsDetailedSummary(): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/detailed-summary`);
+  }
+
+  getAdminReportsCoinPacks(params: { period?: 'today' | 'monthly' | 'yearly'; month?: number; year?: number } = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/coin-packs`, { params: this.cleanParams({ period: 'today', ...params }) });
+  }
+
+  getAdminReportsCountrywiseCoin(params: { country?: string; period?: 'today' | 'monthly' | 'yearly'; month?: number; year?: number } = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/countrywise-coin`, { params: this.cleanParams({ period: 'today', ...params }) });
+  }
+
+  getAdminReportsDetailedList(params: { status?: string; page?: number; limit?: number } = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/detailed-list`, {
+      params: this.cleanParams({ page: 1, limit: 20, ...params })
+    });
+  }
+
+  updateAdminDetailedFeedback(id: number | string, status: string): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/reports/detailed/${id}/status`, { status });
   }
 
   createBanner(data: AdminBannerCreatePayload): Observable<any> {

@@ -17,6 +17,8 @@ import { SeriesManagerComponent } from './series-manager/series-manager.componen
 import { UctActivityComponent } from './uct-activity/uct-activity.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.component';
+import { LeaguesSeriesComponent } from './leagues-series/leagues-series.component';
+import { CoinPacksComponent } from './coin-packs/coin-packs.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.componen
     SeriesManagerComponent,
     UctActivityComponent,
     UserManagementComponent,
-    VotesFeedbackComponent
+    VotesFeedbackComponent,
+    LeaguesSeriesComponent,
+    CoinPacksComponent
   ],
   imports: [
     CommonModule,

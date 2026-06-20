@@ -18,6 +18,7 @@
 .votes-view {
   display: grid;
   gap: 18px;
+  min-width: 0;
   color: var(--paper);
 }
 
@@ -174,6 +175,7 @@
 }
 
 .panel {
+  min-width: 0;
   padding: 22px 24px;
 }
 
@@ -333,13 +335,28 @@
 }
 
 .table-wrap {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .admin-table {
   width: 100%;
-  min-width: 920px;
+  min-width: 820px;
   border-collapse: collapse;
+}
+
+.survey-submissions {
+  grid-column: 1 / -1;
+}
+
+.survey-table {
+  min-width: 1060px;
+}
+
+.select-pill {
+  max-width: 130px;
 }
 
 .admin-table th,
@@ -473,6 +490,45 @@
   background: rgba(11, 204, 142, 0.08);
 }
 
+.state-message.success {
+  color: var(--green);
+  border-color: rgba(11, 204, 142, 0.38);
+  background: rgba(11, 204, 142, 0.08);
+}
+
+.toast {
+  position: fixed;
+  z-index: 150;
+  bottom: 24px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: min(520px, calc(100vw - 32px));
+  padding: 12px 18px;
+  border: 1px solid var(--green);
+  border-radius: 999px;
+  color: var(--paper);
+  background: #0b3c5d;
+  box-shadow: 0 16px 40px -16px #000;
+  font-size: 13px;
+  font-weight: 700;
+  transform: translateX(-50%);
+}
+
+.toast span {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 50%;
+  color: #051a2a;
+  background: var(--green);
+}
+
+.toast.error { border-color: var(--red); background: #351820; }
+.toast.error span { color: #fff; background: var(--red); }
+
 @media (max-width: 1180px) {
   .kpi-grid,
   .cards-grid,
@@ -513,5 +569,14 @@
 
   .val {
     font-size: 28px;
+  }
+
+  .survey-table {
+    min-width: 860px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 11px 9px;
   }
 }

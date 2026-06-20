@@ -61,6 +61,35 @@ export interface AdminCountryCreatePayload {
   is_active: number;
 }
 
+export interface AdminLeagueCreatePayload {
+  name: string;
+  region: string;
+  tier: string;
+  matches_30d: number;
+}
+
+export interface AdminLeague {
+  id: number;
+  league_code: string;
+  name: string;
+  region: string;
+  tier: string;
+  matches_30d: number;
+  is_visible: boolean;
+  created_at: string;
+}
+
+export interface AdminLeaguesReports {
+  success: boolean;
+  kpis: {
+    total_leagues: number;
+    shown_on_website: number;
+    hidden: number;
+    matches_30d: number;
+  };
+  leagues: AdminLeague[];
+}
+
 export interface AdminCountry {
   id: number;
   name: string;
@@ -439,6 +468,7 @@ export interface AdminVotesSummaryReports {
   success: boolean;
   kpis: {
     feedback_responses: number;
+usage_frequency: string|null|undefined;
     like_uct: AdminVotesCountPct;
     want_changes: AdminVotesCountPct;
     dislike: AdminVotesCountPct;
@@ -475,6 +505,8 @@ export interface AdminVotesFeedbackItem {
   vote: 'like_uct' | 'want_changes' | 'dislike' | string;
   vote_label: string;
   rating: number;
+  usage_frequency?: string;
+  device?: string;
   comment: string;
   date: string;
 }

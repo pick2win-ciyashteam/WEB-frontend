@@ -70,6 +70,17 @@ td:nth-child(3) {
   font-weight: 800;
 }
 
+.match-highlight {
+  color: rgb(243, 112, 18) !important;
+  font-weight: 900;
+}
+
+.date-highlight {
+  color: rgb(99, 230, 235) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 800;
+}
+
 tr:last-child td {
   border-bottom: 0;
 }

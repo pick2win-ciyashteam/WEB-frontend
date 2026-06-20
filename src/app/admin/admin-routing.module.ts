@@ -11,6 +11,8 @@ import { CountriesComponent } from './countries/countries.component';
 import { CreateBannerComponent } from './create-banner/create-banner.component';
 import { PackBuyersComponent } from './pack-buyers/pack-buyers.component';
 import { SeriesManagerComponent } from './series-manager/series-manager.component';
+import { LeaguesSeriesComponent } from './leagues-series/leagues-series.component';
+import { CoinPacksComponent } from './coin-packs/coin-packs.component';
 import { UctActivityComponent } from './uct-activity/uct-activity.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.component';
@@ -73,6 +75,14 @@ const routes: Routes = [
       {
         path: 'series-manager',
         component: SeriesManagerComponent
+      },
+      {
+        path: 'leagues-series',
+        component: LeaguesSeriesComponent
+      },
+      {
+        path: 'coin-packs',
+        component: CoinPacksComponent
       }
     ]
   }
