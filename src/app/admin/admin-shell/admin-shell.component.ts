@@ -26,6 +26,7 @@ export class AdminShellComponent {
     { label: 'Series Manager', route: '/admin/series-manager', crumb: 'Catalog' },
     { label: 'Leagues / Series', route: '/admin/leagues-series', crumb: 'Catalog' },
     { label: 'Coin Packs', route: '/admin/coin-packs', crumb: 'Monetization' },
+    { label: 'Admins & Team', route: '/admin/admins-team', crumb: 'Administration' },
     { label: 'Add Subscription', route: '/admin/add-subscription', crumb: 'Monetization' },
     { label: 'Pack Buyers', route: '/admin/pack-buyers', crumb: 'Monetization' },
     { label: 'Create Banner', route: '/admin/create-banner', crumb: 'Website' },
@@ -56,6 +57,10 @@ export class AdminShellComponent {
 
   closeSidebar(): void {
     this.sidebarOpen = false;
+  }
+
+  searchUsers(search: string): void {
+    this.router.navigate(['/admin/users'], { queryParams: { search: search || null } });
   }
 
   logout(): void {

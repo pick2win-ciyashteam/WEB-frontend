@@ -19,6 +19,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.component';
 import { LeaguesSeriesComponent } from './leagues-series/leagues-series.component';
 import { CoinPacksComponent } from './coin-packs/coin-packs.component';
+import { AdminsTeamComponent } from './admins-team/admins-team.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { CoinPacksComponent } from './coin-packs/coin-packs.component';
     UserManagementComponent,
     VotesFeedbackComponent,
     LeaguesSeriesComponent,
-    CoinPacksComponent
+    CoinPacksComponent,
+    AdminsTeamComponent
   ],
   imports: [
     CommonModule,

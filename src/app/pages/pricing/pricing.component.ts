@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
 
 interface PricingPack {
+  id: number;
   name: string;
   subtitle: string;
   coins: number;
@@ -18,6 +19,10 @@ interface PricingPack {
   offerPrice: string;
   perCoin: string;
   saveText: string;
+  currencySymbol: string;
+  offerLabel: string;
+  discountText: string;
+  offerActive: boolean;
   tone: string;
   bestValue?: boolean;
 }
@@ -39,53 +44,7 @@ export class PricingComponent implements OnInit, OnDestroy {
   plans: SubscriptionPlan[] = [];
   generatedStateLoaded = false;
   hasGeneratedAnyUct = false;
-  pricingPacks: PricingPack[] = [
-    {
-      name: 'Starter Pack',
-      subtitle: 'First time / Casual',
-      coins: 5,
-      matches: 5,
-      regularPrice: '15.00',
-      offerPrice: '10.50',
-      perCoin: '2.10',
-      saveText: '',
-      tone: 'pk-green'
-    },
-    {
-      name: 'Basic Pack',
-      subtitle: 'Regular weekly user',
-      coins: 10,
-      matches: 10,
-      regularPrice: '27.50',
-      offerPrice: '19.25',
-      perCoin: '1.93',
-      saveText: 'save 8%',
-      tone: 'pk-blue'
-    },
-    {
-      name: 'Standard Pack',
-      subtitle: 'Multi-league active user',
-      coins: 25,
-      matches: 25,
-      regularPrice: '62.50',
-      offerPrice: '43.75',
-      perCoin: '1.75',
-      saveText: 'save 17%',
-      tone: 'pk-purple'
-    },
-    {
-      name: 'Pro Pack',
-      subtitle: 'Heavy season-long user',
-      coins: 50,
-      matches: 50,
-      regularPrice: '112.50',
-      offerPrice: '78.75',
-      perCoin: '1.58',
-      saveText: 'save 25%',
-      tone: 'pk-orange',
-      bestValue: true
-    }
-  ];
+  pricingPacks: PricingPack[] = [];
   private stripePublishableKey = '';
 
   stripe: any;
@@ -123,6 +82,7 @@ paymentSucceeded = false;
 
         if (res?.success && Array.isArray(res.data) && res.data.length) {
           this.plans = [...res.data].sort((a, b) => a.sort_order - b.sort_order);
+          this.pricingPacks = this.plans.map((plan, index) => this.toPricingPack(plan, index));
         } else {
           this.errorMessage = 'No subscription plans available.';
         }
@@ -178,6 +138,15 @@ paymentSucceeded = false;
       return;
     }
 
+    this.buyPlan(plan);
+  }
+
+  buyPricingPack(pack: PricingPack): void {
+    const plan = this.plans.find(item => item.id === pack.id);
+    if (!plan) {
+      this.paymentError = 'This coin pack is not available from backend yet. Please try again later.';
+      return;
+    }
     this.buyPlan(plan);
   }
 
@@ -393,6 +362,41 @@ closeCheckout(): void {
     }
 
     return Number(plan.price_per_coin) === Math.min(...prices);
+  }
+
+  private toPricingPack(plan: SubscriptionPlan, index: number): PricingPack {
+    const regular = Number(plan.regular_price ?? plan.price ?? 0);
+    const configuredOffer = Number(plan.offer_price ?? plan.price ?? 0);
+    const offerActive = Number(plan.is_offer_active ?? 0) === 1;
+    const offer = offerActive && configuredOffer > 0 ? configuredOffer : regular;
+    const discount = regular > 0 && offer < regular ? Math.round(((regular - offer) / regular) * 100) : 0;
+    const perCoin = Number(plan.coins) > 0 ? offer / Number(plan.coins) : 0;
+    const allOfferPrices = this.plans
+      .map(item => {
+        const itemRegular = Number(item.regular_price ?? item.price ?? 0);
+        const itemOffer = Number(item.offer_price ?? item.price ?? 0);
+        const active = Number(item.is_offer_active ?? 0) === 1;
+        return Number(item.coins) > 0 ? (active && itemOffer > 0 ? itemOffer : itemRegular) / Number(item.coins) : 0;
+      })
+      .filter(value => value > 0);
+
+    return {
+      id: plan.id,
+      name: plan.name,
+      subtitle: plan.subtitle,
+      coins: Number(plan.coins),
+      matches: Number(plan.matches || plan.coins),
+      regularPrice: regular.toFixed(2),
+      offerPrice: offer.toFixed(2),
+      perCoin: perCoin.toFixed(2),
+      saveText: discount ? `save ${discount}%` : '',
+      discountText: `${discount}% OFF`,
+      offerLabel: plan.offer_label || 'Offer price',
+      offerActive,
+      currencySymbol: plan.currency_symbol || '$',
+      tone: this.packTone(index),
+      bestValue: perCoin > 0 && perCoin === Math.min(...allOfferPrices)
+    };
   }
 
   private handleStripeReturn(): void {

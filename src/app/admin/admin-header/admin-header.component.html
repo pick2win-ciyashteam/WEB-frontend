@@ -10,7 +10,7 @@
 
   <div class="search">
     <span class="si" aria-hidden="true">🔎</span>
-    <input type="search" placeholder="Search users, emails...">
+    <input type="search" placeholder="Search users, emails, mobile..." (keyup.enter)="searchUsers($event)">
   </div>
 
   <div class="tb-right">
@@ -24,10 +24,10 @@
     </div>
 
     <div class="admin-chip" title="Manage admins">
-      <div class="av">LN</div>
+      <div class="av">{{ initials }}</div>
       <div class="ac-txt">
-        <b>Lakshmi Narayana P</b>
-        <small>admin@pick2win.io</small>
+        <b>{{ profile.name || 'Administrator' }}</b>
+        <small>{{ profile.email || 'Loading profile...' }}</small>
       </div>
     </div>
     <button class="btn ghost sm logout" type="button" (click)="logoutClicked.emit()">

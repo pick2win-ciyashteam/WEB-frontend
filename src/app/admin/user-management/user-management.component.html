@@ -68,7 +68,8 @@
             <th>Packs purchased</th>
             <th class="num">Coins</th>
             <th>Joined</th>
-            <th>Status</th>
+            <th>Account status</th>
+            <th>Pack status</th>
             <th></th>
           </tr>
         </thead>
@@ -80,8 +81,8 @@
             </td>
             <td><div class="cell-main country">{{ user.country || '-' }}</div></td>
             <td>
-              <div class="packchips" *ngIf="user.packs_purchased?.length; else noPack">
-                <span class="pchip" *ngFor="let pack of user.packs_purchased">
+              <div class="packchips" *ngIf="user.current_pack; else noPack">
+                <span class="pchip" *ngFor="let pack of user.current_pack">
                   <span aria-hidden="true">{{ packIcon(pack) }}</span>
                   {{ pack }}
                 </span>
@@ -91,12 +92,13 @@
             <td class="num mono">{{ user.coins || 0 }}</td>
             <td class="mono">{{ dateOnly(user.joined) }}</td>
             <td><span class="tag" [ngClass]="statusClass(user.status)"><span class="dotv"></span>{{ titleCase(user.status) }}</span></td>
+            <td><span class="tag" [ngClass]="statusClass(user.pack_status)"><span class="dotv"></span>{{ titleCase(user.pack_status) }}</span></td>
             <td class="t-actions">
               <button class="lk" type="button" (click)="openUser(user)">View</button>
             </td>
           </tr>
           <tr *ngIf="!loading && !users.length">
-            <td colspan="7" class="empty">No users match this filter.</td>
+            <td colspan="8" class="empty">No users match this filter.</td>
           </tr>
         </tbody>
       </table>
@@ -238,7 +240,8 @@
 
       <div class="modal-actions">
         <button class="btn sm" type="button" (click)="startEdit(user)" [disabled]="user.status === 'deleted'">Edit</button>
-        <button class="btn danger sm" type="button" (click)="suspendUser(user)" *ngIf="user.status !== 'deleted' && user.status !== 'suspended'">Suspend</button>
+        <button class="btn danger sm" type="button" (click)="suspendUser(user)" *ngIf="user.status !== 'deleted' && user.status !== 'suspended' && user.status !== 'blocked'">Suspend</button>
+        <button class="btn sm" type="button" (click)="restoreUser(user)" *ngIf="user.status === 'blocked' || user.status === 'suspended'">Activate</button>
         <button class="btn ghost sm" type="button" (click)="closeModal()">Close</button>
       </div>
     </ng-container>

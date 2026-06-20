@@ -28,7 +28,7 @@ export class AdminSidebarComponent {
     { label: 'Profit', icon: '📈', group: 'Finance' },
     { label: 'Payments', icon: '💳', route: '/admin/pack-buyers', group: 'Finance' },
     { label: 'Leagues / Series', icon: '🏆', route: '/admin/leagues-series', group: 'Catalog' },
-    { label: 'Admins & Team', icon: '🔐', group: 'Administration' },
+    { label: 'Admins & Team', icon: '🔐', route: '/admin/admins-team', group: 'Administration' },
     { label: 'Activity Log', icon: '📝', route: '/admin/activity-dormancy', group: 'Administration' },
     { label: 'System & Integrations', icon: '🛠️', group: 'System' }
   ];

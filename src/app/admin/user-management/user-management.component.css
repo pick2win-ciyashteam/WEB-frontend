@@ -607,6 +607,23 @@ tr:last-child td {
   justify-content: flex-end;
 }
 
+.users-panel td.t-actions {
+  display: table-cell;
+  min-width: 68px;
+  padding-right: 16px;
+  text-align: right;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.users-panel td.t-actions .lk {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+}
+
 .users-panel .pchip {
   display: inline-flex;
   align-items: center;

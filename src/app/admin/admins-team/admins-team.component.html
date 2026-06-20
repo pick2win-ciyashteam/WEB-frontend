@@ -1,0 +1,89 @@
+<section class="team-view">
+    <article class="panel">
+        <div class="head">
+            <div>
+                <h2>Primary administrator</h2>
+                <p>Super Admin — full access to every section</p>
+            </div>
+            <span class="super">● Super Admin</span>
+        </div>
+        <div class="grid">
+            <label>Full name<input [(ngModel)]="primary.name"></label>
+            <label>Email<input [(ngModel)]="primary.email" type="email"></label>
+            <label>Mobile<input [(ngModel)]="primary.mobile"></label>
+            <label>Two-factor authentication<span class="toggle-row">Require 2FA at login 
+                <button type="button" class="toggle" [class.on]="primary.twoFactor" (click)="toggle2Fa()"></button></span></label>
+            </div>
+            <button class="gold" (click)="savePrimary()">Save details</button>
+        </article>
+        <article class="panel"><div class="head"><div><h2>Login credentials</h2><p>Change the super-admin password and 2FA code used to sign in.</p></div><span class="locked">🔒 Super Admin only</span></div><div class="grid credentials"><label>Current password<input [(ngModel)]="credentials.current" type="password"></label><span></span><label>New password<input [(ngModel)]="credentials.password" type="password" placeholder="min 8 characters"></label><label>Confirm new password<input [(ngModel)]="credentials.confirm" type="password" placeholder="re-type new password"></label><label>New 2FA code (6 digits)<input [(ngModel)]="credentials.code" maxlength="6" placeholder="e.g. 482913"></label></div><button class="gold" (click)="updateCredentials()">Update login credentials</button><small class="note">⚠ Prototype UI — credentials will be verified server-side once APIs are connected.</small></article><article class="panel"><div class="head"><div>
+            <h2>Sub-admins</h2>
+            <p>{{ admins.length }} of 3 sub-admins added</p>
+        </div>
+        <button class="link">⇩ CSV</button>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Role / access</th>
+                    <th>Login</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let admin of admins">
+                    <td><b>{{ admin.name }}</b><small>{{ admin.id }}</small></td>
+                    <td>{{ admin.email }}</td>
+                    <td>{{ admin.mobile }}</td>
+                    <td><span class="tag">{{ admin.role }}</span><span class="tag muted">🔒 {{ admin.access }}</span></td>
+                    <td><button class="toggle" [class.on]="admin.enabled" (click)="admin.enabled=!admin.enabled"></button></td>
+                    <td>{{ admin.status }}</td>
+                    <td><button class="edit" (click)="openEditAdmin(admin)">Edit</button> | <button class="remove" (click)="removeTarget=admin">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</article><article class="panel">
+    <div class="head">
+        <div>
+            
+            <h2>Add sub-admin</h2>
+            <p>Assign a role and access level. Editors can make changes; read-only members can only view.</p>
+        </div>
+        <span class="locked">{{ 3 - admins.length }} slot{{ 3 - admins.length === 1 ? '' : 's' }} remaining</span>
+    </div>
+    <div class="grid">
+        <label>Full name<input [(ngModel)]="newAdmin.name" placeholder="e.g. Priya Verma"></label>
+        <label>Email<input [(ngModel)]="newAdmin.email" type="email" placeholder="name@pick2win.io"></label>
+        <label>Mobile<input [(ngModel)]="newAdmin.mobile" placeholder="+91 ..."></label>
+        <label>Role
+            <select [(ngModel)]="newAdmin.role">
+            <option>Finance</option><option>Operations</option>
+            <option>Support</option>
+            <option>Marketing</option>
+        </select>
+    </label>
+    <label>Access level
+        <select [(ngModel)]="newAdmin.access">
+            <option>Editor (can make changes)</option>
+            <option>Read-only</option>
+        </select>
+    </label>
+</div>
+<button class="gold" (click)="addAdmin()">+ Add sub-admin</button>
+</article>
+</section>
+<div class="modal" *ngIf="removeTarget"><div>
+    <h3>Remove sub-admin?</h3>
+    <p>Remove <b>{{ removeTarget.name }}</b> from the team?</p>
+    <button class="ghost" (click)="removeTarget=null">Cancel</button>
+    <button class="danger" (click)="removeAdmin()">Remove</button>
+</div>
+</div>
+<div class="toast" *ngIf="toast" [class.error]="toastError"><span>{{ toastError ? '!' : '✓' }}</span>{{ toast }}</div>
+<div class="modal" *ngIf="editingAdmin as admin"><div class="edit-admin-modal"><h3>Edit sub-admin</h3><div class="grid"><label>Full name<input [(ngModel)]="admin.name"></label><label>Email<input [(ngModel)]="admin.email" type="email"></label><label>Mobile<input [(ngModel)]="admin.mobile"></label><label>New password<input [(ngModel)]="admin.password" type="password" placeholder="Leave blank to keep current password"></label><label>Role<select [(ngModel)]="admin.role"><option value="finance">Finance</option><option value="operations">Operations</option><option value="support">Support</option><option value="marketing">Marketing</option></select></label><label>Access level<select [(ngModel)]="admin.access_level"><option value="editor">Editor (can make changes)</option><option value="read_only">Read-only</option></select></label><label>Status<select [(ngModel)]="admin.status"><option value="active">Active</option><option value="inactive">Blocked</option></select></label></div><button class="ghost" (click)="editingAdmin=null">Cancel</button><button class="gold" (click)="saveEditedAdmin()">Save changes</button></div></div>

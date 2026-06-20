@@ -56,24 +56,24 @@
           <span class="credit-pack-cred-label">coins</span>
         </div>
         <p class="credit-pack-matches"><b>{{ pack.matches }} matches</b> of UCT workflow</p>
-        <div class="credit-pack-regular">
+        <div class="credit-pack-regular" *ngIf="pack.offerActive && pack.regularPrice !== pack.offerPrice">
           <span class="cpr-label">Regular price</span>
-          <s>${{ pack.regularPrice }}</s>
+          <s>{{ pack.currencySymbol }}{{ pack.regularPrice }}</s>
         </div>
-        <div class="credit-pack-offer-label">FIFA WC offer price</div>
+        <div class="credit-pack-offer-label">{{ pack.offerActive ? pack.offerLabel : 'Price' }}</div>
         <div class="credit-pack-price">
-          <span class="credit-pack-cur">$</span>
+          <span class="credit-pack-cur">{{ pack.currencySymbol }}</span>
           <span class="credit-pack-amount">{{ pack.offerPrice }}</span>
         </div>
         <div class="credit-pack-per">
-          &asymp; <b>${{ pack.perCoin }}</b> per coin
+          &asymp; <b>{{ pack.currencySymbol }}{{ pack.perCoin }}</b> per coin
           <span class="cp-save" *ngIf="pack.saveText">- {{ pack.saveText }}</span>
         </div>
-        <span class="credit-pack-disc">
+        <span class="credit-pack-disc" *ngIf="pack.offerActive && pack.discountText !== '0% OFF'">
           <span class="material-symbols-outlined" aria-hidden="true">celebration</span>
-          30% OFF
+          {{ pack.discountText }}
         </span>
-        <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyStaticPack(pack.coins)">
+        <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPricingPack(pack)">
           {{ purchasingPlanId ? 'Opening Stripe...' : 'Buy ' + pack.coins + ' Coins' }}
           <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
         </button>

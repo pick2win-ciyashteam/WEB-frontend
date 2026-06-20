@@ -8,6 +8,7 @@
       [title]="currentTitle"
       [crumb]="currentCrumb"
       (menuClicked)="toggleSidebar()"
+      (userSearch)="searchUsers($event)"
       (logoutClicked)="logout()">
     </app-admin-header>
 

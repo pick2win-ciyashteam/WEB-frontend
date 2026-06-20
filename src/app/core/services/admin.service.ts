@@ -20,6 +20,20 @@ export class AdminService {
     return this.http.post(`${this.BASE}/admin/admin-auth/logout`, {});
   }
 
+  createAdmin(data: { name: string; email: string; mobile: string; password: string; role: string; access_level: string }): Observable<any> { return this.http.post(`${this.BASE}/admin/admin-auth/create-admin`, data); }
+
+  getAdmins(params: { page?: number; limit?: number } = {}): Observable<any> { return this.http.get(`${this.BASE}/admin/admin-auth/get-admins`, { params: this.cleanParams({ page: 1, limit: 20, ...params }) }); }
+  getAdminProfile(): Observable<any> { return this.http.get(`${this.BASE}/admin/admin-auth/profile`); }
+
+  updateAdmin(id: number | string, data: Record<string, unknown>): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-admin/${id}`, data); }
+
+  updateAdminProfile(data: { name: string; mobile: string }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-profile`, data); }
+  updateAdminCredentials(data: { currentPassword: string; newPassword: string; confirmPassword: string; new2FACode: string }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-credentials`, data); }
+
+  toggleAdmin2Fa(enabled: boolean): Observable<any> { return this.http.post(`${this.BASE}/admin/admin-auth/toggle-2fa`, { enabled }); }
+  
+  removeAdmin(id: number | string): Observable<any> { return this.http.delete(`${this.BASE}/admin/admin-auth/remove-admin/${id}`); }
+
   getFixtures(data: AdminFixturesPayload): Observable<any> {
     return this.http.post(`${this.BASE}/admin/sportmonks/fixtures`, data);
   }
@@ -196,6 +210,10 @@ export class AdminService {
 
   restoreAdminUser(id: number | string): Observable<any> {
     return this.http.patch(`${this.BASE}/admin/users/${id}/restore`, {});
+  }
+
+  updateAdminUserAccountStatus(id: number | string, accountStatus: 'active' | 'blocked'): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/reports/users/${id}/account-status`, { account_status: accountStatus });
   }
 
   deleteAdminUser(id: number | string): Observable<any> {

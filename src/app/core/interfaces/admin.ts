@@ -137,6 +137,11 @@ export interface AdminSubscriptionCreatePayload {
   is_popular: number;
   is_pro: number;
   sort_order: number;
+  is_active?: number;
+  regular_price?: number;
+  offer_price?: number;
+  offer_label?: string;
+  is_offer_active?: number;
 }
 
 export interface AdminSubscription extends AdminSubscriptionCreatePayload {
@@ -265,6 +270,8 @@ export interface AdminUsersFilters {
 }
 
 export interface AdminUserReportItem {
+current_pack: any;
+pack_status: string;
   id: number;
   user_code: string;
   fullname: string;

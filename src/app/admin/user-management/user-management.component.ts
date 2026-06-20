@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { AdminCoinExpiryReports, AdminCoinExpiryUser, AdminCoinExpiryWindow, AdminCountry, AdminUserReportItem, AdminUsersReports } from 'src/app/core/interfaces/admin';
 import { AdminService } from 'src/app/core/services/admin.service';
@@ -45,12 +46,16 @@ export class UserManagementComponent implements OnInit {
     { label: 'Expired', value: 'expired' }
   ];
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.loadCountries();
-    this.loadUsers();
     this.loadCoinExpiry();
+    this.route.queryParams.subscribe(params => {
+      this.search = String(params['search'] || '');
+      this.page = 1;
+      this.loadUsers();
+    });
   }
 
   get users(): AdminUserReportItem[] {
@@ -85,7 +90,21 @@ export class UserManagementComponent implements OnInit {
       status: this.status
     }).subscribe({
       next: (res) => {
-        this.reports = res?.data || res || null;
+        const reports = res?.data || res || null;
+        if (Array.isArray(reports?.users)) {
+          reports.users = reports.users.map((user: any) => {
+            const rawPack = user.current_pack ?? user.packs_purchased;
+            const packs = Array.isArray(rawPack) ? rawPack : (rawPack && rawPack !== 'No pack' ? [rawPack] : []);
+            return {
+              ...user,
+              current_pack: packs,
+              packs_purchased: packs,
+              status: user.account_status || user.status || 'active',
+              pack_status: user.pack_status || (packs.length ? 'active' : 'idle')
+            };
+          });
+        }
+        this.reports = reports;
         this.loading = false;
       },
       error: (err) => {
@@ -202,12 +221,12 @@ export class UserManagementComponent implements OnInit {
       message: `Suspend ${user.fullname}? This will block their account access until restored.`,
       confirmText: 'Suspend',
       danger: true,
-      action: () => this.runAction(this.adminService.suspendAdminUser(user.id), 'User suspended successfully.')
+      action: () => this.runAction(this.adminService.updateAdminUserAccountStatus(user.id, 'blocked'), 'User account blocked successfully.')
     });
   }
 
   restoreUser(user: AdminUserReportItem): void {
-    this.runAction(this.adminService.restoreAdminUser(user.id), 'User restored successfully.');
+    this.runAction(this.adminService.updateAdminUserAccountStatus(user.id, 'active'), 'User account activated successfully.');
   }
 
   deleteUser(user: AdminUserReportItem): void {
@@ -328,6 +347,7 @@ export class UserManagementComponent implements OnInit {
     if (status === 'idle') return 'warn';
     if (status === 'deleted') return 'bad';
     if (status === 'suspended') return 'bad';
+    if (status === 'blocked') return 'bad';
     return 'mut';
   }
 

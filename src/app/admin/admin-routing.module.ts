@@ -13,6 +13,7 @@ import { PackBuyersComponent } from './pack-buyers/pack-buyers.component';
 import { SeriesManagerComponent } from './series-manager/series-manager.component';
 import { LeaguesSeriesComponent } from './leagues-series/leagues-series.component';
 import { CoinPacksComponent } from './coin-packs/coin-packs.component';
+import { AdminsTeamComponent } from './admins-team/admins-team.component';
 import { UctActivityComponent } from './uct-activity/uct-activity.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.component';
@@ -83,6 +84,10 @@ const routes: Routes = [
       {
         path: 'coin-packs',
         component: CoinPacksComponent
+      },
+      {
+        path: 'admins-team',
+        component: AdminsTeamComponent
       }
     ]
   }

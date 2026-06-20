@@ -33,6 +33,11 @@ export interface SubscriptionPlan {
   is_popular: number;
   is_pro: number;
   sort_order: number;
+  regular_price?: string | number;
+  offer_price?: string | number;
+  discount_pct?: string | number | null;
+  offer_label?: string;
+  is_offer_active?: number | boolean;
 }
 
 export interface CheckoutSessionPayload {
