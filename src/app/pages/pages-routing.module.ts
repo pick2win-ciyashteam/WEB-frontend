@@ -10,6 +10,7 @@ import { FaqComponent } from './faq/faq.component';
 import { TermsComponent } from './terms/terms.component';
 import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
+import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component';
 import { AllSeriesCoverComponent } from '../lineouts/all-series-cover/all-series-cover.component';
 import { createUctGuard, preventPendingUctGenerationGuard } from '../core/guards/create-uct.guard';
@@ -69,9 +70,13 @@ const routes: Routes = [
     component: PolicyComponent
   },
 
-   {
+  {
     path: 'refund',
     component: RefundComponent
+  },
+  {
+    path: 'cookie-policy',
+    component: CookiePolicyComponent
   },
 
   

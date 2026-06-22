@@ -1,4 +1,4 @@
-<div class="myteams-view" *ngIf="!selectedMatch; else matchDetail">
+<div class="myteams-view">
   <section class="myteams-toolbar reveal">
     <div class="myteams-toolbar-info">
       <h4 class="myteams-toolbar-title">My Generated Teams</h4>
@@ -73,13 +73,17 @@
             TXT
           </button>
           <span class="mb-expired-pill" *ngIf="!canAccessTeams(match)">Teams expired</span>
-          <span class="mb-chev" *ngIf="canAccessTeams(match)">v</span>
+          <span class="mb-chev material-symbols-outlined" *ngIf="canAccessTeams(match)">{{ selectedMatch?.id === match.id ? 'expand_less' : 'expand_more' }}</span>
         </div>
       </div>
 
       <div class="mb-expired-note" *ngIf="!canAccessTeams(match)">
         Teams are no longer available after kickoff. Your downloaded TXT is the only copy.
       </div>
+
+      <ng-container *ngIf="selectedMatch?.id === match.id">
+        <ng-container *ngTemplateOutlet="teamsDetail; context: { $implicit: match }"></ng-container>
+      </ng-container>
     </article>
   </div>
 
@@ -92,15 +96,11 @@
   </ng-template>
 </div>
 
-<ng-template #matchDetail>
+<ng-template #teamsDetail let-detailMatch>
   <div class="myteams-view">
-    <section class="match-batch open" *ngIf="selectedMatch as detailMatch">
+    <section class="match-batch open" style="display:none">
       <div class="mb-h">
         <div class="mb-info">
-          <button class="mt-back-btn" type="button" (click)="backToMatches()">
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-            Back to matches
-          </button>
           <div class="mb-league">{{ detailMatch.league }}</div>
           <div class="mb-teams">
             <span class="mb-team-pill">

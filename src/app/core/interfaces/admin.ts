@@ -63,8 +63,12 @@ export interface AdminCountryCreatePayload {
 
 export interface AdminLeagueCreatePayload {
   name: string;
+  short_name: string;
   region: string;
   tier: string;
+  from_month_year: string;
+  to_month_year: string;
+  description: string;
   matches_30d: number;
 }
 
@@ -72,8 +76,12 @@ export interface AdminLeague {
   id: number;
   league_code: string;
   name: string;
+  short_name?: string;
   region: string;
   tier: string;
+  from_month_year?: string;
+  to_month_year?: string;
+  description?: string;
   matches_30d: number;
   is_visible: boolean;
   created_at: string;
@@ -667,3 +675,6 @@ export interface AdminExpenseRole { id?: number; role_id?: number; name: string;
 export interface AdminExpenseCategory { id: number; name: string; frequency: string; frequency_months?: number | null; is_auto: boolean; has_roles: boolean; amount_inr: number; fy_total_inr: number; roles?: AdminExpenseRole[]; share_pct?: number; fy_total_usd?: string; }
 export interface AdminExpensesMonthReport { kpis: { expenses_month_inr: number; expenses_fy_inr: number; expense_ratio_pct: number; largest_cost_fy: { name: string; amount_inr: number } }; month_label: string; fy_label: string; month_total_inr: number; fy_total_inr: number; categories: AdminExpenseCategory[]; }
 export interface AdminExpensesFyReport { fy_label: string; total_inr: number; total_usd: string; categories: AdminExpenseCategory[]; }
+
+export interface AdminProfitMonth { month_label: string; month: number; year: number; is_current: boolean; revenue_usd: string; revenue_inr: string; expenses_usd: string; expenses_inr: string; profit_usd: string; profit_inr: string; margin_pct: number; is_loss: boolean; }
+export interface AdminProfitReports { kpis: { revenue_fy_usd: string; revenue_fy_inr: string; expenses_fy_usd: string; expenses_fy_inr: string; profit_fy_usd: string; profit_fy_inr: string; }; fy_start: string; fy_end: string; months: AdminProfitMonth[]; totals: Omit<AdminProfitMonth, 'month_label' | 'month' | 'year' | 'is_current'>; }

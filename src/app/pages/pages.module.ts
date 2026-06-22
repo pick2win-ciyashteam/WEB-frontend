@@ -12,6 +12,7 @@ import { SeriesComponent } from './series/series.component';
 import { TermsComponent } from './terms/terms.component';
 import { PolicyComponent } from './policy/policy.component';
 import { RefundComponent } from './refund/refund.component';
+import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 import { SharedModule } from '../shared/shared.module';
 import { LineoutsModule } from '../lineouts/lineouts.module';
 
@@ -27,7 +28,8 @@ import { LineoutsModule } from '../lineouts/lineouts.module';
     SeriesComponent,
     TermsComponent,
     PolicyComponent,
-    RefundComponent
+    RefundComponent,
+    CookiePolicyComponent
   ],
   imports: [
     CommonModule,

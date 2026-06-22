@@ -4,10 +4,11 @@ import { AdminService } from 'src/app/core/services/admin.service';
 
 @Component({ selector: 'app-revenue', templateUrl: './revenue.component.html', styleUrls: ['./revenue.component.css'] })
 export class RevenueComponent implements OnInit {
-  loading = false; errorMessage = ''; tab: AdminRevenueTab = 'today'; month = new Date().getMonth() + 1; year = new Date().getFullYear(); reports: AdminRevenueReports | null = null;
+  loading = false; errorMessage = ''; currencyRate = 0; tab: AdminRevenueTab = 'today'; month = new Date().getMonth() + 1; year = new Date().getFullYear(); reports: AdminRevenueReports | null = null;
   readonly months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   constructor(private adminService: AdminService) { }
-  ngOnInit(): void { this.loadRevenue(); }
+  ngOnInit(): void { this.loadRevenue(); this.loadCurrencyRate(); }
+  private loadCurrencyRate(): void { this.adminService.getAdminProfile().subscribe({ next: response => { this.currencyRate = Number((response?.data || response || {}).currency || 0); }, error: () => { this.currencyRate = 0; } }); }
   loadRevenue(): void {
     this.loading = true; this.errorMessage = '';
     const params: { tab: AdminRevenueTab; month?: number; year?: number } = { tab: this.tab };
@@ -25,6 +26,7 @@ export class RevenueComponent implements OnInit {
   share(pack: AdminRevenuePack): string { const total = this.total(); return total ? `${((Number(pack.revenue_usd || 0) / total) * 100).toFixed(1)}%` : '0.0%'; }
   /** Keeps the exact amount returned by the backend; do not round or compact revenue. */
   money(value: string | number): string { return `$${String(value ?? '0.00')}`; }
+  inr(value: string | number): string { return this.currencyRate ? `₹${(Number(value || 0) * this.currencyRate).toLocaleString('en-IN', { maximumFractionDigits: 0 })}` : '—'; }
   packIcon(index: number): string { return ['🎯', '⭐', '🚀', '👑', '💎'][index % 5]; }
-  exportCsv(): void { const rows = [['Coin Pack', 'Coins', 'Revenue (USD)', 'Share'], ...this.packs.map(pack => [pack.name, pack.coins, pack.revenue_usd, this.share(pack)]), ['All packs', '', this.reports?.by_pack?.total_usd || '0.00', '100%']]; const csv = rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n'); const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' })); link.download = `pick2win-revenue-${this.tab}-${new Date().toISOString().slice(0, 10)}.csv`; link.click(); URL.revokeObjectURL(link.href); }
+  exportCsv(): void { const rows = [['Coin Pack', 'Coins', 'Revenue (USD)', 'Revenue (INR)', 'Share'], ...this.packs.map(pack => [pack.name, pack.coins, pack.revenue_usd, this.inr(pack.revenue_usd), this.share(pack)]), ['All packs', '', this.reports?.by_pack?.total_usd || '0.00', this.inr(this.reports?.by_pack?.total_usd || '0.00'), '100%']]; const csv = rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n'); const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' })); link.download = `pick2win-revenue-${this.tab}-${new Date().toISOString().slice(0, 10)}.csv`; link.click(); URL.revokeObjectURL(link.href); }
 }

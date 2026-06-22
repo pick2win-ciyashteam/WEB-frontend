@@ -11,14 +11,13 @@
     <div class="demo-head">
       <div class="demo-eyebrow">TROPHY ALL SERIES - 3 PRIORITY TIERS</div>
       <h1 class="demo-title">Every series we cover.</h1>
-      <p class="demo-sub">
-        Every football competition supported at launch - listed by priority tier with full series name,
-        season window, and match volume. All thirty series are included in every coin pack. Pricing differs
-        on volume of coins, never on coverage.
-      </p>
+      <p class="demo-sub">Every supported competition is loaded from the live PICK2WIN catalog and listed by priority tier with its season window and match volume. All {{ total }} leagues are included in every coin pack.</p>
     </div>
 
-    <ng-container *ngFor="let tier of tiers; trackBy: trackTier">
+    <div class="demo-sub" *ngIf="loading">Loading supported leagues...</div>
+    <div class="demo-sub" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
+
+    <ng-container *ngIf="!loading && !errorMessage"><ng-container *ngFor="let tier of tiers; trackBy: trackTier">
       <div class="tier-band reveal">
         <span class="tier-pill" [ngClass]="tier.key">{{ tier.label }}</span>
         <h2>{{ tier.title }}</h2>
@@ -33,13 +32,13 @@
             <h3>{{ series.name }}</h3>
             <div class="tile-meta">
               <span>CAL <b>{{ series.season }}</b></span>
-              <span>BALL <b>{{ series.matches }}</b> - per season</span>
+              <span>BALL <b>{{ series.matches }}</b> - last 30 days</span>
             </div>
           </div>
           <div class="tile-note">{{ series.note }}</div>
         </article>
       </div>
-    </ng-container>
+    </ng-container></ng-container>
 
     <div class="series-note reveal">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

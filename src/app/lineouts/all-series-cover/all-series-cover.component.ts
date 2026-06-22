@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/core/services/api.service';
 
 interface CoveredSeries {
+  id?: number;
   flag: string;
   region: string;
   name: string;
@@ -22,10 +24,13 @@ interface CoverageTier {
   templateUrl: './all-series-cover.component.html',
   styleUrls: ['./all-series-cover.component.css']
 })
-export class AllSeriesCoverComponent {
+export class AllSeriesCoverComponent implements OnInit {
   @Input() embedded = false;
+  loading = true;
+  errorMessage = '';
+  total = 0;
 
-  readonly tiers: CoverageTier[] = [
+  tiers: CoverageTier[] = [
     {
       key: 't1',
       label: 'Tier 01 - Absolute Core',
@@ -82,11 +87,40 @@ export class AllSeriesCoverComponent {
     }
   ];
 
+  constructor(private api: ApiService) { }
+
+  ngOnInit(): void {
+    this.api.getSeriesLeagues().subscribe({
+      next: response => {
+        const leagues = Array.isArray(response?.leagues) ? response.leagues : (Array.isArray(response?.data?.leagues) ? response.data.leagues : []);
+        this.total = Number(response?.total ?? response?.data?.total ?? leagues.length);
+        this.tiers = this.groupByTier(leagues);
+        this.loading = false;
+      },
+      error: () => { this.tiers = []; this.loading = false; this.errorMessage = 'Unable to load supported leagues right now.'; }
+    });
+  }
+
   trackTier(_: number, tier: CoverageTier): string {
     return tier.key;
   }
 
-  trackSeries(_: number, series: CoveredSeries): string {
-    return series.name;
+  trackSeries(_: number, series: CoveredSeries): string | number {
+    return series.id || series.name;
+  }
+
+  private groupByTier(leagues: any[]): CoverageTier[] {
+    const specs: Record<string, Omit<CoverageTier, 'series'>> = {
+      'Tier 1': { key: 't1', label: 'Tier 01 - Absolute Core', title: 'Mandatory - highest UCT & fantasy value', meta: '' },
+      'Tier 2': { key: 't2', label: 'Tier 02 - High Value', title: 'Strong regional and cup competition coverage', meta: '' },
+      'Tier 3': { key: 't3', label: 'Tier 03 - Established', title: 'Smaller markets and specialist competitions', meta: '' }
+    };
+    return Object.entries(specs).map(([tier, spec]) => {
+      const series = leagues.filter(item => String(item?.tier || '') === tier).map(item => ({
+        id: Number(item?.id || 0), flag: String(item?.short_name || item?.region || '—'), region: String(item?.region || '—'), name: String(item?.name || 'Unnamed league'),
+        season: [item?.from_month_year, item?.to_month_year].filter(Boolean).join(' → ') || '—', matches: `${Number(item?.matches_30d || 0)} matches`, note: String(item?.description || '')
+      }));
+      return { ...spec, meta: `${series.length} league${series.length === 1 ? '' : 's'} - live catalog`, series };
+    }).filter(tier => tier.series.length);
   }
 }

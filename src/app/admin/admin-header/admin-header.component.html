@@ -14,13 +14,13 @@
   </div>
 
   <div class="tb-right">
-    <div class="fx-chip" title="Latest USD to INR. Edit to set the live rate.">
+    <div class="fx-chip" [title]="currencyError || 'Latest USD to INR. Edit to set the live rate.'">
       <span class="fx-ic" aria-hidden="true">💱</span>
       <span class="fx-l">USD→INR</span>
       <span class="fx-eq">₹</span>
-      <input class="fx-in mono" type="number" step="0.01" min="0" value="95.36" (blur)="formatFxInput($event)">
+      <input class="fx-in mono" type="number" step="0.01" min="0" [(ngModel)]="currency" [disabled]="savingCurrency" (blur)="saveCurrency()" aria-label="USD to INR currency rate">
       <span class="fx-div"></span>
-      <span class="fx-note mono">as of 9 Jun 2026</span>
+      <span class="fx-note mono">{{ savingCurrency ? 'saving...' : 'live rate' }}</span>
     </div>
 
     <div class="admin-chip" title="Manage admins">

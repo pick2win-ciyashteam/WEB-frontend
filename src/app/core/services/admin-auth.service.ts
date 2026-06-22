@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { AdminService } from './admin.service';
 import { TokenService } from './token.service';
 
@@ -56,7 +56,19 @@ export class AdminAuthService {
     return !!this.tokenService.getAdminToken();
   }
 
-  private clearAdminSession(): void {
+  /** Confirms a locally stored token is still a valid admin session on the server. */
+  validateSession(): Observable<boolean> {
+    if (!this.isLoggedIn()) {
+      return of(false);
+    }
+
+    return this.adminService.getAdminProfile().pipe(
+      map(response => response?.success !== false),
+      catchError(() => of(false))
+    );
+  }
+
+  clearAdminSession(redirect = true): void {
     this.tokenService.clearAdmin();
     this.tokenService.clear();
     localStorage.removeItem('user');
@@ -64,6 +76,8 @@ export class AdminAuthService {
     localStorage.removeItem('pick2win_user');
     sessionStorage.clear();
     this.loggedInSubject.next(false);
-    this.router.navigate(['/admin/login'], { replaceUrl: true });
+    if (redirect) {
+      this.router.navigate(['/admin/login'], { replaceUrl: true });
+    }
   }
 }

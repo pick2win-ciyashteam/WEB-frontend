@@ -1,0 +1,7 @@
+<app-header></app-header>
+<main class="pol-page cookie-page"><div class="pol-container">
+  <div class="cookie-brand"><span aria-hidden="true">▤</span> <b>PICK2WIN</b> <em>POLICIES</em></div>
+  <nav class="pol-tabbar" aria-label="PICK2WIN policy pages"><a class="pol-tab" routerLink="/terms">Terms &amp; Conditions</a><a class="pol-tab" routerLink="/policy">Privacy Policy</a><a class="pol-tab" routerLink="/refund">Refund Policy</a><a class="pol-tab active" routerLink="/cookie-policy">Cookie Policy</a></nav>
+  <article class="pol-panel active"><h1 class="pol-doc-title">Cookie Policy</h1><p class="pol-doc-meta">Last updated 24 June 2026 · PICK2WIN Technologies Private Limited</p><section class="pol-section" *ngFor="let section of sections; let i = index"><h2><span class="sec-num">{{ i + 1 }}</span>{{ section.title }}</h2><p *ngFor="let paragraph of section.paragraphs" [innerHTML]="paragraph"></p><ul class="pol-list" *ngIf="section.items?.length"><li *ngFor="let item of section.items">{{ item }}</li></ul></section></article>
+</div></main>
+<app-footer></app-footer>

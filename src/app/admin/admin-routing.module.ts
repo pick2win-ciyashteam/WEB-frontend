@@ -20,6 +20,8 @@ import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.componen
 import { ActivityLogsComponent } from './activity-logs/activity-logs.component';
 import { RevenueComponent } from './revenue/revenue.component';
 import { ExpensesComponent } from './expenses/expenses.component';
+import { ProfitComponent } from './profit/profit.component';
+import { PaymentsComponent } from './payments/payments.component';
 
 const routes: Routes = [
   {
@@ -34,6 +36,7 @@ const routes: Routes = [
   {
     path: '',
     canActivate: [adminAuthGuard],
+    canActivateChild: [adminAuthGuard],
     component: AdminShellComponent,
     children: [
       {
@@ -103,6 +106,14 @@ const routes: Routes = [
       {
         path: 'expenses',
         component: ExpensesComponent
+      },
+      {
+        path: 'profit',
+        component: ProfitComponent
+      },
+      {
+        path: 'payments',
+        component: PaymentsComponent
       }
     ]
   }

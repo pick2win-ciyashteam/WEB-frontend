@@ -42,6 +42,7 @@ export class LeaguesSeriesComponent implements OnInit {
         const data = response?.data || response;
         this.reports = data || null;
         this.leagues = Array.isArray(data?.leagues) ? data.leagues : [];
+        this.loadPublicLeagueDetails();
         this.loading = false;
       },
       error: (error) => {
@@ -50,6 +51,24 @@ export class LeaguesSeriesComponent implements OnInit {
         this.loading = false;
         this.showError(error?.error?.message || error?.error?.error || 'Unable to load leagues.');
       }
+    });
+  }
+
+  private loadPublicLeagueDetails(): void {
+    this.adminService.getUserSeriesLeagues().subscribe({
+      next: response => {
+        const data = response?.data || response;
+        const publicLeagues = Array.isArray(data) ? data : (Array.isArray(data?.leagues) ? data.leagues : []);
+        if (!publicLeagues.length) return;
+
+        this.leagues = this.leagues.map(league => {
+          const matched = publicLeagues.find((item: any) => Number(item?.id) === Number(league.id)
+            || String(item?.league_code || item?.code || '') === String(league.league_code || '')
+            || String(item?.name || '').toLowerCase() === String(league.name || '').toLowerCase());
+          return matched ? { ...league, ...matched } : league;
+        });
+      },
+      error: () => { /* Admin catalog remains available if the public leagues feed is unavailable. */ }
     });
   }
 
@@ -80,7 +99,7 @@ export class LeaguesSeriesComponent implements OnInit {
   createLeague(): void {
     this.errorMessage = '';
     this.successMessage = '';
-    const payload = { name: this.newLeague.name.trim(), region: this.newLeague.region.trim(), tier: this.newLeague.tier, matches_30d: Number(this.newLeague.matches_30d || 0) };
+    const payload = this.leaguePayload(this.newLeague);
     if (!payload.name || !payload.region || !payload.tier) {
       this.showError('Name, region, and tier are required.');
       return;
@@ -112,12 +131,7 @@ export class LeaguesSeriesComponent implements OnInit {
       return;
     }
 
-    const payload = {
-      name: this.editingLeague.name.trim(),
-      region: this.editingLeague.region.trim(),
-      tier: this.editingLeague.tier,
-      matches_30d: Number(this.editingLeague.matches_30d || 0)
-    };
+    const payload = this.leaguePayload(this.editingLeague);
 
     if (!payload.name || !payload.region || !payload.tier) {
       this.showError('Name, region, and tier are required.');
@@ -198,7 +212,7 @@ export class LeaguesSeriesComponent implements OnInit {
   }
 
   downloadCsv(): void {
-    const rows = [['ID', 'League / competition', 'Region', 'Tier', 'Matches (30d)', 'Shown on website'], ...this.leagues.map(item => [item.league_code, item.name, item.region, item.tier, String(item.matches_30d ?? 0), item.is_visible ? 'Yes' : 'No'])];
+    const rows = [['ID', 'League / competition', 'Short name', 'Region', 'Tier', 'From', 'To', 'Description', 'Matches (30d)', 'Shown on website'], ...this.leagues.map(item => [item.league_code, item.name, item.short_name || '', item.region, item.tier, item.from_month_year || '', item.to_month_year || '', item.description || '', String(item.matches_30d ?? 0), item.is_visible ? 'Yes' : 'No'])];
     const csv = rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
     const link = document.createElement('a');
     link.href = URL.createObjectURL(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' }));
@@ -243,5 +257,9 @@ export class LeaguesSeriesComponent implements OnInit {
     window.setTimeout(() => this.toastMessage = '', 3500);
   }
 
-  private emptyLeague(): AdminLeagueCreatePayload { return { name: '', region: '', tier: 'Tier 1', matches_30d: 0 }; }
+  private leaguePayload(league: AdminLeagueCreatePayload | AdminLeague): AdminLeagueCreatePayload {
+    return { name: league.name.trim(), short_name: String(league.short_name || '').trim(), region: league.region.trim(), tier: league.tier, from_month_year: String(league.from_month_year || '').trim(), to_month_year: String(league.to_month_year || '').trim(), description: String(league.description || '').trim(), matches_30d: Number(league.matches_30d || 0) };
+  }
+
+  private emptyLeague(): AdminLeagueCreatePayload { return { name: '', short_name: '', region: '', tier: 'Tier 1', from_month_year: '', to_month_year: '', description: '', matches_30d: 0 }; }
 }

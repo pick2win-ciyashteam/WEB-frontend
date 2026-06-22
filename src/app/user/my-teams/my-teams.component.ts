@@ -168,7 +168,13 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
       });
 
       this.applyDateFilter();
-this.openMatchFromQueryParam();
+      this.openMatchFromQueryParam();
+      if (!this.selectedMatch) {
+        const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
+        if (firstViewableMatch) {
+          this.openMatchTeams(firstViewableMatch);
+        }
+      }
 this.loadingMatches = false;
     },
     error: () => {
@@ -398,6 +404,11 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
   openMatchTeams(match: GeneratedMatch) {
     if (!this.canAccessTeams(match)) {
+      return;
+    }
+
+    if (this.selectedMatch?.id === match.id) {
+      this.backToMatches();
       return;
     }
 

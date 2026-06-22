@@ -93,6 +93,10 @@ export class ApiService {
     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/countries/get-all`);
   }
 
+  getSeriesLeagues(): Observable<any> {
+    return this.http.get(`${this.BASE}/user/series/leagues`);
+  }
+
   getCountryByName(name: string): Observable<ApiDataResponse<Country>> {
     return this.http.get<ApiDataResponse<Country>>(`${this.BASE}/user/countries/${encodeURIComponent(name)}`);
   }

@@ -14,12 +14,19 @@ export class AdminHeaderComponent implements OnInit {
   @Output() userSearch = new EventEmitter<string>();
 
   profile = { name: '', email: '' };
+  currency = 0;
+  savingCurrency = false;
+  currencyError = '';
 
   constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.adminService.getAdminProfile().subscribe({
-      next: res => { const profile = res?.data || res || {}; this.profile = { name: profile.name || '', email: profile.email || '' }; },
+      next: res => {
+        const profile = res?.data || res || {};
+        this.profile = { name: profile.name || '', email: profile.email || '' };
+        this.currency = Number(profile.currency ?? 0);
+      },
       error: err => console.log('get admin header profile error:', err)
     });
   }
@@ -28,11 +35,25 @@ export class AdminHeaderComponent implements OnInit {
     return this.profile.name.split(/\s+/).filter(Boolean).map(part => part[0]).slice(0, 2).join('').toUpperCase() || 'AD';
   }
 
-  formatFxInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = Number(input.value);
+  saveCurrency(): void {
+    const currency = Number(this.currency);
+    this.currencyError = '';
 
-    input.value = Number.isFinite(value) && value >= 0 ? value.toFixed(2) : '0.00';
+    if (!Number.isFinite(currency) || currency < 0) {
+      this.currency = 0;
+      this.currencyError = 'Enter a valid currency value.';
+      return;
+    }
+
+    this.currency = currency;
+    this.savingCurrency = true;
+    this.adminService.updateAdminProfile({ currency }).subscribe({
+      next: () => { this.savingCurrency = false; },
+      error: err => {
+        this.savingCurrency = false;
+        this.currencyError = err?.error?.message || err?.error?.error || 'Unable to update currency.';
+      }
+    });
   }
 
   searchUsers(event: Event): void {

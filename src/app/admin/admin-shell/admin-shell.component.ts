@@ -28,6 +28,8 @@ export class AdminShellComponent {
     { label: 'Coin Packs', route: '/admin/coin-packs', crumb: 'Monetization' },
     { label: 'Revenue', route: '/admin/revenue', crumb: 'Finance' },
     { label: 'Expenses', route: '/admin/expenses', crumb: 'Finance' },
+    { label: 'Profit', route: '/admin/profit', crumb: 'Finance' },
+    { label: 'Payments', route: '/admin/payments', crumb: 'Finance' },
     { label: 'Admins & Team', route: '/admin/admins-team', crumb: 'Administration' },
     { label: 'Activity Log', route: '/admin/activity-logs', crumb: 'Administration' },
     { label: 'Add Subscription', route: '/admin/add-subscription', crumb: 'Monetization' },

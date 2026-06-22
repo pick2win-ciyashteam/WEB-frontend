@@ -23,6 +23,8 @@ import { AdminsTeamComponent } from './admins-team/admins-team.component';
 import { ActivityLogsComponent } from './activity-logs/activity-logs.component';
 import { RevenueComponent } from './revenue/revenue.component';
 import { ExpensesComponent } from './expenses/expenses.component';
+import { ProfitComponent } from './profit/profit.component';
+import { PaymentsComponent } from './payments/payments.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { ExpensesComponent } from './expenses/expenses.component';
     ActivityLogsComponent,
     RevenueComponent,
     ExpensesComponent
+    , ProfitComponent
+    , PaymentsComponent
   ],
   imports: [
     CommonModule,

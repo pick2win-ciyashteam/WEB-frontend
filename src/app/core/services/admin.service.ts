@@ -27,7 +27,7 @@ export class AdminService {
 
   updateAdmin(id: number | string, data: Record<string, unknown>): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-admin/${id}`, data); }
 
-  updateAdminProfile(data: { name: string; mobile: string }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-profile`, data); }
+  updateAdminProfile(data: { name?: string; mobile?: string; currency?: number }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-profile`, data); }
   updateAdminCredentials(data: { currentPassword: string; newPassword: string; confirmPassword: string; new2FACode: string }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-credentials`, data); }
 
   toggleAdmin2Fa(enabled: boolean): Observable<any> { return this.http.post(`${this.BASE}/admin/admin-auth/toggle-2fa`, { enabled }); }
@@ -72,6 +72,10 @@ export class AdminService {
 
   getAdminReportsLeagues(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/reports/leagues`);
+  }
+
+  getUserSeriesLeagues(): Observable<any> {
+    return this.http.get(`${this.BASE}/user/series/leagues`);
   }
 
   getAdminReportsSeries(status: 'all' | 'live' | 'upcoming' | 'completed' = 'all'): Observable<any> {
@@ -244,6 +248,9 @@ export class AdminService {
 
   getAdminExpensesByMonth(month: number, year: number): Observable<any> { return this.http.get(`${this.BASE}/admin/reports/expenses/by-month`, { params: this.cleanParams({ month, year }) }); }
   getAdminExpensesFyReport(year: number): Observable<any> { return this.http.get(`${this.BASE}/admin/reports/expenses/fy-report`, { params: this.cleanParams({ year }) }); }
+  getAdminReportsProfitFy(year: number): Observable<any> { return this.http.get(`${this.BASE}/admin/reports/profit/fy`, { params: this.cleanParams({ year }) }); }
+  getAdminPaymentsSummary(params: { tab?: 'today' | 'by_month' | 'fy_report'; month?: number; year?: number } = {}): Observable<any> { return this.http.get(`${this.BASE}/admin/reports/payments/summary`, { params: this.cleanParams({ tab: 'today', ...params }) }); }
+  getAdminPaymentTransactions(params: { tab?: string; page?: number; limit?: number } = {}): Observable<any> { return this.http.get(`${this.BASE}/admin/reports/payments/transactions`, { params: this.cleanParams({ tab: 'all', page: 1, limit: 20, ...params }) }); }
   createAdminExpenseCategory(data: { name: string; frequency: string; has_roles: number }): Observable<any> { return this.http.post(`${this.BASE}/admin/reports/expenses/category`, data); }
   deleteAdminExpenseCategory(id: number): Observable<any> { return this.http.delete(`${this.BASE}/admin/reports/expenses/category/${id}`); }
   addAdminExpenseRole(categoryId: number, name: string): Observable<any> { return this.http.post(`${this.BASE}/admin/reports/expenses/category/${categoryId}/role`, { name }); }
