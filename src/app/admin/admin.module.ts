@@ -20,6 +20,9 @@ import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.componen
 import { LeaguesSeriesComponent } from './leagues-series/leagues-series.component';
 import { CoinPacksComponent } from './coin-packs/coin-packs.component';
 import { AdminsTeamComponent } from './admins-team/admins-team.component';
+import { ActivityLogsComponent } from './activity-logs/activity-logs.component';
+import { RevenueComponent } from './revenue/revenue.component';
+import { ExpensesComponent } from './expenses/expenses.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,10 @@ import { AdminsTeamComponent } from './admins-team/admins-team.component';
     VotesFeedbackComponent,
     LeaguesSeriesComponent,
     CoinPacksComponent,
-    AdminsTeamComponent
+    AdminsTeamComponent,
+    ActivityLogsComponent,
+    RevenueComponent,
+    ExpensesComponent
   ],
   imports: [
     CommonModule,

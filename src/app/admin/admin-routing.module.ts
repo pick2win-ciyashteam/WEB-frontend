@@ -17,6 +17,9 @@ import { AdminsTeamComponent } from './admins-team/admins-team.component';
 import { UctActivityComponent } from './uct-activity/uct-activity.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { VotesFeedbackComponent } from './votes-feedback/votes-feedback.component';
+import { ActivityLogsComponent } from './activity-logs/activity-logs.component';
+import { RevenueComponent } from './revenue/revenue.component';
+import { ExpensesComponent } from './expenses/expenses.component';
 
 const routes: Routes = [
   {
@@ -88,6 +91,18 @@ const routes: Routes = [
       {
         path: 'admins-team',
         component: AdminsTeamComponent
+      },
+      {
+        path: 'activity-logs',
+        component: ActivityLogsComponent
+      },
+      {
+        path: 'revenue',
+        component: RevenueComponent
+      },
+      {
+        path: 'expenses',
+        component: ExpensesComponent
       }
     ]
   }

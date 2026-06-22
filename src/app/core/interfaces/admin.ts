@@ -631,3 +631,39 @@ export interface AdminActivityDormancyReports {
   reengagement_segments: AdminReengagementSegment[];
   dormant_90d_cohort: AdminDormant90dCohort;
 }
+
+export type AdminActivityLogCategory = 'all' | 'packs' | 'finance' | 'payments' | 'catalog' | 'users' | 'admin';
+
+export interface AdminActivityLogAction {
+  id: number;
+  when: string;
+  admin_name: string;
+  admin_role: string;
+  category: Exclude<AdminActivityLogCategory, 'all'> | string;
+  action: string;
+  details: string;
+}
+
+export interface AdminActivityLogReports {
+  kpis: { actions_logged: number; by_super_admin: number; by_sub_admins: number };
+  category_counts: Record<AdminActivityLogCategory, number>;
+  pagination: { total: number; page: number; limit: number; total_pages: number };
+  filters: { category: AdminActivityLogCategory };
+  actions: AdminActivityLogAction[];
+}
+
+export type AdminRevenueTab = 'today' | 'by_month' | 'fy_report';
+export interface AdminRevenuePack { name: string; coins: number; revenue_usd: string; }
+export interface AdminRevenueReports {
+  kpis: { revenue_today_usd: string; revenue_month_usd: string; revenue_fy_usd: string; month_label: string; fy_label: string };
+  tab: AdminRevenueTab;
+  label: string;
+  month?: number;
+  year?: number;
+  by_pack: { packs: AdminRevenuePack[]; total_usd: string };
+}
+
+export interface AdminExpenseRole { id?: number; role_id?: number; name: string; amount_inr?: number; fy_total_inr?: number; }
+export interface AdminExpenseCategory { id: number; name: string; frequency: string; frequency_months?: number | null; is_auto: boolean; has_roles: boolean; amount_inr: number; fy_total_inr: number; roles?: AdminExpenseRole[]; share_pct?: number; fy_total_usd?: string; }
+export interface AdminExpensesMonthReport { kpis: { expenses_month_inr: number; expenses_fy_inr: number; expense_ratio_pct: number; largest_cost_fy: { name: string; amount_inr: number } }; month_label: string; fy_label: string; month_total_inr: number; fy_total_inr: number; categories: AdminExpenseCategory[]; }
+export interface AdminExpensesFyReport { fy_label: string; total_inr: number; total_usd: string; categories: AdminExpenseCategory[]; }

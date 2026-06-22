@@ -272,7 +272,7 @@ Error: src/app/pages/pages.module.ts:36:5 - error NG6002: This import contains e
 
 Error: src/app/user/my-profile/my-profile.component.html:112:53 - error TS2339: Property 'purchasedCoins' does not exist on type 'MyProfileComponent'.
 
-112             <div class="profile-ledger-cell-sub">{{ purchasedCoins(profile) }} purchased + free match credits</div>
+112             <div class="profile-ledger-cell-sub">{{ purchasedCoins(profile) }} purchased </div>
                                                         ~~~~~~~~~~~~~~
 
   src/app/user/my-profile/my-profile.component.ts:10:16

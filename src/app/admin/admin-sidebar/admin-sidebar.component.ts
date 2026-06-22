@@ -23,13 +23,13 @@ export class AdminSidebarComponent {
     { label: 'UCT Activity', icon: '⚡', route: '/admin/uct-activity', group: 'Product', badge: 'live' },
     { label: 'Votes & Feedback', icon: '💬', route: '/admin/votes-feedback', group: 'Product' },
     { label: 'Coin Packs', icon: '🪙', route: '/admin/coin-packs', group: 'Monetization' },
-    { label: 'Revenue', icon: '💵', group: 'Finance' },
-    { label: 'Expenses', icon: '📉', group: 'Finance' },
+    { label: 'Revenue', icon: '💵', route: '/admin/revenue', group: 'Finance' },
+    { label: 'Expenses', icon: '📉', route: '/admin/expenses', group: 'Finance' },
     { label: 'Profit', icon: '📈', group: 'Finance' },
     { label: 'Payments', icon: '💳', route: '/admin/pack-buyers', group: 'Finance' },
     { label: 'Leagues / Series', icon: '🏆', route: '/admin/leagues-series', group: 'Catalog' },
     { label: 'Admins & Team', icon: '🔐', route: '/admin/admins-team', group: 'Administration' },
-    { label: 'Activity Log', icon: '📝', route: '/admin/activity-dormancy', group: 'Administration' },
+    { label: 'Activity Log', icon: '📝', route: '/admin/activity-logs', group: 'Administration' },
     { label: 'System & Integrations', icon: '🛠️', group: 'System' }
   ];
 

@@ -238,7 +238,7 @@
       </div>
     </div>
 
-    <div class="account-ready-block reveal">
+    <div class="account-ready-block reveal" *ngIf="loggedIn$ | async">
       <div class="ar-icon"><span class="material-symbols-outlined" aria-hidden="true">person</span></div>
       <div class="ar-body">
         <div class="ar-eyebrow">ACCOUNT READY</div>

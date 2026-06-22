@@ -1,0 +1,15 @@
+<section class="activity-log-view">
+  <div class="audit-banner">📝 <span>Audit trail — every create, edit, delete, refund and credential change made by an admin is recorded here for accountability across the team.</span></div>
+  <div class="state-message loading" *ngIf="loading">Loading activity log...</div>
+  <div class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="kpi-grid">
+    <article class="kpi gold"><div class="lbl">Actions logged</div><div class="val">{{ reports?.kpis?.actions_logged || 0 }}</div><div class="delta">recent admin actions</div></article>
+    <article class="kpi blue"><div class="lbl">By super admin</div><div class="val">{{ reports?.kpis?.by_super_admin || 0 }}</div><div class="delta">full-access changes</div></article>
+    <article class="kpi purple"><div class="lbl">By sub-admins</div><div class="val">{{ reports?.kpis?.by_sub_admins || 0 }}</div><div class="delta">editor actions</div></article>
+  </div>
+  <article class="panel">
+    <div class="panel-head"><div><h2>Admin actions</h2><p>{{ reports?.pagination?.total || 0 }} actions shown</p></div><div class="panel-tools"><div class="filters"><button *ngFor="let category of categories" type="button" class="filter" [class.active]="selectedCategory === category.key" (click)="selectCategory(category.key)"><span>{{ category.icon }}</span> {{ category.label }} <b>{{ categoryCount(category.key) }}</b></button></div><button class="csv" type="button" (click)="exportCsv()">⇩ CSV</button></div></div>
+    <div class="table-wrap"><table><thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Details</th></tr></thead><tbody *ngIf="reports?.actions?.length"><tr *ngFor="let item of reports?.actions"><td class="when">{{ formatWhen(item.when) }}</td><td><strong>{{ item.admin_name }}</strong><small>{{ item.admin_role }}</small></td><td><span class="category">{{ categoryMeta(item.category).icon }} {{ categoryMeta(item.category).label }}</span><span class="action">{{ item.action }}</span></td><td class="details">{{ item.details }}</td></tr></tbody><tbody *ngIf="!loading && !reports?.actions?.length"><tr><td colspan="4" class="empty">No activity has been recorded for this category.</td></tr></tbody></table></div>
+    <div class="pagination" *ngIf="(reports?.pagination?.total_pages || 0) > 1"><button type="button" (click)="page(-1)" [disabled]="reports?.pagination?.page === 1">Previous</button><span>Page {{ reports?.pagination?.page }} of {{ reports?.pagination?.total_pages }}</span><button type="button" (click)="page(1)" [disabled]="reports?.pagination?.page === reports?.pagination?.total_pages">Next</button></div>
+  </article>
+</section>

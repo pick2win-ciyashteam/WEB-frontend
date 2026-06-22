@@ -81,7 +81,11 @@ paymentSucceeded = false;
         // console.log('subscription plans:', res);
 
         if (res?.success && Array.isArray(res.data) && res.data.length) {
-          this.plans = [...res.data].sort((a, b) => a.sort_order - b.sort_order);
+          // Keep the Pro pack as the final card; it is the only pack marked Best Value.
+          this.plans = [...res.data].sort((a, b) => {
+            const proOrder = Number(this.isProPack(a)) - Number(this.isProPack(b));
+            return proOrder || Number(a.sort_order || 0) - Number(b.sort_order || 0);
+          });
           this.pricingPacks = this.plans.map((plan, index) => this.toPricingPack(plan, index));
         } else {
           this.errorMessage = 'No subscription plans available.';
@@ -371,15 +375,6 @@ closeCheckout(): void {
     const offer = offerActive && configuredOffer > 0 ? configuredOffer : regular;
     const discount = regular > 0 && offer < regular ? Math.round(((regular - offer) / regular) * 100) : 0;
     const perCoin = Number(plan.coins) > 0 ? offer / Number(plan.coins) : 0;
-    const allOfferPrices = this.plans
-      .map(item => {
-        const itemRegular = Number(item.regular_price ?? item.price ?? 0);
-        const itemOffer = Number(item.offer_price ?? item.price ?? 0);
-        const active = Number(item.is_offer_active ?? 0) === 1;
-        return Number(item.coins) > 0 ? (active && itemOffer > 0 ? itemOffer : itemRegular) / Number(item.coins) : 0;
-      })
-      .filter(value => value > 0);
-
     return {
       id: plan.id,
       name: plan.name,
@@ -395,8 +390,12 @@ closeCheckout(): void {
       offerActive,
       currencySymbol: plan.currency_symbol || '$',
       tone: this.packTone(index),
-      bestValue: perCoin > 0 && perCoin === Math.min(...allOfferPrices)
+      bestValue: this.isProPack(plan)
     };
+  }
+
+  private isProPack(plan: SubscriptionPlan): boolean {
+    return Number(plan.is_pro) === 1 || /\bpro\b/i.test(String(plan.name || ''));
   }
 
   private handleStripeReturn(): void {

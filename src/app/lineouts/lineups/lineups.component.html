@@ -31,10 +31,7 @@
           </a>
         </div>
 
-        <div class="try-free-note" *ngIf="showTryFreeNote">
-          <span class="try-free-icon">🎁</span>
-          <div>Try your first match free — continue only if you like it, <b>no pressure to buy.</b></div>
-        </div>
+     
 
         <div class="empty-state" *ngIf="loadingMatches">
           <div class="empty-ball">⚽</div>
@@ -201,7 +198,7 @@
         </p>
 
         <div class="signin-actions">
-          <button type="button" class="create-btn" (click)="openSignup()">Create account · free first UCT</button>
+          <button type="button" class="create-btn" (click)="openSignup()">Create account</button>
           <button type="button" class="signin-btn" (click)="openLogin()">Sign in</button>
         </div>
       </div>

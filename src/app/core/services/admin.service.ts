@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLeagueCreatePayload, AdminLoginPayload, AdminMatchTogglePayload, AdminSubscriptionCreatePayload, AdminUsersQuery } from '../interfaces/admin';
+import { AdminActivityLogCategory, AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLeagueCreatePayload, AdminLoginPayload, AdminMatchTogglePayload, AdminRevenueTab, AdminSubscriptionCreatePayload, AdminUsersQuery } from '../interfaces/admin';
 
 @Injectable({
   providedIn: 'root'
@@ -231,6 +231,24 @@ export class AdminService {
   getAdminReportsActivityDormancy(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/admin-reports/activity-dormancy`);
   }
+
+  getAdminReportsActivityLog(params: { category?: AdminActivityLogCategory; page?: number; limit?: number } = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/activity-log`, {
+      params: this.cleanParams({ category: 'all', page: 1, limit: 20, ...params })
+    });
+  }
+
+  getAdminReportsRevenue(params: { tab?: AdminRevenueTab; month?: number; year?: number } = {}): Observable<any> {
+    return this.http.get(`${this.BASE}/admin/reports/revenue`, { params: this.cleanParams({ tab: 'today', ...params }) });
+  }
+
+  getAdminExpensesByMonth(month: number, year: number): Observable<any> { return this.http.get(`${this.BASE}/admin/reports/expenses/by-month`, { params: this.cleanParams({ month, year }) }); }
+  getAdminExpensesFyReport(year: number): Observable<any> { return this.http.get(`${this.BASE}/admin/reports/expenses/fy-report`, { params: this.cleanParams({ year }) }); }
+  createAdminExpenseCategory(data: { name: string; frequency: string; has_roles: number }): Observable<any> { return this.http.post(`${this.BASE}/admin/reports/expenses/category`, data); }
+  deleteAdminExpenseCategory(id: number): Observable<any> { return this.http.delete(`${this.BASE}/admin/reports/expenses/category/${id}`); }
+  addAdminExpenseRole(categoryId: number, name: string): Observable<any> { return this.http.post(`${this.BASE}/admin/reports/expenses/category/${categoryId}/role`, { name }); }
+  deleteAdminExpenseRole(id: number): Observable<any> { return this.http.delete(`${this.BASE}/admin/reports/expenses/role/${id}`); }
+  saveAdminExpenseEntry(data: { category_id: number; role_id?: number; month: number; year: number; amount_inr: number }): Observable<any> { return this.http.patch(`${this.BASE}/admin/reports/expenses/entry`, data); }
 
   private cleanParams(params: Record<string, unknown>): Record<string, string> {
     return Object.entries(params).reduce((acc, [key, value]) => {
