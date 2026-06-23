@@ -46,11 +46,7 @@
 
   <div class="sec-title">Monetization &amp; lifecycle</div>
   <div class="kpi-grid lifecycle-grid">
-    <article class="kpi b">
-      <div class="lbl">Verified users</div>
-      <div class="val">{{ formatNumber(lifecycle?.verified_users) }}</div>
-      <div class="delta flat">Verified accounts</div>
-    </article>
+  
 
     <article class="kpi g">
       <div class="lbl">Active rate</div>
@@ -64,11 +60,7 @@
       <div class="delta down">Closed accounts</div>
     </article>
 
-    <article class="kpi">
-      <div class="lbl">Today total UCTs</div>
-      <div class="val">{{ formatNumber(reports?.today_match?.total_ucts_today) }}</div>
-      <div class="delta flat">{{ todayMatches.length }} matches listed</div>
-    </article>
+   
   </div>
 
   <div class="row c2">
@@ -128,7 +120,6 @@
     <div class="panel-head">
       <div>
         <h3>Today's match · UCTs used</h3>
-        <p class="ph-sub">Matches currently visible to users</p>
       </div>
       <span class="tag ok"><span class="dotv"></span>{{ formatNumber(reports?.today_match?.total_ucts_today) }} UCTs</span>
     </div>
@@ -140,9 +131,7 @@
             <th>Match</th>
             <th>Series</th>
             <th>Kickoff</th>
-            <th>Status</th>
             <th class="num">UCTs Used</th>
-            <th class="num">Countries active</th>
           </tr>
         </thead>
         <tbody>
@@ -153,9 +142,7 @@
             </td>
             <td>{{ match.series }}</td>
             <td>{{ formatMatchTime(match.start_time) }}</td>
-            <td><span class="tag info">{{ match.status }}</span></td>
             <td class="num">{{ formatNumber(match.ucts_used) }}</td>
-            <td class="num">{{ formatNumber(match.countries_active) }}</td>
           </tr>
           <tr *ngIf="!loading && !todayMatches.length">
             <td colspan="6" class="empty">No today match data found.</td>
