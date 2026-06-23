@@ -23,7 +23,7 @@
 
 .trust-page {
   min-height: 100vh;
-  padding: 88px 0 96px;
+  padding: 40px 0 96px;
   color: var(--paper);
   font-family: var(--f-body);
   background:
@@ -846,6 +846,237 @@
   }
 }
 
+/* Readability pass: preserve the reference layout without undersized copy. */
+.md-eyebrow { font-size: 10px; }
+.md-is-statement { font-size: clamp(21px, 2.5vw, 28px); line-height: 1.3; }
+.statement-list-block p,
+.md-body,
+.commitment-block p { font-size: 14px; line-height: 1.65; }
+.statement-list li { font-size: 13px; line-height: 1.55; }
+.principles-title { font-size: 10px; }
+.md-promise { font-size: 12px; line-height: 1.4; }
+.md-promise .ic { font-size: 14px; }
+.commitment-strong { font-size: 14px !important; }
+
+.trust-card { min-height: 230px; padding: 25px 18px; }
+.trust-card h4 { font-size: 18px; line-height: 1.2; }
+.trust-card p { font-size: 13px; line-height: 1.58; }
+.num { font-size: 60px; }
+
+.partners-lead,
+.dp-card p,
+.partner-card p { font-size: 14px; line-height: 1.65; }
+.dp-card h4 { font-size: 19px; }
+
+@media (max-width: 720px) {
+  .md-is-statement { font-size: 22px; }
+  .trust-card { min-height: 215px; }
+  .trust-card h4 { font-size: 17px; }
+  .trust-card p { font-size: 12.5px; }
+}
+
+@media (max-width: 430px) {
+  .statement-list-block p,
+  .md-body,
+  .commitment-block p { font-size: 13px !important; }
+  .statement-list li { font-size: 12.5px; }
+  .md-promise { font-size: 11.5px; }
+  .trust-card { min-height: 0; }
+  .trust-card h4 { font-size: 18px; }
+  .trust-card p { font-size: 13px; }
+}
+
+/* Larger desktop reading scale requested for the Trust page. */
+@media (min-width: 721px) {
+  .statement-list-block p,
+  .md-body,
+  .commitment-block p { font-size: 15px; }
+  .statement-list li { font-size: 14px; }
+  .md-promise { font-size: 12.5px; }
+  .trust-card { min-height: 255px; }
+  .trust-card h4 { font-size: 19px; }
+  .trust-card p { font-size: 14px; line-height: 1.6; }
+  .partners-lead,
+  .dp-card p,
+  .partner-card p { font-size: 15px; }
+  .dp-card h4 { font-size: 20px; }
+}
+
+/* One further step up for comfortable reading on normal laptop displays. */
+.statement-list-block p,
+.md-body,
+.commitment-block p { font-size: 15px; }
+.statement-list li { font-size: 14px; }
+.md-promise { font-size: 12.5px; }
+.trust-card { min-height: 255px; }
+.trust-card h4 { font-size: 19px; }
+.trust-card p { font-size: 14px; line-height: 1.6; }
+.partners-lead,
+.dp-card p,
+.partner-card p { font-size: 15px; }
+.dp-card h4 { font-size: 20px; }
+
+@media (max-width: 720px) {
+  .trust-card { min-height: 230px; }
+  .trust-card h4 { font-size: 18px; }
+  .trust-card p { font-size: 13px; }
+}
+
+/* Exact hierarchy and reading rhythm from the supplied Trust/Cookie page. */
+.section-head { max-width: 1080px; margin: 0 auto 22px; }
+.section-title { font-size: clamp(28px, 3.2vw, 38px); }
+
+.md-disclaimer {
+  max-width: 1080px;
+  margin: 0 auto 28px;
+  padding: 28px 52px 26px;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(215,38,56,.10), transparent 55%),
+    radial-gradient(ellipse at 0% 100%, rgba(244,180,0,.10), transparent 55%),
+    linear-gradient(180deg, var(--ink-2), var(--ink));
+}
+
+.md-eyebrow-row { justify-content: flex-start; margin-bottom: 16px; }
+.md-shield { width: 38px; height: 38px; border-radius: 10px; font-size: 18px; }
+.md-eyebrow { font-size: 9px; letter-spacing: .19em; }
+
+.md-is-statement {
+  max-width: 64ch;
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  text-align: left;
+  font-size: clamp(18px, 2.25vw, 24px);
+  line-height: 1.27;
+}
+
+.statement-list-block { max-width: 60ch; margin: 16px 0 8px; }
+.statement-list-block p,
+.md-body,
+.commitment-block p { font-size: 12px; line-height: 1.55; }
+.statement-list { gap: 2px; }
+.statement-list li { gap: 8px; font-size: 11px; line-height: 1.45; }
+.statement-list .ic { width: 18px; font-size: 13px; }
+.statement-list .bullet { width: 4px; height: 4px; margin-top: 6px; }
+.md-body { max-width: 64ch; margin: 16px 0 0; text-align: left; }
+
+.principles-box { margin-top: 18px; padding: 14px 12px; }
+.principles-title { margin-bottom: 10px; font-size: 9px; }
+.md-promises { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.md-promise { padding: 8px 9px; border-radius: 7px; font-size: 9px; line-height: 1.25; }
+.md-promise .ic { width: 14px; font-size: 12px; }
+.commitment-block { max-width: 100%; margin-top: 14px; padding-top: 14px; }
+.commitment-block p { margin-bottom: 8px; text-align: left; }
+.commitment-strong { max-width: none; font-size: 12px !important; }
+.md-foot { margin-top: 16px; font-size: 9px; }
+
+.trust-grid { max-width: 1080px; margin: 28px auto 54px; }
+.data-protect-section { margin-top: 0; }
+
+@media (max-width: 720px) {
+  .md-disclaimer { padding: 24px 22px; }
+  .md-promises { grid-template-columns: 1fr; }
+}
+
+/* Source Trust/Cookie page parity: compact card grid and data-protection panel. */
+.trust-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.trust-card {
+  min-height: 202px;
+  padding: 22px 14px;
+  border-radius: 12px;
+}
+
+.trust-card h4 {
+  max-width: 12ch;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.trust-card p {
+  margin-top: 12px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.num {
+  right: 12px;
+  top: 6px;
+  font-size: 52px;
+}
+
+.trust-card a,
+.dp-card a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.data-protect-section {
+  max-width: var(--card-w);
+  margin: 54px auto 0;
+}
+
+.dp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.dp-card {
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(2, 10, 18, 0.32);
+}
+
+.dp-ic {
+  margin-bottom: 12px;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.dp-card h4 {
+  margin: 0 0 10px;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.dp-card p {
+  margin: 0;
+  color: var(--paper-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.dp-card p b { color: var(--paper); }
+
+@media (max-width: 980px) {
+  .trust-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dp-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 430px) {
+  .trust-grid { grid-template-columns: 1fr; }
+  .trust-card { min-height: 0; padding: 22px 18px; }
+  .trust-card h4 { max-width: 15ch; }
+  .trust-card p { font-size: 12px; }
+  .dp-card { padding: 20px; }
+}
+
 /* Final mobile density pass. */
 @media (max-width: 640px) {
   .trust-page {
@@ -895,4 +1126,42 @@
     font-size: 12.5px !important;
     line-height: 1.48 !important;
   }
+}
+
+/* Final readable type scale — intentionally comes after the legacy compact rules. */
+.md-eyebrow { font-size: 10px; }
+.md-is-statement { font-size: clamp(21px, 2.5vw, 28px); line-height: 1.3; }
+.statement-list-block p,
+.md-body,
+.commitment-block p { font-size: 14px; line-height: 1.65; }
+.statement-list li { font-size: 13px; line-height: 1.55; }
+.principles-title { font-size: 10px; }
+.md-promise { font-size: 12px; line-height: 1.4; }
+.md-promise .ic { font-size: 14px; }
+.commitment-strong { font-size: 14px !important; }
+.trust-card { min-height: 230px; padding: 25px 18px; }
+.trust-card h4 { font-size: 18px; line-height: 1.2; }
+.trust-card p { font-size: 13px; line-height: 1.58; }
+.num { font-size: 60px; }
+.partners-lead,
+.dp-card p,
+.partner-card p { font-size: 14px; line-height: 1.65; }
+.dp-card h4 { font-size: 19px; }
+
+@media (max-width: 720px) {
+  .md-is-statement { font-size: 22px; }
+  .trust-card { min-height: 215px; }
+  .trust-card h4 { font-size: 17px; }
+  .trust-card p { font-size: 12.5px; }
+}
+
+@media (max-width: 430px) {
+  .statement-list-block p,
+  .md-body,
+  .commitment-block p { font-size: 13px !important; }
+  .statement-list li { font-size: 12.5px; }
+  .md-promise { font-size: 11.5px; }
+  .trust-card { min-height: 0; }
+  .trust-card h4 { font-size: 18px; }
+  .trust-card p { font-size: 13px; }
 }

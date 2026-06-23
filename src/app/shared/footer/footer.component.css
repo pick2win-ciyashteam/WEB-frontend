@@ -226,10 +226,34 @@ footer.site {
 .payment-card {
   min-width: 46px;
   padding-inline: 10px;
+  gap: 5px;
+  color: var(--paper-2);
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: .02em;
 }
 
-.security-item.stripe {
-  color: #635bff;
+.security-item.razorpay-security {
+  min-height: 42px;
+  color: var(--brand-gold);
+  text-align: left;
+}
+
+.razorpay-security > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+
+.razorpay-security b {
+  color: var(--paper);
+  font-size: 11px;
+}
+
+.razorpay-security small {
+  color: rgba(255,255,255,.62);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .security-item.ssl {
@@ -326,10 +350,10 @@ footer.site {
     text-align: center;
   }
 
-  .security-item.stripe,
+  .security-item.razorpay-security,
   .security-item.ssl,
   .security-item.site-lock {
-    grid-column: span 4;
+    grid-column: span 12;
   }
 
   .payment-card {
@@ -362,10 +386,10 @@ footer.site {
     gap: 5px;
   }
 
-  .security-item.stripe,
+  .security-item.razorpay-security,
   .security-item.ssl,
   .security-item.site-lock {
-    grid-column: span 4;
+    grid-column: span 12;
   }
 
   .payment-card {
@@ -381,4 +405,123 @@ footer.site {
   .security-item i {
     font-size: 14px;
   }
+}
+
+/* Footer payment strip: compact on desktop, touch-friendly on Android and iOS. */
+@media (min-width: 1101px) {
+  .legal-bar {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) auto;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .payment-security {
+    flex: 0 0 auto;
+    gap: 6px;
+  }
+
+  .security-item.razorpay-security {
+    width: 365px;
+    min-width: 365px;
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    justify-content: start;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px;
+    white-space: normal;
+  }
+
+  .razorpay-security .security-symbol { font-size: 17px; }
+  .razorpay-security > span:last-child { min-width: 0; }
+  .razorpay-security b { font-size: 11px; line-height: 1.1; }
+  .razorpay-security small { display: block; font-size: 9px; white-space: nowrap; }
+
+  .payment-card {
+    min-width: 0;
+    padding: 8px 8px;
+  }
+}
+
+.payment-card {
+  flex-direction: row;
+  text-align: left;
+}
+
+.payment-card span {
+  display: inline-block;
+}
+
+@media (max-width: 560px) {
+  .payment-security {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .security-item.razorpay-security {
+    grid-column: 1 / -1;
+    min-height: 48px;
+    padding: 9px 12px;
+    text-align: left;
+  }
+
+  .razorpay-security b { font-size: 11px; }
+  .razorpay-security small { font-size: 9px; }
+
+  .security-item.ssl,
+  .security-item.site-lock {
+    grid-column: auto;
+    min-height: 42px;
+  }
+
+  .payment-card {
+    grid-column: auto;
+    min-height: 58px;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 6px;
+    text-align: center;
+  }
+
+  .payment-card i { font-size: 23px; }
+  .payment-card span { font-size: 9px; line-height: 1.05; }
+}
+
+@media (max-width: 360px) {
+  .payment-card span { font-size: 8px; }
+  .payment-card i { font-size: 20px; }
+}
+
+/* Desktop: keep copyright and payment controls on distinct rows to prevent overlap. */
+@media (min-width: 1101px) {
+  .legal-bar {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 14px;
+  }
+
+  .legal-copy {
+    width: 100%;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .payment-security {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .security-item.ssl,
+  .security-item.site-lock {
+    min-height: 42px;
+    padding: 8px 11px;
+    color: var(--paper-2);
+  }
+
+  .security-item.ssl .security-symbol { color: #22c55e; }
+  .security-item.site-lock .security-symbol { color: var(--brand-gold); }
 }

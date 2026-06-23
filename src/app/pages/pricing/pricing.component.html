@@ -74,11 +74,26 @@
           {{ pack.discountText }}
         </span>
         <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPricingPack(pack)">
-          {{ purchasingPlanId ? 'Opening Stripe...' : 'Buy ' + pack.coins + ' Coins' }}
+          {{ purchasingPlanId ? 'Opening Razorpay...' : 'Buy ' + pack.coins + ' Coins' }}
           <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
         </button>
       </div>
     </div>
+
+    <section class="payment-methods-note reveal" aria-labelledby="payment-methods-title">
+      <div class="payment-brand-icons" aria-label="Supported payment methods">
+        <span class="brand-visa">VISA</span><span class="brand-rupay">RuPay</span><span class="brand-mastercard"><i></i><i></i></span><span class="brand-amex">AMERICAN<br>EXPRESS</span><span class="brand-diners">◉ DINERS</span>
+      </div>
+      <div class="payment-methods-copy">
+        <span class="payment-methods-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">payments</span> PAYMENT METHODS</span>
+        <h3 id="payment-methods-title">Check your payment method before you buy coins.</h3>
+        <p>Use your own card for every transaction. Confirm that it is enabled for online and international payments before you proceed.</p>
+      </div>
+      <button type="button" class="payment-methods-btn" (click)="openPaymentMethods()">
+        View payment methods &amp; important notes
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </button>
+    </section>
 
     <div class="coin-usage reveal">
       <div class="coin-usage-head">
@@ -100,7 +115,7 @@
       <div class="pricing-table-head">
         <span class="pricing-table-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">table_chart</span> ALL PACKS - SIDE BY SIDE</span>
         <h3 class="pricing-table-h">Compare every coin pack at a glance</h3>
-        <p class="pricing-table-sub">Every pack covers the same UCT workflow. The only differences are coin volume and per-match price. <b>All packs - valid 365 days from purchase - one-time payment - no auto-renewal - payments via Stripe.</b></p>
+        <p class="pricing-table-sub">Every pack covers the same UCT workflow. The only differences are coin volume and per-match price. <b>All packs - valid 365 days from purchase - one-time payment - no auto-renewal - payments via Razorpay.</b></p>
       </div>
 
       <div class="pricing-table-scroll">
@@ -171,7 +186,7 @@
             </tr>
             <tr>
               <td>Payment partner</td>
-              <td colspan="4" class="center-cell">Stripe - 3D Secure - Radar fraud detection</td>
+              <td colspan="4" class="center-cell">Razorpay - 3D Secure - Radar fraud detection</td>
             </tr>
           </tbody>
         </table>
@@ -294,6 +309,31 @@
       </div>
     </ng-template>
   </div>
+</div>
+
+<div class="payment-methods-overlay" *ngIf="paymentMethodsOpen" role="presentation" (click)="closePaymentMethods()">
+  <section class="payment-methods-modal" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title" (click)="$event.stopPropagation()">
+    <header class="payment-methods-modal-head">
+      <div>
+        <span class="payment-methods-eyebrow">💳 PAYMENT METHODS</span>
+        <h2 id="payment-modal-title">Pay securely with confidence.</h2>
+      </div>
+      <button type="button" class="payment-modal-close" aria-label="Close payment methods" (click)="closePaymentMethods()"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+    </header>
+    <div class="payment-modal-icons" aria-label="Supported card and bank-transfer payment methods">
+      <div><span>International Credit and Debit Cards</span><div class="payment-brand-icons"><span class="brand-visa">VISA</span><span class="brand-rupay">RuPay</span><span class="brand-mastercard"><i></i><i></i></span><span class="brand-amex">AMERICAN<br>EXPRESS</span><span class="brand-diners">◉ DINERS</span></div></div>
+      <div><span>International Bank Transfers</span><div class="bank-brand-icons"><b>✣ ACH<br><small>Network</small></b><b class="bacs">bacs</b><b class="swift">SWIFT</b></div></div>
+    </div>
+    <p class="payment-modal-lead">PICK2WIN supports secure international payments through Razorpay.</p>
+    <div class="payment-modal-grid">
+      <article><h3>Accepted Payment Methods</h3><ul><li>✅ Visa</li><li>✅ Mastercard</li><li>✅ American Express <small>(where supported)</small></li><li>✅ Diners Club International <small>(where supported)</small></li><li>🏦 International Bank Transfers <small>(where available)</small></li></ul></article>
+      <article><h3>Card Requirements</h3><ul><li>Your card must be enabled for online payments.</li><li>Your card must be enabled for international transactions if required by your bank.</li><li>Additional authentication such as OTP, 3D Secure, or bank verification may be required.</li><li>Payment approval is subject to your bank and payment provider.</li></ul></article>
+      <article><h3>Security</h3><ul><li>🔒 Payments are processed securely through Razorpay.</li><li>🔒 PICK2WIN does not store your complete card details.</li><li>🔒 Additional verification may be performed to help prevent unauthorized transactions and fraud.</li></ul></article>
+      <article><h3>Important Information</h3><ul><li>Available payment methods may vary depending on your country, bank, card issuer, and payment provider.</li><li>Some prepaid, virtual, or restricted cards may not be supported.</li><li>Transaction approvals and declines are determined by the card issuer and payment provider.</li></ul></article>
+    </div>
+    <div class="supported-countries"><h3>Supported Countries</h3><div><span>United Kingdom</span><span>Ireland</span><span>Germany</span><span>France</span><span>Spain</span><span>Italy</span><span>Netherlands</span><span>Sweden</span><span>Norway</span><span>Denmark</span><span>Finland</span><span>Austria</span><span>Belgium</span><span>Portugal</span><span>Poland</span><span>United States</span><span>Canada</span><span>Australia</span><span>New Zealand</span></div></div>
+    <p class="payment-modal-warning"><span class="material-symbols-outlined" aria-hidden="true">warning</span> Please ensure your payment method is authorized for international online transactions before attempting a purchase.</p>
+  </section>
 </div>
 
 <app-footer></app-footer>

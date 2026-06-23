@@ -56,6 +56,7 @@ selectedPlan: SubscriptionPlan | null = null;
 checkoutOpen = false;
 paymentProcessing = false;
 paymentSucceeded = false;
+paymentMethodsOpen = false;
 
   constructor(
     private api: ApiService,
@@ -111,6 +112,14 @@ paymentSucceeded = false;
 
   openSignup(): void {
     this.authModal.open('signup');
+  }
+
+  openPaymentMethods(): void {
+    this.paymentMethodsOpen = true;
+  }
+
+  closePaymentMethods(): void {
+    this.paymentMethodsOpen = false;
   }
 
   claimFreeMatch(): void {
