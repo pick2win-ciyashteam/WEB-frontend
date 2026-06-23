@@ -56,10 +56,13 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   uctAlert: { title: string; message: string; type: UctAlertType } | null = null;
   generationStatus = 'Resolving constraints - applying mandates - computing splits';
   readonly generationMessages = [
-    'Resolving constraints - applying mandates - computing splits',
-    'Building formation distributions - 4-7 - 5-6 - 6-5 - 7-4',
-    'Optimising captaincy - validating position counts',
-    'Finalising 20 structured lineups...'
+  '🎯 Applying your configuration...',
+  '👥 Processing selected players...',
+  '📋 Building team combinations...',
+  '👑 Creating captain and vice-captain variations...',
+  '🔄 Maximising team coverage...',
+  '✅ Validating All Teams...',
+  '🚀 Finalising your 20 teams...'
   ];
 
   selectedSubIds = new Set<number>();

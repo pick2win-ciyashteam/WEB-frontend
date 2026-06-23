@@ -207,8 +207,8 @@
 
     <div class="preview-h">
       <div class="preview-h-side">
-        <span class="preview-h-small">Players</span>
-        <strong>{{ previewTeam.players.length }}<span>/11</span></strong>
+        <!-- <span class="preview-h-small">Players</span>
+        <strong>{{ previewTeam.players.length }}<span>/11</span></strong> -->
       </div>
 
       <div class="preview-h-center">
@@ -219,7 +219,7 @@
           <b>{{ previewTeam.awayCount }}</b>
           <span class="preview-team-badge away">{{ teamCode('away') }}</span>
         </div>
-        <h3 id="previewTitle">Team T{{ previewIndex + 1 }} - {{ previewTeam.split }} split</h3>
+        <h4 id="previewTitle">Team T{{ previewIndex + 1 }} </h4>
       </div>
 
       <div class="preview-h-actions">
@@ -268,7 +268,8 @@
   <ng-template #pitchInitials>{{ playerInitials(player) }}</ng-template>
 </div>
                 </div>
-                <div class="pp-plate" [style.background]="teamColor(player.team)">{{ player.name }}</div>
+                <div class="pp-plate" [style.background]="teamColor(player.team)" (click)="togglePreviewPlayerName(player.id)" [attr.title]="player.name">{{ player.name }}</div>
+                <span class="pp-full-name" *ngIf="expandedPreviewPlayerId === player.id">{{ player.name }}</span>
                 <div class="pp-sub">{{ teamCode(player.team) }}</div>
               </div>
             </div>

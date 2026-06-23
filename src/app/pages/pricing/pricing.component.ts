@@ -377,6 +377,10 @@ closeCheckout(): void {
     return Number(plan.price_per_coin) === Math.min(...prices);
   }
 
+  get hasActiveCoinPackOffer(): boolean {
+    return this.pricingPacks.some(pack => pack.offerActive);
+  }
+
   private toPricingPack(plan: SubscriptionPlan, index: number): PricingPack {
     const regular = Number(plan.regular_price ?? plan.price ?? 0);
     const configuredOffer = Number(plan.offer_price ?? plan.price ?? 0);

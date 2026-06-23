@@ -134,11 +134,7 @@
             <div class="profile-ledger-cell-sub">available for {{ availableCoins(profile) }} more matches</div>
           </div>
         </div>
-        <div class="profile-ledger-bar" *ngIf="profile$ | async as profile">
-          <div class="profile-ledger-bar-track"><div class="profile-ledger-bar-fill" [style.width.%]="coinUsagePercent(profile)"></div></div>
-          <div class="profile-ledger-bar-labels"><span><b>{{ usedCoins(profile) }}</b> used</span><span><b>{{ totalCoins(profile) }}</b> total coins</span></div>
-        </div>
-        <p class="profile-ledger-foot">Each coin = <b>1 match UCT generation</b>. Your coins stay valid for 365 days from your most recent purchase - every new pack refreshes the clock on your whole balance. Use them whenever lineups drop for any league PICK2WIN supports.</p>
+        
       </div>
 
       <div class="coin-lots-wrap">
@@ -200,7 +196,7 @@
         <div class="danger-label">Danger Zone</div>
         <div class="danger-card">
           <h4>Delete my account</h4>
-          <p>Permanently delete your PICK2WIN account. This action cannot be reversed. Unused coins will not be refunded · your data will be erased · your account cannot be reclaimed. See <span routerLink="/refund" style="color: darkorange;">Refund Policy (5)</span>  and <span routerLink="/policy" style="color: darkorange;">Privacy Policy (7)</span> for full terms.</p>
+          <p>Permanently delete your PICK2WIN account. This action cannot be reversed. Unused coins will not be refunded · your data will be erased · your account cannot be reclaimed. See <a routerLink="/refund" fragment="refund-5" style="color: darkorange;">Refund Policy (5)</a> and <a routerLink="/policy" fragment="privacy-7" style="color: darkorange;">Privacy Policy (7)</a> for full terms.</p>
           <div class="danger-actions">
             <button type="button" (click)="openDeleteModal()">
               <span class="material-symbols-outlined" aria-hidden="true">delete_forever</span>

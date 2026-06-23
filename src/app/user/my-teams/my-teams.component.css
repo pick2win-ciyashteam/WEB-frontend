@@ -928,6 +928,8 @@
   white-space: nowrap;
 }
 
+.pp-full-name { display: none; }
+
 .pp-sub {
   margin-top: 3px;
   color: rgba(255,255,255,0.78);
@@ -1087,46 +1089,74 @@
   .pitch-field {
     height: 100%;
     min-height: 0;
-    justify-content: space-evenly;
-    gap: 2px;
-    padding: 6px 7px;
+    justify-content: space-between;
+    gap: 3px;
+    padding: 7px 8px 9px;
   }
 
   .pitch-rlabel {
     margin-bottom: 3px;
     padding: 2px 7px;
-    font-size: 7.5px;
-    letter-spacing: 0.09em;
+    font-size: 8px;
+    letter-spacing: 0.1em;
   }
 
   .pitch-line {
-    column-gap: 8px;
-    row-gap: 3px;
-    max-width: 100%;
+    column-gap: 12px;
+    row-gap: 4px;
+    max-width: 346px;
     margin: 0 auto;
   }
 
   .pitch-player {
-    width: 58px;
-    min-width: 54px;
+    width: 76px;
+    min-width: 70px;
   }
 
   .pp-jersey {
-    width: 33px;
-    height: 33px;
-    font-size: 10px;
+    width: 42px;
+    height: 42px;
+    font-size: 12px;
   }
 
   .pp-plate {
-    max-width: 64px;
+    max-width: 82px;
     margin-top: 3px;
+    overflow: hidden;
     padding: 2px 5px;
-    font-size: 8px;
+    font-size: 9.5px;
+    line-height: 1.1;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pitch-player { position: relative; }
+
+  .pp-full-name {
+    display: block;
+    position: absolute;
+    z-index: 8;
+    top: 57px;
+    left: 50%;
+    width: max-content;
+    max-width: 190px;
+    padding: 5px 8px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 6px;
+    color: #fff;
+    background: rgba(3, 14, 25, .96);
+    box-shadow: 0 6px 16px rgba(0,0,0,.36);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
+    transform: translateX(-50%);
   }
 
   .pp-sub {
     margin-top: 1px;
-    font-size: 7px;
+    font-size: 8.5px;
   }
 
   .pp-cvc {

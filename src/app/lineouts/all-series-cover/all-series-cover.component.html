@@ -4,28 +4,22 @@
   <div class="wrap">
     <div class="series-divider">
       <div class="series-divider-line"></div>
-      <div class="series-divider-label">ALL SERIES WE COVER</div>
+      <div class="series-divider-label">ALL SERIES PICK2WIN COVER</div>
       <div class="series-divider-line"></div>
     </div>
 
     <div class="demo-head">
-      <div class="demo-eyebrow">TROPHY ALL SERIES - 3 PRIORITY TIERS</div>
+      <div class="demo-eyebrow">TROPHY ALL SERIES</div>
       <h1 class="demo-title">Every series we cover.</h1>
-      <p class="demo-sub">Every supported competition is loaded from the live PICK2WIN catalog and listed by priority tier with its season window and match volume. All {{ total }} leagues are included in every coin pack.</p>
+      <p class="demo-sub">Every supported competition is loaded from the live PICK2WIN catalog. All {{ total }} leagues are included in every coin pack.</p>
     </div>
 
     <div class="demo-sub" *ngIf="loading">Loading supported leagues...</div>
     <div class="demo-sub" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
 
-    <ng-container *ngIf="!loading && !errorMessage"><ng-container *ngFor="let tier of tiers; trackBy: trackTier">
-      <div class="tier-band reveal">
-        <span class="tier-pill" [ngClass]="tier.key">{{ tier.label }}</span>
-        <h2>{{ tier.title }}</h2>
-        <span class="tier-meta">{{ tier.meta }}</span>
-      </div>
-
+    <ng-container *ngIf="!loading && !errorMessage">
       <div class="league-grid reveal">
-        <article class="league-tile" [ngClass]="tier.key" *ngFor="let series of tier.series; trackBy: trackSeries">
+        <article class="league-tile" *ngFor="let series of series; trackBy: trackSeries">
           <div class="tile-flag" aria-hidden="true">{{ series.flag }}</div>
           <div>
             <div class="tile-region">{{ series.region }}</div>
@@ -38,7 +32,7 @@
           <div class="tile-note">{{ series.note }}</div>
         </article>
       </div>
-    </ng-container></ng-container>
+    </ng-container>
 
     <div class="series-note reveal">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -46,8 +40,8 @@
         <path d="M12 8v4M12 16h.01" />
       </svg>
       <p>
-        <strong>Every supported league - all packs include all tiers.</strong>
-        Every coin pack (Starter / Basic / Standard / Pro) covers every league across all 3 tiers.
+        <strong>Every supported league is included in every pack.</strong>
+        Every coin pack (Starter / Basic / Standard / Pro) covers every series shown above.
         Pricing only differs on the volume of coins purchased - never on which leagues you can use them for.
         Verify your specific match window in <em>Lineouts</em> before purchasing; we publish lineups only after
         they are officially released by the clubs.

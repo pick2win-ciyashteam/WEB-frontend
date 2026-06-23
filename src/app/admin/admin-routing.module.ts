@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { adminAuthGuard } from '../core/guards/admin-auth.guard';
-import { ActivityDormancyComponent } from './activity-dormancy/activity-dormancy.component';
-import { AddCountryComponent } from './add-country/add-country.component';
-import { AddSubscriptionComponent } from './add-subscription/add-subscription.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminShellComponent } from './admin-shell/admin-shell.component';
@@ -63,22 +60,12 @@ const routes: Routes = [
         path: 'create-banner',
         component: CreateBannerComponent
       },
-      {
-        path: 'add-country',
-        component: AddCountryComponent
-      },
-      {
-        path: 'add-subscription',
-        component: AddSubscriptionComponent
-      },
+    
       {
         path: 'pack-buyers',
         component: PackBuyersComponent
       },
-      {
-        path: 'activity-dormancy',
-        component: ActivityDormancyComponent
-      },
+     
       {
         path: 'series-manager',
         component: SeriesManagerComponent

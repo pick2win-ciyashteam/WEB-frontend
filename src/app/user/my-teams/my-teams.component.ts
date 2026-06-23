@@ -107,6 +107,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
   selectedMatch: GeneratedMatch | null = null;
   previewTeam: PreviewTeam | null = null;
   previewIndex = 0;
+  expandedPreviewPlayerId: number | null = null;
 
   matches: GeneratedMatch[] = [];
   previewTeams: PreviewTeam[] = [];
@@ -460,6 +461,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   openTeamPreview(teamId: number): void {
+    this.expandedPreviewPlayerId = null;
     this.previewIndex = this.previewTeams.findIndex(t => t.id === teamId);
     if (this.previewIndex < 0) this.previewIndex = 0;
 
@@ -491,6 +493,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
   closePreview(): void {
     this.previewTeam = null;
+    this.expandedPreviewPlayerId = null;
   }
 
   navPreview(delta: number): void {
@@ -501,6 +504,10 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     const team = this.previewTeams[this.previewIndex];
 
     this.openTeamPreview(team.id);
+  }
+
+  togglePreviewPlayerName(playerId: number): void {
+    this.expandedPreviewPlayerId = this.expandedPreviewPlayerId === playerId ? null : playerId;
   }
 
   playersByPosition(position: PlayerPosition): PreviewPlayer[] {

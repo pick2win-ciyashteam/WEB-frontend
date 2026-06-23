@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 interface PolicySection {
   title: string;
@@ -10,7 +11,7 @@ interface PolicySection {
   templateUrl: './refund.component.html',
   styleUrls: ['./refund.component.css']
 })
-export class RefundComponent {
+export class RefundComponent implements AfterViewInit {
   readonly docTitle = 'Refund Policy';
   readonly docMeta = 'Last updated 24 June 2026 - PICK2WIN Technologies Pvt Ltd';
   readonly pageIcon = 'currency_exchange';
@@ -24,6 +25,16 @@ export class RefundComponent {
     { title: 'Chargebacks', body: 'Please contact us before raising a chargeback so we can resolve the issue. Chargebacks raised in bad faith on consumed coins may lead to account suspension.' },
     { title: 'Contact', body: 'Refund questions? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> - we aim to reply within 48 hours.' }
   ];
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngAfterViewInit(): void {
+    this.route.fragment.subscribe(fragment => {
+      if (fragment) {
+        setTimeout(() => this.scrollToAnchor(fragment), 100);
+      }
+    });
+  }
 
   scrollToTop(event: Event): void {
     event.preventDefault();
@@ -39,6 +50,15 @@ export class RefundComponent {
     }
 
     const headerOffset = 96;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }
+
+  private scrollToAnchor(sectionId: string): void {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+
+    const headerOffset = 108;
     const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   }

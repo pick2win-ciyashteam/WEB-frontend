@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 interface PolicySection {
   title: string;
@@ -10,7 +11,7 @@ interface PolicySection {
   templateUrl: './policy.component.html',
   styleUrls: ['./policy.component.css']
 })
-export class PolicyComponent {
+export class PolicyComponent implements AfterViewInit {
   readonly docTitle = 'Privacy Policy';
   readonly docMeta = 'Last updated 24 June 2026 - PICK2WIN Technologies Pvt Ltd';
   readonly pageIcon = 'shield_lock';
@@ -27,6 +28,16 @@ export class PolicyComponent {
     { title: 'Contact', body: 'Privacy questions or requests? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a>.' }
   ];
 
+  constructor(private route: ActivatedRoute) {}
+
+  ngAfterViewInit(): void {
+    this.route.fragment.subscribe(fragment => {
+      if (fragment) {
+        setTimeout(() => this.scrollToAnchor(fragment), 100);
+      }
+    });
+  }
+
   scrollToTop(event: Event): void {
     event.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -41,6 +52,15 @@ export class PolicyComponent {
     }
 
     const headerOffset = 96;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }
+
+  private scrollToAnchor(sectionId: string): void {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+
+    const headerOffset = 108;
     const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   }

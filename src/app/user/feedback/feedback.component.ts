@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FeedbackPostPayload, FeedbackQuestion } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
+import { ProfileService } from 'src/app/core/services/profile.service';
 
 interface UserFeedbackItem {
   id: number;
@@ -32,12 +33,17 @@ export class FeedbackComponent implements OnInit {
   submittingSurvey = false;
   submittingFeedback = false;
   surveyComplete = false;
+  profileEmail = '';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private profileService: ProfileService) {}
 
   ngOnInit(): void {
     this.loadFeedback();
     this.loadFeedbackQuestions();
+    this.profileService.loadProfile().subscribe({
+      next: () => this.profileEmail = this.profileService.profile?.email || '',
+      error: () => this.profileEmail = ''
+    });
   }
 
   submitSurvey(event: Event): void {
@@ -129,7 +135,7 @@ export class FeedbackComponent implements OnInit {
       importance: String(formData.get('importance') || ''),
       subject: String(formData.get('subject') || '').trim(),
       description: String(formData.get('description') || '').trim(),
-      email: String(formData.get('email') || '').trim(),
+      email: this.profileEmail || String(formData.get('email') || '').trim(),
       location: String(formData.get('location') || ''),
       email_followup: formData.get('email_followup') === 'true'
     };

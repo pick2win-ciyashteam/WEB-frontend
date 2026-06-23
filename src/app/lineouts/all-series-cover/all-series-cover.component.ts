@@ -29,6 +29,7 @@ export class AllSeriesCoverComponent implements OnInit {
   loading = true;
   errorMessage = '';
   total = 0;
+  series: CoveredSeries[] = [];
 
   tiers: CoverageTier[] = [
     {
@@ -94,10 +95,10 @@ export class AllSeriesCoverComponent implements OnInit {
       next: response => {
         const leagues = Array.isArray(response?.leagues) ? response.leagues : (Array.isArray(response?.data?.leagues) ? response.data.leagues : []);
         this.total = Number(response?.total ?? response?.data?.total ?? leagues.length);
-        this.tiers = this.groupByTier(leagues);
+        this.series = this.mapSeries(leagues);
         this.loading = false;
       },
-      error: () => { this.tiers = []; this.loading = false; this.errorMessage = 'Unable to load supported leagues right now.'; }
+      error: () => { this.series = []; this.loading = false; this.errorMessage = 'Unable to load supported leagues right now.'; }
     });
   }
 
@@ -107,6 +108,20 @@ export class AllSeriesCoverComponent implements OnInit {
 
   trackSeries(_: number, series: CoveredSeries): string | number {
     return series.id || series.name;
+  }
+
+  private mapSeries(leagues: any[]): CoveredSeries[] {
+    return [...leagues]
+      .sort((left, right) => Number(left?.sort_order ?? Number.MAX_SAFE_INTEGER) - Number(right?.sort_order ?? Number.MAX_SAFE_INTEGER) || String(left?.name || '').localeCompare(String(right?.name || '')))
+      .map(item => ({
+        id: Number(item?.id || 0),
+        flag: String(item?.short_name || item?.region || '—'),
+        region: String(item?.region || '—'),
+        name: String(item?.name || 'Unnamed league'),
+        season: [item?.from_month_year, item?.to_month_year].filter(Boolean).join(' → ') || '—',
+        matches: `${Number(item?.matches_30d || 0)} matches`,
+        note: String(item?.description || '')
+      }));
   }
 
   private groupByTier(leagues: any[]): CoverageTier[] {

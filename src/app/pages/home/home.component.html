@@ -10,7 +10,7 @@
     <h1>Where <em>skill</em> matters more.</h1>
     <div class="splash-date">
       <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
-      Launching <b>24 June 2026</b>
+      Launching <b>26 June 2026</b>
     </div>
 
     <button class="splash-preview" type="button" (click)="closeSplash()">Preview the site -&gt;</button>
@@ -140,6 +140,19 @@
   </div>
 </section>
 
+<section class="home-section home-acc-green reveal" *ngIf="showTodayLineupsCta">
+  <div class="wrap">
+    <div class="home-cta-block">
+      <a routerLink="/lineouts" class="home-cta-btn pulsing">
+        <span class="home-cta-pulse"></span>
+        <span class="home-cta-text">
+          {{ (loggedIn$ | async) ? "Today's Match Lineouts" : "Sign up Access today's Lineouts" }}
+        </span>
+        <span class="home-cta-arrow">-&gt;</span>
+      </a>
+    </div>
+  </div>
+</section>
 
 <section class="home-section home-first reveal">
   <div class="wrap">
@@ -161,7 +174,7 @@
     </div>
 
     <div class="home-hero-card">
-      <div class="home-hero-eyebrow"><span class="home-hero-dot"></span>WHAT IS PICK2WIN</div>
+      <div class="home-hero-eyebrow"><span class="home-hero-dot"></span>WHAT IS UCT UNDER PICK2WIN</div>
       <h1 class="home-hero-title">Football fantasy team configuration - <em>20 teams per match</em>, in seconds.</h1>
       <p class="home-hero-lead">PICK2WIN is a <b>virtual team-configuration tool</b> for fantasy football that works <b>one match at a time</b> - in any league or series. When official lineups drop, you set your strategy (<b>substitutes, mandates, captaincy</b>) and PICK2WIN turns it into <b>20 football-valid teams for that single match</b>, built only from the players in that fixture - both teams. It's not about picking one "best" team from everyone; it's 20 structured combinations, per match. It doesn't predict results or guarantee outcomes - every final decision stays yours.</p>
 
@@ -280,22 +293,6 @@
           <span class="home-banner-arrow">-&gt;</span>
         </div>
       </a>
-    </div>
-  </div>
-</section>
-
-<section class="home-section home-acc-green reveal" *ngIf="showTodayLineupsCta">
-  <div class="wrap">
-    <div class="home-cta-block">
-      <a routerLink="/lineouts" class="home-cta-btn pulsing">
-        <span class="home-cta-pulse"></span>
-        <span class="home-cta-text">
-          {{ (loggedIn$ | async) ? "Today's Match Lineouts" : "Sign up Access today's Lineouts" }}
-        </span>
-        <span class="home-cta-arrow">-&gt;</span>
-      </a>
-
-      <p class="home-cta-sub"><span class="home-cta-pulse"></span> Lineups go live <b>60 minutes before kickoff</b> - do not miss the window.</p>
     </div>
   </div>
 </section>
@@ -540,16 +537,6 @@
           <div class="journey-phase"><div class="jp-num"><span class="jp-dot"></span> PHASE 04</div><h4>Proven on real matchdays</h4><p>Refined across leagues and live fixtures until generation was fast, consistent, and aligned to the lineups that actually drop.</p></div>
         </div>
 
-        <div class="journey-outcome">
-          <div class="jo-stat"><span class="jo-num">20</span><span class="jo-lbl">structured teams</span></div>
-          <span class="jo-sep"></span>
-          <div class="jo-stat"><span class="jo-num">Seconds</span><span class="jo-lbl">not minutes</span></div>
-          <span class="jo-sep"></span>
-          <div class="jo-stat"><span class="jo-num">Every match</span><span class="jo-lbl">same speed, any league</span></div>
-          <span class="jo-sep"></span>
-          <div class="jo-stat"><span class="jo-num">100% you</span><span class="jo-lbl">skill, not busywork</span></div>
-        </div>
-
         <div class="journey-next">
           <span class="jn-ic">NEXT</span>
           <div class="jn-body">
@@ -580,36 +567,6 @@
   </div>
 </section>
 
-<section class="home-section home-acc-green reveal">
-  <div class="wrap">
-    <div class="about-x">
-      <div class="about-block reveal">
-        <div class="about-block-eyebrow"><span class="num">?</span> - IS PICK2WIN FOR YOU?</div>
-        <h2 class="about-block-h">Be sure it's the <em>right fit</em> before you start.</h2>
-        <div class="fit-grid">
-          <div class="fit-col fit-yes">
-            <div class="fit-head"><span class="fit-ic">YES</span> A great fit if...</div>
-            <ul class="fit-list">
-              <li>You build <b>20 or more teams</b> for a single match</li>
-              <li>You think in <b>coverage</b> - spreading risk across the match</li>
-              <li>You rotate captains, hedge picks, and vary formations</li>
-              <li>You're tired of racing the lineup clock by hand</li>
-            </ul>
-          </div>
-          <div class="fit-col fit-no">
-            <div class="fit-head"><span class="fit-ic">NO</span> Not for you if...</div>
-            <ul class="fit-list">
-              <li>You enter only <b>one or two teams</b> per match</li>
-              <li>You pick by <b>player favouritism</b> rather than coverage</li>
-              <li>You want predictions, tips, or guaranteed results</li>
-              <li>You prefer to build every team manually</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section class="home-section home-acc-red reveal">
   <div class="wrap">
@@ -634,27 +591,6 @@
   </div>
 </section>
 
-<section class="home-section home-launch-section reveal">
-  <div class="wrap">
-    <div class="launch-band-card">
-      <div class="launch-band-eyebrow"><span class="ls-pulse-dot"></span> LAUNCHING SOON - 24 JUNE 2026</div>
-      <h2 class="launch-band-title">Be ready the moment <em>lineouts go live.</em></h2>
-      <p class="launch-band-sub">We launch in</p>
-      <div class="countdown" aria-label="Launch countdown">
-        <div class="cd-unit"><div class="cd-num">{{ days }}</div><div class="cd-label">Days</div></div>
-        <div class="cd-unit"><div class="cd-num">{{ hours }}</div><div class="cd-label">Hours</div></div>
-        <div class="cd-unit"><div class="cd-num">{{ minutes }}</div><div class="cd-label">Minutes</div></div>
-        <div class="cd-unit"><div class="cd-num">{{ seconds }}</div><div class="cd-label">Seconds</div></div>
-      </div>
-      <div class="launch-offer">
-        <span class="launch-offer-badge"><span class="material-symbols-outlined" aria-hidden="true">emoji_events</span> FIFA WC 2026 - LAUNCH OFFER</span>
-        <div class="launch-offer-main"><span class="launch-offer-pct">30% OFF</span> every coin pack</div>
-        <p class="launch-offer-cap">Discounted coin packs for a limited period at launch - 1 coin = 1 match - any league, any series.</p>
-        <a routerLink="/pricing" class="launch-offer-cta">See the launch offer -&gt;</a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- <section class="home-section home-acc-green reveal">
   <div class="wrap">

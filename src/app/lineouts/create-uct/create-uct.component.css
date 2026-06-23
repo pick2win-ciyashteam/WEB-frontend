@@ -359,6 +359,18 @@ h1 em,
   border-color: rgba(11, 204, 142, .45);
 }
 
+/* Keep only the desktop workflow stepper visible while the configuration scrolls. */
+@media (min-width: 901px) {
+  .stepper {
+    position: sticky;
+    top: 72px;
+    z-index: 30;
+    margin-bottom: 22px;
+    background: var(--ink-2);
+    box-shadow: 0 16px 30px rgba(0, 10, 20, .28);
+  }
+}
+
 @media (min-width: 901px) {
   .stepper {
     gap: 10px;
@@ -477,6 +489,42 @@ h1 em,
 .selection-pill.success {
   color: var(--pitch-2);
   border-color: rgba(11, 204, 142, .34);
+}
+
+/* Keep the Playing XI toggle and selection count on one desktop row. */
+@media (min-width: 901px) {
+  .playing-xi-head {
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .playing-xi-head > div {
+    min-width: 0;
+  }
+
+  .playing-xi-head .playing-xi-tools {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .playing-xi-head .xi-toggle {
+    flex-wrap: nowrap;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .playing-xi-head .substitutes-header-title {
+    flex: 0 0 auto;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .playing-xi-head .selection-pill {
+    flex: 0 0 auto;
+    align-self: center;
+    margin-left: auto;
+  }
 }
 
 .player-grid,
@@ -1368,6 +1416,17 @@ h1 em,
   background: rgba(215, 38, 56, .12);
 }
 
+.action-summary-title.cvc .material-symbols-outlined,
+.action-summary-title.captain .material-symbols-outlined {
+  color: var(--gold);
+  background: rgba(244, 180, 0, .12);
+}
+
+.action-summary-title.vice-captain .material-symbols-outlined {
+  color: var(--blue);
+  background: rgba(91, 176, 230, .12);
+}
+
 .action-chip-row {
   display: flex;
   flex-wrap: wrap;
@@ -1393,6 +1452,15 @@ h1 em,
 
 .action-player-chip.no {
   border-left-color: var(--acid);
+}
+
+.action-player-chip.cvc,
+.action-player-chip.captain {
+  border-left-color: var(--gold);
+}
+
+.action-player-chip.vice-captain {
+  border-left-color: var(--blue);
 }
 
 .action-player-chip b {
@@ -1422,6 +1490,11 @@ h1 em,
 }
 
 .mandate-bottom-summary {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.captain-bottom-summary {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 14px;
 }
@@ -3914,7 +3987,7 @@ h1 em,
 
 /* Final compact alignment for Create UCT workflow. */
 .uct-flow-page {
-  padding: 52px 0 72px !important;
+  padding: 10px 0 72px !important;
 }
 
 .back-link {

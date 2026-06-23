@@ -2,7 +2,7 @@
 
 <section class="pricing-page" id="pricing">
   <div class="wrap">
-    <div class="wc-offer-banner reveal">
+    <div class="wc-offer-banner reveal" *ngIf="hasActiveCoinPackOffer">
       <div class="wc-offer-title">
         <span class="material-symbols-outlined wc-trophy" aria-hidden="true">emoji_events</span>
         <span class="wc-brand">PICK2WIN</span>
@@ -193,28 +193,6 @@
       </div>
     </div>
 
-    <div class="wc-terms reveal">
-      <div class="wc-terms-head">
-        <span class="wc-terms-ic material-symbols-outlined" aria-hidden="true">hourglass_top</span>
-        <div>
-          <div class="wc-terms-eyebrow">LIMITED PERIOD OFFER</div>
-          <h3 class="wc-terms-h">Grab the launch pricing while it lasts.</h3>
-        </div>
-      </div>
-      <p class="wc-terms-lead">The FIFA World Cup 2026 promotional pricing:</p>
-      <div class="wc-terms-grid">
-        <div class="wc-term">Is available for a <b>limited period</b> only.</div>
-        <div class="wc-term">May be <b>modified or withdrawn</b> at any time.</div>
-        <div class="wc-term">May <b>revert to regular pricing</b> without prior notice.</div>
-        <div class="wc-term">Applies only to the <b>launch package structure</b>.</div>
-      </div>
-      <div class="wc-terms-after">
-        <p class="wc-after-label">After the FIFA World Cup 2026 promotional period:</p>
-        <div class="wc-after-line"><span class="material-symbols-outlined" aria-hidden="true">inventory_2</span> New package structures may be introduced</div>
-        <div class="wc-after-line"><span class="material-symbols-outlined" aria-hidden="true">redeem</span> New promotional offers may be announced</div>
-        <div class="wc-after-line"><span class="material-symbols-outlined" aria-hidden="true">paid</span> Regular pricing may apply</div>
-      </div>
-    </div>
 
     <div class="pricing-commitments reveal">
       <div class="pricing-commitments-head">

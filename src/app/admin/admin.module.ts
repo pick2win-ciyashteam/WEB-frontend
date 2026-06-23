@@ -9,9 +9,6 @@ import { AdminShellComponent } from './admin-shell/admin-shell.component';
 import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
 import { CountriesComponent } from './countries/countries.component';
 import { CreateBannerComponent } from './create-banner/create-banner.component';
-import { AddCountryComponent } from './add-country/add-country.component';
-import { AddSubscriptionComponent } from './add-subscription/add-subscription.component';
-import { ActivityDormancyComponent } from './activity-dormancy/activity-dormancy.component';
 import { PackBuyersComponent } from './pack-buyers/pack-buyers.component';
 import { SeriesManagerComponent } from './series-manager/series-manager.component';
 import { UctActivityComponent } from './uct-activity/uct-activity.component';
@@ -35,9 +32,6 @@ import { PaymentsComponent } from './payments/payments.component';
     AdminSidebarComponent,
     CountriesComponent,
     CreateBannerComponent,
-    AddCountryComponent,
-    AddSubscriptionComponent,
-    ActivityDormancyComponent,
     PackBuyersComponent,
     SeriesManagerComponent,
     UctActivityComponent,

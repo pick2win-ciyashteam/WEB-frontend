@@ -94,6 +94,20 @@ footer.site {
   letter-spacing: 0.14em;
 }
 
+.foot-grid .footer-nav-title {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  margin-bottom: 16px;
+  padding: 0 10px;
+  border: 1px solid rgba(244,180,0,.30);
+  border-radius: 999px;
+  color: var(--brand-gold) !important;
+  background: rgba(244,180,0,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+
 .foot-grid ul {
   display: grid;
   gap: 10px;
@@ -103,13 +117,31 @@ footer.site {
 }
 
 .foot-grid ul a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
   color: var(--paper);
   font-size: 13.5px;
-  transition: color .2s;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.foot-grid ul a::before {
+  width: 0;
+  height: 1px;
+  margin-right: 0;
+  content: "";
+  background: var(--brand-gold);
+  transition: width .2s ease, margin-right .2s ease;
 }
 
 .foot-grid ul a:hover {
-  color: var(--brand-red);
+  color: #eeb720 !important;
+  transform: translateX(4px);
+}
+
+.foot-grid ul a:hover::before {
+  width: 8px;
+  margin-right: 6px;
 }
 
 .footer-disclaimer {

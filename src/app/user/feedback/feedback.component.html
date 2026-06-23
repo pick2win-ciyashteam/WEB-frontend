@@ -1,64 +1,3 @@
-<div class="fb-hero reveal">
-  <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">tips_and_updates</span> User Voice - Direct Line To The Team</span>
-  <h1 class="fb-h">Your feedback shapes the next tuning.</h1>
-  <p class="fb-lead">
-    Every suggestion, tuning request, league wish-list, and bug report comes straight to the PICK2WIN team.
-    We read every submission, and the patterns we see in user feedback directly drive what gets shipped next.
-    <b>All replies are sent from</b> <a href="mailto:support@pick2win.io">support@pick2win.io</a> within 48 hours.
-  </p>
-</div>
-
-<div class="fb-roadmap-banner reveal">
-  <div class="fb-rb-icon material-symbols-outlined" aria-hidden="true">rocket_launch</div>
-  <div class="fb-rb-body">
-    <div class="fb-rb-eyebrow">A full roadmap is already lined up - your voice decides what ships first</div>
-    <h3>PICK2WIN has many version updates planned. But the best <em>refinements</em> come from you.</h3>
-    <p>Your votes, comments, and bug reports tell us what genuinely saves users time and brings real satisfaction to people using UCT every gameweek.</p>
-  </div>
-</div>
-
-<div class="fb-section-head reveal">
-  <h3>What can you tell us?</h3>
-  <p>Six kinds of feedback - all read by a real person within 48 hours.</p>
-</div>
-
-<div class="fb-categories reveal">
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">target</div>
-    <h4>UCT tuning requests</h4>
-    <p>"Increase variance on captains" - "Add 8-3 / 3-8 splits" - "Hard-lock a specific formation" - anything about how the engine generates teams.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">settings</div>
-    <h4>Feature suggestions</h4>
-    <p>New exports, integrations, workflow shortcuts, presets, team-comparison views - anything that would make your workflow smoother.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">emoji_events</div>
-    <h4>League / coverage requests</h4>
-    <p>Want a league we do not cover yet? A specific cup competition? Women's football? Tell us which competition matters most to you.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">science</div>
-    <h4>Engine accuracy feedback</h4>
-    <p>Noticed a player missing? Lineup did not refresh in time? Constraint validation behaved oddly? The engineering team triages these within 24 hours.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">bug_report</div>
-    <h4>Bug reports</h4>
-    <p>UI glitches, mobile issues, payment problems, account access - anything not working as expected. Include screenshots if you can.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">favorite</div>
-    <h4>What you love</h4>
-    <p>Equally important - what is working well? Knowing what users genuinely value helps us protect those things during future changes.</p>
-  </div>
-</div>
-
-<div class="fb-section-head reveal fb-build-head">
-  <h3>You decide what we build next</h3>
-  <p>Two quick steps - cast your <b class="green">Votes</b>, then share your <b class="gold">Detailed Feedback</b>. Finishing both shapes the next version the most.</p>
-</div>
 
 <div class="fb-tabs reveal">
   <div class="fb-tabbar" role="tablist">
@@ -279,11 +218,7 @@
           </div>
 
           <div class="fb-row-2">
-            <div class="fb-field">
-              <label for="fb-email">Email (for follow-up)</label>
-              <input type="email" id="fb-email" name="email" placeholder="you@example.com">
-              <small>Optional - we will only contact you about this submission</small>
-            </div>
+            <input type="hidden" name="email" [value]="profileEmail">
             <div class="fb-field">
               <label for="fb-app-version">Where in PICK2WIN? (optional)</label>
               <select id="fb-app-version" name="location">
@@ -336,6 +271,69 @@
     </div>
   </div>
 </div>
+
+<div class="fb-hero reveal">
+  <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">tips_and_updates</span> User Voice - Direct Line To The Team</span>
+  <h1 class="fb-h">Your feedback shapes the next tuning.</h1>
+  <p class="fb-lead">
+    Every suggestion, tuning request, league wish-list, and bug report comes straight to the PICK2WIN team.
+    We read every submission, and the patterns we see in user feedback directly drive what gets shipped next.
+    <b>All replies are sent from</b> <a href="mailto:support@pick2win.io">support@pick2win.io</a> within 48 hours.
+  </p>
+</div>
+
+<div class="fb-roadmap-banner reveal">
+  <div class="fb-rb-icon material-symbols-outlined" aria-hidden="true">rocket_launch</div>
+  <div class="fb-rb-body">
+    <div class="fb-rb-eyebrow">A full roadmap is already lined up - your voice decides what ships first</div>
+    <h3>PICK2WIN has many version updates planned. But the best <em>refinements</em> come from you.</h3>
+    <p>Your votes, comments, and bug reports tell us what genuinely saves users time and brings real satisfaction to people using UCT every gameweek.</p>
+  </div>
+</div>
+
+<div class="fb-section-head reveal">
+  <h3>What can you tell us?</h3>
+  <p>Six kinds of feedback - all read by a real person within 48 hours.</p>
+</div>
+
+<div class="fb-categories reveal">
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">target</div>
+    <h4>UCT tuning requests</h4>
+    <p>"Increase variance on captains" - "Add 8-3 / 3-8 splits" - "Hard-lock a specific formation" - anything about how the engine generates teams.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">settings</div>
+    <h4>Feature suggestions</h4>
+    <p>New exports, integrations, workflow shortcuts, presets, team-comparison views - anything that would make your workflow smoother.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">emoji_events</div>
+    <h4>League / coverage requests</h4>
+    <p>Want a league we do not cover yet? A specific cup competition? Women's football? Tell us which competition matters most to you.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">science</div>
+    <h4>Engine accuracy feedback</h4>
+    <p>Noticed a player missing? Lineup did not refresh in time? Constraint validation behaved oddly? The engineering team triages these within 24 hours.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">bug_report</div>
+    <h4>Bug reports</h4>
+    <p>UI glitches, mobile issues, payment problems, account access - anything not working as expected. Include screenshots if you can.</p>
+  </div>
+  <div class="fb-category-card">
+    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">favorite</div>
+    <h4>What you love</h4>
+    <p>Equally important - what is working well? Knowing what users genuinely value helps us protect those things during future changes.</p>
+  </div>
+</div>
+
+<div class="fb-section-head reveal fb-build-head">
+  <h3>You decide what we build next</h3>
+  <p>Two quick steps - cast your <b class="green">Votes</b>, then share your <b class="gold">Detailed Feedback</b>. Finishing both shapes the next version the most.</p>
+</div>
+
 
 <div class="fb-shipped reveal">
   <div class="fb-shipped-h">
