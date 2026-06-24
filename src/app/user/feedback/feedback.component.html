@@ -1,6 +1,6 @@
 
-<div class="fb-tabs reveal">
-  <div class="fb-tabbar" role="tablist">
+<div class="fb-tabs reveal" >
+  <div class="fb-tabbar" role="tablist" style="margin-top: 1rem;">
     <button class="fb-tab" data-fbtab="vote" type="button" [class.active]="feedbackTab === 'vote'" [class.done]="surveySubmitted" (click)="setFeedbackTab('vote')">
       <span class="material-symbols-outlined" aria-hidden="true">how_to_vote</span>
       Votes
@@ -13,7 +13,7 @@
     </button>
   </div>
 
-  <div class="fb-tabpanel" *ngIf="feedbackTab === 'vote'">
+  <div class="fb-tabpanel" *ngIf="feedbackTab === 'vote'" >
     <div class="fb-survey">
       <div class="fb-survey-h">
         <span class="fb-eyebrow vote"><span class="material-symbols-outlined" aria-hidden="true">ballot</span> Votes - Help Shape The Next Version</span>
@@ -272,7 +272,7 @@
   </div>
 </div>
 
-<div class="fb-hero reveal">
+<div class="fb-hero reveal" style="margin-top: 2rem;">
   <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">tips_and_updates</span> User Voice - Direct Line To The Team</span>
   <h1 class="fb-h">Your feedback shapes the next tuning.</h1>
   <p class="fb-lead">
