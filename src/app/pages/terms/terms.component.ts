@@ -12,65 +12,37 @@ interface PolicySection {
 })
 export class TermsComponent {
   readonly docTitle = 'Terms & Conditions';
-  readonly docMeta = 'Last updated 24 June 2026 - PICK2WIN Technologies Pvt Ltd';
+  readonly docMeta = 'Last updated 27 June 2026 - PICK2WIN Technologies Private Limited';
   readonly pageIcon = 'gavel';
+
   readonly sections: PolicySection[] = [
-    {
-      title: 'Acceptance & eligibility',
-      body: 'By creating a PICK2WIN account you confirm you are <strong>18 years or older</strong>, legally permitted to use the platform in your jurisdiction, and that you accept these Terms, the Privacy Policy and the Refund Policy. PICK2WIN is not intended for minors.'
-    },
-    {
-      title: 'What PICK2WIN is - and is not',
-      body: 'PICK2WIN is a <strong>virtual team-configuration tool</strong>. Its UCT engine turns your own inputs into 20 structured teams per match. PICK2WIN is <strong>not</strong> a betting, gambling or real-money gaming service, does <strong>not</strong> predict match outcomes, does <strong>not</strong> guarantee any result, and pays out no winnings. You decide how to use the generated teams elsewhere.'
-    },
-    {
-      title: 'No advice or recommendations',
-      body: 'PICK2WIN explains how the platform is structured and the constraints it works within. It does <strong>not</strong> recommend players, captains, formations or selections, and never advises which options to choose. Every configuration decision is entirely yours - the engine only processes the inputs you provide.'
-    },
-    {
-      title: 'Accounts & verification',
-      body: 'Each user may hold <strong>one account only</strong>. Both a mobile number and an email address must be verified; disposable email and VoIP / virtual numbers are blocked. Creating multiple accounts - for example to evade the one-account rule - leads to <strong>permanent ban</strong> and forfeiture of any balance.'
-    },
-    {
-      title: 'Coins & generation',
-      body: 'One coin equals one match UCT generation, and each successful run produces exactly <strong>20 structured teams</strong>. Coin packs are one-time purchases with no subscription or auto-renewal. Your coins form a single combined balance valid for <strong>365 days from your most recent purchase</strong> (Active Pack Merge - see the Refund Policy). Each generation reflects strictly the configuration inputs you provided (Substitute, Mandate, Captaincy); if a completed run does not reflect those inputs, this is a technical fault - contact <a href="mailto:support@pick2win.io">support@pick2win.io</a> with your downloaded TXT file for verification (see Refund Policy &middot; Verified technical failure).'
-    },
-    {
-      title: 'Coin consumption & failed runs',
-      body: 'A coin is consumed <strong>only</strong> when a generation succeeds and 20 teams are delivered to My Teams. No coin is charged if a run fails, is cancelled mid-flow, or never completes; on failure you return to the configuration screen with your inputs preserved and may re-run. If a coin is charged but no teams are delivered due to a fault on our side, contact <a href="mailto:support@pick2win.io">support@pick2win.io</a> and we will verify and restore or refund the coin.'
-    },
-    {
-      title: 'Generated teams are final',
-      body: 'Once a generation completes, the 20 teams are <strong>final</strong> and locked as-is: they cannot be edited, swapped, modified, regenerated or undone, and each match supports one successful generation per user. While the teams are visible in My Teams you may browse, preview and download them.'
-    },
-    {
-      title: 'Availability & downloads',
-      body: 'Generated teams remain available in My Teams until the match kicks off. <strong>After kickoff they are removed</strong>, and the file you downloaded becomes your only copy. You are responsible for downloading your teams before kickoff.'
-    },
-    {
-      title: 'Acceptable use',
-      body: 'You agree not to scrape, automate, resell, or commercially redistribute the service or its output, not to attempt to bypass verification or rate limits, and not to interfere with the platform operation. We may suspend or terminate accounts that breach these terms.'
-    },
-    {
-      title: 'Intellectual property',
-      body: 'The PICK2WIN name, UCT engine, interface and content are owned by PICK2WIN Technologies Pvt Ltd. You retain ownership of the inputs you provide; you receive a personal, non-transferable right to use the teams generated for you.'
-    },
-    {
-      title: 'Disclaimers & limitation of liability',
-      body: 'The service is provided as is. Football data is sourced from third-party providers and may change; PICK2WIN is not liable for lineup changes, cancellations, third-party platform actions, or how you use the generated teams. To the maximum extent permitted by law, our aggregate liability is limited to the amount you paid in the preceding 12 months.'
-    },
-    {
-      title: 'Changes to these terms',
-      body: 'We may update these Terms. Coins you have already purchased remain usable under the terms in force at the time of purchase; future changes never retroactively shorten the validity of coins you already hold or change a pack you already paid for.'
-    },
-    {
-      title: 'Governing law',
-      body: 'These Terms are governed by the laws of India, with exclusive jurisdiction of the courts of Bengaluru, Karnataka.'
-    },
-    {
-      title: 'Contact',
-      body: 'Questions about these Terms? Email <a href="mailto:support@pick2win.io" style="color: var(--gold);">support@pick2win.io</a>.'
-    }
+    { title: 'Acceptance of Terms', body: 'By accessing, registering for, purchasing from, or using PICK2WIN, you agree to be bound by these Terms & Conditions, our Privacy Policy, Cookie Policy, and Refund Policy.<br><br>If you do not agree with any part of these Terms, you must not access or use the platform.<br><br>PICK2WIN may update these Terms from time to time. Continued use of the platform after any update constitutes acceptance of the revised Terms.' },
+    { title: 'Eligibility', body: 'To use PICK2WIN, you must:<ul><li>Be at least eighteen (18) years of age.</li><li>Have legal capacity to enter into a binding agreement.</li><li>Be legally permitted to use the service in your jurisdiction.</li><li>Comply with all applicable laws and regulations.</li></ul>PICK2WIN is not intended for minors.<br><br>Users are responsible for ensuring that use of the platform is lawful in their location.' },
+    { title: 'What PICK2WIN Is – And Is Not', body: 'PICK2WIN is a Software-as-a-Service (SaaS) platform that provides virtual football team configuration tools.<br><br>Its User Configuration Teams (UCT) engine processes user-selected inputs and generates twenty (20) structured virtual football teams for supported football matches.<br><br>PICK2WIN:<ul><li>Is not a betting platform.</li><li>Is not a gambling platform.</li><li>Is not a sportsbook.</li><li>Is not a casino.</li><li>Is not a real-money gaming platform.</li><li>Does not host contests or tournaments.</li><li>Does not accept wagers or bets.</li><li>Does not provide prizes or winnings.</li><li>Does not predict match outcomes.</li><li>Does not guarantee player performance.</li><li>Does not guarantee fantasy contest success.</li></ul>PICK2WIN does not guarantee that generated teams will achieve any particular result, ranking, score, profit, prize, or success on any third-party platform.<br><br>Users remain solely responsible for how they choose to use generated teams.' },
+    { title: 'No Advice or Recommendations', body: 'PICK2WIN does not provide:<ul><li>Betting advice.</li><li>Gambling advice.</li><li>Financial advice.</li><li>Investment advice.</li><li>Fantasy sports advice.</li><li>Player recommendations.</li><li>Captain recommendations.</li><li>Vice-captain recommendations.</li><li>Team recommendations.</li></ul>All player selections, substitutions, mandates, captaincy choices, and configuration decisions are made solely by the user.<br><br>The UCT engine only processes the information and preferences submitted by the user.' },
+    { title: 'User Accounts', body: 'Each user may maintain only one active PICK2WIN account.<br><br>Registration requires:<ul><li>A valid email address.</li><li>A valid mobile number.</li><li>Successful verification of both.</li></ul>PICK2WIN may reject:<ul><li>Disposable email addresses.</li><li>Temporary email services.</li><li>Virtual numbers.</li><li>VoIP numbers.</li><li>Fraudulent registrations.</li></ul>Providing false, misleading, incomplete, or inaccurate information may result in suspension or termination of the account.<br><br>Users must ensure their account information remains accurate and up to date.' },
+    { title: 'Account Security', body: 'Users are responsible for:<ul><li>Protecting login credentials.</li><li>Maintaining password confidentiality.</li><li>Securing devices used to access the platform.</li><li>Activities performed through their account.</li></ul>Users must immediately notify PICK2WIN if they suspect:<ul><li>Unauthorized account access.</li><li>Credential compromise.</li><li>Account misuse.</li></ul>PICK2WIN is not responsible for losses resulting from user negligence regarding account security.' },
+    { title: 'Verification Requirements', body: 'PICK2WIN may require verification of:<ul><li>Email address.</li><li>Mobile number.</li><li>Identity information.</li><li>Payment information.</li></ul>Failure to complete required verification may result in restricted access to platform features.' },
+    { title: 'Coins & UCT Generation', body: 'PICK2WIN operates using a coin-based access model.<ul><li>One (1) Coin = One (1) successful UCT generation.</li><li>One successful generation produces exactly twenty (20) virtual teams.</li><li>Coin packs are one-time purchases.</li><li>No subscriptions are currently offered.</li><li>No automatic renewals occur.</li><li>No recurring billing occurs.</li></ul>Coin validity, expiration, Active Pack Merge, and refund rules are governed by the Refund Policy.' },
+    { title: 'Coin Consumption & Failed Runs', body: 'A coin is consumed only when:<ul><li>A UCT generation completes successfully; and</li><li>Twenty (20) virtual teams are delivered to the user’s My Teams section.</li></ul>A coin is not consumed if:<ul><li>Generation fails.</li><li>Generation is cancelled.</li><li>The process does not complete successfully.</li></ul>If a coin is deducted but no teams are delivered due to a verified PICK2WIN technical issue, users should contact <a href="mailto:support@pick2win.io">support@pick2win.io</a>.<br><br>Resolution will be handled in accordance with the Refund Policy.' },
+    { title: 'Coin Purchase Issues', body: 'If a payment is successfully processed but purchased coins are not credited to the user’s account, users should contact <a href="mailto:support@pick2win.io">support@pick2win.io</a> and provide relevant transaction details.<br><br>PICK2WIN will investigate the issue using payment provider records, transaction references, banking confirmations, and platform logs.<br><br>Where appropriate, coins may be credited, restored, or refunded in accordance with the Refund Policy.<br><br>PICK2WIN cannot refund funds that were never received by PICK2WIN from the payment provider.<br><br>Where a user’s bank account reflects a debit but the transaction was not successfully received or settled to PICK2WIN, any reversal or refund must be processed through the payment provider and banking system.' },
+    { title: 'Generated Teams & Downloads', body: 'Once generation completes successfully, generated teams become final and cannot be edited, modified, regenerated, reversed, or otherwise altered.<br><br>Users may:<ul><li>View teams.</li><li>Preview teams.</li><li>Download teams.</li></ul>Generated teams remain available until the scheduled match kickoff.<br><br>After kickoff:<ul><li>Teams may be removed from the platform.</li><li>Downloaded files become the user’s only retained copy.</li></ul>Users are responsible for downloading teams before kickoff.' },
+    { title: 'Supported Sports & Platform Scope', body: 'At the time of publication of these Terms, PICK2WIN supports Football (Soccer) only.<br><br>PICK2WIN may introduce additional sports, competitions, fantasy app structures, features, or services in future versions.<br><br>The availability of specific competitions, leagues, matches, fantasy app structures, and platform features may change from time to time.<br><br>PICK2WIN is not affiliated with, endorsed by, sponsored by, or officially connected to any third-party fantasy sports platform unless explicitly stated.' },
+    { title: 'Third-Party Compatibility', body: 'PICK2WIN attempts to generate teams based on supported structures and user configurations.<br><br>However, PICK2WIN does not guarantee:<ul><li>Compatibility with third-party fantasy platforms.</li><li>Compatibility with contest formats.</li><li>Compatibility with scoring systems.</li><li>Compatibility with future rule changes.</li><li>Compatibility with future platform updates.</li></ul>Users remain responsible for reviewing generated teams before using them elsewhere.' },
+    { title: 'User Responsibilities', body: 'Users are solely responsible for:<ul><li>Player selections.</li><li>Captain selections.</li><li>Vice-captain selections.</li><li>Substitute selections.</li><li>Mandate selections.</li><li>Configuration choices.</li><li>Downloading generated teams before kickoff.</li><li>Ensuring generated teams comply with any third-party platform they choose to use.</li></ul>' },
+    { title: 'Acceptable Use', body: 'Users must not:<ul><li>Scrape platform content.</li><li>Automate access without authorization.</li><li>Reverse engineer the platform.</li><li>Bypass security controls.</li><li>Share accounts.</li><li>Resell generated teams commercially.</li><li>Circumvent platform limitations.</li><li>Disrupt platform operations.</li><li>Attempt unauthorized access to systems or data.</li><li>Use the platform for unlawful, fraudulent, abusive, deceptive, or malicious purposes.</li></ul>Violations may result in suspension, restriction, or permanent termination of access.' },
+    { title: 'Fraud Prevention & Enforcement', body: 'PICK2WIN may investigate activity involving:<ul><li>Multiple accounts.</li><li>Identity fraud.</li><li>Payment fraud.</li><li>Chargeback abuse.</li><li>Credential sharing.</li><li>Automated abuse.</li><li>Suspicious platform activity.</li></ul>PICK2WIN may suspend, restrict, terminate, or permanently ban accounts involved in such activity.<br><br>Unused balances may be forfeited where permitted by applicable law.' },
+    { title: 'Intellectual Property', body: 'All rights relating to:<ul><li>PICK2WIN.</li><li>UCT.</li><li>Software.</li><li>Branding.</li><li>Logos.</li><li>Content.</li><li>Documentation.</li><li>User Interface.</li></ul>remain the exclusive property of PICK2WIN Technologies Private Limited.<br><br>Users receive a limited, personal, non-transferable, non-commercial license to use generated outputs.<br><br>No ownership rights are transferred to users.' },
+    { title: 'Third-Party Data Providers', body: 'Match, lineup, player, competition, and football-related data may be supplied by third-party providers.<br><br>Such information may:<ul><li>Change without notice.</li><li>Be delayed.</li><li>Contain inaccuracies.</li><li>Become unavailable.</li></ul>PICK2WIN is not responsible for errors, omissions, delays, inaccuracies, or interruptions originating from third-party providers.' },
+    { title: 'Service Availability', body: 'PICK2WIN aims to provide reliable service but does not guarantee uninterrupted availability.<br><br>Services may be affected by:<ul><li>Scheduled maintenance.</li><li>Software updates.</li><li>Infrastructure issues.</li><li>Third-party provider outages.</li><li>Internet disruptions.</li><li>Security incidents.</li></ul>Temporary interruptions do not automatically qualify for refunds.' },
+    { title: 'Disclaimer of Warranties', body: 'The platform is provided on an “as is” and “as available” basis.<br><br>To the fullest extent permitted by law, PICK2WIN disclaims all warranties, including implied warranties of merchantability, fitness for a particular purpose, and non-infringement.<br><br>No guarantee is made regarding:<ul><li>Team performance.</li><li>Match outcomes.</li><li>User results.</li><li>Third-party platform acceptance.</li><li>Player performance.</li><li>Fantasy contest outcomes.</li></ul>' },
+    { title: 'Limitation of Liability', body: 'To the fullest extent permitted by law, PICK2WIN shall not be liable for:<ul><li>Indirect losses.</li><li>Consequential losses.</li><li>Lost profits.</li><li>Lost opportunities.</li><li>Third-party platform actions.</li><li>Match cancellations.</li><li>Match postponements.</li><li>Lineup changes.</li><li>Data provider failures.</li></ul>PICK2WIN’s total aggregate liability shall not exceed the total amount paid by the user to PICK2WIN during the twelve (12) months preceding the event giving rise to the claim.' },
+    { title: 'Suspension & Termination', body: 'PICK2WIN may suspend or terminate accounts for:<ul><li>Breach of these Terms.</li><li>Fraudulent activity.</li><li>Security concerns.</li><li>Abuse of platform services.</li><li>Legal compliance requirements.</li></ul>Users may request permanent account deletion in accordance with the Privacy Policy.<br><br>Once account deletion is completed, the account cannot be recovered, restored, or reactivated.' },
+    { title: 'Force Majeure', body: 'PICK2WIN shall not be liable for delays or failures caused by events beyond its reasonable control, including:<ul><li>Natural disasters.</li><li>Government actions.</li><li>Internet failures.</li><li>Cyberattacks.</li><li>Cloud service outages.</li><li>Labor disputes.</li><li>Public emergencies.</li><li>Telecommunications failures.</li></ul>' },
+    { title: 'Changes To These Terms', body: 'PICK2WIN may update these Terms from time to time.<br><br>Changes apply prospectively from their effective date.<br><br>Previously purchased coin packs will not have their validity retroactively shortened or materially altered.' },
+    { title: 'Governing Law & Jurisdiction', body: 'These Terms shall be governed by and interpreted in accordance with the laws of India.<br><br>Any dispute arising from these Terms shall be subject to the exclusive jurisdiction of the courts located in Bengaluru, Karnataka, India.' },
+    { title: 'Contact & Complaints', body: 'For questions, complaints, refund requests, payment issues, legal inquiries, or support requests:<br>Email: <a href="mailto:support@pick2win.io">support@pick2win.io</a><br><br>PICK2WIN aims to acknowledge and review support requests within 48–72 business hours.' },
+    { title: 'Entire Agreement', body: 'These Terms & Conditions, together with the Privacy Policy, Cookie Policy, Refund Policy, and any other policies published by PICK2WIN, constitute the entire agreement between the user and PICK2WIN regarding use of the platform and supersede any prior understandings, communications, or agreements relating to the service.' }
   ];
 
   scrollToTop(event: Event): void {
@@ -81,10 +53,7 @@ export class TermsComponent {
   scrollToSection(event: Event, sectionId: string): void {
     event.preventDefault();
     const target = document.getElementById(sectionId);
-
-    if (!target) {
-      return;
-    }
+    if (!target) return;
 
     const headerOffset = 96;
     const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;

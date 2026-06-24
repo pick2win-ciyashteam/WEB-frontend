@@ -1,7 +1,42 @@
 <app-header></app-header>
-<main class="pol-page cookie-page"><div class="pol-container">
-  <div class="cookie-brand"><span aria-hidden="true">▤</span> <b>PICK2WIN</b> <em>POLICIES</em></div>
-  <nav class="pol-tabbar" aria-label="PICK2WIN policy pages"><a class="pol-tab" routerLink="/terms">Terms &amp; Conditions</a><a class="pol-tab" routerLink="/policy">Privacy Policy</a><a class="pol-tab" routerLink="/refund">Refund Policy</a><a class="pol-tab active" routerLink="/cookie-policy">Cookie Policy</a></nav>
-  <article class="pol-panel active"><h1 class="pol-doc-title">Cookie Policy</h1><p class="pol-doc-meta">Last updated 24 June 2026 · PICK2WIN Technologies Private Limited</p><section class="pol-section" *ngFor="let section of sections; let i = index"><h2><span class="sec-num">{{ i + 1 }}</span>{{ section.title }}</h2><p *ngFor="let paragraph of section.paragraphs" [innerHTML]="paragraph"></p><ul class="pol-list" *ngIf="section.items?.length"><li *ngFor="let item of section.items">{{ item }}</li></ul></section></article>
-</div></main>
+
+<main class="pol-page">
+  <div class="pol-container">
+    <section class="pol-hero">
+      <div class="pol-top">
+        <span class="material-symbols-outlined pol-top-icon" aria-hidden="true">{{ pageIcon }}</span>
+        <span class="pol-eyebrow">PICK2WIN - Legal</span>
+      </div>
+      <h1 class="pol-mast">{{ docTitle }} <em>for UCT users</em></h1>
+      <p class="pol-intro">How cookies, local storage, account sessions, payments, and UCT workflow data are handled.</p>
+    </section>
+
+    <nav class="pol-tabbar" aria-label="PICK2WIN policy pages">
+      <a class="pol-tab" routerLink="/terms">Terms &amp; Conditions</a>
+      <a class="pol-tab" routerLink="/policy">Privacy Policy</a>
+      <a class="pol-tab" routerLink="/refund">Refund Policy</a>
+      <a class="pol-tab active" routerLink="/cookie-policy">Cookie Policy</a>
+    </nav>
+
+    <article class="pol-panel active">
+      <h3 class="pol-doc-title">{{ docTitle }}</h3>
+      <p class="pol-doc-meta">{{ docMeta }}</p>
+
+      <div class="pol-section" *ngFor="let section of sections; let i = index" [attr.id]="'cookie-' + (i + 1)">
+        <h4><span class="sec-num">{{ i + 1 }}</span>{{ section.title }}</h4>
+
+        <p *ngFor="let paragraph of section.paragraphs" [innerHTML]="paragraph"></p>
+
+        <ul class="pol-list" *ngIf="section.items?.length">
+          <li *ngFor="let item of section.items">{{ item }}</li>
+        </ul>
+      </div>
+    </article>
+
+    <div class="pol-foot">
+      &copy; 2026 PICK2WIN Technologies Pvt Ltd - All rights reserved - support@pick2win.io
+    </div>
+  </div>
+</main>
+
 <app-footer></app-footer>

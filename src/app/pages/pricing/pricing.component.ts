@@ -401,7 +401,7 @@ closeCheckout(): void {
       discountText: `${discount}% OFF`,
       offerLabel: plan.offer_label || 'Offer price',
       offerActive,
-      currencySymbol: plan.currency_symbol || '$',
+      currencySymbol: '$',
       tone: this.packTone(index),
       bestValue: this.isProPack(plan)
     };

@@ -1,19 +1,205 @@
 import { Component } from '@angular/core';
 
-interface CookieSection { title: string; paragraphs: string[]; items?: string[]; }
+interface CookieSection {
+  title: string;
+  paragraphs: string[];
+  items?: string[];
+}
 
-@Component({ selector: 'app-cookie-policy', templateUrl: './cookie-policy.component.html', styleUrls: ['./cookie-policy.component.css'] })
+@Component({
+  selector: 'app-cookie-policy',
+  templateUrl: './cookie-policy.component.html',
+  styleUrls: ['./cookie-policy.component.css']
+})
 export class CookiePolicyComponent {
+  readonly docTitle = 'Cookie Policy';
+  readonly docMeta = 'Last updated 27 June 2026 - PICK2WIN Technologies Private Limited';
+  readonly pageIcon = 'cookie';
+
   readonly sections: CookieSection[] = [
-    { title: 'What this policy covers', paragraphs: ['This Cookie Policy explains how PICK2WIN uses cookies and similar technologies, including your browser&rsquo;s local storage, on our website and platform. It should be read together with our <a href="/policy">Privacy Policy</a>.'] },
-    { title: 'What cookies and local storage are', paragraphs: ['Cookies are small text files stored on your device by a website. Local storage is a similar browser technology that allows websites to store small amounts of information on your device. These technologies help the platform remember information between page loads and sessions, such as your sign-in status and platform preferences.'] },
-    { title: 'How we use them', paragraphs: ['We use cookies and local storage only for essential purposes, including:', 'We do not use cookies or local storage to build advertising profiles or track you across other websites.'], items: ['Keeping you signed in', 'Maintaining your session', 'Remembering your in-session configuration and preferences', 'Protecting the platform against fraud, abuse, and unauthorized access', 'Supporting platform functionality and security'] },
-    { title: 'Strictly necessary technologies', paragraphs: ['These technologies are required for the platform to operate properly and include:', 'Because these technologies are essential to providing the service, they cannot be disabled through our platform.'], items: ['User authentication and sign-in', 'Session management', 'Security and fraud prevention', 'In-session state and configuration management', 'Platform functionality and performance'] },
-    { title: 'Local storage', paragraphs: ['In addition to cookies, PICK2WIN uses browser local storage to maintain sign-in status and remember in-session platform state. Information stored in local storage remains on your device and is used solely for operating and securing the service. We do not share local storage data with advertisers or advertising networks.'] },
-    { title: 'No advertising or cross-site tracking', paragraphs: ['PICK2WIN does not use:', 'We do not sell your personal information to advertisers.'], items: ['Advertising cookies', 'Third-party advertising trackers', 'Cross-site tracking technologies', 'Behavioural advertising technologies'] },
-    { title: 'Third-party services', paragraphs: ['Certain third-party service providers may place their own cookies when providing services to us. For example, payment processing is provided by <strong>Razorpay</strong>. During payment or checkout, Razorpay may use cookies and similar technologies for security, fraud prevention, authentication, and payment processing. Such technologies are governed by the applicable policies of the respective provider. Aside from payment processing and essential service delivery, PICK2WIN does not use third-party advertising or marketing cookies.'] },
-    { title: 'Managing cookies', paragraphs: ['Most web browsers allow you to:', 'Please note that disabling or removing essential cookies or local storage may prevent you from signing in, completing purchases, generating teams, or using parts of the platform properly.'], items: ['View stored cookies', 'Delete cookies', 'Block cookies', 'Clear local storage'] },
-    { title: 'Consent and changes', paragraphs: ['PICK2WIN uses only essential cookies and local storage that are necessary for the operation and security of the platform. Where applicable law requires consent for any future non-essential technologies, we will obtain your consent before they are used. We may update this Cookie Policy from time to time. Any updates will be published on this page and reflected by the “Last Updated” date above.'] },
-    { title: 'Contact us', paragraphs: ['If you have any questions about this Cookie Policy, please contact us:<br>Email: <a href="mailto:support@pick2win.io">support@pick2win.io</a>'] }
+    {
+      title: 'Introduction',
+      paragraphs: [
+        'This Cookie Policy explains how PICK2WIN Technologies Private Limited (“PICK2WIN”, “we”, “our”, or “us”) uses cookies and similar technologies, including browser local storage, on the PICK2WIN website and platform.',
+        'This Cookie Policy should be read together with our <a href="/policy">Privacy Policy</a>.',
+        'By using PICK2WIN, you agree to the use of essential cookies and local storage as described in this Policy.'
+      ]
+    },
+    {
+      title: 'What Are Cookies and Local Storage?',
+      paragraphs: [
+        '<strong>Cookies</strong><br>Cookies are small text files stored on your device by a website.',
+        'Cookies help websites remember information between page visits and user sessions, allowing services to operate efficiently and securely.',
+        '<strong>Local Storage</strong><br>Local storage is a browser technology that allows websites to store limited information directly on your device.',
+        'Like cookies, local storage helps maintain information between page loads and sessions.',
+        'These technologies help PICK2WIN operate securely, reliably, and efficiently.'
+      ]
+    },
+    {
+      title: 'How PICK2WIN Uses Cookies & Local Storage',
+      paragraphs: [
+        'PICK2WIN uses cookies and local storage solely for essential platform operations.',
+        'Examples include:',
+        'We do not use cookies or local storage to build advertising profiles or track users across other websites.'
+      ],
+      items: [
+        'Keeping users signed in.',
+        'Maintaining active sessions.',
+        'Preserving account state.',
+        'Remembering in-session configuration selections.',
+        'Supporting platform functionality.',
+        'Improving platform security.',
+        'Detecting fraud and abuse.',
+        'Preventing unauthorized access.',
+        'Protecting user accounts.',
+        'Supporting secure payment workflows.'
+      ]
+    },
+    {
+      title: 'Strictly Necessary Technologies',
+      paragraphs: [
+        'The technologies used by PICK2WIN are considered strictly necessary for operation of the service.',
+        'Examples include:',
+        'Because these technologies are required for the platform to operate correctly and securely, they cannot be disabled through the PICK2WIN platform.'
+      ],
+      items: [
+        'User authentication.',
+        'Secure sign-in functionality.',
+        'Session management.',
+        'Security monitoring.',
+        'Fraud prevention.',
+        'In-session configuration management.',
+        'Platform functionality and performance.',
+        'Account protection mechanisms.'
+      ]
+    },
+    {
+      title: 'Local Storage Usage',
+      paragraphs: [
+        'PICK2WIN uses browser local storage to:',
+        'Information stored in local storage remains on your device and is used only for operation of the PICK2WIN platform.',
+        'PICK2WIN does not share local storage information with advertisers, marketing companies, or advertising networks.'
+      ],
+      items: [
+        'Maintain sign-in status.',
+        'Preserve active sessions.',
+        'Store temporary platform state.',
+        'Support UCT workflow functionality.',
+        'Improve platform security and reliability.'
+      ]
+    },
+    {
+      title: 'No Advertising, Analytics Tracking, or Cross-Site Profiling',
+      paragraphs: [
+        'PICK2WIN respects user privacy.',
+        'PICK2WIN does not use:',
+        'PICK2WIN does not sell, rent, lease, trade, or monetize personal information through advertising activities.',
+        'We believe user privacy, security, and trust are more important than advertising revenue.'
+      ],
+      items: [
+        'Advertising cookies.',
+        'Behavioural advertising technologies.',
+        'Cross-site tracking technologies.',
+        'Third-party advertising trackers.',
+        'Marketing pixels.',
+        'Advertising networks.',
+        'User profiling technologies for advertising purposes.'
+      ]
+    },
+    {
+      title: 'Our Commitment To User Privacy',
+      paragraphs: [
+        'PICK2WIN is committed to protecting user privacy and platform security.',
+        'We do not build our business around collecting, selling, renting, trading, or monetizing personal information.',
+        'PICK2WIN will never intentionally sell, rent, lease, trade, or disclose personal information to advertisers, marketing companies, data brokers, or other third parties for commercial gain.',
+        'Any limited information sharing is restricted solely to what is necessary for:',
+        'User safety, privacy, and account security remain core priorities in everything we build and operate.'
+      ],
+      items: [
+        'Processing payments.',
+        'Delivering verification messages.',
+        'Maintaining platform functionality.',
+        'Preventing fraud and abuse.',
+        'Protecting platform security.',
+        'Meeting legal and regulatory obligations.'
+      ]
+    },
+    {
+      title: 'Third-Party Service Providers',
+      paragraphs: [
+        'Certain third-party service providers may place their own cookies or similar technologies when delivering services required for platform operation.',
+        '<strong>Razorpay</strong><br>Payment processing is provided by Razorpay.',
+        'During payment or checkout, Razorpay may use cookies or similar technologies for:',
+        'Such technologies are governed by Razorpay’s own policies and practices.',
+        '<strong>Infrastructure & Security Providers</strong><br>Cloud hosting, content delivery, security services, and infrastructure providers may also use essential technologies required for secure platform operation.',
+        'Aside from essential service providers, PICK2WIN does not use third-party advertising or marketing cookies.'
+      ],
+      items: [
+        'Authentication.',
+        'Security.',
+        'Fraud prevention.',
+        'Payment processing.',
+        'Risk assessment.'
+      ]
+    },
+    {
+      title: 'Managing Cookies',
+      paragraphs: [
+        'Most web browsers allow users to:',
+        'Users can manage these settings through their browser preferences.',
+        'Please note that disabling or removing essential cookies or local storage may prevent users from:'
+      ],
+      items: [
+        'View stored cookies.',
+        'Delete cookies.',
+        'Block cookies.',
+        'Restrict cookie usage.',
+        'Clear local storage.',
+        'Configure browser privacy settings.',
+        'Signing in.',
+        'Purchasing coin packs.',
+        'Generating teams.',
+        'Accessing account features.',
+        'Maintaining active sessions.',
+        'Using parts of the platform correctly.'
+      ]
+    },
+    {
+      title: 'Security & Fraud Prevention',
+      paragraphs: [
+        'Certain cookies and local storage functions are used to help:',
+        'Removing or blocking essential technologies may affect PICK2WIN’s ability to provide secure services.'
+      ],
+      items: [
+        'Protect user accounts.',
+        'Detect suspicious activity.',
+        'Prevent unauthorized access.',
+        'Reduce fraud.',
+        'Prevent abuse.',
+        'Maintain platform security.'
+      ]
+    },
+    {
+      title: 'Consent & Future Technologies',
+      paragraphs: [
+        'PICK2WIN currently uses only essential cookies and local storage required for platform functionality and security.',
+        'If PICK2WIN introduces any future non-essential technologies that require user consent under applicable law, users will be notified and consent will be obtained before such technologies are activated.'
+      ]
+    },
+    {
+      title: 'Changes To This Cookie Policy',
+      paragraphs: [
+        'PICK2WIN may update this Cookie Policy from time to time.',
+        'Any updates will be published on this page and reflected by the “Last Updated” date shown above.',
+        'Continued use of the platform after updates become effective constitutes acceptance of the revised Cookie Policy.'
+      ]
+    },
+    {
+      title: 'Contact',
+      paragraphs: [
+        'For questions, concerns, requests, or complaints relating to this Cookie Policy:<br>Email: <a href="mailto:support@pick2win.io">support@pick2win.io</a>',
+        'PICK2WIN aims to acknowledge and review cookie-related requests within 48–72 business hours.'
+      ]
+    }
   ];
 }

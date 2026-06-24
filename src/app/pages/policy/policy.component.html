@@ -24,7 +24,7 @@
 
       <div class="pol-section" *ngFor="let section of sections; let i = index" [attr.id]="'privacy-' + (i + 1)">
         <h4><span class="sec-num">{{ i + 1 }}</span>{{ section.title }}</h4>
-        <p [innerHTML]="section.body"></p>
+                <div class="policy-content" [innerHTML]="section.body"></div>
       </div>
     </article>
 
