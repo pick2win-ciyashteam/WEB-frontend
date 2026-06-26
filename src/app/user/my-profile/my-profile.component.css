@@ -2893,11 +2893,45 @@ tbody tr:hover {
 .profile-page .profile-balance-card {
   grid-column: 2 !important;
   grid-row: 2 !important;
+  grid-template-columns: 44px 1fr !important;
+  gap: 14px !important;
   justify-self: end !important;
   align-self: center !important;
-  width: min(360px, 100%) !important;
-  min-height: 96px !important;
+  width: min(260px, 100%) !important;
+  min-height: 77px !important;
+  padding: 15px 22px !important;
+  border: 1.5px solid rgba(244, 180, 0, 0.78) !important;
+  border-left: 4px solid var(--gold) !important;
+  border-radius: 14px !important;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(244, 180, 0, 0.11), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(5, 26, 42, 0.70)) !important;
   margin: 0 0 28px !important;
+}
+
+.profile-page .profile-balance-card .balance-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border: 2px solid rgba(5, 26, 42, 0.7) !important;
+  color: var(--ink) !important;
+  background: radial-gradient(circle at 35% 25%, #ffe17a, var(--gold) 58%, #b87800) !important;
+  box-shadow: 0 0 0 2px rgba(244, 180, 0, 0.28), 0 6px 14px rgba(244, 180, 0, 0.22) !important;
+}
+
+.profile-page .profile-balance-card .balance-body {
+  min-width: 0 !important;
+}
+
+.profile-page .profile-balance-card .balance-warning {
+  display: none !important;
+}
+
+.profile-page .profile-balance-card .balance-amount strong {
+  font-size: 31px !important;
+}
+
+.profile-page .profile-balance-card .balance-amount span {
+  font-size: 15px !important;
 }
 
 .profile-page .profile-section,
@@ -2932,6 +2966,10 @@ tbody tr:hover {
   .profile-page .lineouts-teaser-btn,
   .profile-page .profile-balance-card {
     width: 100% !important;
+  }
+
+  .profile-page .profile-balance-card {
+    grid-template-columns: 42px 1fr !important;
   }
 
   .profile-page .profile-tabs {
@@ -3146,6 +3184,8 @@ tbody tr:hover {
     grid-row: 1 !important;
     justify-self: end !important;
     align-self: center !important;
+    width: min(260px, 100%) !important;
+    min-height: 77px !important;
     margin-bottom: 22px !important;
   }
 

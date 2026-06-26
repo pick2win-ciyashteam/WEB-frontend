@@ -1159,3 +1159,137 @@ textarea.fb-input,
     margin-bottom: 40px;
   }
 }
+
+/* My Space feedback tab alignment: match the profile tab card rhythm. */
+:host {
+  width: 100%;
+}
+
+.fb-tabs,
+.fb-roadmap-banner,
+.fb-section-head,
+.fb-categories,
+.fb-shipped,
+.fb-commitment {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.fb-tabs {
+  margin: 0 auto 26px;
+  padding: 26px 28px 30px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at top left, rgba(244, 180, 0, 0.06), transparent 34%),
+    linear-gradient(135deg, rgba(9, 31, 48, 0.96), rgba(2, 10, 18, 0.94));
+  box-shadow: 0 24px 56px -18px rgba(0, 0, 0, 0.58);
+}
+
+.fb-tabbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 0 22px !important;
+}
+
+.fb-tab {
+  min-width: 210px;
+  justify-content: center;
+}
+
+.fb-survey,
+.fb-form-wrap {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.fb-survey-form,
+.fb-form-card {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.fb-hero {
+  max-width: 900px;
+  margin: 32px auto 42px !important;
+}
+
+.fb-roadmap-banner,
+.fb-commitment {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.fb-section-head {
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0;
+}
+
+.fb-categories {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0;
+}
+
+.fb-category-card {
+  min-height: 178px;
+  height: 100%;
+}
+
+.fb-shipped {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.fb-shipped-h,
+.fb-shipped-list {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+@media (max-width: 980px) {
+  .fb-tabs,
+  .fb-roadmap-banner,
+  .fb-commitment {
+    padding: 22px;
+  }
+
+  .fb-categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .fb-tabs,
+  .fb-roadmap-banner,
+  .fb-commitment {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .fb-tabbar {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .fb-tab {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .fb-survey-form,
+  .fb-form-card {
+    padding: 18px 14px;
+  }
+
+  .fb-categories {
+    grid-template-columns: 1fr;
+  }
+}
