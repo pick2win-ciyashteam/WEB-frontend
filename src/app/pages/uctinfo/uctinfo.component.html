@@ -91,17 +91,17 @@
       <div class="fact-grid three">
         <div class="fact-card teal"><b>1 GK</b><span>Every team needs one</span><p>Each of the 20 generated teams must include exactly one goalkeeper.</p></div>
         <div class="fact-card blue"><b>2</b><span>Starting goalkeepers</span><p>One from each real team. A third can be added optionally as a substitute.</p></div>
-        <div class="fact-card gold"><b>DEF/MID/FWD</b><span>Mandates only</span><p>Mandates apply only to DEF, MID, FWD. Goalkeepers follow coverage rules.</p></div>
+        <div class="fact-card gold"><b>GK M-YES</b><span>Conditional</span><p>With 1 Goalkeeper, M-YES is not allowed. With 2 Goalkeepers, one may optionally be selected as M-YES.</p></div>
       </div>
 
       <div class="confirm-card">
         <span class="material-symbols-outlined" aria-hidden="true">compare_arrows</span>
-        <div><b>UCT splits both goalkeepers across the 20 teams.</b><p>By default, UCT distributes the 2 starting goalkeepers across the 20 generated teams in a balanced split. Both GKs appear - no manual configuration needed before generation.</p><p><b>Example:</b> GK from Team A appears in some teams - GK from Team B appears in the others - both covered across the full 20.</p></div>
+        <div><b>UCT handles Goalkeepers based on your My Squad.</b><p>If My Squad has 1 Goalkeeper, that player appears in all 20 generated teams automatically and cannot be selected as M-YES.</p><p>If My Squad has 2 Goalkeepers, you may leave both unselected so UCT distributes them, or select one Goalkeeper as M-YES to force that player into all 20 teams.</p></div>
       </div>
 
       <div class="confirm-card info">
-        <span class="material-symbols-outlined" aria-hidden="true">add_circle</span>
-        <div><b>If you pick a substitute goalkeeper</b><p>Substitute selection can include a goalkeeper. If you choose to add a third goalkeeper as a substitute in the Substitute step, UCT distributes all 3 goalkeepers across the 20 teams.</p></div>
+        <span class="material-symbols-outlined" aria-hidden="true">block</span>
+        <div><b>Two Goalkeepers cannot both be M-YES</b><p>Only one Goalkeeper can be selected as M-YES. Selecting both Goalkeepers as M-YES is not allowed.</p></div>
       </div>
 
       <div class="confirm-card keeper-captaincy">
