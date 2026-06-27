@@ -51,6 +51,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   showGenerateConfirm = false;
   showCaptainModeConfirm = false;
   showPlayingXi = true;
+  showSubstitutes = false;
   generateConsent = false;
   mandateMode: Mandate = 'NA';
   pendingCaptainMode: CaptainMode | null = null;
@@ -80,7 +81,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   readonly maxSubs = 3;
   readonly maxMandateYes = 2;
   readonly maxMandateNo = 2;
-  readonly maxCvc = 8;
+  readonly maxCvc = 6;
   readonly minCvc = 2;
   readonly maxCaptains = 4;
   readonly maxViceCaptains = 5;
@@ -89,12 +90,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   readonly teamSize = 5;
   readonly singleGoalkeeperMandateMessage = 'Your squad contains only one Goalkeeper. This Goalkeeper will automatically appear in all generated teams. Selecting it as M-YES is not required.';
   readonly teamCombinationOptions = [
-    { home: 5, away: 0 },
     { home: 4, away: 1 },
     { home: 3, away: 2 },
     { home: 2, away: 3 },
-    { home: 1, away: 4 },
-    { home: 0, away: 5 }
+    { home: 1, away: 4 }
   ];
   readonly positionLimits: Record<string, { min: number; max: number }> = {
     GK: { min: 1, max: 1 },
@@ -427,6 +426,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.showPlayingXi = !this.showPlayingXi;
   }
 
+  toggleSubstitutes(): void {
+    this.showSubstitutes = !this.showSubstitutes;
+  }
+
   nextStep(): void {
     if (this.step === 1 && !this.canLeaveSquadStep()) {
       this.showAlert('My Squad rules incomplete', this.squadValidationMessage(), 'warning');
@@ -447,6 +450,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.step === 3) {
+      this.setActiveStep(5);
+      return;
+    }
+
     if (this.step === 4 && !this.canLeaveDistributionStep()) {
       this.showAlert('Distribution needed', 'Select at least one valid real-team combination or switch to Auto.', 'warning');
       return;
@@ -463,6 +471,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     if (this.step > 1) {
+      if (this.step === 5) {
+        this.setActiveStep(3);
+        return;
+      }
+
       this.setActiveStep(this.step - 1);
     } else {
       this.goBack();
@@ -483,6 +496,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.captainIds.delete(player.id);
       this.viceCaptainIds.delete(player.id);
       this.syncDistributionAfterSquadChange();
+      this.syncMandatesAfterSquadChange();
       this.refreshActionBarLayout();
       return;
     }
@@ -494,6 +508,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     this.selectedStartingIds.add(player.id);
     this.syncDistributionAfterSquadChange();
+    this.syncMandatesAfterSquadChange();
     this.refreshActionBarLayout();
   }
 
@@ -509,6 +524,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.captainIds.delete(player.id);
       this.viceCaptainIds.delete(player.id);
       this.syncDistributionAfterSquadChange();
+      this.syncMandatesAfterSquadChange();
       this.refreshActionBarLayout();
       return;
     }
@@ -530,6 +546,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     this.selectedSubIds.add(player.id);
     this.syncDistributionAfterSquadChange();
+    this.syncMandatesAfterSquadChange();
     this.refreshActionBarLayout();
   }
 
@@ -839,7 +856,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     if (!this.validTeamCombinations().length) {
-      return 'Select enough players from at least one real-team combination: 5x0, 4x1, 3x2, 2x3, 1x4 or 0x5.';
+      return 'Select enough players from at least one real-team combination: 4x1, 3x2, 2x3 or 1x4.';
     }
 
     if (!this.confirmed) {
@@ -950,7 +967,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   captaincyHint(): string {
     if (this.captainMode === 'CVC') {
-      return this.canReview ? 'Captain pool ready.' : `Select ${this.minCvc}-${this.maxCvc} Captain Pool players.`;
+      return `${this.cvcPlayers.length}/${this.maxCvc} captains selected`;
     }
 
     if (this.canReview) {
@@ -1114,6 +1131,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return String(player.position || '').toLowerCase();
   }
 
+  isGoalkeeperPlayer(player: UctPlayer): boolean {
+    return this.isGoalkeeper(player);
+  }
+
   initials(player: UctPlayer): string {
     return player.player_name
       .split(' ')
@@ -1253,16 +1274,16 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private scrollToStepView(step: number): void {
     setTimeout(() => {
-      const elementId = step === 7 ? 'uctGeneratingPanel' : 'uctStepNav';
+      const elementId = step === 7 ? 'uctGeneratingPanel' : 'uctStepContent';
       const element = document.getElementById(elementId);
 
       if (!element) {
         return;
       }
 
-      const headerOffset = 96;
+      const headerOffset = window.innerWidth <= 640 ? 86 : 112;
       const top = element.getBoundingClientRect().top + window.scrollY - headerOffset;
-      this.viewportScroller.scrollToPosition([0, Math.max(0, top)]);
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     });
   }
 
@@ -1313,7 +1334,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private filterMandateModePlayers(players: UctPlayer[]): UctPlayer[] {
     if (this.mandateMode === 'YES') {
-      return players.filter(player => this.mandates.get(player.id) !== 'NO');
+      return players.filter(player =>
+        this.mandates.get(player.id) !== 'NO'
+        && (!this.isGoalkeeper(player) || this.selectedGoalkeepers.length > 1)
+      );
     }
 
     if (this.mandateMode === 'NO') {
@@ -1362,6 +1386,16 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         this.selectedCombinationKeys.delete(key);
       }
     });
+  }
+
+  private syncMandatesAfterSquadChange(): void {
+    if (this.selectedGoalkeepers.length > 1) {
+      return;
+    }
+
+    this.availablePool
+      .filter(player => this.isGoalkeeper(player) && this.mandates.get(player.id) === 'YES')
+      .forEach(player => this.mandates.delete(player.id));
   }
 
   private buildTeam(seed: number, targetHomeCount: number): UctPlayer[] {
