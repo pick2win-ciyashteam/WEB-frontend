@@ -24,9 +24,12 @@ export interface SubscriptionPlan {
   name: string;
   subtitle: string;
   coins: number;
+  bonus_coins?: number;
+  total_coins?: number;
   matches: number;
   price: string;
   price_per_coin: string;
+  price_per_total_coin?: string | number | null;
   currency: string;
   currency_symbol: string;
   validity_days: number;

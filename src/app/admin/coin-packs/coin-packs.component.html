@@ -5,30 +5,36 @@
   <article class="panel"><div class="head"><div><h2>Pack purchases by country</h2><p>How many of each coin pack were purchased in each country.</p></div><div class="country-actions"><label class="country-label">Country<select [(ngModel)]="country" (change)="setCountry(country)"><option value="">All countries</option><option *ngFor="let item of availableCountries" [value]="item.name">{{ item.name }}</option></select></label><button class="show-all" *ngIf="country" (click)="showAllCountries()">All countries</button><button class="link" (click)="downloadCsv(true)">⇩ CSV</button></div></div><div class="table-wrap"><table><thead><tr><th>Country</th><th class="num" *ngFor="let pack of packColumns">{{ pack }}</th><th class="num">Total</th></tr></thead><tbody><tr *ngFor="let row of countries"><td><strong>{{ row.country }}</strong></td><td class="num" *ngFor="let pack of packColumns">{{ format(row.packs?.[pack]) }}</td><td class="num total">{{ format(row.total) }}</td></tr><tr *ngIf="!loading && !countries.length"><td colspan="10" class="empty">No country purchases found.</td></tr></tbody></table></div></article>
   <article class="panel manage-panel"><div class="head"><div><h2>Manage coin packs</h2><p>Source of truth — create, edit, or delete coin packs loaded from the subscription API.</p></div></div><div class="table-wrap"><table><thead><tr><th>Pack name</th><th class="num">Coins</th><th class="num">Price (USD $)</th><th class="num">Users purchased</th><th>Action</th></tr></thead><tbody><tr *ngFor="let item of subscriptions"><td><input [readonly]="editingId !== item.id" [(ngModel)]="item.name"></td><td class="num"><input [readonly]="editingId !== item.id" type="number" [(ngModel)]="item.coins"></td><td class="num"><input [readonly]="editingId !== item.id" type="number" step="0.01" [(ngModel)]="item.price"></td><td class="num green">{{ format(usersPurchasedFor(item.id)) }}</td><td class="actions"><button *ngIf="editingId !== item.id" (click)="editPack(item)">Edit</button><button *ngIf="editingId === item.id" (click)="savePack(item)" [disabled]="saving">Save</button><button class="delete" (click)="openDeleteConfirm(item)" [disabled]="saving">Delete</button></td></tr><tr *ngIf="!subscriptions.length"><td colspan="5" class="empty">No coin packs found.</td></tr></tbody></table></div><div class="add-row"><label>Pack name<input [(ngModel)]="newPack.name" placeholder="e.g. Mega Pack"></label><label>Coins<input [(ngModel)]="newPack.coins" type="number" min="1" placeholder="150"></label><label>Price (USD $)<input [(ngModel)]="newPack.price" type="number" min="0" step="0.01" placeholder="300"></label><button (click)="createPack()" [disabled]="saving">{{ saving ? 'Adding...' : '+ Add coin pack' }}</button></div></article>
   <article class="panel manage-panel-v2">
-    <div class="head"><div><h2>Manage coin packs</h2><p>Source of truth — create, edit, or delete coin packs loaded from the subscription API.</p></div></div>
-    <div class="table-wrap manage-table"><table><thead><tr><th>Order</th><th>Pack name</th><th>Subtitle</th><th>Coins</th><th>Regular price</th><th>Offer price</th><th>Offer label</th><th>Offer active</th><th class="num">Users purchased</th><th>Action</th></tr></thead><tbody>
+    <div class="head"><div><h2>Manage coin packs</h2><p>Source of truth - create, edit, or delete coin packs loaded from the subscription API.</p></div><button class="refresh-packs" type="button" (click)="refreshSubscriptions()" [disabled]="saving">Refresh</button></div>
+    <div class="table-wrap manage-table"><table><thead><tr><th>Order</th><th>Package</th><th>Coins</th><th>Bonus Coins</th><th>Price</th><th>Validity</th><th class="num">Users</th><th>Action</th></tr></thead><tbody>
       <tr *ngFor="let item of subscriptions">
-        <td><input [readonly]="editingId !== item.id" type="number" min="0" [(ngModel)]="item.sort_order"></td>
-        <td><input [readonly]="editingId !== item.id" [(ngModel)]="item.name"></td>
-        <td><input [readonly]="editingId !== item.id" [(ngModel)]="item.subtitle" placeholder="e.g. Multi-league active user"></td>
-        <td><input [readonly]="editingId !== item.id" type="number" [(ngModel)]="item.coins"></td>
-        <td><input [readonly]="editingId !== item.id" type="number" step="0.01" [(ngModel)]="item.regular_price" [placeholder]="item.price"></td>
-        <td><input [readonly]="editingId !== item.id" type="number" step="0.01" [(ngModel)]="item.offer_price" [placeholder]="item.price"></td>
-        <td><input [readonly]="editingId !== item.id" [(ngModel)]="item.offer_label" placeholder="No active offer"></td>
-        <td><select [disabled]="editingId !== item.id" [(ngModel)]="item.is_offer_active"><option [ngValue]="0">Off</option><option [ngValue]="1">On</option></select></td>
-        <td class="num green">{{ format(usersPurchasedFor(item.id)) }}</td>
-        <td class="actions"><button *ngIf="editingId !== item.id" (click)="editPack(item)">Edit</button><button *ngIf="editingId === item.id" (click)="savePack(item)" [disabled]="saving">Save</button><button class="delete" (click)="openDeleteConfirm(item)" [disabled]="saving">Delete</button></td>
+        <td data-label="Order"><input [readonly]="editingId !== item.id" type="number" min="0" [(ngModel)]="item.sort_order"></td>
+        <td data-label="Package"><input [readonly]="editingId !== item.id" [(ngModel)]="item.name"></td>
+        <td data-label="Coins"><input [readonly]="editingId !== item.id" type="number" [(ngModel)]="item.coins"></td>
+        <td data-label="Bonus Coins"><input [readonly]="editingId !== item.id" type="number" min="0" [(ngModel)]="item.bonus_coins"></td>
+        <td data-label="Price"><input [readonly]="editingId !== item.id" type="number" min="0" step="0.01" [(ngModel)]="item.price"></td>
+        <td data-label="Validity"><input [readonly]="editingId !== item.id" type="number" min="1" [(ngModel)]="item.validity_days"></td>
+        <td data-label="Users" class="num green">{{ format(usersPurchasedFor(item.id)) }}</td>
+        <td data-label="Action" class="actions">
+          <button class="icon-action" *ngIf="editingId !== item.id" type="button" title="Edit" aria-label="Edit coin pack" (click)="editPack(item)">
+            <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+          </button>
+          <button class="icon-action save" *ngIf="editingId === item.id" type="button" title="Save" aria-label="Save coin pack" (click)="savePack(item)" [disabled]="saving">
+            <span class="material-symbols-outlined" aria-hidden="true">check</span>
+          </button>
+          <button class="icon-action delete" type="button" title="Delete" aria-label="Delete coin pack" (click)="openDeleteConfirm(item)" [disabled]="saving">
+            <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+          </button>
+        </td>
       </tr>
-      <tr *ngIf="!subscriptions.length"><td colspan="10" class="empty">No coin packs found.</td></tr>
+      <tr *ngIf="!subscriptions.length"><td colspan="8" class="empty">No coin packs found.</td></tr>
     </tbody></table></div>
     <div class="add-row pack-form">
-      <label>Pack name<input [(ngModel)]="newPack.name" placeholder="e.g. Mega Pack"></label>
-      <label>Subtitle<input [(ngModel)]="newPack.subtitle" placeholder="e.g. MULTI-LEAGUE ACTIVE USER"></label>
-      <label>Coins<input [(ngModel)]="newPack.coins" type="number" min="1" placeholder="150"></label>
-      <label>Regular price<input [(ngModel)]="newPack.regular_price" type="number" min="0" step="0.01" placeholder="e.g. 15"></label>
-      <label>Offer price<input [(ngModel)]="newPack.offer_price" type="number" min="0" step="0.01" placeholder="e.g. 10.50"></label>
-      <label>Offer label<input [(ngModel)]="newPack.offer_label" placeholder="e.g. FIFA World Cup Offer"></label>
-      <label>Offer active<select [(ngModel)]="newPack.is_offer_active"><option [ngValue]="0">Offer off</option><option [ngValue]="1">Offer on</option></select></label>
+      <label>Package<input [(ngModel)]="newPack.name" placeholder="e.g. Standard Pack"></label>
+      <label>Coins<input [(ngModel)]="newPack.coins" type="number" min="1" placeholder="200"></label>
+      <label>Bonus Coins<input [(ngModel)]="newPack.bonus_coins" type="number" min="0" placeholder="100"></label>
+      <label>Price<input [(ngModel)]="newPack.price" type="number" min="0" step="0.01" placeholder="$20"></label>
+      <label>Validity<input [(ngModel)]="newPack.validity_days" type="number" min="1" placeholder="365"></label>
       <button (click)="createPack()" [disabled]="saving">{{ saving ? 'Adding...' : '+ Add coin pack' }}</button>
     </div>
   </article>

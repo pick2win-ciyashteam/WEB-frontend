@@ -134,7 +134,7 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
     return this.http.post<UctGenerateResponse>(
       `${this.BASE}/user/teams/generate-teams`,
       JSON.stringify(data),
-      { headers: { 'Content-Type': 'application/json' } }
+      { headers: { 'Content-Type': 'application/json', 'x-api-key': '12345678' } }
     );
   }
 

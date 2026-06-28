@@ -135,16 +135,17 @@ export interface AdminBanner {
 
 export interface AdminSubscriptionCreatePayload {
   name: string;
-  subtitle: string;
+  subtitle?: string;
   coins: number;
+  bonus_coins?: number;
   matches: number;
   price: number;
-  currency: string;
-  currency_symbol: string;
-  validity_days: number;
+  validity_days?: number;
   is_popular: number;
-  is_pro: number;
   sort_order: number;
+  currency?: string;
+  currency_symbol?: string;
+  is_pro?: number;
   is_active?: number;
   regular_price?: number;
   offer_price?: number;
@@ -154,6 +155,9 @@ export interface AdminSubscriptionCreatePayload {
 
 export interface AdminSubscription extends AdminSubscriptionCreatePayload {
   id: number;
+  total_coins?: number;
+  price_per_coin?: string | number | null;
+  price_per_total_coin?: string | number | null;
   is_active?: number;
   created_at?: string;
   updated_at?: string;

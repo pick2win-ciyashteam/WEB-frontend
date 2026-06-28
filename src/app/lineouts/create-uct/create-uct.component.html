@@ -8,8 +8,8 @@
       </button>
       <div class="mobile-title">
         <h2 *ngIf="step === 1">My Squad</h2>
-        <h2 *ngIf="step === 2">M-YES Selection <span>(Optional)</span></h2>
-        <h2 *ngIf="step === 3">Captain Pool <span>(Mandatory)</span></h2>
+        <h2 *ngIf="step === 2">Mandatory Players <span>(Optional)</span></h2>
+        <h2 *ngIf="step === 3">Captain Pool <span>(Required)</span></h2>
         <h2 *ngIf="step === 5">UCT Preview</h2>
         <h2 *ngIf="step >= 6">UCT Teams</h2>
         <!-- <p *ngIf="step === 1">Select 10-22 players from XI and optional substitutes</p> -->
@@ -100,10 +100,10 @@
           <b>01</b><span>My Squad</span>
         </button>
         <button type="button" [class.active]="step === 2" [class.done]="step > 2" (click)="setStep(2)">
-          <b>02</b><span>Mandatory</span><small>Optional</small>
+          <b>02</b><span>Mandatory Players</span><small>Optional</small>
         </button>
         <button type="button" [class.active]="step === 3" [class.done]="step > 3" (click)="setStep(3)">
-          <b>03</b><span>Captain Pool</span><small>Mandatory</small>
+          <b>03</b><span>Captain Pool</span><small>Required</small>
         </button>
         <button type="button" [class.active]="step === 5" [class.done]="step > 5" (click)="setStep(5)">
           <b>04</b><span>Preview</span>
@@ -115,10 +115,19 @@
 
       <section class="flow-panel" id="uctStepContent" *ngIf="step === 1">
         <div class="squad-screen-note">
-          <p>Each generated team = 5 cards: <b>1 GK</b> + <b>1-2 DEF</b> / <b>1-2 MID</b> / <b>1-2 FWD</b>, one captain, no duplicate teams.</p>
-          <div>
-            <b>Select only the players whose eligible Sorare cards you own.</b>
-            <span>PICK2WIN does not verify card ownership or competition eligibility. Generated teams are based entirely on your selected player pool.</span>
+          <!-- <p>Each generated team = 5 cards: <b>1 GK</b> + <b>1-2 DEF</b> / <b>1-2 MID</b> / <b>1-2 FWD</b>, one captain, no duplicate teams.</p> -->
+          <div class="squad-alert">
+            <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+            <div>
+              <b>This is the most important step in the PICK2WIN UCT workflow.</b>
+              <p>Your My Squad is the foundation for generating all 20 team combinations.</p>
+              <ul>
+                <li>Build your My Squad from the Official Playing XI and, if required, Optional Substitute Players from both teams.</li>
+                <li>Substitutes can be <b>DEF</b>, <b>MID</b>, or <b>FWD</b> only. Goalkeepers are not allowed as substitutes.</li>
+                <li>Select only the players whose eligible Sorare cards you own.</li>
+                <li>PICK2WIN does not verify card ownership, card eligibility, or competition eligibility.</li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -174,8 +183,9 @@
           aria-controls="substitutePoolPanel"
           [attr.aria-expanded]="showSubstitutes">
           <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
-          <b>Substitutes</b>
-          <small>Optional - select up to {{ maxSubs }} - no Goalkeepers</small>
+          <b>Substitutes (Optional)</b>
+          <small> Select up to 3 players • No Goalkeepers
+          Click to expand and view substitute players.</small>
           <span class="material-symbols-outlined toggle-arrow" aria-hidden="true">expand_more</span>
         </button>
 
@@ -237,38 +247,43 @@
 
         <label class="confirm-box squad-confirm">
           <input type="checkbox" [checked]="confirmed" (change)="confirmed = !confirmed">
-          <span>I confirm I selected only players whose eligible Sorare cards I own, and understand PICK2WIN does not verify card ownership or competition eligibility.</span>
+          <span>I confirm that I have selected only the players whose eligible Sorare cards I own. I understand that PICK2WIN generates team combinations solely from my selected My Squad and does not verify card ownership, card eligibility, or competition eligibility.</span>
         </label>
       </section>
 
       <section class="flow-panel mandate-panel" id="uctStepContent" *ngIf="step === 2">
-        <div class="panel-head">
-          <div>
-            <h2>Mandatory Players</h2>
-            <p>Optional. Select 0, 1 or 2 players to include in all 20 generated teams. Goalkeeper M-YES applies only when My Squad has two Goalkeepers.</p>
+        <div class="mandate-toolbar">
+          <div class="mandate-mode-toggle" role="group" aria-label="Mandate mode">
+            <button type="button" [class.active]="mandateMode === 'NA'" (click)="setMandateMode('NA')">
+              <b>N/A</b>
+            </button>
+            <button type="button" [class.active]="mandateMode === 'YES'" (click)="setMandateMode('YES')">
+              <b>M-YES</b>
+            </button>
           </div>
-          <span class="selection-pill">M-YES {{ mandateYesPlayers.length }}/{{ maxMandateYes }}</span>
-        </div>
-
-        <div class="mandate-mode-toggle" role="group" aria-label="Mandate mode">
-          <button type="button" [class.active]="mandateMode === 'NA'" (click)="setMandateMode('NA')">
-            <b>N/A</b>
-          </button>
-          <button type="button" [class.active]="mandateMode === 'YES'" (click)="setMandateMode('YES')">
-            <b>M-YES</b><span>{{ mandateYesPlayers.length }}/{{ maxMandateYes }}</span>
-          </button>
+          <span class="selection-pill" *ngIf="mandateMode === 'YES'">M-YES {{ mandateYesPlayers.length }}/{{ maxMandateYes }}</span>
         </div>
 
         <div class="mode-note" *ngIf="mandateMode === 'YES'">
-          Selecting Mandatory Players is completely optional. If a player is selected as M-YES, that player will be included in all 20 generated teams.
-          Goalkeeper Note: If your My Squad contains only one Goalkeeper, that Goalkeeper is automatically included in every generated team. M-YES is only applicable when your My Squad contains two Goalkeepers.
+          <span class="material-symbols-outlined" aria-hidden="true">push_pin</span>
+          <div>
+            <b>You have chosen Mandatory Players (M-YES).</b>
+            <p>Select up to 2 players to include in all 20 generated teams.</p>
+            <small>Goalkeeper (GK)</small>
+            <ul>
+              <li><b>1 GK in My Squad</b> automatically appears in all 20 teams.</li>
+              <li><b>2 GKs in My Squad</b> lets you optionally select 1 GK as M-YES.</li>
+              <li>2 GKs cannot both be selected as M-YES.</li>
+            </ul>
+          </div>
         </div>
         <div class="na-card" *ngIf="mandateMode === 'NA'">
           <span class="material-symbols-outlined" aria-hidden="true">all_inclusive</span>
           <div>
-            <b>No mandate selected</b>
-            <p>All Playing XI players and selected substitutes remain available for team generation.</p>
-            <small>Tap Next to choose Captain Pool players</small>
+            <b>By default, no Mandatory (M-YES) players are selected.</b>
+            <p>If you do not want to force any player into all 20 generated teams, leave <b>N/A</b> selected and continue.</p>
+            <p>PICK2WIN will generate teams using only your selected <b>My Squad</b>.</p>
+            <small>Tap <b>Next</b> to select your <b>Captain Pool</b> players.</small>
           </div>
         </div>
 
@@ -326,7 +341,7 @@
         <div class="panel-head">
           <div>
             <!-- <h2>Captain Pool</h2> -->
-            <p>Sorare uses Captain only. Select 2-6 players eligible to be Captain across your 20 teams.</p>
+            <p>Sorare uses Captain only.</p>
           </div>
           <span class="selection-pill">{{ cvcPlayers.length }} / {{ maxCvc }} captains</span>
         </div>
@@ -338,7 +353,8 @@
         </div>
 
         <div class="mode-note">
-          Captain Pool: select 2-6 players. UCT assigns exactly one Captain per generated team and rotates captain exposure across all 20 teams.
+          Select 2-6 players from your My Squad as Captain candidates. <br>
+          PICK2WIN UCT automatically assigns exactly one Captain to each generated team and intelligently rotates Captain selection across all 20 teams to provide wider coverage.
         </div>
 
         <div class="team-pool-grid">
@@ -419,8 +435,8 @@
       <section class="flow-panel review-panel" id="uctStepContent" *ngIf="step === 5">
         <div class="panel-head">
           <div>
-            <h2>Review &amp; Generate</h2>
-            <p>Confirm that the 20 teams will be created strictly from your selected configuration.</p>
+            <!-- <h2>Review &amp; Generate</h2> -->
+            <p>Take a moment to review your complete configuration before generating the final teams.</p>
           </div>
         </div>
 

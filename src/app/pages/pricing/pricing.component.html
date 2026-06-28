@@ -2,16 +2,6 @@
 
 <section class="pricing-page" id="pricing">
   <div class="wrap">
-    <div class="wc-offer-banner reveal" *ngIf="hasActiveCoinPackOffer">
-      <div class="wc-offer-title">
-        <span class="material-symbols-outlined wc-trophy" aria-hidden="true">emoji_events</span>
-        <span class="wc-brand">PICK2WIN</span>
-        <span class="wc-event">FIFA WORLD CUP 2026</span>
-        <b>LAUNCH OFFER</b>
-      </div>
-      <div class="wc-offer-pill">Limited-Time Introductory Pricing On All Coin Packs - 30% OFF</div>
-    </div>
-
     <div class="pricing-header-row reveal">
       <div class="section-head reveal">
         <span class="pricing-eyebrow">PRICING - COIN PACKS</span>
@@ -43,38 +33,30 @@
     <div class="pack-status success" *ngIf="paymentMessage">{{ paymentMessage }}</div>
     <div class="pack-status error" *ngIf="paymentError">{{ paymentError }}</div>
 
-    <div class="credit-packs reveal">
+    <div class="credit-packs reveal" *ngIf="!loading && pricingPacks.length">
       <div class="credit-pack" *ngFor="let pack of pricingPacks" [ngClass]="pack.tone">
-        <div class="credit-pack-badge" *ngIf="pack.bestValue">
-          <span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
-          Best Value
-        </div>
         <div class="credit-pack-name">{{ pack.name }}</div>
-        <div class="credit-pack-sub">{{ pack.subtitle }}</div>
         <div class="credit-pack-coins">
-          <span class="credit-pack-num">{{ pack.coins }}</span>
+          <span class="credit-pack-num">{{ pack.totalCoins }}</span>
           <span class="credit-pack-cred-label">coins</span>
         </div>
-        <p class="credit-pack-matches"><b>{{ pack.matches }} matches</b> of UCT workflow</p>
-        <div class="credit-pack-regular" *ngIf="pack.offerActive && pack.regularPrice !== pack.offerPrice">
-          <span class="cpr-label">Regular price</span>
-          <s>{{ pack.currencySymbol }}{{ pack.regularPrice }}</s>
-        </div>
-        <div class="credit-pack-offer-label">{{ pack.offerActive ? pack.offerLabel : 'Price' }}</div>
+        <p class="credit-pack-matches">
+          <!-- <b>{{ pack.totalCoins }} total coins</b> -->
+          <span>Base {{ pack.coins }} + Bonus {{ pack.bonusCoins }}</span>
+        </p>
+        <div class="credit-pack-offer-label">Price</div>
         <div class="credit-pack-price">
           <span class="credit-pack-cur">{{ pack.currencySymbol }}</span>
-          <span class="credit-pack-amount">{{ pack.offerPrice }}</span>
+          <span class="credit-pack-amount">{{ pack.price }}</span>
         </div>
         <div class="credit-pack-per">
           &asymp; <b>{{ pack.currencySymbol }}{{ pack.perCoin }}</b> per coin
-          <span class="cp-save" *ngIf="pack.saveText">- {{ pack.saveText }}</span>
         </div>
-        <span class="credit-pack-disc" *ngIf="pack.offerActive && pack.discountText !== '0% OFF'">
-          <span class="material-symbols-outlined" aria-hidden="true">celebration</span>
-          {{ pack.discountText }}
-        </span>
+        <div class="credit-pack-validity">
+          Validity <b>{{ pack.validityDays }} days</b>
+        </div>
         <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPricingPack(pack)">
-          {{ purchasingPlanId ? 'Opening Razorpay...' : 'Buy ' + pack.coins + ' Coins' }}
+          {{ purchasingPlanId ? 'Opening Razorpay...' : 'Buy ' + pack.totalCoins + ' Coins' }}
           <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
         </button>
       </div>
@@ -107,86 +89,65 @@
         <li><span class="cu-check material-symbols-outlined" aria-hidden="true">check_circle</span><span>Use coins across <b>any supported league or match</b></span></li>
       </ul>
       <div class="cur-note">
-        <span class="cur-note-pill">$ All prices in USD - billed in US Dollars</span>
+        <span class="cur-note-pill">Prices and currency are loaded from the current package data</span>
       </div>
     </div>
 
-    <div class="pricing-table-wrap reveal">
+    <div class="pricing-table-wrap reveal" *ngIf="!loading && pricingPacks.length">
       <div class="pricing-table-head">
-        <span class="pricing-table-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">table_chart</span> ALL PACKS - SIDE BY SIDE</span>
-        <h3 class="pricing-table-h">Compare every coin pack at a glance</h3>
-        <p class="pricing-table-sub">Every pack covers the same UCT workflow. The only differences are coin volume and per-match price. <b>All packs - valid 365 days from purchase - one-time payment - no auto-renewal - payments via Razorpay.</b></p>
+        <span class="pricing-table-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">table_chart</span> PACKAGE DETAILS</span>
+        <h3 class="pricing-table-h">Compare available coin packs</h3>
+        <p class="pricing-table-sub">Packages are loaded from the latest backend response. Total coins are calculated as base coins plus bonus coins.</p>
       </div>
 
       <div class="pricing-table-scroll">
-        <table class="pricing-table">
+        <table class="pricing-table dynamic-pack-table">
           <thead>
             <tr>
               <th>Detail</th>
-              <th>Starter</th>
-              <th class="highlight">Basic</th>
-              <th>Standard</th>
-              <th>Pro</th>
+              <th *ngFor="let pack of pricingPacks" [ngClass]="pack.tone">{{ pack.name }}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Coins</td>
-              <td><span class="pt-price">5</span></td>
-              <td><span class="pt-price">10</span></td>
-              <td><span class="pt-price">25</span></td>
-              <td><span class="pt-price">50</span></td>
+              <td *ngFor="let pack of pricingPacks">{{ pack.coins }}</td>
             </tr>
             <tr>
-              <td>Matches covered</td>
-              <td>5</td>
-              <td>10</td>
-              <td>25</td>
-              <td>50</td>
+              <td>Bonus Coins</td>
+              <td *ngFor="let pack of pricingPacks">+{{ pack.bonusCoins }}</td>
             </tr>
             <tr>
-              <td>Regular price - USD</td>
-              <td><s>$15.00</s></td>
-              <td><s>$27.50</s></td>
-              <td><s>$62.50</s></td>
-              <td><s>$112.50</s></td>
+              <td>Total Coins</td>
+              <td *ngFor="let pack of pricingPacks"><span class="pt-price">{{ pack.totalCoins }}</span></td>
             </tr>
             <tr>
-              <td>FIFA WC offer - 30% off</td>
-              <td><span class="pt-price"><span class="pt-price-currency">$</span>10.50</span></td>
-              <td><span class="pt-price"><span class="pt-price-currency">$</span>19.25</span></td>
-              <td><span class="pt-price"><span class="pt-price-currency">$</span>43.75</span></td>
-              <td><span class="pt-price"><span class="pt-price-currency">$</span>78.75</span></td>
+              <td>Price</td>
+              <td *ngFor="let pack of pricingPacks"><span class="pt-price"><span class="pt-price-currency">{{ pack.currencySymbol }}</span>{{ pack.price }}</span></td>
             </tr>
             <tr>
-              <td>Per coin (offer)</td>
-              <td>$2.10</td>
-              <td>$1.93</td>
-              <td>$1.75</td>
-              <td><b class="best-rate">$1.58</b></td>
+              <td>Price / Coin</td>
+              <td *ngFor="let pack of pricingPacks"><b class="best-rate">{{ pack.currencySymbol }}{{ pack.perCoin }}</b></td>
             </tr>
             <tr>
               <td>Expiry</td>
-              <td><span class="pt-yes">365 days</span></td>
-              <td><span class="pt-yes">365 days</span></td>
-              <td><span class="pt-yes">365 days</span></td>
-              <td><span class="pt-yes">365 days</span></td>
+              <td *ngFor="let pack of pricingPacks"><span class="pt-yes">{{ pack.validityDays }} days</span></td>
             </tr>
             <tr>
               <td>Leagues included</td>
-              <td colspan="4" class="center-cell">Every competition PICK2WIN supports - Premier League - UCL - La Liga - Serie A - Bundesliga - Ligue 1 - MLS - FIFA WC 2026 + more</td>
+              <td [attr.colspan]="pricingPacks.length" class="center-cell">Every competition PICK2WIN supports - Premier League - UCL - La Liga - Serie A - Bundesliga - Ligue 1 - MLS - FIFA WC 2026 + more</td>
             </tr>
             <tr>
               <td>Auto-renewal</td>
-              <td colspan="4" class="center-cell"><span class="pt-no">No - one-time purchases only</span></td>
+              <td [attr.colspan]="pricingPacks.length" class="center-cell"><span class="pt-no">No - one-time purchases only</span></td>
             </tr>
             <tr>
               <td>Refunds</td>
-              <td colspan="4" class="center-cell"><span class="pt-no">No refunds - once coins are issued they are non-refundable</span></td>
+              <td [attr.colspan]="pricingPacks.length" class="center-cell"><span class="pt-no">No refunds - once coins are issued they are non-refundable</span></td>
             </tr>
             <tr>
               <td>Payment partner</td>
-              <td colspan="4" class="center-cell">Razorpay - 3D Secure - Radar fraud detection</td>
+              <td [attr.colspan]="pricingPacks.length" class="center-cell">Razorpay - 3D Secure - Radar fraud detection</td>
             </tr>
           </tbody>
         </table>
@@ -254,7 +215,7 @@
     </div>
 
     <div class="order-summary">
-      <p>{{ selectedPlan.name }} - {{ selectedPlan.coins }} coins</p>
+      <p>{{ selectedPlan.name }} - {{ totalCoinsForPlan(selectedPlan) }} coins</p>
       <strong>{{ selectedPlan.currency_symbol }}{{ selectedPlan.price | number:'1.0-2' }}</strong>
     </div>
 

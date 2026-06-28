@@ -315,44 +315,57 @@ h1 em,
 }
 
 .stepper button {
+  --step-rgb: 124, 58, 237;
+  --step-color: rgb(var(--step-rgb));
   display: flex;
   gap: 10px;
   align-items: center;
   min-height: 48px;
   padding: 10px 14px;
-  border: 1px solid rgba(11, 204, 142, .45);
+  border: 1px solid rgba(var(--step-rgb), .34);
   border-radius: 11px;
   color: var(--paper-2);
-  background: rgba(11, 204, 142, .06);
+  background: rgba(var(--step-rgb), .06);
   text-align: left;
   cursor: pointer;
 }
 
+.stepper button:nth-child(1) {
+  --step-rgb: 124, 58, 237;
+}
+
+.stepper button:nth-child(2) {
+  --step-rgb: 249, 115, 22;
+}
+
+.stepper button:nth-child(3) {
+  --step-rgb: 29, 116, 216;
+}
+
+.stepper button:nth-child(4) {
+  --step-rgb: 245, 184, 0;
+}
+
 .stepper b {
-  color: var(--gold);
+  color: var(--step-color);
 }
 
 .stepper small {
   margin-left: auto;
   padding: 4px 8px;
   border-radius: 999px;
-  color: #5bb0e6;
-  background: rgba(91, 176, 230, .2);
+  color: var(--step-color);
+  background: rgba(var(--step-rgb), .16);
   font-size: 9px;
   font-weight: 950;
   letter-spacing: .06em;
   text-transform: uppercase;
 }
 
-.stepper button:nth-child(3) small {
-  color: #ef3340;
-  background: rgba(215, 38, 56, .22);
-}
-
 .stepper .active {
-  border-color: var(--gold);
-  background: rgba(244, 180, 0, .08);
-  box-shadow: 0 0 28px rgba(244, 180, 0, .18);
+  border-color: rgba(var(--step-rgb), .72);
+  background: rgba(var(--step-rgb), .10);
+  box-shadow: 0 0 28px rgba(var(--step-rgb), .18);
 }
 
 .stepper .done {
@@ -566,7 +579,7 @@ h1 em,
 
   .stepper button:hover {
     transform: translateY(-1px);
-    border-color: rgba(244, 180, 0, .32);
+    border-color: rgba(var(--step-rgb), .45);
   }
 
   .stepper b {
@@ -577,8 +590,8 @@ h1 em,
     height: 24px;
     border: 1px solid currentColor;
     border-radius: 50%;
-    color: var(--gold);
-    background: rgba(244, 180, 0, .10);
+    color: var(--step-color);
+    background: rgba(var(--step-rgb), .10);
     font-family: var(--f-display);
     font-size: 10px;
     line-height: 1;
@@ -590,15 +603,15 @@ h1 em,
   }
 
   .stepper button.active {
-    border-color: var(--gold);
-    background: rgba(244, 180, 0, .08);
-    box-shadow: 0 0 28px rgba(244, 180, 0, .18);
+    border-color: rgba(var(--step-rgb), .72);
+    background: rgba(var(--step-rgb), .09);
+    box-shadow: 0 0 28px rgba(var(--step-rgb), .18);
   }
 
   .stepper button.active b {
-    color: #071421;
-    border-color: var(--gold);
-    background: var(--gold);
+    color: #fff;
+    border-color: var(--step-color);
+    background: var(--step-color);
   }
 
   .stepper button.active span {
@@ -1097,14 +1110,64 @@ h1 em,
 }
 
 .mode-note {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
   margin: 0 0 16px;
-  padding: 13px 16px;
+  padding: 16px;
   border: 1px solid rgba(91, 176, 230, .25);
   border-radius: 12px;
   color: var(--paper-2);
   background: rgba(91, 176, 230, .07);
   font-size: 13px;
   line-height: 1.55;
+}
+
+.mode-note .material-symbols-outlined {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(244, 180, 0, .32);
+  border-radius: 50%;
+  color: var(--gold);
+  background: rgba(244, 180, 0, .08);
+  font-size: 19px;
+}
+
+.mode-note div {
+  min-width: 0;
+}
+
+.mode-note b {
+  color: var(--paper);
+}
+
+.mode-note p {
+  margin: 4px 0 10px;
+}
+
+.mode-note small {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--gold);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.mode-note ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.mode-note li {
+  padding-left: 2px;
 }
 
 .squad-screen-note {
@@ -1137,6 +1200,41 @@ h1 em,
 
 .squad-screen-note div b {
   color: #ffb4bd;
+}
+
+.squad-screen-note .squad-alert {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.squad-alert .material-symbols-outlined {
+  flex: 0 0 auto;
+  color: #ffb4bd;
+  font-size: 24px;
+}
+
+.squad-alert div {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.squad-alert p {
+  margin: 4px 0 8px;
+  color: var(--paper-2);
+}
+
+.squad-alert ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.squad-alert li {
+  padding-left: 2px;
 }
 
 .substitute-section-title {
@@ -1259,9 +1357,22 @@ h1 em,
 
 .mandate-mode-toggle {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  margin: 0;
+}
+
+.mandate-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
   margin: 0 0 16px;
+}
+
+.mandate-toolbar .selection-pill {
+  align-self: center;
+  justify-self: end;
 }
 
 .mandate-mode-toggle button {
@@ -1278,6 +1389,10 @@ h1 em,
   cursor: pointer;
 }
 
+.mandate-mode-toggle button > b {
+  min-width: 0;
+}
+
 .mandate-mode-toggle b {
   color: var(--paper);
   font-family: var(--f-display);
@@ -1285,6 +1400,7 @@ h1 em,
 }
 
 .mandate-mode-toggle span {
+  flex: 0 0 auto;
   color: var(--gold);
   font-family: var(--f-mono);
   font-size: 11px;
@@ -1321,6 +1437,17 @@ h1 em,
 .na-card p {
   margin: 5px 0 0;
   line-height: 1.55;
+}
+
+.na-card small {
+  display: block;
+  margin-top: 8px;
+  color: var(--paper-3);
+  line-height: 1.45;
+}
+
+.na-card small b {
+  color: var(--paper);
 }
 
 .sub-player-section {
@@ -2737,12 +2864,22 @@ h1 em,
   }
 
   .mandate-mode-toggle {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
+  }
+
+  .mandate-toolbar {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .mandate-toolbar .selection-pill {
+    justify-self: end;
   }
 
   .mandate-mode-toggle button {
     min-height: 50px;
+    padding: 10px 12px;
   }
 
   .locked-xi-grid {
@@ -3028,7 +3165,7 @@ h1 em,
   }
 
   .stepper button.active::after {
-    background: linear-gradient(90deg, #ef3340 0 45%, #cbd5e1 45%);
+    background: linear-gradient(90deg, var(--step-color) 0 45%, #cbd5e1 45%);
   }
 
   .stepper b {
@@ -3053,6 +3190,12 @@ h1 em,
   .stepper button:nth-child(3) b::before { content: "3"; font-size: 19px; }
   .stepper button:nth-child(4) b::before { content: "4"; font-size: 19px; }
 
+  .stepper button b {
+    color: var(--step-color);
+    border-color: rgba(var(--step-rgb), .36);
+    background: rgba(var(--step-rgb), .10);
+  }
+
   .stepper button.done b {
     color: #fff;
     border-color: #10b981;
@@ -3066,8 +3209,8 @@ h1 em,
 
   .stepper button.active b {
     color: #fff;
-    border-color: #ef3340;
-    background: #ef3340;
+    border-color: var(--step-color);
+    background: var(--step-color);
   }
 
   .stepper span {
@@ -3083,7 +3226,7 @@ h1 em,
   }
 
   .stepper button.active span {
-    color: #ef3340;
+    color: var(--step-color);
   }
 
   .flow-panel {
@@ -3304,34 +3447,39 @@ h1 em,
     box-shadow: none;
   }
 
+  .mandate-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 12px !important;
+    align-items: center !important;
+    margin: 0 0 12px !important;
+    padding: 12px !important;
+  }
+
+  .mandate-toolbar .selection-pill {
+    justify-self: end !important;
+  }
+
   .mandate-mode-toggle {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 0 !important;
     margin: 0 !important;
-    padding: 12px !important;
+    padding: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
     background: transparent !important;
   }
 
   .mandate-mode-toggle::before {
-    content: "SWITCH MODE";
-    grid-column: 1 / -1;
-    margin: 0 0 12px;
-    color: #64748b;
-    font-family: var(--f-mono);
-    font-size: 14px;
-    font-weight: 950;
-    letter-spacing: .18em;
+    content: none !important;
   }
 
   .mandate-mode-toggle button {
-    min-height: 76px !important;
-    padding: 10px 8px !important;
+    min-height: 64px !important;
+    padding: 10px 12px !important;
     border: 0 !important;
     border-radius: 16px !important;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     color: #64748b !important;
     background: #fff !important;
   }
@@ -3348,18 +3496,14 @@ h1 em,
     background: rgba(100, 116, 139, .08) !important;
   }
 
-  .mandate-mode-toggle button:nth-child(3).active {
-    border-color: rgba(239, 51, 64, .28) !important;
-    color: #ef3340 !important;
-    background: rgba(239, 51, 64, .08) !important;
-  }
-
   .mandate-mode-toggle b {
     color: inherit !important;
     font-size: 16px !important;
+    white-space: nowrap;
   }
 
   .mandate-mode-toggle span {
+    flex: 0 0 auto;
     padding: 4px 8px;
     border-radius: 8px;
     color: inherit !important;
@@ -5223,6 +5367,26 @@ h1 em,
     display: none !important;
   }
 
+  .stepper button.active b {
+    color: #fff !important;
+    border-color: var(--step-color) !important;
+    background: var(--step-color) !important;
+  }
+
+  .stepper button.active span {
+    color: var(--step-color) !important;
+  }
+
+  .stepper button.done b {
+    color: #fff !important;
+    border-color: #10b981 !important;
+    background: #10b981 !important;
+  }
+
+  .stepper button.done span {
+    color: #10b981 !important;
+  }
+
   .flow-panel {
     padding-bottom: 84px !important;
   }
@@ -5241,6 +5405,14 @@ h1 em,
     padding: 10px 12px !important;
     font-size: 10.5px !important;
     line-height: 1.35 !important;
+  }
+
+  .squad-alert div {
+    padding: 0 !important;
+  }
+
+  .squad-alert .material-symbols-outlined {
+    font-size: 20px !important;
   }
 
   .team-pool-grid {

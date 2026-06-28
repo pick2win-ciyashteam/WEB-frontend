@@ -1242,7 +1242,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       payload.mandate = mandate;
     }
 
-    if (this.captainMode === 'CVC' && this.cvcIds.has(player.id)) {
+    if (
+      (this.captainMode === 'CVC' && this.cvcIds.has(player.id))
+      || (this.captainMode === 'C_AND_VC' && this.captainIds.has(player.id))
+    ) {
       payload.captain = 'C';
     }
 

@@ -24,6 +24,11 @@ interface GeneratedMatch {
   matchDate?: string;
   startDate?: string;
   startTimeISO?: string;
+  generatedAtISO?: string;
+  generationTime?: string | number;
+  fantasyPlatform?: string;
+  sport?: string;
+  coinConsumed?: string | number;
 }
 
 interface ApiPlayer {
@@ -153,9 +158,14 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           title: `${m.home_team || 'HOME'} vs ${m.away_team || 'AWAY'}`,
           coin: '-1',
           generatedAt: this.formatTime(m.generated_at),
+          generatedAtISO: m.generated_at || '',
+          generationTime: m.generation_time || m.generation_seconds || m.generation_time_seconds || '',
           expires: this.expiryLabel(startTimeISO, m.status),
           live: !expired,
           free: false,
+          fantasyPlatform: m.fantasy_platform || m.platform || 'Sorare',
+          sport: m.sport || 'Football',
+          coinConsumed: m.coin_consumed ?? m.coins_consumed ?? 1,
           homeLogo: m.home_logo,
           awayLogo: m.away_logo,
           homeFullName: m.home_full_team_name || m.home_full_name || m.home_team_name || '',
@@ -244,7 +254,7 @@ private openMatchFromQueryParam(): void {
       const responsePreview = this.teamsPreviewFromResponse(res);
 
       if (generatedTeams.length) {
-        const text = this.teamTextBlocks(generatedTeams, match, responsePreview);
+        const text = this.teamTextBlocks(generatedTeams, match, responsePreview, res);
         this.downloadText(text, this.makeTeamFileName(match, 'txt'));
         return;
       }
@@ -263,7 +273,6 @@ private openMatchFromQueryParam(): void {
         const fwd = players.filter((p: any) => p.role === 'FWD').map((p: any) => p.name);
 
         const captain = players.find((p: any) => p.captain === 'C' || p.captain === 'CVC')?.name || '';
-        const viceCaptain = players.find((p: any) => p.captain === 'VC')?.name || '';
 
         const homeCount = players.filter((p: any) => p.team_side === 'team_a').length;
         const awayCount = players.filter((p: any) => p.team_side === 'team_b').length;
@@ -273,7 +282,6 @@ private openMatchFromQueryParam(): void {
           Split: `${homeCount}-${awayCount}`,
           'Formation (GK-DEF-MID-FWD)': `${gk.length}-${def.length}-${mid.length}-${fwd.length}`,
           Captain: captain,
-          'Vice-Captain': viceCaptain,
           'GK Players': gk.join(' / '),
           Defenders: def.join(' / '),
           Midfielders: mid.join(' / '),
@@ -302,12 +310,13 @@ teamCodeFromTitle(title: string, side: 'home' | 'away'): string {
 
 makeTeamFileName(match: any, extension = 'txt'): string {
   const [homeRaw, awayRaw] = String(match.title || 'TEAMA vs TEAMB').split(/\s+vs\s+/i);
+  const platform = this.fileLeagueSegment(match.fantasyPlatform || 'Sorare');
   const homeTeam = this.fileTeamSegment(homeRaw || 'TEAMA');
   const awayTeam = this.fileTeamSegment(awayRaw || 'TEAMB');
   const leagueName = this.fileLeagueSegment(match.league || 'League');
   const matchDate = match.startDate || new Date().toISOString().split('T')[0];
 
-  return `PICK2WIN_UCT-${homeTeam}_vs_${awayTeam}-${leagueName}-${matchDate}.${extension}`;
+  return `PICK2WIN_UCT-${platform}-${homeTeam}_vs_${awayTeam}-${leagueName}-${matchDate}.${extension}`;
 }
 
 private fileTeamSegment(value: string): string {
@@ -555,10 +564,6 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return player.captain === 'C' || player.captain === 'CVC';
   }
 
-  isViceCaptain(player: PreviewPlayer): boolean {
-    return player.captain === 'VC';
-  }
-
   playerInitials(player: PreviewPlayer): string {
     return player.short.slice(0, 2).toUpperCase();
   }
@@ -606,14 +611,9 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   private mapGeneratedTeam(team: ApiGeneratedTeam): PreviewTeam {
     const players = (Array.isArray(team.players) ? team.players : []).map(player => this.mapPreviewPlayer(player));
     const captain = players.find(player => player.captain === 'C' || player.name === team.captain) || null;
-    const viceCaptain = players.find(player => player.captain === 'VC' || player.name === team.vice_captain) || null;
 
     if (captain && !captain.captain) {
       captain.captain = 'C';
-    }
-
-    if (viceCaptain && !viceCaptain.captain) {
-      viceCaptain.captain = 'VC';
     }
 
     return {
@@ -621,7 +621,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       split: `${players.filter(player => player.team === 'home').length}-${players.filter(player => player.team === 'away').length}`,
       players,
       captain,
-      viceCaptain,
+      viceCaptain: null,
       homeCount: players.filter(player => player.team === 'home').length,
       awayCount: players.filter(player => player.team === 'away').length,
       counts: this.positionCounts(players)
@@ -656,15 +656,12 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     const captain =
       players.find(p => p.captain === 'C' || p.captain === 'CVC') || null;
 
-    const viceCaptain =
-      players.find(p => p.captain === 'VC') || null;
-
     return {
       id: teamId,
       split: `${players.filter(p => p.team === 'home').length}-${players.filter(p => p.team === 'away').length}`,
       players,
       captain,
-      viceCaptain,
+      viceCaptain: null,
       homeCount: players.filter(p => p.team === 'home').length,
       awayCount: players.filter(p => p.team === 'away').length,
       counts: this.positionCounts(players)
@@ -713,7 +710,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       rows.push(['Team:', String(team.team_no)]);
       rows.push(['Combination:', combination]);
       rows.push([]);
-      rows.push(['', 'Player', 'Role', 'C/VC']);
+      rows.push(['', 'Player', 'Role', 'C']);
 
       players.forEach((player, index) => {
         rows.push([
@@ -737,15 +734,11 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       return 'C';
     }
 
-    if (team.viceCaptain?.id === player.id || player.captain === 'VC') {
-      return 'VC';
-    }
-
     return '.';
   }
 
-  private teamTextBlocks(teams: ApiGeneratedTeam[], match?: GeneratedMatch, preview?: ApiTeamsPreview | null): string {
-    const blocks = teams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team));
+  private teamTextBlocks(teams: ApiGeneratedTeam[], match?: GeneratedMatch, preview?: ApiTeamsPreview | null, rawResponse?: any): string {
+    const blocks = teams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team, teams.length, match));
 
     if (!match) {
       return [
@@ -757,17 +750,22 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     }
 
     return [
-      this.teamTextHeader(match, teams.length),
-      this.previewTextBlock(preview, match),
+      this.teamTextHeader(match, teams.length, rawResponse),
+      this.previewTextBlock(preview, match, teams),
+      this.teamDistributionBlock(teams),
+      this.definitionsBlock(),
       this.generatedTeamsTitle(),
       blocks.join('\r\n\r\n'),
       this.teamTextFooter()
     ].filter(Boolean).join('\r\n\r\n');
   }
 
-  private teamTextHeader(match: GeneratedMatch, totalTeams: number): string {
+  private teamTextHeader(match: GeneratedMatch, totalTeams: number, rawResponse?: any): string {
     const matchDate = this.reportMatchDate(match);
-    const generatedOn = this.reportGeneratedOn(match, matchDate);
+    const generatedOn = this.reportGeneratedOn(match, matchDate, rawResponse);
+    const kickoffTime = this.reportKickoffTime(match);
+    const generationTime = this.reportGenerationTime(match, rawResponse);
+    const coinConsumed = this.reportCoinConsumed(match, rawResponse);
 
     return [
       this.reportLine('='),
@@ -775,88 +773,63 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       this.centerReportText('(UCT)'),
       this.reportLine('='),
       '',
-      'Match:',
-      this.reportMatchTitle(match),
-      '',
-      'Competition:',
-      match.league || 'N/A',
-      '',
-      'Match Date:',
-      matchDate,
-      '',
-      'Generated On:',
-      generatedOn,
-      '',
-      'Total Teams Generated:',
-      String(totalTeams || match.teamsGenerated || 0)
+      this.reportField('Fantasy Platform', match.fantasyPlatform || 'Sorare'),
+      this.reportField('Sport', match.sport || 'Football'),
+      this.reportField('Competition', match.league || 'N/A'),
+      this.reportField('Match', this.reportMatchTitle(match)),
+      this.reportField('Match Date', matchDate),
+      this.reportField('Kickoff Time', kickoffTime),
+      this.reportField('Generated On', generatedOn),
+      this.reportField('Generated By', 'PICK2WIN UCT'),
+      this.reportField('Total Teams', String(totalTeams || match.teamsGenerated || 0)),
+      this.reportField('Generation Time', generationTime),
+      this.reportField('Coin Consumed', coinConsumed)
     ].join('\r\n');
   }
 
-  private previewTextBlock(preview?: ApiTeamsPreview | null, match?: GeneratedMatch): string {
-    if (!preview) {
-      return '';
-    }
-
-    const substitutes = Array.isArray(preview.substitutes) ? preview.substitutes : [];
-    const mandateYes = Array.isArray(preview.mandate_yes) ? preview.mandate_yes : [];
-    const mandateNo = Array.isArray(preview.mandate_no) ? preview.mandate_no : [];
-    const cvcPlayers = Array.isArray(preview.cvc_players) ? preview.cvc_players : [];
-    const captains = Array.isArray(preview.captains) ? preview.captains : [];
-    const viceCaptains = Array.isArray(preview.vice_captains) ? preview.vice_captains : [];
-
-    if (
-      !substitutes.length &&
-      !mandateYes.length &&
-      !mandateNo.length &&
-      !cvcPlayers.length &&
-      !captains.length &&
-      !viceCaptains.length &&
-      preview.substitutes_count == null &&
-      preview.mandate_yes_count == null &&
-      preview.mandate_no_count == null &&
-      preview.cvc_count == null &&
-      preview.cvc_players_count == null &&
-      preview.captain_count == null &&
-      preview.captains_count == null &&
-      preview.captaincy_count == null &&
-      preview.vice_captain_count == null &&
-      preview.vice_captains_count == null
-    ) {
-      return '';
-    }
-
-    const sections = [
-      this.previewPlayersSection('SUBSTITUTE PLAYERS', substitutes, match),
-      this.mandatePlayersSection(mandateYes, mandateNo, match),
-      this.captaincyPlayersSection(preview, captains, viceCaptains, cvcPlayers, match)
-    ].filter(Boolean);
+  private previewTextBlock(preview?: ApiTeamsPreview | null, match?: GeneratedMatch, teams: ApiGeneratedTeam[] = []): string {
+    const substitutes = Array.isArray(preview?.substitutes) ? preview?.substitutes || [] : [];
+    const mandateYes = Array.isArray(preview?.mandate_yes) ? preview?.mandate_yes || [] : [];
+    const cvcPlayers = Array.isArray(preview?.cvc_players) ? preview?.cvc_players || [] : [];
+    const captains = Array.isArray(preview?.captains) ? preview?.captains || [] : [];
+    const captainPool = captains.length ? captains : cvcPlayers;
+    const substituteCount = Number(preview?.substitutes_count ?? substitutes.length);
+    const playerPoolCount = this.reportPlayerPoolCount(preview, teams, substituteCount);
+    const playingXiCount = Math.max(0, playerPoolCount - substituteCount);
 
     return [
       this.reportLine('='),
       this.centerReportText('USER CONFIGURATION SUMMARY'),
       this.reportLine('='),
       '',
-      sections.join('\r\n\r\n')
-    ].filter(Boolean).join('\r\n');
+      'Player Pool',
+      '-----------',
+      this.reportField('Selected Players', `${playerPoolCount} / 22`, 26),
+      this.reportField('Playing XI Selected', String(playingXiCount), 26),
+      this.reportField('Substitutes Selected', `${substituteCount} / 3`, 26),
+      '',
+      this.reportPreviewListSection('Substitute Players', substitutes, match),
+      '',
+      this.reportPreviewListSection('Mandatory Players', mandateYes, match),
+      '',
+      this.reportPreviewListSection('Captain Pool', captainPool, match)
+    ].join('\r\n');
   }
 
   private previewModeText(preview: ApiTeamsPreview): string {
     const cvcPlayers = Array.isArray(preview.cvc_players) ? preview.cvc_players : [];
     const captains = Array.isArray(preview.captains) ? preview.captains : [];
-    const viceCaptains = Array.isArray(preview.vice_captains) ? preview.vice_captains : [];
 
     if (cvcPlayers.length || Number(preview.cvc_count || 0) > 0) {
-      return 'Mode: CVC mode';
+      return 'Mode: Captain mode';
     }
 
     if (
       captains.length ||
-      viceCaptains.length ||
       Number(preview.captain_count || 0) > 0 ||
-      Number(preview.captaincy_count || 0) > 0 ||
-      Number(preview.vice_captain_count || 0) > 0
+      Number(preview.captaincy_count || 0) > 0
     ) {
-      return 'Mode: C & VC mode';
+      return 'Mode: Captain mode';
     }
 
     return '';
@@ -873,28 +846,32 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return lines.join('\r\n');
   }
 
-  private teamTextBlock(team: ApiGeneratedTeam): string {
+  private teamTextBlock(team: ApiGeneratedTeam, totalTeams = 20, match?: GeneratedMatch): string {
     const previewTeam = this.mapGeneratedTeam(team);
     const previewPlayers = previewTeam.players;
-    const combination = `${previewTeam.homeCount} x ${previewTeam.awayCount}`;
-    const playerWidth = Math.max(26, ...previewPlayers.map(player => player.name.length));
+    const combination = `${previewTeam.homeCount} × ${previewTeam.awayCount}`;
+    const teamNo = String(team.team_no || previewTeam.id).padStart(2, '0');
+    const total = String(totalTeams || 20).padStart(2, '0');
 
     const lines = [
-      `UCT TEAM : ${team.team_no}`,
+      this.reportLine('#'),
+      this.centerReportText(`UCT TEAM : ${teamNo} / ${total}`),
+      this.reportLine('#'),
+      '',
       `Combination : ${combination}`,
       '',
-      `${'No'.padEnd(5)}${'Player'.padEnd(playerWidth)} ${'Role'.padEnd(8)} C/VC`,
-      '-'.repeat(48)
+      this.reportLine('-'),
+      `${'No'.padEnd(5)}${'Player'.padEnd(32)}${'Position'.padEnd(14)}Team`,
+      this.reportLine('-')
     ];
 
     previewPlayers.forEach((player, index) => {
-      const cap = this.csvCaptainLabel(player, previewTeam);
+      const playerName = this.reportPlayerName(player, previewTeam);
       lines.push(
-        `${String(index + 1).padEnd(5)}${player.name.padEnd(playerWidth)} ${player.pos.padEnd(8)} ${cap}`
+        `${String(index + 1).padEnd(5)}${playerName.padEnd(32)}${player.pos.padEnd(14)}${this.reportSideCode(match, player.team)}`
       );
     });
 
-    lines.push('');
     lines.push(this.reportLine('-'));
 
     return lines.join('\r\n');
@@ -915,7 +892,6 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         ['FWD', String(row['Forwards'] || '')]
       ];
       const captain = String(row['Captain'] || '');
-      const viceCaptain = String(row['Vice-Captain'] || '');
       const players = playerGroups.flatMap(([role, names]) =>
         names.split(' / ').filter(Boolean).map(name => ({ name, role }))
       );
@@ -924,12 +900,12 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         `UCT TEAM : ${teamNo}`,
         `Combination : ${split.toLowerCase()}`,
         '',
-        `${'No'.padEnd(5)}${'Player'.padEnd(playerWidth)} ${'Role'.padEnd(8)} C/VC`,
+        `${'No'.padEnd(5)}${'Player'.padEnd(playerWidth)} ${'Role'.padEnd(8)} C`,
         '-'.repeat(48)
       ];
 
       players.forEach((player, playerIndex) => {
-        const cap = player.name === captain ? 'C' : (player.name === viceCaptain ? 'VC' : '.');
+        const cap = player.name === captain ? 'C' : '.';
 
         lines.push(
           `${String(playerIndex + 1).padEnd(5)}${player.name.padEnd(playerWidth)} ${player.role.padEnd(8)} ${cap}`
@@ -946,58 +922,60 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   private generatedTeamsTitle(): string {
     return [
       this.reportLine('='),
-      this.centerReportText('GENERATED TEAMS'),
+      this.centerReportText('######################  YOUR 20 GENERATED TEAMS  ######################'),
+      this.reportLine('='),
+      '',
+      'This is your working section while creating teams in Sorare.',
+      '',
+      'Create Team 01 → Team 20 in sequence.',
+      '',
       this.reportLine('=')
     ].join('\r\n');
   }
 
   private teamTextFooter(): string {
     return [
-      '(Each team contains 11 players and follows the',
-      'configured UCT generation rules.)',
-      '',
       this.reportLine('='),
-      this.centerReportText('GENERATION NOTES'),
+      this.centerReportText('IMPORTANT NOTES'),
       this.reportLine('='),
       '',
-      '- Teams are generated based on the user-selected',
+      '• Build your Player Pool using only the eligible player cards you own.',
+      '',
+      '• Configuration Limits:',
+      '    ✓ Player Pool        : 10–22 Players',
+      '    ✓ Substitutes        : 0–3 Players (Optional)',
+      '    ✓ Mandatory Players  : 0–2 Players (Optional)',
+      '    ✓ Captain Pool       : 2–8 Players (Mandatory)',
+      '',
+      '• Teams are generated strictly according to your selected',
       '  configuration.',
       '',
-      '- Mandate YES players are included in every generated',
-      '  team.',
+      '• Mandatory Players are forced into all generated teams.',
       '',
-      '- Mandate NO players are excluded from all generated',
-      '  teams.',
+      '• Captain choices are assigned only from your selected Captain Pool.',
       '',
-      '- Substitute players are considered according to the',
-      '  selected configuration.',
+      '• PICK2WIN does not verify card ownership, card eligibility,',
+      '  or competition eligibility.',
       '',
-      '- Captaincy assignments are generated from the selected',
-      '  captaincy mode and associated player pool.',
-      '',
-      '- Team combinations follow the configured player',
-      '  distribution rules and role constraints.',
+      '• Please verify all players manually before creating teams in Sorare.',
       '',
       this.reportLine('='),
-      this.centerReportText('PICK2WIN'),
-      this.reportLine('='),
       '',
-      'Your Configuration. Your Teams. In Seconds.',
+      this.centerReportText('PICK2WIN UCT'),
       '',
-      'UCT (User Configuration Teams) is a structured virtual',
-      'team generation engine that creates up to 20 teams',
-      'based on your selected players, preferences,',
-      'and strategy.',
+      this.centerReportText('Your Strategy. Your Players.'),
+      this.centerReportText('Your Team Combinations.'),
       '',
-      'Website:',
-      'www.pick2win.io',
+      this.centerReportText('Configure Faster. Generate Smarter.'),
+      this.centerReportText('Save Time.'),
       '',
-      '(c) PICK2WIN Technologies Private Limited',
+      'Website : www.pick2win.io',
+      '',
+      '© 2026 PICK2WIN Technologies Pvt Ltd.',
+      '',
       'All Rights Reserved.',
       '',
-      'Generated by PICK2WIN UCT Engine',
-      '',
-      this.reportLine('=')
+      this.reportLine('='),
     ].join('\r\n');
   }
 
@@ -1046,26 +1024,20 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     cvcPlayers: ApiPreviewPlayer[],
     match?: GeneratedMatch
   ): string {
-    if (!captains.length && !viceCaptains.length && !cvcPlayers.length) {
+    if (!captains.length && !cvcPlayers.length) {
       return '';
     }
 
     const isCvc = cvcPlayers.length || Number(preview.cvc_count || preview.cvc_players_count || 0) > 0;
     const lines = [
       this.reportLine('*'),
-      `CAPTAINCY MODE : ${isCvc ? 'CVC' : 'C & VC'}`
+      'CAPTAINCY MODE : C'
     ];
 
     if (isCvc) {
       lines.push('', this.previewPlayersList(cvcPlayers, match));
-    } else {
-      if (captains.length) {
-        lines.push('', 'CAPTAINS', '', this.previewPlayersList(captains, match));
-      }
-
-      if (viceCaptains.length) {
-        lines.push('', 'VICE CAPTAINS', '', this.previewPlayersList(viceCaptains, match));
-      }
+    } else if (captains.length) {
+      lines.push('', 'CAPTAINS', '', this.previewPlayersList(captains, match));
     }
 
     lines.push('', this.reportLine('*'));
@@ -1086,6 +1058,111 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return teamCode ? `${teamCode} - ${role}` : role;
   }
 
+  private reportPreviewListSection(title: string, players: ApiPreviewPlayer[], match?: GeneratedMatch): string {
+    const lines = [
+      this.reportLine('-'),
+      title,
+      this.reportLine('-'),
+      ''
+    ];
+
+    if (!players.length) {
+      lines.push('None');
+      return lines.join('\r\n');
+    }
+
+    players.forEach((player, index) => {
+      lines.push(`${index + 1}. ${player.name || '-'} (${this.previewPlayerMeta(player, match)})`, '');
+    });
+
+    return lines.join('\r\n').trimEnd();
+  }
+
+  private teamDistributionBlock(teams: ApiGeneratedTeam[]): string {
+    const distribution = new Map<string, number>();
+
+    teams.forEach(team => {
+      const previewTeam = this.mapGeneratedTeam(team);
+      const key = `${previewTeam.homeCount} × ${previewTeam.awayCount}`;
+      distribution.set(key, (distribution.get(key) || 0) + 1);
+    });
+
+    const lines = [
+      this.reportLine('='),
+      this.centerReportText('TEAM DISTRIBUTION'),
+      this.reportLine('='),
+      ''
+    ];
+
+    Array.from(distribution.keys()).forEach(key => {
+      lines.push(`✓ ${key}`, '');
+    });
+
+    return lines.join('\r\n').trimEnd();
+  }
+
+  private definitionsBlock(): string {
+    return [
+      this.reportLine('='),
+      this.centerReportText('DEFINITIONS'),
+      this.reportLine('='),
+      '',
+      'Position Legend',
+      '---------------',
+      '',
+      'GK   = Goalkeeper',
+      '',
+      'DEF  = Defender',
+      '',
+      'MID  = Midfielder',
+      '',
+      'FWD  = Forward',
+      '',
+      '',
+      'Captain Legend',
+      '--------------',
+      '',
+      '(C) = Captain'
+    ].join('\r\n');
+  }
+
+  private reportPlayerPoolCount(preview: ApiTeamsPreview | null | undefined, teams: ApiGeneratedTeam[], substituteCount: number): number {
+    const explicitCount = Number(
+      (preview as any)?.selected_players_count ??
+      (preview as any)?.player_pool_count ??
+      (preview as any)?.players_count ??
+      0
+    );
+
+    if (explicitCount > 0) {
+      return explicitCount;
+    }
+
+    const names = new Set<string>();
+    teams.forEach(team => {
+      (team.players || []).forEach(player => names.add(String(player.original_name || player.name || '').toLowerCase()));
+    });
+
+    return Math.max(names.size, substituteCount);
+  }
+
+  private reportPlayerName(player: PreviewPlayer, team: PreviewTeam): string {
+    const label = this.csvCaptainLabel(player, team);
+
+    if (label === 'C') {
+      return `${player.name} (C)`;
+    }
+
+    return player.name;
+  }
+
+  private reportSideCode(match: GeneratedMatch | undefined, side: 'home' | 'away'): string {
+    const teamName = this.matchTeamName(match || null, side);
+    const bracketCode = String(teamName || '').match(/\(([A-Za-z0-9]+)\)/);
+
+    return this.fileTeamSegment(bracketCode?.[1] || teamName || (side === 'home' ? 'TEAMA' : 'TEAMB'));
+  }
+
   private reportTeamCode(match: GeneratedMatch | undefined, side: 'team_a' | 'team_b'): string {
     const title = match?.title || 'TEAMA vs TEAMB';
     const [home, away] = title.split(/\s+vs\s+/i);
@@ -1095,16 +1172,19 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return this.fileTeamSegment(bracketCode?.[1] || teamName || (side === 'team_a' ? 'TEAMA' : 'TEAMB'));
   }
 
-  private reportLine(char: '=' | '-' | '*'): string {
-    return char.repeat(char === '-' ? 56 : 56);
+  private reportLine(char: '=' | '-' | '*' | '#'): string {
+    return char.repeat(char === '-' ? 63 : 70);
   }
 
-  private centerReportText(value: string): string {
-    const width = 56;
+  private centerReportText(value: string, width = 70): string {
     const text = String(value || '');
     const left = Math.max(0, Math.floor((width - text.length) / 2));
 
     return `${' '.repeat(left)}${text}`;
+  }
+
+  private reportField(label: string, value: string | number, labelWidth = 18): string {
+    return `${label.padEnd(labelWidth)}: ${value ?? '-'}`;
   }
 
   private reportMatchDate(match: GeneratedMatch): string {
@@ -1127,8 +1207,13 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return `${fullName} (${shortName})`;
   }
 
-  private reportGeneratedOn(match: GeneratedMatch, matchDate: string): string {
+  private reportGeneratedOn(match: GeneratedMatch, matchDate: string, rawResponse?: any): string {
+    const generatedAtISO = rawResponse?.generated_at || rawResponse?.data?.generated_at || match.generatedAtISO || '';
     const generatedAt = String(match.generatedAt || '').trim();
+
+    if (generatedAtISO) {
+      return this.reportDateTime(generatedAtISO);
+    }
 
     if (!generatedAt || generatedAt === '-') {
       return matchDate;
@@ -1139,6 +1224,84 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     }
 
     return `${matchDate} ${generatedAt}`;
+  }
+
+  private reportKickoffTime(match: GeneratedMatch): string {
+    const value = match.startTimeISO || match.startDate || match.matchDate || '';
+
+    if (!value) {
+      return '-';
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return match.time || '-';
+    }
+
+    const time = date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'UTC'
+    });
+
+    return `${time} UTC`;
+  }
+
+  private reportGenerationTime(match: GeneratedMatch, rawResponse?: any): string {
+    const value =
+      rawResponse?.generation_time ??
+      rawResponse?.generation_seconds ??
+      rawResponse?.data?.generation_time ??
+      rawResponse?.data?.generation_seconds ??
+      match.generationTime;
+
+    if (value === null || value === undefined || value === '') {
+      return '-';
+    }
+
+    const text = String(value);
+    return /second/i.test(text) ? text : `${text} Seconds`;
+  }
+
+  private reportCoinConsumed(match: GeneratedMatch, rawResponse?: any): string {
+    const value =
+      rawResponse?.coin_consumed ??
+      rawResponse?.coins_consumed ??
+      rawResponse?.data?.coin_consumed ??
+      rawResponse?.data?.coins_consumed ??
+      match.coinConsumed;
+
+    if (value === null || value === undefined || value === '') {
+      return '1';
+    }
+
+    return String(value);
+  }
+
+  private reportDateTime(value: string): string {
+    if (!value) {
+      return '-';
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+    const time = date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+
+    return `${day}-${month}-${year} ${time}`;
   }
 
   private reportDate(value: string): string {

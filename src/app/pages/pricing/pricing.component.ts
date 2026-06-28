@@ -12,19 +12,14 @@ import { ProfileService } from 'src/app/core/services/profile.service';
 interface PricingPack {
   id: number;
   name: string;
-  subtitle: string;
   coins: number;
-  matches: number;
-  regularPrice: string;
-  offerPrice: string;
+  bonusCoins: number;
+  totalCoins: number;
+  validityDays: number;
+  price: string;
   perCoin: string;
-  saveText: string;
   currencySymbol: string;
-  offerLabel: string;
-  discountText: string;
-  offerActive: boolean;
   tone: string;
-  bestValue?: boolean;
 }
 
 @Component({
@@ -82,14 +77,11 @@ paymentMethodsOpen = false;
         // console.log('subscription plans:', res);
 
         if (res?.success && Array.isArray(res.data) && res.data.length) {
-          // Keep the Pro pack as the final card; it is the only pack marked Best Value.
-          this.plans = [...res.data].sort((a, b) => {
-            const proOrder = Number(this.isProPack(a)) - Number(this.isProPack(b));
-            return proOrder || Number(a.sort_order || 0) - Number(b.sort_order || 0);
-          });
+          this.plans = [...res.data].sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
           this.pricingPacks = this.plans.map((plan, index) => this.toPricingPack(plan, index));
         } else {
-          this.errorMessage = 'No subscription plans available.';
+          this.plans = [];
+          this.pricingPacks = [];
         }
         this.loading = false;
       },
@@ -188,7 +180,7 @@ paymentMethodsOpen = false;
     const res = await firstValueFrom(this.api.buyCoins({
       plan_id: plan.id,
       amount: Number(plan.price),
-      coins: Number(plan.coins)
+      coins: this.totalCoinsForPlan(plan)
     }));
 
     if (!res?.success || !res.clientSecret) {
@@ -315,7 +307,7 @@ closeCheckout(): void {
   }
 
   packTone(index: number): string {
-    return ['pk-green', 'pk-blue', 'pk-purple', 'pk-orange'][index] || 'pk-green';
+    return ['pk-orange', 'pk-green', 'pk-blue', 'pk-purple', 'pk-gold'][index % 5] || 'pk-orange';
   }
 
   isPurchasing(plan: SubscriptionPlan): boolean {
@@ -377,38 +369,34 @@ closeCheckout(): void {
     return Number(plan.price_per_coin) === Math.min(...prices);
   }
 
-  get hasActiveCoinPackOffer(): boolean {
-    return this.pricingPacks.some(pack => pack.offerActive);
-  }
-
   private toPricingPack(plan: SubscriptionPlan, index: number): PricingPack {
-    const regular = Number(plan.regular_price ?? plan.price ?? 0);
-    const configuredOffer = Number(plan.offer_price ?? plan.price ?? 0);
-    const offerActive = Number(plan.is_offer_active ?? 0) === 1;
-    const offer = offerActive && configuredOffer > 0 ? configuredOffer : regular;
-    const discount = regular > 0 && offer < regular ? Math.round(((regular - offer) / regular) * 100) : 0;
-    const perCoin = Number(plan.coins) > 0 ? offer / Number(plan.coins) : 0;
+    const coins = Number(plan.coins || 0);
+    const bonusCoins = Number(plan.bonus_coins || 0);
+    const totalCoins = this.totalCoinsForPlan(plan);
+    const price = Number(plan.price || 0);
+    const perCoin = totalCoins > 0 ? price / totalCoins : 0;
     return {
       id: plan.id,
       name: plan.name,
-      subtitle: plan.subtitle,
-      coins: Number(plan.coins),
-      matches: Number(plan.matches || plan.coins),
-      regularPrice: regular.toFixed(2),
-      offerPrice: offer.toFixed(2),
+      coins,
+      bonusCoins,
+      totalCoins,
+      validityDays: Number(plan.validity_days || 365),
+      price: price.toFixed(2),
       perCoin: perCoin.toFixed(2),
-      saveText: discount ? `save ${discount}%` : '',
-      discountText: `${discount}% OFF`,
-      offerLabel: plan.offer_label || 'Offer price',
-      offerActive,
-      currencySymbol: '$',
-      tone: this.packTone(index),
-      bestValue: this.isProPack(plan)
+      currencySymbol: plan.currency_symbol || '$',
+      tone: this.packTone(index)
     };
   }
 
   private isProPack(plan: SubscriptionPlan): boolean {
     return Number(plan.is_pro) === 1 || /\bpro\b/i.test(String(plan.name || ''));
+  }
+
+  totalCoinsForPlan(plan: SubscriptionPlan): number {
+    const coins = Number(plan.coins || 0);
+    const bonusCoins = Number(plan.bonus_coins || 0);
+    return Number(plan.total_coins || 0) || coins + bonusCoins;
   }
 
   private handleStripeReturn(): void {

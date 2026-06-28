@@ -265,6 +265,12 @@
   border-color: rgba(255, 138, 43, 0.62);
 }
 
+.pk-gold {
+  --pack-color: #f4b400;
+  --pack-soft: rgba(244, 180, 0, 0.32);
+  border-color: rgba(244, 180, 0, 0.54);
+}
+
 .credit-pack-badge {
   position: absolute;
   top: -12px;
@@ -314,7 +320,7 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 6px;
+  margin: 12px 0 8px;
 }
 
 .credit-pack-num {
@@ -337,13 +343,56 @@
 }
 
 .credit-pack-matches {
-  margin: 0 0 12px;
+  display: grid;
+  gap: 4px;
+  margin: 0 0 18px;
   color: var(--paper-2);
   font-size: 13px;
 }
 
 .credit-pack-matches b {
   color: var(--paper);
+}
+
+.credit-pack-matches span {
+  color: var(--pack-color);
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.credit-pack-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.credit-pack-stats .stat-chip {
+  display: grid;
+  gap: 5px;
+  min-height: 62px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 12px;
+  color: var(--paper-3);
+  background: rgba(0, 0, 0, 0.16);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.credit-pack-stats .stat-chip b {
+  color: var(--pack-color);
+  font-family: var(--f-mono);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.credit-pack-stats .stat-chip.bonus {
+  border-color: color-mix(in srgb, var(--pack-color) 24%, transparent);
+  background: color-mix(in srgb, var(--pack-color) 10%, transparent);
 }
 
 .credit-pack-regular {
@@ -415,6 +464,27 @@
 
 .credit-pack-per b {
   color: var(--gold);
+}
+
+.credit-pack-validity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 9px 11px;
+  border: 1px solid rgba(11, 204, 142, 0.22);
+  border-radius: 10px;
+  color: var(--paper-3);
+  background: rgba(11, 204, 142, 0.06);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.credit-pack-validity b {
+  color: var(--pitch-2);
+  font-family: var(--f-mono);
+  font-size: 12px;
 }
 
 .cp-save {
@@ -650,6 +720,12 @@
 .pricing-table .highlight {
   color: var(--gold);
 }
+
+.dynamic-pack-table th.pk-orange { color: #ff9a45; }
+.dynamic-pack-table th.pk-green { color: #1be89a; }
+.dynamic-pack-table th.pk-blue { color: #4ea8ff; }
+.dynamic-pack-table th.pk-purple { color: #c684ee; }
+.dynamic-pack-table th.pk-gold { color: #f4b400; }
 
 .pt-price {
   color: var(--paper);
@@ -1052,7 +1128,6 @@
 }
 
 @media (max-width: 1080px) {
-  .credit-packs,
   .coin-usage-list,
   .wc-terms-grid,
   .pricing-commitments-grid {
@@ -1060,7 +1135,8 @@
   }
 
   .credit-packs {
-    max-width: 720px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 760px;
   }
 }
 

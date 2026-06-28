@@ -176,14 +176,6 @@
               <div class="cv-badge">C</div>
               <div class="cv-name">{{ team.captain?.name || 'N/A' }}</div>
             </div>
-            <div class="cv-pill vc">
-            <div class="cv-avatar" [style.background]="team.viceCaptain && !team.viceCaptain.logo ? teamColor(team.viceCaptain.team) : null">
-  <img *ngIf="team.viceCaptain?.logo; else vcInitials" [src]="team.viceCaptain?.logo" [alt]="team.viceCaptain?.name">
-  <ng-template #vcInitials>{{ team.viceCaptain ? playerInitials(team.viceCaptain) : 'VC' }}</ng-template>
-</div>
-              <div class="cv-badge vc">VC</div>
-              <div class="cv-name">{{ team.viceCaptain?.name || 'N/A' }}</div>
-            </div>
           </div>
         </div>
 
@@ -262,7 +254,6 @@
               <div class="pitch-player" *ngFor="let player of playersByPosition(position)">
                 <div class="pp-ava">
                   <div class="pp-cvc c" *ngIf="isCaptain(player)">C</div>
-                  <div class="pp-cvc vc" *ngIf="isViceCaptain(player)">VC</div>
                   <div class="pp-jersey" [style.background]="!player.logo ? teamColor(player.team) : null">
   <img *ngIf="player.logo; else pitchInitials" [src]="player.logo" [alt]="player.name">
   <ng-template #pitchInitials>{{ playerInitials(player) }}</ng-template>
