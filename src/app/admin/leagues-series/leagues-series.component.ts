@@ -100,8 +100,8 @@ export class LeaguesSeriesComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
     const payload = this.leaguePayload(this.newLeague);
-    if (!payload.name || !payload.region || !payload.tier) {
-      this.showError('Name, region, and tier are required.');
+    if (!payload.name || !payload.region) {
+      this.showError('Name and region are required.');
       return;
     }
     this.saving = true;
@@ -133,8 +133,8 @@ export class LeaguesSeriesComponent implements OnInit {
 
     const payload = this.leaguePayload(this.editingLeague);
 
-    if (!payload.name || !payload.region || !payload.tier) {
-      this.showError('Name, region, and tier are required.');
+    if (!payload.name || !payload.region) {
+      this.showError('Name and region are required.');
       return;
     }
 
@@ -258,8 +258,8 @@ export class LeaguesSeriesComponent implements OnInit {
   }
 
   private leaguePayload(league: AdminLeagueCreatePayload | AdminLeague): AdminLeagueCreatePayload {
-    return { name: league.name.trim(), short_name: String(league.short_name || '').trim(), region: league.region.trim(), tier: league.tier, from_month_year: String(league.from_month_year || '').trim(), to_month_year: String(league.to_month_year || '').trim(), description: String(league.description || '').trim(), matches_30d: Number(league.matches_30d || 0) };
+    return { name: league.name.trim(), short_name: String(league.short_name || '').trim(), region: league.region.trim(), from_month_year: String(league.from_month_year || '').trim(), to_month_year: String(league.to_month_year || '').trim(), description: String(league.description || '').trim(), matches_30d: Number(league.matches_30d || 0) };
   }
 
-  private emptyLeague(): AdminLeagueCreatePayload { return { name: '', short_name: '', region: '', tier: 'Tier 1', from_month_year: '', to_month_year: '', description: '', matches_30d: 0 }; }
+  private emptyLeague(): AdminLeagueCreatePayload { return { name: '', short_name: '', region: '', from_month_year: '', to_month_year: '', description: '', matches_30d: 0 }; }
 }

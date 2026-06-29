@@ -1968,7 +1968,7 @@ h1 em,
   background: rgba(215, 38, 56, .12);
 }
 
-.action-summary-title.cvc .material-symbols-outlined,
+.action-summary-title.captain .material-symbols-outlined,
 .action-summary-title.captain .material-symbols-outlined {
   color: var(--gold);
   background: rgba(244, 180, 0, .12);
@@ -2006,7 +2006,7 @@ h1 em,
   border-left-color: var(--acid);
 }
 
-.action-player-chip.cvc,
+.action-player-chip.captain,
 .action-player-chip.captain {
   border-left-color: var(--gold);
 }

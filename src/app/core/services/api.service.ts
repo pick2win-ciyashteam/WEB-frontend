@@ -131,9 +131,16 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
   }
 
   createUctTeams(data: UctGeneratePayload): Observable<UctGenerateResponse> {
+    const url = `${this.BASE}/user/teams/generate-teams`;
+    console.log('Generate UCT API request:', {
+      url,
+      headers: { 'Content-Type': 'application/json', 'x-api-key': '12345678' },
+      body: data
+    });
+
     return this.http.post<UctGenerateResponse>(
-      `${this.BASE}/user/teams/generate-teams`,
-      JSON.stringify(data),
+      url,
+      data,
       { headers: { 'Content-Type': 'application/json', 'x-api-key': '12345678' } }
     );
   }

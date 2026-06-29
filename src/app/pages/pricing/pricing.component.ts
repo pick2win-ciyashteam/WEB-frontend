@@ -12,6 +12,7 @@ import { ProfileService } from 'src/app/core/services/profile.service';
 interface PricingPack {
   id: number;
   name: string;
+  icon: string;
   coins: number;
   bonusCoins: number;
   totalCoins: number;
@@ -310,6 +311,17 @@ closeCheckout(): void {
     return ['pk-orange', 'pk-green', 'pk-blue', 'pk-purple', 'pk-gold'][index % 5] || 'pk-orange';
   }
 
+  packIcon(index: number, name: string): string {
+    const value = String(name || '').toLowerCase();
+
+    if (value.includes('starter')) return 'rocket_launch';
+    if (value.includes('basic')) return 'shield';
+    if (value.includes('standard')) return 'star';
+    if (value.includes('pro')) return 'diamond';
+
+    return ['rocket_launch', 'shield', 'star', 'diamond', 'workspace_premium'][index % 5] || 'paid';
+  }
+
   isPurchasing(plan: SubscriptionPlan): boolean {
     return this.purchasingPlanId === plan.id;
   }
@@ -378,6 +390,7 @@ closeCheckout(): void {
     return {
       id: plan.id,
       name: plan.name,
+      icon: this.packIcon(index, plan.name),
       coins,
       bonusCoins,
       totalCoins,

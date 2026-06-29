@@ -28,23 +28,32 @@
       </div>
     </div>
 
-    <div class="pack-status" *ngIf="loading">Loading latest coin packs...</div>
+    <div class="pack-status" *ngIf="loading">Loading latest packs...</div>
     <div class="pack-status error" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
     <div class="pack-status success" *ngIf="paymentMessage">{{ paymentMessage }}</div>
     <div class="pack-status error" *ngIf="paymentError">{{ paymentError }}</div>
 
     <div class="credit-packs reveal" *ngIf="!loading && pricingPacks.length">
       <div class="credit-pack" *ngFor="let pack of pricingPacks" [ngClass]="pack.tone">
-        <div class="credit-pack-name">{{ pack.name }}</div>
+        <div class="credit-pack-head">
+          <div class="credit-pack-title">
+            <span class="credit-pack-icon material-symbols-outlined" aria-hidden="true">{{ pack.icon }}</span>
+            <div class="credit-pack-name">{{ pack.name }}</div>
+          </div>
+          <span class="credit-pack-coin-icon material-symbols-outlined" aria-hidden="true">paid</span>
+        </div>
         <div class="credit-pack-coins">
-          <span class="credit-pack-num">{{ pack.totalCoins }}</span>
+          <span class="credit-pack-num">{{ pack.coins }}</span>
           <span class="credit-pack-cred-label">coins</span>
         </div>
-        <p class="credit-pack-matches">
-          <!-- <b>{{ pack.totalCoins }} total coins</b> -->
-          <span>Base {{ pack.coins }} + Bonus {{ pack.bonusCoins }}</span>
-        </p>
-        <div class="credit-pack-offer-label">Price</div>
+        <div class="credit-pack-breakdown" aria-label="Coin breakdown">
+          <span><b>Base</b> {{ pack.coins }}</span>
+          <i>+</i>
+          <span><b>Bonus</b> {{ pack.bonusCoins }}</span>
+          <i>=</i>
+          <span><b>Total</b> {{ pack.totalCoins }}</span>
+        </div>
+        <div class="credit-pack-offer-label">Price (USD)</div>
         <div class="credit-pack-price">
           <span class="credit-pack-cur">{{ pack.currencySymbol }}</span>
           <span class="credit-pack-amount">{{ pack.price }}</span>
@@ -53,10 +62,14 @@
           &asymp; <b>{{ pack.currencySymbol }}{{ pack.perCoin }}</b> per coin
         </div>
         <div class="credit-pack-validity">
-          Validity <b>{{ pack.validityDays }} days</b>
+          <span class="credit-pack-validity-icon material-symbols-outlined" aria-hidden="true">calendar_month</span>
+          <span class="credit-pack-validity-copy">
+            <span>Validity</span>
+            <b>{{ pack.validityDays }} Days</b>
+          </span>
         </div>
         <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPricingPack(pack)">
-          {{ purchasingPlanId ? 'Opening Razorpay...' : 'Buy ' + pack.totalCoins + ' Coins' }}
+          {{ purchasingPlanId ? 'Opening Razorpay...' : 'Buy ' + pack.coins + ' Coins' }}
           <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
         </button>
       </div>

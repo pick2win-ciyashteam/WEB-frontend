@@ -65,7 +65,6 @@ export interface AdminLeagueCreatePayload {
   name: string;
   short_name: string;
   region: string;
-  tier: string;
   from_month_year: string;
   to_month_year: string;
   description: string;
@@ -138,11 +137,11 @@ export interface AdminSubscriptionCreatePayload {
   subtitle?: string;
   coins: number;
   bonus_coins?: number;
-  matches: number;
+  matches?: number;
   price: number;
   validity_days?: number;
-  is_popular: number;
-  sort_order: number;
+  is_popular?: number;
+  sort_order?: number;
   currency?: string;
   currency_symbol?: string;
   is_pro?: number;

@@ -268,12 +268,11 @@
           <span class="material-symbols-outlined" aria-hidden="true">push_pin</span>
           <div>
             <b>You have chosen Mandatory Players (M-YES).</b>
-            <p>Select up to 2 players to include in all 20 generated teams.</p>
-            <small>Goalkeeper (GK)</small>
+            <p>Select exactly 1 player to include in all 20 generated teams.</p>
+            <small>DEF, MID or FWD only. Goalkeeper (GK) is not available for M-YES.</small>
             <ul>
-              <li><b>1 GK in My Squad</b> automatically appears in all 20 teams.</li>
-              <li><b>2 GKs in My Squad</b> lets you optionally select 1 GK as M-YES.</li>
-              <li>2 GKs cannot both be selected as M-YES.</li>
+              <li>Choose any one eligible Playing XI or Substitute player.</li>
+              <li>GK players are hidden in M-YES selection.</li>
             </ul>
           </div>
         </div>
@@ -343,7 +342,7 @@
             <!-- <h2>Captain Pool</h2> -->
             <p>Sorare uses Captain only.</p>
           </div>
-          <span class="selection-pill">{{ cvcPlayers.length }} / {{ maxCvc }} captains</span>
+          <span class="selection-pill">{{ captainPlayers.length }} / {{ maxCaptainPool }} captains</span>
         </div>
 
         <div class="mobile-team-versus">
@@ -363,11 +362,11 @@
               <h3><span class="team-color" [class.away]="side.cls === 'away'"></span>{{ side.name }}</h3>
               <b>{{ side.players.length }} players</b>
             </div>
-          <button class="player-row" type="button" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="!canSelectCvc(player)" (click)="toggleCvc(player)">
+          <button class="player-row" type="button" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id)" [disabled]="!canSelectCaptain(player)" (click)="toggleCaptain(player)">
             <span class="avatar image-avatar">
               <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
             </span>
-            <input class="row-check" type="checkbox" [checked]="cvcIds.has(player.id)" tabindex="-1">
+            <input class="row-check" type="checkbox" [checked]="captainIds.has(player.id)" tabindex="-1">
             <span class="player-main"><b>{{ player.player_name }}</b></span>
             <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
           </button>
@@ -384,11 +383,11 @@
             </div>
           </div>
           <div class="sub-player-grid">
-            <button class="player-row" type="button" *ngFor="let player of captaincySubstitutes; trackBy: trackPlayer" [class.selected]="cvcIds.has(player.id)" [disabled]="!canSelectCvc(player)" (click)="toggleCvc(player)">
+            <button class="player-row" type="button" *ngFor="let player of captaincySubstitutes; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id)" [disabled]="!canSelectCaptain(player)" (click)="toggleCaptain(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
-              <input class="row-check" type="checkbox" [checked]="cvcIds.has(player.id)" tabindex="-1">
+              <input class="row-check" type="checkbox" [checked]="captainIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -490,7 +489,7 @@
               </div>
             </div>
             <div class="preview-player-grid">
-              <div class="preview-player" *ngFor="let player of cvcPlayers; trackBy: trackPlayer">
+              <div class="preview-player" *ngFor="let player of captainPlayers; trackBy: trackPlayer">
                 <span class="avatar image-avatar">
                   <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                 </span>
@@ -557,14 +556,14 @@
               </div>
             </div>
           </div>
-          <div class="action-selection-summary captain-bottom-summary" *ngIf="step === 3 && cvcPlayers.length">
-            <div class="action-mandate-col" *ngIf="cvcPlayers.length">
-              <div class="action-summary-title cvc">
+          <div class="action-selection-summary captain-bottom-summary" *ngIf="step === 3 && captainPlayers.length">
+            <div class="action-mandate-col" *ngIf="captainPlayers.length">
+              <div class="action-summary-title captain">
                 <span class="material-symbols-outlined" aria-hidden="true">military_tech</span>
-                <b>Captain Pool {{ cvcPlayers.length }}/{{ maxCvc }}</b>
+                <b>Captain Pool {{ captainPlayers.length }}/{{ maxCaptainPool }}</b>
               </div>
               <div class="action-chip-row">
-                <span class="action-player-chip cvc" *ngFor="let player of cvcPlayers; trackBy: trackPlayer">
+                <span class="action-player-chip captain" *ngFor="let player of captainPlayers; trackBy: trackPlayer">
                   <b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small>
                 </span>
               </div>

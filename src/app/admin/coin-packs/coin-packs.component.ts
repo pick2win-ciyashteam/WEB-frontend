@@ -50,24 +50,20 @@ export class CoinPacksComponent implements OnInit {
   selectMonth(month: number): void { this.month = month; this.loadReports(); }
   loadCountries(): void { this.adminService.getCountries().subscribe({ next: res => { const data = res?.data || res || []; const rows = Array.isArray(data) ? data : (data?.countries || res?.countries || []); this.availableCountries = Array.isArray(rows) ? rows.map((item: any) => ({ name: item?.name || item?.country || item?.country_name || String(item || '') })).filter(item => item.name) : []; }, error: err => console.log('get countries for coin packs error:', err) }); }
   createPack(): void {
-    if (!this.newPack.name?.trim() || !Number(this.newPack.coins) || this.newPack.price === null || this.newPack.price === '') { this.errorMessage = 'Pack name, coins, and price are required.'; return; }
+    if (!this.newPack.name?.trim() || !Number(this.newPack.coins) || this.newPack.price === null || this.newPack.price === '' || !Number(this.newPack.validity_days)) { this.errorMessage = 'Pack name, coins, price, and validity are required.'; return; }
     this.saving = true; this.errorMessage = '';
     this.adminService.createSubscription({
       name: this.newPack.name.trim(),
-      subtitle: '',
       coins: Number(this.newPack.coins),
       bonus_coins: Number(this.newPack.bonus_coins || 0),
-      matches: Number(this.newPack.coins),
       price: Number(this.newPack.price),
-      validity_days: Number(this.newPack.validity_days || 365),
-      is_popular: 0,
-      sort_order: this.subscriptions.length + 1
+      validity_days: Number(this.newPack.validity_days)
     }).subscribe({ next: res => { this.saving = false; this.successMessage = res?.message || 'Coin pack added successfully.'; this.resetNewPack(); this.loadReports(); this.loadSubscriptions(); }, error: err => { this.saving = false; this.errorMessage = err?.error?.message || 'Unable to add coin pack.'; } });
   }
   loadSubscriptions(): void { this.adminService.getSubscriptions().subscribe({ next: res => { const rows = res?.data || res || []; this.subscriptions = Array.isArray(rows) ? [...rows].map(pack => this.normalizeSubscription(pack)).sort((left, right) => Number(left.sort_order ?? Number.MAX_SAFE_INTEGER) - Number(right.sort_order ?? Number.MAX_SAFE_INTEGER) || String(left.name || '').localeCompare(String(right.name || ''))) : []; }, error: err => this.errorMessage = err?.error?.message || 'Unable to load coin packs.' }); }
   refreshSubscriptions(): void { if (this.saving) return; this.errorMessage = ''; this.successMessage = ''; this.editingId = null; this.loadSubscriptions(); }
   editPack(item: AdminSubscription): void { this.editingId = item.id; }
-  savePack(item: AdminSubscription): void { this.saving = true; this.adminService.updateSubscription(item.id, { name: item.name, subtitle: item.subtitle || '', coins: Number(item.coins), bonus_coins: Number(item.bonus_coins || 0), matches: Number(item.matches || item.coins), price: Number(item.price), validity_days: Number(item.validity_days || 365), is_popular: Number(item.is_popular || 0), sort_order: Number(item.sort_order || 0), is_active: Number(item.is_active ?? 1) }).subscribe({ next: res => { this.saving = false; this.editingId = null; this.successMessage = res?.message || 'Coin pack updated successfully.'; this.loadReports(); this.loadSubscriptions(); }, error: err => { this.saving = false; this.errorMessage = err?.error?.message || 'Unable to update coin pack.'; } }); }
+  savePack(item: AdminSubscription): void { this.saving = true; this.adminService.updateSubscription(item.id, { sort_order: Number(item.sort_order || 0), name: item.name, coins: Number(item.coins), bonus_coins: Number(item.bonus_coins || 0), price: Number(item.price), validity_days: Number(item.validity_days || 365) }).subscribe({ next: res => { this.saving = false; this.editingId = null; this.successMessage = res?.message || 'Coin pack updated successfully.'; this.loadReports(); this.loadSubscriptions(); }, error: err => { this.saving = false; this.errorMessage = err?.error?.message || 'Unable to update coin pack.'; } }); }
   openDeleteConfirm(item: AdminSubscription): void { this.deleteConfirmPack = item; }
   closeDeleteConfirm(): void { if (!this.saving) this.deleteConfirmPack = null; }
   deletePack(): void { const item = this.deleteConfirmPack; if (!item) return; this.saving = true; this.adminService.deleteSubscription(item.id).subscribe({ next: res => { this.saving = false; this.deleteConfirmPack = null; this.successMessage = res?.message || 'Coin pack deleted successfully.'; this.loadReports(); this.loadSubscriptions(); }, error: err => { this.saving = false; this.errorMessage = err?.error?.message || 'Unable to delete coin pack.'; } }); }

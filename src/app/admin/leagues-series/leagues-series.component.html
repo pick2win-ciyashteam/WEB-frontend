@@ -16,13 +16,37 @@
   </article>
   <article class="panel">
     <div class="panel-head"><div><h3>Leagues catalog</h3><p class="ph-sub">{{ formatNumber(totalLeagues) }} leagues / competitions · {{ formatNumber(shownOnWebsite) }} visible on the website</p></div><button class="lk" type="button" (click)="downloadCsv()" [disabled]="!leagues.length">⇩ CSV</button></div>
-    <div class="table-wrap"><table><thead><tr><th>League / competition</th><th>Region</th><th>Schedule</th><th class="num">Tier</th><th class="num">Matches / 30d</th><th>Shown on website</th><th>Created</th><th></th></tr></thead><tbody>
-      <tr *ngFor="let league of leagues"><td><div class="cell-main">{{ league.name }} <span class="short-name" *ngIf="league.short_name">{{ league.short_name }}</span></div><div class="cell-sub" *ngIf="league.description">{{ league.description }}</div><div class="cell-sub" *ngIf="!league.description">{{ league.league_code }}</div></td><td>{{ league.region }}</td><td class="cell-sub">{{ league.from_month_year || '-' }} — {{ league.to_month_year || '-' }}</td><td class="num"><span class="tag" [class.warn]="league.tier === 'Tier 1'" [class.mut]="league.tier !== 'Tier 1'">{{ league.tier }}</span></td><td class="num">{{ formatNumber(league.matches_30d) }}</td><td><button class="visibility" [class.on]="league.is_visible" type="button" [disabled]="saving" (click)="toggleVisibility(league)" [attr.aria-label]="league.is_visible ? 'Hide from website' : 'Show on website'"></button><span class="visibility-label">{{ league.is_visible ? 'Shown' : 'Hidden' }}</span></td><td class="cell-sub">{{ league.created_at | date:'dd MMM yyyy' }}</td><td><span class="t-actions"><button class="lk" type="button" (click)="editLeague(league)">Edit</button><button class="lk danger-link" type="button" (click)="openDeleteConfirm(league)">Delete</button></span></td></tr>
-      <tr *ngIf="!loading && !leagues.length"><td colspan="7" class="empty">No leagues yet — add one below.</td></tr>
-    </tbody></table></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>League / competition</th>
+            <th>Region</th>
+            <th>Schedule</th>
+            <th class="num">Matches / 30d</th>
+            <th>Shown on website</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr *ngFor="let league of leagues">
+        <td><div class="cell-main">{{ league.name }} <span class="short-name" *ngIf="league.short_name">{{ league.short_name }}</span></div><div class="cell-sub" *ngIf="league.description">{{ league.description }}</div><div class="cell-sub" *ngIf="!league.description">{{ league.league_code }}</div></td>
+        <td>{{ league.region }}</td>
+        <td class="cell-sub">{{ league.from_month_year || '-' }} — {{ league.to_month_year || '-' }}</td>
+        <td class="num">{{ formatNumber(league.matches_30d) }}</td>
+        <td><button class="visibility" [class.on]="league.is_visible" type="button" [disabled]="saving" (click)="toggleVisibility(league)" [attr.aria-label]="league.is_visible ? 'Hide from website' : 'Show on website'"></button><span class="visibility-label">{{ league.is_visible ? 'Shown' : 'Hidden' }}</span></td>
+        <td class="cell-sub">{{ league.created_at | date:'dd MMM yyyy' }}</td>
+        <td><span class="t-actions"><button class="lk" type="button" (click)="editLeague(league)">Edit</button><button class="lk danger-link" type="button" (click)="openDeleteConfirm(league)">Delete</button></span></td>
+      </tr>
+      <tr *ngIf="!loading && !leagues.length"><td colspan="7" class="empty">No leagues yet — add one below.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
   </article>
   <article class="panel"><div class="panel-head"><h3>Add league / competition</h3></div><div class="form-grid">
-    <label>Name<input class="inp" [(ngModel)]="newLeague.name" placeholder="e.g. Indian Premier League"></label><label>Short name<input class="inp" [(ngModel)]="newLeague.short_name" placeholder="e.g. IPL"></label><label>Region / country<input class="inp" [(ngModel)]="newLeague.region" placeholder="e.g. India"></label><label>Tier<select class="inp" [(ngModel)]="newLeague.tier"><option>Tier 1</option><option>Tier 2</option><option>Tier 3</option></select></label><label>From month / year<input class="inp" [(ngModel)]="newLeague.from_month_year" placeholder="e.g. Mar 2026"></label><label>To month / year<input class="inp" [(ngModel)]="newLeague.to_month_year" placeholder="e.g. May 2026"></label><label class="full-field">Description<textarea class="inp" [(ngModel)]="newLeague.description" rows="3" placeholder="e.g. Top T20 cricket league in India"></textarea></label><label>Matches / 30d<input class="inp" [(ngModel)]="newLeague.matches_30d" type="number" min="0" placeholder="e.g. 12"></label>
+    <label>Name<input class="inp" [(ngModel)]="newLeague.name" placeholder="e.g. Indian Premier League"></label><label>Short name<input class="inp" [(ngModel)]="newLeague.short_name" placeholder="e.g. IPL"></label><label>Region / country<input class="inp" [(ngModel)]="newLeague.region" placeholder="e.g. India"></label><label>From month / year<input class="inp" [(ngModel)]="newLeague.from_month_year" placeholder="e.g. Mar 2026"></label><label>To month / year<input class="inp" [(ngModel)]="newLeague.to_month_year" placeholder="e.g. May 2026"></label><label class="full-field">Description<textarea class="inp" [(ngModel)]="newLeague.description" rows="3" placeholder="e.g. Top T20 cricket league in India"></textarea></label><label>Matches / 30d<input class="inp" [(ngModel)]="newLeague.matches_30d" type="number" min="0" placeholder="e.g. 12"></label>
   </div><div class="modal-actions"><button class="btn" type="button" (click)="createLeague()" [disabled]="saving">{{ saving ? 'Adding league...' : '+ Add league' }}</button></div></article>
 </section>
 
@@ -34,7 +58,6 @@
       <label>Name<input class="inp" [(ngModel)]="league.name"></label>
       <label>Short name<input class="inp" [(ngModel)]="league.short_name"></label>
       <label>Region / country<input class="inp" [(ngModel)]="league.region"></label>
-      <label>Tier<select class="inp" [(ngModel)]="league.tier"><option>Tier 1</option><option>Tier 2</option><option>Tier 3</option></select></label>
       <label>From month / year<input class="inp" [(ngModel)]="league.from_month_year" placeholder="e.g. Mar 2026"></label>
       <label>To month / year<input class="inp" [(ngModel)]="league.to_month_year" placeholder="e.g. May 2026"></label>
       <label class="full-field">Description<textarea class="inp" [(ngModel)]="league.description" rows="3"></textarea></label>
