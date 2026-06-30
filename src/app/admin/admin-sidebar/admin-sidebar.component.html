@@ -11,13 +11,13 @@
     <ng-container *ngFor="let item of navItems; let i = index">
       <div class="nav-group" *ngIf="visibleGroup(i)">{{ visibleGroup(i) }}</div>
       <a *ngIf="item.route; else navButton" class="nav-item" [routerLink]="item.route" routerLinkActive="active">
-        <span class="ic" aria-hidden="true">{{ item.icon }}</span>
+        <span class="ic" [class.material-symbols-outlined]="item.materialIcon" aria-hidden="true">{{ item.materialIcon || item.icon }}</span>
         <span>{{ item.label }}</span>
         <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
       </a>
       <ng-template #navButton>
         <button class="nav-item nav-button" type="button">
-          <span class="ic" aria-hidden="true">{{ item.icon }}</span>
+          <span class="ic" [class.material-symbols-outlined]="item.materialIcon" aria-hidden="true">{{ item.materialIcon || item.icon }}</span>
           <span>{{ item.label }}</span>
           <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
         </button>

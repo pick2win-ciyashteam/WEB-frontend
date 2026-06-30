@@ -3,6 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 interface AdminNavItem {
   label: string;
   icon: string;
+  materialIcon?: string;
   route?: string;
   group: string;
   badge?: string;
@@ -22,13 +23,14 @@ export class AdminSidebarComponent {
     { label: 'Countries', icon: '🌍', route: '/admin/countries', group: 'Users & Countries' },
     { label: 'UCT Activity', icon: '⚡', route: '/admin/uct-activity', group: 'Product', badge: 'live' },
     { label: 'Votes & Feedback', icon: '💬', route: '/admin/votes-feedback', group: 'Product' },
-    { label: 'Support Tickets', icon: 'SUP', route: '/admin/support-tickets', group: 'Product' },
     { label: 'Coin Packs', icon: '🪙', route: '/admin/coin-packs', group: 'Monetization' },
     { label: 'Revenue', icon: '💵', route: '/admin/revenue', group: 'Finance' },
     { label: 'Expenses', icon: '📉', route: '/admin/expenses', group: 'Finance' },
     { label: 'Profit', icon: '📈', route: '/admin/profit', group: 'Finance' },
     { label: 'Payments', icon: '💳', route: '/admin/payments', group: 'Finance' },
     { label: 'Leagues / Series', icon: '🏆', route: '/admin/leagues-series', group: 'Catalog' },
+
+    { label: 'Support Tickets', icon: '', materialIcon: 'support_agent', route: '/admin/support-tickets', group: 'Administration' },
     { label: 'Admins & Team', icon: '🔐', route: '/admin/admins-team', group: 'Administration' },
     { label: 'Activity Log', icon: '📝', route: '/admin/activity-logs', group: 'Administration' },
     { label: 'System & Integrations', icon: '🛠️', group: 'System' }
