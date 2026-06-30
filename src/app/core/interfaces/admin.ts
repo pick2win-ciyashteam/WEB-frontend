@@ -538,6 +538,51 @@ export interface AdminVotesListReports {
   feedback: AdminVotesFeedbackItem[];
 }
 
+export type AdminSupportStatus = 'open' | 'in_progress' | 'resolved' | 'closed';
+
+export interface AdminSupportUser {
+  id: number;
+  fullname: string;
+  email: string;
+  country: string;
+}
+
+export interface AdminSupportTicket {
+  id: number;
+  ticket_code: string;
+  subject: string;
+  message: string;
+  admin_reply: string | null;
+  status: AdminSupportStatus | string;
+  user: AdminSupportUser;
+  created_at: string;
+  replied_at: string | null;
+}
+
+export interface AdminSupportKpis {
+  total: number;
+  open: number;
+  in_progress: number;
+  resolved: number;
+  closed: number;
+}
+
+export interface AdminSupportListReports {
+  success: boolean;
+  kpis: AdminSupportKpis;
+  pagination: AdminUsersPagination;
+  filters: {
+    status: string;
+    search: string;
+  };
+  tickets: AdminSupportTicket[];
+}
+
+export interface AdminSupportTicketReports {
+  success: boolean;
+  ticket: AdminSupportTicket;
+}
+
 export interface AdminPackBuyersSummary {
   unique_buyers: number;
   total_purchases: number;

@@ -19,6 +19,7 @@ import { RevenueComponent } from './revenue/revenue.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { ProfitComponent } from './profit/profit.component';
 import { PaymentsComponent } from './payments/payments.component';
+import { AdminSupportComponent } from './admin-support/admin-support.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,10 @@ const routes: Routes = [
       {
         path: 'votes-feedback',
         component: VotesFeedbackComponent
+      },
+      {
+        path: 'support-tickets',
+        component: AdminSupportComponent
       },
       {
         path: 'create-banner',

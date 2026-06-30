@@ -599,6 +599,33 @@
   </div>
 </main>
 
+<div class="uct-confirm-modal match-started-modal" *ngIf="showMatchStartedModal" role="dialog" aria-modal="true" aria-labelledby="matchStartedTitle">
+  <div class="uct-confirm-card compact match-started-card">
+    <div class="uct-confirm-title-row">
+      <div class="uct-confirm-icon warning">
+        <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+      </div>
+      <div>
+        <span class="uct-confirm-kicker">Match Status</span>
+        <h2 id="matchStartedTitle">Match Has Started</h2>
+      </div>
+    </div>
+
+    <div class="match-started-copy">
+      <p>This match has already started. Team generation for this match is no longer available.</p>
+      <p>Any unsaved configuration will not be used.</p>
+    </div>
+
+    <div class="uct-confirm-actions match-started-actions">
+      <button class="ghost-btn" type="button" (click)="goToLineoutsAfterMatchStarted()">OK</button>
+      <button class="primary-btn" type="button" (click)="goToLineoutsAfterMatchStarted()">
+        Go to Dashboard
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="uct-confirm-modal" *ngIf="showGenerateConfirm" role="dialog" aria-modal="true" aria-labelledby="uctConfirmTitle" (click)="closeGenerateConfirm()">
   <div class="uct-confirm-card" (click)="$event.stopPropagation()">
     <button class="uct-confirm-close" type="button" aria-label="Close" (click)="closeGenerateConfirm()">

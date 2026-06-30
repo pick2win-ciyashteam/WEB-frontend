@@ -1,0 +1,146 @@
+<section class="support-admin">
+  <div class="support-head">
+    <div>
+      <span class="eyebrow">Support Desk</span>
+      <h2>Support Tickets</h2>
+      <p>Review user support requests, reply to users, and keep ticket status updated.</p>
+    </div>
+    <button class="btn" type="button" (click)="loadTickets()" [disabled]="loading">
+      <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
+      Refresh
+    </button>
+  </div>
+
+  <div class="kpi-grid">
+    <article class="kpi"><span>Total</span><b>{{ kpis.total }}</b></article>
+    <article class="kpi open"><span>Open</span><b>{{ kpis.open }}</b></article>
+    <article class="kpi progress"><span>In Progress</span><b>{{ kpis.in_progress }}</b></article>
+    <article class="kpi resolved"><span>Resolved</span><b>{{ kpis.resolved }}</b></article>
+    <article class="kpi closed"><span>Closed</span><b>{{ kpis.closed }}</b></article>
+  </div>
+
+  <div class="state ok" *ngIf="actionMessage">{{ actionMessage }}</div>
+  <div class="state error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="state loading" *ngIf="loading">Loading support tickets...</div>
+
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Ticket Queue</h3>
+        <p>{{ tickets.length }} of {{ pagination.total || tickets.length }} tickets shown</p>
+      </div>
+      <div class="filters">
+        <button *ngFor="let item of statuses" class="chip" type="button" [class.active]="status === item.value" (click)="setStatus(item.value)">
+          {{ item.label }}
+        </button>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <input class="inp" type="search" placeholder="Search ticket, subject, user, email..." [(ngModel)]="search" (keyup.enter)="applySearch()">
+      <button class="btn sm" type="button" (click)="applySearch()">Search</button>
+      <button class="btn ghost sm" type="button" (click)="resetFilters()">Reset</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ticket</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Reply</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ticket of tickets; trackBy: trackTicket">
+            <td>
+              <div class="ticket-code">{{ ticket.ticket_code }}</div>
+              <div class="main">{{ ticket.subject }}</div>
+              <div class="sub">{{ ticket.message }}</div>
+            </td>
+            <td>
+              <div class="main">{{ ticket.user.fullname }}</div>
+              <div class="sub">{{ ticket.user.email }} - {{ ticket.user.country || '-' }}</div>
+            </td>
+            <td>
+              <select class="status-select" [ngModel]="normalizeStatus(ticket.status)" (ngModelChange)="updateStatus(ticket, $event)" [disabled]="actionLoading">
+                <option *ngFor="let item of replyStatuses" [ngValue]="item">{{ statusLabel(item) }}</option>
+              </select>
+            </td>
+            <td class="mono">{{ formatDate(ticket.created_at) }}</td>
+            <td><span class="tag" [class.replied]="ticket.admin_reply">{{ ticket.admin_reply ? 'Replied' : 'Pending' }}</span></td>
+            <td class="actions"><button class="link-btn" type="button" (click)="openTicket(ticket)">View / Reply</button></td>
+          </tr>
+          <tr *ngIf="!loading && !tickets.length">
+            <td colspan="6" class="empty">No support tickets match this filter.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pager" *ngIf="pagination.total_pages > 1">
+      <span>Page {{ page }} of {{ pagination.total_pages }}</span>
+      <div>
+        <button class="btn ghost sm" type="button" (click)="previousPage()" [disabled]="page <= 1">Prev</button>
+        <button class="btn ghost sm" type="button" (click)="nextPage()" [disabled]="page >= pagination.total_pages">Next</button>
+      </div>
+    </div>
+  </article>
+</section>
+
+<div class="modal" *ngIf="loadingDetail || selectedTicket" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <button class="close" type="button" aria-label="Close" (click)="closeModal()">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+
+    <div class="state loading" *ngIf="loadingDetail">Loading ticket details...</div>
+
+    <ng-container *ngIf="!loadingDetail && selectedTicket as ticket">
+      <div class="modal-title">
+        <div>
+          <span class="ticket-code">{{ ticket.ticket_code }}</span>
+          <h3>{{ ticket.subject }}</h3>
+          <p>{{ formatDate(ticket.created_at) }}</p>
+        </div>
+        <span class="status-pill" [class]="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
+      </div>
+
+      <div class="detail-grid">
+        <section class="detail-box">
+          <span>User</span>
+          <b>{{ ticket.user.fullname }}</b>
+          <p>{{ ticket.user.email }} - {{ ticket.user.country || '-' }}</p>
+        </section>
+        <section class="detail-box">
+          <span>User Message</span>
+          <p>{{ ticket.message }}</p>
+        </section>
+      </div>
+
+      <label class="field">
+        Admin Reply
+        <textarea class="inp" rows="5" [(ngModel)]="replyText" placeholder="Write reply to user..."></textarea>
+      </label>
+
+      <label class="field">
+        Status
+        <select class="inp" [(ngModel)]="replyStatus">
+          <option *ngFor="let item of replyStatuses" [ngValue]="item">{{ statusLabel(item) }}</option>
+        </select>
+      </label>
+
+      <div class="state error" *ngIf="modalError">{{ modalError }}</div>
+
+      <div class="modal-actions">
+        <button class="btn ghost sm" type="button" (click)="closeModal()">Cancel</button>
+        <button class="btn sm" type="button" (click)="saveReply()" [disabled]="actionLoading">
+          {{ actionLoading ? 'Saving...' : 'Save Reply' }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>

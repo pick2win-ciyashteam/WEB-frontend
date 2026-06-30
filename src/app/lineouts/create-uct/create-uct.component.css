@@ -2560,6 +2560,51 @@ h1 em,
   cursor: pointer;
 }
 
+.match-started-modal {
+  z-index: 10050;
+}
+
+.match-started-card {
+  border-color: rgba(244, 180, 0, .62);
+  box-shadow: 0 28px 78px rgba(0, 0, 0, .52), 0 0 0 1px rgba(244, 180, 0, .12);
+}
+
+.match-started-copy {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0 22px;
+  color: var(--paper-2);
+}
+
+.match-started-copy p {
+  margin: 0 !important;
+  color: var(--paper-2) !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+}
+
+.match-started-actions {
+  justify-content: flex-start;
+}
+
+.match-started-actions .ghost-btn,
+.match-started-actions .primary-btn {
+  min-width: 128px;
+}
+
+.match-started-actions .ghost-btn {
+  border-color: rgba(255, 255, 255, .28);
+  color: #ffffff;
+  background: rgba(255, 255, 255, .08);
+}
+
+.match-started-actions .primary-btn {
+  min-width: 190px;
+  color: #071421;
+  background: var(--gold);
+  box-shadow: 0 12px 28px rgba(244, 180, 0, .30);
+}
+
 @media (max-width: 900px) {
   .uct-hero,
   .panel-head,

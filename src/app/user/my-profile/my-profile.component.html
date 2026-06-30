@@ -71,10 +71,16 @@
             </h3>
             <div class="profile-id-tagline">PICK2WIN member · {{ profile.country || 'Supported market' }}</div>
           </div>
-          <button class="profile-edit-btn" type="button" (click)="openEditModal(profile)">
-            <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-            Edit Account
-          </button>
+          <div class="profile-hero-actions">
+            <a class="profile-support-btn" routerLink="/user/support">
+              <span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+              Support Tickets
+            </a>
+            <button class="profile-edit-btn" type="button" (click)="openEditModal(profile)">
+              <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+              Edit Account
+            </button>
+          </div>
         </div>
 
         <div class="profile-id-grid">

@@ -1,0 +1,332 @@
+:host {
+  display: block;
+  --ink: #051a2a;
+  --ink-2: #091f30;
+  --paper: #ffffff;
+  --paper-2: #c8d6e0;
+  --paper-3: #8da0b5;
+  --gold: #f4b400;
+  --green: #0bcc8e;
+  --line: rgba(255,255,255,.12);
+}
+
+.support-page {
+  min-height: 100vh;
+  padding: 25px 16px 72px;
+  color: var(--paper);
+  background:
+    radial-gradient(ellipse 72% 42% at 50% -10%, rgba(11, 60, 93, .56), transparent 62%),
+    linear-gradient(180deg, var(--ink), #020a12);
+}
+
+.support-shell {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.support-head {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.support-back,
+.support-inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  color: var(--gold);
+  font-weight: 900;
+}
+
+.support-back .material-symbols-outlined,
+.support-inline-link .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.support-kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.support-head h1 {
+  margin: 0;
+  color: var(--paper);
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 1.04;
+}
+
+.support-head p {
+  max-width: 720px;
+  margin: 10px 0 0;
+  color: var(--paper-2);
+  line-height: 1.6;
+}
+
+.support-toolbar,
+.ticket-card,
+.ticket-detail,
+.support-state {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(9,31,48,.95), rgba(5,26,42,.95));
+  box-shadow: 0 18px 44px rgba(0,0,0,.24);
+}
+
+.support-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 16px 18px;
+  border-radius: 14px;
+}
+
+.support-toolbar b {
+  color: var(--gold);
+  font-size: 22px;
+}
+
+.support-toolbar span {
+  color: var(--paper-2);
+  font-weight: 800;
+}
+
+.support-refresh,
+.support-pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid rgba(244,180,0,.42);
+  border-radius: 999px;
+  color: #071421;
+  background: var(--gold);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.support-refresh:disabled,
+.support-pagination button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.ticket-list {
+  display: grid;
+  gap: 12px;
+}
+
+.ticket-card {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  padding: 18px;
+  border-radius: 14px;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(244,180,0,.42);
+}
+
+.ticket-top,
+.ticket-meta,
+.detail-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ticket-code {
+  color: var(--gold);
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.ticket-status {
+  padding: 5px 10px;
+  border: 1px solid rgba(11,204,142,.34);
+  border-radius: 999px;
+  color: #86efac;
+  background: rgba(11,204,142,.10);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.ticket-status.closed,
+.ticket-status.resolved {
+  color: var(--paper-2);
+  border-color: rgba(255,255,255,.20);
+  background: rgba(255,255,255,.07);
+}
+
+.ticket-card h2,
+.detail-box h2 {
+  margin: 0;
+  color: var(--paper);
+  font-size: 19px;
+}
+
+.ticket-card p,
+.detail-box p {
+  margin: 0;
+  color: var(--paper-2);
+  line-height: 1.58;
+}
+
+.ticket-card p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.ticket-meta {
+  color: var(--paper-3);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.support-state {
+  padding: 20px;
+  border-radius: 14px;
+  color: var(--paper-2);
+  font-weight: 800;
+}
+
+.support-state.error {
+  color: #fecaca;
+  border-color: rgba(239,68,68,.32);
+  background: rgba(239,68,68,.10);
+}
+
+.support-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.support-pagination span {
+  color: var(--paper-2);
+  font-weight: 800;
+}
+
+.ticket-detail {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 16px;
+}
+
+.ticket-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10040;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(2,10,18,.74);
+  backdrop-filter: blur(10px);
+}
+
+.modal-card {
+  width: min(620px, 100%);
+  max-height: min(720px, calc(100vh - 40px));
+  overflow: auto;
+  padding-top: 58px;
+  border-color: rgba(244,180,0,.30);
+  box-shadow: 0 28px 78px rgba(0,0,0,.54);
+}
+
+.ticket-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 50%;
+  color: var(--paper);
+  background: rgba(5,26,42,.96);
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+  cursor: pointer;
+}
+
+.ticket-modal-close .material-symbols-outlined {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.detail-box {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+}
+
+.detail-box.reply {
+  border-color: rgba(11,204,142,.26);
+  background: rgba(11,204,142,.07);
+}
+
+.detail-box.reply.empty {
+  border-color: rgba(244,180,0,.26);
+  background: rgba(244,180,0,.06);
+}
+
+.detail-label {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.detail-box small {
+  color: var(--paper-3);
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .support-page {
+    padding: 82px 12px 54px;
+  }
+
+  .support-toolbar,
+  .ticket-top,
+  .ticket-meta,
+  .detail-status-row,
+  .support-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .support-refresh,
+  .support-pagination button {
+    width: 100%;
+  }
+}

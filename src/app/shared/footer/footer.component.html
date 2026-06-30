@@ -109,3 +109,58 @@
     </div>
   </div>
 </footer>
+
+<div class="support-widget" [class.open]="supportOpen" *ngIf="loggedIn$ | async">
+  <section class="support-panel" *ngIf="supportOpen" aria-labelledby="supportTitle">
+    <div class="support-panel-head">
+      <div>
+        <span class="support-kicker">Support</span>
+        <h3 id="supportTitle">Need help?</h3>
+      </div>
+      <button class="support-close" type="button" aria-label="Close support" (click)="closeSupport()">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <form class="support-form" (submit)="submitSupport($event, supportSubject, supportMessage)">
+      <label for="supportSubject">Subject</label>
+      <input
+        #supportSubject
+        id="supportSubject"
+        name="supportSubject"
+        type="text"
+        autocomplete="off"
+        required
+        [disabled]="supportSubmitting"
+        (input)="supportSubmitted = false; supportError = ''"
+      >
+
+      <label for="supportMessage">Message</label>
+      <textarea
+        #supportMessage
+        id="supportMessage"
+        name="supportMessage"
+        rows="4"
+        required
+        [disabled]="supportSubmitting"
+        (input)="supportSubmitted = false; supportError = ''"
+      ></textarea>
+
+      <button class="support-submit" type="submit" [disabled]="supportSubmitting">
+        {{ supportSubmitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </form>
+
+    <p class="support-success" *ngIf="supportSubmitted">
+      Your message team will review shortly.
+    </p>
+
+    <p class="support-error" *ngIf="supportError">
+      {{ supportError }}
+    </p>
+  </section>
+
+  <button class="support-trigger" type="button" aria-label="Open support" (click)="toggleSupport()">
+    <span class="material-symbols-outlined" aria-hidden="true">{{ supportOpen ? 'close' : 'support_agent' }}</span>
+  </button>
+</div>

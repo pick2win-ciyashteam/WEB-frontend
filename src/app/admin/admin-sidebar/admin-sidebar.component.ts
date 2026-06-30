@@ -22,6 +22,7 @@ export class AdminSidebarComponent {
     { label: 'Countries', icon: '🌍', route: '/admin/countries', group: 'Users & Countries' },
     { label: 'UCT Activity', icon: '⚡', route: '/admin/uct-activity', group: 'Product', badge: 'live' },
     { label: 'Votes & Feedback', icon: '💬', route: '/admin/votes-feedback', group: 'Product' },
+    { label: 'Support Tickets', icon: 'SUP', route: '/admin/support-tickets', group: 'Product' },
     { label: 'Coin Packs', icon: '🪙', route: '/admin/coin-packs', group: 'Monetization' },
     { label: 'Revenue', icon: '💵', route: '/admin/revenue', group: 'Finance' },
     { label: 'Expenses', icon: '📉', route: '/admin/expenses', group: 'Finance' },

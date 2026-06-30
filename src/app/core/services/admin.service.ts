@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminActivityLogCategory, AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLeagueCreatePayload, AdminLoginPayload, AdminMatchTogglePayload, AdminRevenueTab, AdminSubscriptionCreatePayload, AdminUsersQuery } from '../interfaces/admin';
+import { AdminActivityLogCategory, AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLeagueCreatePayload, AdminLoginPayload, AdminMatchTogglePayload, AdminRevenueTab, AdminSubscriptionCreatePayload, AdminSupportListReports, AdminSupportStatus, AdminSupportTicketReports, AdminUsersQuery } from '../interfaces/admin';
 
 @Injectable({
   providedIn: 'root'
@@ -146,6 +146,24 @@ export class AdminService {
 
   updateAdminDetailedFeedback(id: number | string, status: string): Observable<any> {
     return this.http.patch(`${this.BASE}/admin/reports/detailed/${id}/status`, { status });
+  }
+
+  getAdminSupportTickets(params: { status?: string; search?: string; page?: number; limit?: number } = {}): Observable<AdminSupportListReports> {
+    return this.http.get<AdminSupportListReports>(`${this.BASE}/admin/support`, {
+      params: this.cleanParams({ page: 1, limit: 20, ...params })
+    });
+  }
+
+  getAdminSupportTicket(id: number | string): Observable<AdminSupportTicketReports> {
+    return this.http.get<AdminSupportTicketReports>(`${this.BASE}/admin/support/${id}`);
+  }
+
+  replyAdminSupportTicket(id: number | string, data: { admin_reply: string; status: AdminSupportStatus }): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/support/${id}/reply`, data);
+  }
+
+  updateAdminSupportTicketStatus(id: number | string, status: AdminSupportStatus): Observable<any> {
+    return this.http.patch(`${this.BASE}/admin/support/${id}/status`, { status });
   }
 
   createBanner(data: AdminBannerCreatePayload): Observable<any> {

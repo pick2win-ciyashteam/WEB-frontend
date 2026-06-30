@@ -422,7 +422,15 @@ th,
   overflow-wrap: anywhere;
 }
 
+.profile-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 10px;
+}
+
 .profile-edit-btn,
+.profile-support-btn,
 .profile-download-btn {
   display: inline-flex;
   align-items: center;
@@ -438,12 +446,37 @@ th,
 .profile-edit-btn {
   align-self: start;
   white-space: nowrap;
-  color: var(--paper-2);
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid var(--line-2);
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(91, 176, 230, 0.26), rgba(91, 176, 230, 0.12));
+  border: 1px solid rgba(91, 176, 230, 0.48);
+  box-shadow: 0 10px 22px rgba(91, 176, 230, 0.12);
+}
+
+.profile-edit-btn:hover {
+  color: #ffffff;
+  border-color: rgba(91, 176, 230, 0.78);
+  background: linear-gradient(135deg, rgba(91, 176, 230, 0.36), rgba(91, 176, 230, 0.18));
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(91, 176, 230, 0.18);
+}
+
+.profile-support-btn {
+  align-self: start;
+  white-space: nowrap;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--gold), #ffe08a);
+  border: 1px solid rgba(255, 224, 138, 0.82);
+  box-shadow: 0 12px 24px rgba(244, 180, 0, 0.18);
+  text-decoration: none;
+}
+
+.profile-support-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(244, 180, 0, 0.24);
 }
 
 .profile-edit-btn .material-symbols-outlined,
+.profile-support-btn .material-symbols-outlined,
 .profile-download-btn .material-symbols-outlined {
   font-size: 18px;
 }
@@ -1523,6 +1556,7 @@ tbody tr:hover {
   }
 
   .profile-edit-btn,
+  .profile-support-btn,
   .profile-download-btn,
   .lineouts-teaser-btn {
     width: 100%;
@@ -1772,11 +1806,23 @@ tbody tr:hover {
     font-size: 16px;
   }
 
-  .profile-edit-btn {
+  .profile-hero-actions {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .profile-edit-btn,
+  .profile-support-btn {
     grid-column: 1 / -1;
     width: 100%;
     min-height: 42px;
     border-radius: 10px;
+  }
+
+  .profile-edit-btn {
     color: #07111c;
     background: var(--gold);
     border-color: rgba(244, 180, 0, 0.74);
@@ -2562,17 +2608,31 @@ tbody tr:hover {
     line-height: 1.35;
   }
 
-  .profile-edit-btn {
+  .profile-hero-actions {
+    justify-self: end;
+  }
+
+  .profile-edit-btn,
+  .profile-support-btn {
     justify-self: end;
     min-height: 40px;
     padding: 0 18px;
-    border: 1px solid rgba(91, 176, 230, 0.28);
     border-radius: 999px;
+    font-size: 14px;
+    font-weight: 850;
+  }
+
+  .profile-edit-btn {
+    border: 1px solid rgba(91, 176, 230, 0.28);
     color: #f7fbff;
     background: rgba(255, 255, 255, 0.02);
     box-shadow: none;
-    font-size: 14px;
-    font-weight: 850;
+  }
+
+  .profile-support-btn {
+    border-color: rgba(255, 190, 0, 0.72);
+    color: #07111c;
+    background: var(--gold);
   }
 
   .profile-edit-btn:hover {
@@ -2695,14 +2755,24 @@ tbody tr:hover {
     line-height: 1.35;
   }
 
-  .profile-edit-btn {
+  .profile-hero-actions {
+    justify-self: center;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .profile-edit-btn,
+  .profile-support-btn {
     width: min(100%, 320px);
     min-height: 48px;
     border-radius: 12px;
+    font-size: 14px;
+  }
+
+  .profile-edit-btn {
     color: #07111c;
     background: var(--gold);
     border-color: rgba(244, 180, 0, 0.74);
-    font-size: 14px;
   }
 
   .profile-id-grid {
@@ -3241,4 +3311,20 @@ tbody tr:hover {
     font-size: 12px !important;
     line-height: 1.5 !important;
   }
+}
+
+/* Final profile action contrast: keep Edit Account visibly highlighted beside Support Tickets. */
+.profile-page .profile-hero-actions .profile-edit-btn {
+  color: #07111c !important;
+  background: linear-gradient(135deg, #5bb0e6, #b8e8ff) !important;
+  border-color: rgba(184, 232, 255, 0.95) !important;
+  box-shadow: 0 12px 26px rgba(91, 176, 230, 0.30) !important;
+}
+
+.profile-page .profile-hero-actions .profile-edit-btn:hover {
+  color: #07111c !important;
+  background: linear-gradient(135deg, #7cc7f4, #dcf5ff) !important;
+  border-color: #dcf5ff !important;
+  box-shadow: 0 16px 32px rgba(91, 176, 230, 0.38) !important;
+  transform: translateY(-1px);
 }

@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
-import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, CheckoutSessionPayload, CheckoutSessionResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, Series, StripeConfigResponse, SubscriptionPlan, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
+import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, CheckoutSessionPayload, CheckoutSessionResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, Series, StripeConfigResponse, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
 import { TokenService } from './token.service';
 
 @Injectable({
@@ -79,6 +79,25 @@ export class ApiService {
 
   postFeedback(data: FeedbackPostPayload): Observable<any> {
     return this.http.post(`${this.BASE}/admin/feedback/user-post`, data, this.userAuthOptions());
+  }
+
+  postSupport(data: SupportPayload): Observable<SupportResponse> {
+    return this.http.post<SupportResponse>(`${this.BASE}/user/support`, data, this.userAuthOptions());
+  }
+
+  getSupportTickets(page = 1, limit = 20): Observable<SupportTicketsResponse> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('limit', limit);
+
+    return this.http.get<SupportTicketsResponse>(`${this.BASE}/user/support`, {
+      ...this.userAuthOptions(),
+      params
+    });
+  }
+
+  getSupportTicket(id: number | string): Observable<SupportTicketResponse> {
+    return this.http.get<SupportTicketResponse>(`${this.BASE}/user/support/${id}`, this.userAuthOptions());
   }
 
   getFeedbackQuestions(): Observable<ApiListResponse<FeedbackQuestion>> {

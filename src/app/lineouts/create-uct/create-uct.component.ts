@@ -36,6 +36,7 @@ interface CreateUctContext {
 export class CreateUctComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private generatingStatusTimer: ReturnType<typeof setInterval> | null = null;
+  private matchStatusTimer: ReturnType<typeof setInterval> | null = null;
 
   matchId = '';
   loading = true;
@@ -49,6 +50,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   showGenerateConfirm = false;
   showPlayingXi = true;
   showSubstitutes = false;
+  showMatchStartedModal = false;
   generateConsent = false;
   mandateMode: Mandate = 'NA';
   uctAlert: { title: string; message: string; type: UctAlertType } | null = null;
@@ -119,6 +121,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           this.errorMessage = this.detail ? '' : 'Unable to load UCT match data.';
           this.resetUctSelections();
           this.printPlayerPools();
+          this.handleMatchAvailability(this.detail);
+          this.startMatchStatusPolling();
         },
         error: (err) => {
           this.detail = null;
@@ -130,6 +134,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopGeneratingStatus();
+    this.stopMatchStatusPolling();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -279,7 +284,9 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get canGenerate(): boolean {
-    return this.canReview;
+    return !this.showMatchStartedModal
+      && !this.isCurrentMatchClosed()
+      && this.canReview;
   }
 
   matchDateLabel(detail: MatchDetail): string {
@@ -788,6 +795,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   generateTeams(): void {
+    if (this.ensureMatchStillOpen()) {
+      return;
+    }
+
     if (!this.canGenerate) {
       return;
     }
@@ -806,6 +817,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   closeAlert(): void {
     this.uctAlert = null;
+  }
+
+  goToLineoutsAfterMatchStarted(): void {
+    this.router.navigate(['/lineouts']);
   }
 
   canDeactivate(): boolean {
@@ -836,6 +851,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   confirmGenerateTeams(): void {
+    if (this.ensureMatchStillOpen()) {
+      return;
+    }
+
     if (!this.canGenerate) {
       return;
     }
@@ -854,6 +873,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   submitUctConfiguration(): void {
+    if (this.ensureMatchStillOpen()) {
+      return;
+    }
+
     if (!this.canGenerate || this.submitting) {
       return;
     }
@@ -1059,6 +1082,86 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private showAlert(title: string, message: string, type: UctAlertType): void {
     this.uctAlert = { title, message, type };
+  }
+
+  private startMatchStatusPolling(): void {
+    this.stopMatchStatusPolling();
+
+    if (!this.matchId || this.showMatchStartedModal) {
+      return;
+    }
+
+    this.matchStatusTimer = setInterval(() => {
+      this.api.getMatchDetails(this.matchId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            const latestDetail = res?.success ? res.data : null;
+
+            if (!latestDetail) {
+              return;
+            }
+
+            this.detail = latestDetail;
+            this.handleMatchAvailability(latestDetail);
+          },
+          error: () => {
+            // Keep the current screen usable if a background status check fails.
+          }
+        });
+    }, 15000);
+  }
+
+  private stopMatchStatusPolling(): void {
+    if (this.matchStatusTimer) {
+      clearInterval(this.matchStatusTimer);
+      this.matchStatusTimer = null;
+    }
+  }
+
+  private handleMatchAvailability(detail: MatchDetail | null): void {
+    if (!detail || !this.isMatchClosedForUct(detail)) {
+      return;
+    }
+
+    this.showMatchStartedModal = true;
+    this.showGenerateConfirm = false;
+    this.generateConsent = false;
+    this.uctAlert = null;
+
+    if (this.submitting) {
+      this.submitting = false;
+      this.stopGeneratingStatus();
+    }
+
+    this.stopMatchStatusPolling();
+  }
+
+  private ensureMatchStillOpen(): boolean {
+    const closed = this.isCurrentMatchClosed();
+
+    if (closed) {
+      this.handleMatchAvailability(this.detail);
+    }
+
+    return closed;
+  }
+
+  private isCurrentMatchClosed(): boolean {
+    return this.isMatchClosedForUct(this.detail);
+  }
+
+  private isMatchClosedForUct(detail: MatchDetail | null): boolean {
+    if (!detail) {
+      return false;
+    }
+
+    const status = String(detail.match.status || '').toUpperCase();
+    const startedStatuses = ['LIVE', 'FINISHED', 'FT', 'ENDED'];
+    const kickoff = this.matchStartDate(detail)?.getTime();
+    const matchStarted = typeof kickoff === 'number' && Number.isFinite(kickoff) && Date.now() >= kickoff;
+
+    return startedStatuses.includes(status) || matchStarted;
   }
 
   private refreshActionBarLayout(): void {

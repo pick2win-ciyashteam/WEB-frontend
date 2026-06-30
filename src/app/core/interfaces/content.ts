@@ -118,6 +118,46 @@ export interface FeedbackPostPayload {
   email_followup: boolean;
 }
 
+export interface SupportPayload {
+  subject: string;
+  message: string;
+}
+
+export interface SupportResponse {
+  success: boolean;
+  message?: string;
+  data?: unknown;
+}
+
+export interface SupportTicket {
+  id: number;
+  ticket_code: string;
+  subject: string;
+  message: string;
+  admin_reply: string | null;
+  status: string;
+  created_at: string;
+  replied_at: string | null;
+}
+
+export interface SupportTicketsResponse {
+  success: boolean;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+  };
+  tickets: SupportTicket[];
+  message?: string;
+}
+
+export interface SupportTicketResponse {
+  success: boolean;
+  ticket: SupportTicket;
+  message?: string;
+}
+
 export interface FeedbackQuestionOption {
   id: number;
   emoji: string;
