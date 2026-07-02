@@ -116,10 +116,21 @@
       <div>
         <span class="support-kicker">Support</span>
         <h3 id="supportTitle">Need help?</h3>
+        <p>We're here to help you.</p>
       </div>
       <button class="support-close" type="button" aria-label="Close support" (click)="closeSupport()">
         <span class="material-symbols-outlined" aria-hidden="true">close</span>
       </button>
+    </div>
+
+    <div class="support-notice success" *ngIf="supportSubmitted">
+      <span class="material-symbols-outlined notice-icon" aria-hidden="true">
+        check_circle
+      </span>
+      <span>
+        Our support team usually responds within less than 24 hours.
+      </span>
+      <span class="material-symbols-outlined notice-clock" aria-hidden="true">schedule</span>
     </div>
 
     <form class="support-form" (submit)="submitSupport($event, supportSubject, supportMessage)">
@@ -151,13 +162,27 @@
       </button>
     </form>
 
-    <p class="support-success" *ngIf="supportSubmitted">
-      Your message team will review shortly.
-    </p>
-
     <p class="support-error" *ngIf="supportError">
       {{ supportError }}
     </p>
+
+    <div class="support-panel-foot">
+      <a class="support-help-link" routerLink="/user/support" (click)="closeSupport()">
+        <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+        <span>View Help Center</span>
+      </a>
+
+      <div class="support-foot-meta">
+        <span class="support-foot-chip">
+          <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+          <span>Average response: <b>&lt; 24 hours</b></span>
+        </span>
+        <a class="support-foot-email" href="mailto:support@pick2win.io">
+          <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+          <span>support@pick2win.io</span>
+        </a>
+      </div>
+    </div>
   </section>
 
   <button class="support-trigger" type="button" aria-label="Open support" (click)="toggleSupport()">
