@@ -202,7 +202,7 @@ export interface UctGeneratePlayer {
 
 export interface UctGeneratePayload {
   match_id: number | string;
-  platform?: 'sorare' | 'draftkings' | 'fanduel';
+  game: 'sorare' | 'draftkings' | 'fanduel';
   team_a: UctGeneratePlayer[];
   team_b: UctGeneratePlayer[];
 }

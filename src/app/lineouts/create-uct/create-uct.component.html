@@ -213,7 +213,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -231,7 +231,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -266,7 +266,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -285,7 +285,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -300,9 +300,9 @@
             <small>/ {{ maxSquad }}</small>
           </div>
           <div class="squad-rule-item" *ngIf="requiresSalary">
-            <span>Salary Entries</span>
+            <span>{{ selectedPlatform === 'draftkings' ? 'Salary' : 'Points' }}</span>
             <b [class.ok]="!salaryValidationMessage()" [class.no]="!!salaryValidationMessage()">{{ salaryEnteredCount }}</b>
-            <small>/ {{ availablePool.length }}</small>
+            <small>/ {{ availablePool.length }} - {{ totalSelectedSalary }}/{{ activeSalaryCap }}</small>
           </div>
           <div class="squad-rule-item">
             <span>Substitutes</span>

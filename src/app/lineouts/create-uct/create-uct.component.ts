@@ -317,6 +317,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  get salaryPlaceholder(): string {
+    return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Units';
+  }
+
   get totalSelectedSalary(): number {
     return this.availablePool.reduce((total, player) => total + Number(this.salaries.get(player.id) || 0), 0);
   }
@@ -893,8 +897,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
       return !/^\d+$/.test(salaryValue)
         || !Number.isFinite(salary)
-        || salary <= 0
-        || (cap !== null && salary > cap);
+        || salary <= 0;
     });
 
     if (invalidPlayer) {
@@ -909,7 +912,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         return `Enter a valid ${label} salary for ${invalidPlayer.player_name}.`;
       }
 
-      return `${label} salary for ${invalidPlayer.player_name} cannot exceed ${cap}.`;
+      return `Enter a valid ${label} salary for ${invalidPlayer.player_name}.`;
+    }
+
+    if (cap !== null && this.totalSelectedSalary > cap) {
+      return `${label} total salary cannot exceed ${cap}. Current total is ${this.totalSelectedSalary}.`;
     }
 
     return '';
@@ -1258,10 +1265,22 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   private buildSubmitPayload(): UctGeneratePayload {
     return {
       match_id: this.matchId,
-      platform: this.selectedPlatform || 'sorare',
+      game: this.selectedGame(),
       team_a: this.homeAvailablePool.map(player => this.toGeneratePlayer(player)),
       team_b: this.awayAvailablePool.map(player => this.toGeneratePlayer(player))
     };
+  }
+
+  private selectedGame(): FantasyPlatform {
+    switch (this.selectedPlatform) {
+      case 'draftkings':
+        return 'draftkings';
+      case 'fanduel':
+        return 'fanduel';
+      case 'sorare':
+      default:
+        return 'sorare';
+    }
   }
 
   private toGeneratePlayer(player: UctPlayer): UctGeneratePlayer {
