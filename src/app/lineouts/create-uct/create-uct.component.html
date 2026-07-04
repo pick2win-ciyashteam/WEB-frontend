@@ -50,9 +50,9 @@
         </div>
 
         <div class="platform-card-grid">
-          <article class="platform-card" *ngFor="let platform of platforms" [class.selected]="selectedPlatform === platform.id">
+          <article class="platform-card" *ngFor="let platform of platforms" [class.selected]="selectedPlatform === platform.id" [class.generated]="isPlatformGenerated(platform.id)">
             <div class="platform-main">
-              <span class="platform-check material-symbols-outlined" aria-hidden="true">{{ selectedPlatform === platform.id ? 'check_circle' : 'radio_button_unchecked' }}</span>
+              <span class="platform-check material-symbols-outlined" aria-hidden="true">{{ isPlatformGenerated(platform.id) ? 'check_circle' : (selectedPlatform === platform.id ? 'check_circle' : 'radio_button_unchecked') }}</span>
               <span class="platform-logo material-symbols-outlined" aria-hidden="true">{{ platform.icon }}</span>
               <div>
                 <h2>{{ platform.name }}</h2>
@@ -61,16 +61,28 @@
                   <span><i class="material-symbols-outlined" aria-hidden="true">payments</i>{{ platform.salaryLabel }}</span>
                   <span><i class="material-symbols-outlined" aria-hidden="true">block</i>{{ platform.captainLabel }}</span>
                 </div>
-                <p><b>{{ platform.id === 'sorare' ? 'CURRENT WORKFLOW' : 'READY TO START' }}</b><br>{{ platform.summary }}</p>
+                <p><b>{{ isPlatformGenerated(platform.id) ? 'UCT GENERATED' : (platform.id === 'sorare' ? 'CURRENT WORKFLOW' : 'READY TO START') }}</b><br>{{ platform.summary }}</p>
               </div>
             </div>
             <div class="platform-side">
               <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
               <p>{{ platform.capText }}</p>
-              <button class="primary-btn platform-start" type="button" (click)="selectPlatform(platform.id)">
-                Start
-                <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
-              </button>
+              <div class="platform-generated-actions" *ngIf="isPlatformGenerated(platform.id); else startPlatform">
+                <button class="primary-btn platform-start generated" type="button" disabled>
+                  UCT Generated
+                  <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                </button>
+                <button class="primary-btn platform-start view-teams" type="button" (click)="goToGeneratedTeams(platform.id)">
+                  See in My Teams
+                  <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+                </button>
+              </div>
+              <ng-template #startPlatform>
+                <button class="primary-btn platform-start" type="button" (click)="handlePlatformAction(platform.id)">
+                  Start
+                  <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+                </button>
+              </ng-template>
             </div>
           </article>
         </div>
@@ -574,7 +586,7 @@
             <ng-template #salaryPreview>
               <div class="salary-preview-total">
                 <b>{{ salaryEnteredCount }}/{{ availablePool.length }}</b>
-                <span>{{ activePlatformName }} salary entries ready. Cap is checked per generated lineup.</span>
+                <span>{{ activePlatformName }} salary entries ready. Total cap: {{ totalSelectedSalary }}/{{ activeSalaryCap }}.</span>
               </div>
               <div class="preview-player-grid">
                 <div class="preview-player" *ngFor="let player of availablePool; trackBy: trackPlayer">

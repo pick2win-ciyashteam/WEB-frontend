@@ -208,6 +208,56 @@
   margin-bottom: 14px;
 }
 
+.myteams-game-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 0 24px 18px;
+}
+
+.main-game-tabs {
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ink-2), var(--ink));
+}
+
+.myteams-game-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+  color: var(--paper-2);
+  background: rgba(255,255,255,0.04);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.myteams-game-tab small {
+  color: var(--paper-3);
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.myteams-game-tab.generated small {
+  color: var(--pitch-2);
+}
+
+.myteams-game-tab.active {
+  color: var(--ink);
+  border-color: rgba(244,180,0,0.74);
+  background: var(--gold);
+}
+
+.myteams-game-tab.active small {
+  color: rgba(5,26,42,0.76);
+}
+
 .mb-league {
   color: var(--gold);
   font-family: var(--f-mono);

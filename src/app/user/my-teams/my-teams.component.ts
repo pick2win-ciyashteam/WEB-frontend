@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { ActivatedRoute } from '@angular/router';
 
 type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
+type FantasyGame = 'sorare' | 'draftkings' | 'fanduel';
 
 interface GeneratedMatch {
   id: number;
@@ -27,6 +28,8 @@ interface GeneratedMatch {
   generatedAtISO?: string;
   generationTime?: string | number;
   fantasyPlatform?: string;
+  game?: FantasyGame;
+  generatedGames?: FantasyGame[];
   sport?: string;
   coinConsumed?: string | number;
 }
@@ -118,6 +121,12 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
   previewTeams: PreviewTeam[] = [];
 
   readonly positionRows: PlayerPosition[] = ['GK', 'DEF', 'MID', 'FWD'];
+  readonly gameTabs: Array<{ id: FantasyGame; label: string }> = [
+    { id: 'sorare', label: 'Sorare' },
+    { id: 'draftkings', label: 'DraftKings' },
+    { id: 'fanduel', label: 'FanDuel' }
+  ];
+  activeGame: FantasyGame = 'sorare';
 
   loadingMatches = false;
   loadingTeams = false;
@@ -144,15 +153,31 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
 
   this.api.GetMyTeams().subscribe({
     next: (res: any) => {
-      // console.log('My Teams matches response:', res);
+      console.log('My Teams raw matches response:', res);
       const data = Array.isArray(res?.data) ? res.data : [];
+      console.log('My Teams raw matches data:', data);
 
-      this.matches = data.map((m: any) => {
+      const matchMap = new Map<number, GeneratedMatch>();
+
+      data.forEach((m: any) => {
         const startTimeISO = m.start_time || '';
         const expired = this.isExpired(startTimeISO, m.status);
+        const id = Number(m.match_id);
+        const game = this.normalizeGame(m.game || m.fantasy_platform || m.platform);
+        const generatedGames = this.generatedGamesFromValue(m.generated_games || m.games_generated || m.generated_platforms);
+        if (game) generatedGames.add(game);
 
-        return {
-          id: Number(m.match_id),
+        const existing = matchMap.get(id);
+        if (existing) {
+          const currentGames = new Set(existing.generatedGames || []);
+          generatedGames.forEach(item => currentGames.add(item));
+          existing.generatedGames = Array.from(currentGames);
+          existing.teamsGenerated = Math.max(Number(existing.teamsGenerated || 0), Number(m.teams_generated || m.total_teams || 0));
+          return;
+        }
+
+        matchMap.set(id, {
+          id,
           league: m.series_name || 'N/A',
           time: this.formatMatchTime(startTimeISO),
           title: `${m.home_team || 'HOME'} vs ${m.away_team || 'AWAY'}`,
@@ -163,7 +188,9 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           expires: this.expiryLabel(startTimeISO, m.status),
           live: !expired,
           free: false,
-          fantasyPlatform: m.fantasy_platform || m.platform || 'Sorare',
+          fantasyPlatform: this.gameLabel(game || 'sorare'),
+          game: game || 'sorare',
+          generatedGames: Array.from(generatedGames),
           sport: m.sport || 'Football',
           coinConsumed: m.coin_consumed ?? m.coins_consumed ?? 1,
           homeLogo: m.home_logo,
@@ -175,9 +202,11 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           viewable: !expired,
           startDate: startTimeISO ? this.toDateInputValue(new Date(startTimeISO)) : '',
           startTimeISO
-        };
+        });
       });
 
+      this.matches = Array.from(matchMap.values());
+      console.log('My Teams grouped matches:', this.matches);
       this.applyDateFilter();
       this.openMatchFromQueryParam();
       if (!this.selectedMatch) {
@@ -197,14 +226,28 @@ this.loadingMatches = false;
 }
 
 applyDateFilter() {
+  this.selectedMatch = null;
+  this.previewTeam = null;
+  this.previewTeams = [];
+
   if (!this.selectedDate) {
-    this.filteredMatches = [...this.matches];
+    this.filteredMatches = this.matches.filter(match => this.isGameGenerated(match, this.activeGame));
+    console.log('My Teams filtered matches:', {
+      activeGame: this.activeGame,
+      selectedDate: this.selectedDate,
+      filteredMatches: this.filteredMatches
+    });
     return;
   }
 
   this.filteredMatches = this.matches.filter(
-    (match: any) => match.startDate === this.selectedDate
+    (match: any) => match.startDate === this.selectedDate && this.isGameGenerated(match, this.activeGame)
   );
+  console.log('My Teams filtered matches:', {
+    activeGame: this.activeGame,
+    selectedDate: this.selectedDate,
+    filteredMatches: this.filteredMatches
+  });
 }
 
 resetDateFilter() {
@@ -222,6 +265,11 @@ openDatePicker(input: HTMLInputElement): void {
 
 private openMatchFromQueryParam(): void {
   const matchId = this.route.snapshot.queryParamMap.get('match');
+  const queryGame = this.normalizeGame(this.route.snapshot.queryParamMap.get('game'));
+  if (queryGame) {
+    this.activeGame = queryGame;
+    this.applyDateFilter();
+  }
 
   if (!matchId) {
     return;
@@ -237,7 +285,7 @@ private openMatchFromQueryParam(): void {
   this.applyDateFilter();
 
   if (this.canAccessTeams(match)) {
-    this.openMatchTeams(match);
+    this.openMatchTeams(match, queryGame || this.activeGame);
   }
 }
 
@@ -246,7 +294,10 @@ private openMatchFromQueryParam(): void {
     return;
   }
 
-  this.api.MatchByTeams(match.id).subscribe({
+  const game = this.selectedGameForMatch(match);
+  const matchForGame = this.withGame(match, game);
+
+  this.api.MatchByTeams(match.id, game).subscribe({
     next: (res: any) => {
       // console.log('My Teams download response:', res);
 
@@ -254,8 +305,8 @@ private openMatchFromQueryParam(): void {
       const responsePreview = this.teamsPreviewFromResponse(res);
 
       if (generatedTeams.length) {
-        const text = this.teamTextBlocks(generatedTeams, match, responsePreview, res);
-        this.downloadText(text, this.makeTeamFileName(match, 'txt'));
+        const text = this.teamTextBlocks(generatedTeams, matchForGame, responsePreview, res);
+        this.downloadText(text, this.makeTeamFileName(matchForGame, 'txt'));
         return;
       }
 
@@ -286,19 +337,19 @@ private openMatchFromQueryParam(): void {
           Defenders: def.join(' / '),
           Midfielders: mid.join(' / '),
           Forwards: fwd.join(' / '),
-          [`${this.teamCodeFromTitle(match.title, 'home')} Count`]: homeCount,
-          [`${this.teamCodeFromTitle(match.title, 'away')} Count`]: awayCount
+          [`${this.teamCodeFromTitle(matchForGame.title, 'home')} Count`]: homeCount,
+          [`${this.teamCodeFromTitle(matchForGame.title, 'away')} Count`]: awayCount
         };
       });
 
       const text = [
-        this.teamTextHeader(match, rows.length || match.teamsGenerated || 0),
-        this.previewTextBlock(responsePreview, match),
+        this.teamTextHeader(matchForGame, rows.length || matchForGame.teamsGenerated || 0),
+        this.previewTextBlock(responsePreview, matchForGame),
         this.generatedTeamsTitle(),
         this.objectRowsToTextBlocks(rows),
         this.teamTextFooter()
       ].filter(Boolean).join('\r\n\r\n');
-      this.downloadText(text, this.makeTeamFileName(match, 'txt'));
+      this.downloadText(text, this.makeTeamFileName(matchForGame, 'txt'));
     }
   });
 }
@@ -412,24 +463,27 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   ];
 }
 
-  openMatchTeams(match: GeneratedMatch) {
+  openMatchTeams(match: GeneratedMatch, game: FantasyGame = this.activeGame) {
     if (!this.canAccessTeams(match)) {
       return;
     }
 
-    if (this.selectedMatch?.id === match.id) {
+    if (this.selectedMatch?.id === match.id && this.activeGame === game) {
       this.backToMatches();
       return;
     }
 
-    this.selectedMatch = match;
+    this.activeGame = game;
+    this.selectedMatch = this.withGame(match, game);
     this.previewTeam = null;
     this.previewTeams = [];
     this.loadingTeams = true;
 
-    this.api.MatchByTeams(match.id).subscribe({
+    console.log('My Teams loading teams:', { match, game });
+
+    this.api.MatchByTeams(match.id, game).subscribe({
       next: (res: any) => {
-        // console.log('My Teams match teams response:', res);
+        console.log('My Teams match teams response:', { matchId: match.id, game, response: res });
 
         const generatedTeams = this.generatedTeamsFromResponse(res);
 
@@ -438,6 +492,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
           this.previewTeams = generatedTeams.map((team: ApiGeneratedTeam) => this.mapGeneratedTeam(team));
           this.selectedMatch = {
             ...match,
+            ...this.withGame(match, game),
             teamsGenerated: Number(res?.total_teams || res?.data?.total_teams || generatedTeams.length),
             viewable: true
           };
@@ -467,6 +522,102 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     this.selectedMatch = null;
     this.previewTeam = null;
     this.previewTeams = [];
+  }
+
+  selectGameTab(match: GeneratedMatch, game: FantasyGame): void {
+    if (!this.canAccessTeams(match)) {
+      return;
+    }
+
+    this.openMatchTeams(match, game);
+  }
+
+  selectMainGameTab(game: FantasyGame): void {
+    if (this.activeGame === game) {
+      return;
+    }
+
+    this.activeGame = game;
+    console.log('My Teams selected game tab:', game);
+    this.applyDateFilter();
+
+    const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
+    if (firstViewableMatch) {
+      this.openMatchTeams(firstViewableMatch, game);
+    }
+  }
+
+  isGameGenerated(match: GeneratedMatch, game: FantasyGame): boolean {
+    return (match.generatedGames || []).includes(game);
+  }
+
+  gameMatchCount(game: FantasyGame): number {
+    return this.matches.filter(match =>
+      this.isGameGenerated(match, game)
+      && (!this.selectedDate || match.startDate === this.selectedDate)
+    ).length;
+  }
+
+  private selectedGameForMatch(match: GeneratedMatch): FantasyGame {
+    return this.selectedMatch?.id === match.id ? this.activeGame : this.activeGame;
+  }
+
+  private firstGeneratedGame(match: GeneratedMatch): FantasyGame {
+    return match.generatedGames?.[0] || match.game || 'sorare';
+  }
+
+  private withGame(match: GeneratedMatch, game: FantasyGame): GeneratedMatch {
+    return {
+      ...match,
+      game,
+      fantasyPlatform: this.gameLabel(game)
+    };
+  }
+
+  gameLabel(game: FantasyGame): string {
+    if (game === 'draftkings') return 'DraftKings';
+    if (game === 'fanduel') return 'FanDuel';
+    return 'Sorare';
+  }
+
+  private generatedGamesFromValue(value: unknown): Set<FantasyGame> {
+    const games = new Set<FantasyGame>();
+
+    if (Array.isArray(value)) {
+      value.forEach(item => {
+        const game = this.normalizeGame(typeof item === 'object' && item ? (item as any).game || (item as any).platform || (item as any).fantasy_platform : item);
+        if (game) games.add(game);
+      });
+      return games;
+    }
+
+    if (value && typeof value === 'object') {
+      Object.entries(value as Record<string, unknown>).forEach(([key, generated]) => {
+        const game = this.normalizeGame(key);
+        if (game && (generated === true || generated === 1 || String(generated).toLowerCase() === 'true' || Number(generated) > 0)) {
+          games.add(game);
+        }
+      });
+      return games;
+    }
+
+    String(value ?? '')
+      .split(/[,|]/)
+      .map(item => this.normalizeGame(item))
+      .filter((game): game is FantasyGame => !!game)
+      .forEach(game => games.add(game));
+
+    return games;
+  }
+
+  private normalizeGame(value: unknown): FantasyGame | null {
+    const text = String(value ?? '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+    if (text === 'sorare') return 'sorare';
+    if (text === 'draftkings' || text === 'draftking' || text === 'dk') return 'draftkings';
+    if (text === 'fanduel' || text === 'fd') return 'fanduel';
+
+    return null;
   }
 
   openTeamPreview(teamId: number): void {

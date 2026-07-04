@@ -172,8 +172,10 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/teams/generate-matches`);
   }
 
-  MatchByTeams(id: number): Observable<any> {
-    return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}`);
+  MatchByTeams(id: number, game?: 'sorare' | 'draftkings' | 'fanduel'): Observable<any> {
+    const options = game ? { params: new HttpParams().set('game', game) } : undefined;
+
+    return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}`, options);
   }
 
   TeamsByPlayers(id: number): Observable<any> {

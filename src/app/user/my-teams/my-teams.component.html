@@ -35,6 +35,20 @@
     Loading generated matches...
   </div>
 
+  <div class="myteams-game-tabs main-game-tabs" role="tablist" aria-label="Fantasy game tabs" *ngIf="!loadingMatches">
+    <button
+      class="myteams-game-tab"
+      type="button"
+      role="tab"
+      *ngFor="let game of gameTabs"
+      [class.active]="activeGame === game.id"
+      [attr.aria-selected]="activeGame === game.id"
+      (click)="selectMainGameTab(game.id)">
+      <span>{{ game.label }}</span>
+      <small>{{ gameMatchCount(game.id) }} matches</small>
+    </button>
+  </div>
+
   <div class="myteams-list" *ngIf="!loadingMatches && filteredMatches.length > 0; else noMatches">
     <article
       class="match-batch"
@@ -90,8 +104,8 @@
   <ng-template #noMatches>
     <div class="my-teams-empty" *ngIf="!loadingMatches">
       <div class="empty-icon">P2W</div>
-      <h3>No teams yet</h3>
-      <p>Head to Lineouts, pick a match with released lineups, and run UCT. Your 20 teams will appear here with match details and a TXT download.</p>
+      <h3>No {{ gameLabel(activeGame) }} teams yet</h3>
+      <p>No {{ gameLabel(activeGame) }} generated teams found for the selected date. Choose another game tab or date.</p>
     </div>
   </ng-template>
 </div>
@@ -138,7 +152,7 @@
     <div class="my-teams-empty" *ngIf="!loadingTeams && previewTeams.length === 0">
       <div class="empty-icon">P2W</div>
       <h3>No teams found</h3>
-      <p>This match does not have generated teams in the response yet.</p>
+      <p>No {{ gameLabel(activeGame) }} teams found for this match yet.</p>
     </div>
 
     <div class="teams-grid" *ngIf="!loadingTeams && previewTeams.length > 0">

@@ -397,6 +397,11 @@ h1 em,
   box-shadow: 0 0 0 1px rgba(11,204,142,.16), 0 20px 50px rgba(0,0,0,.22);
 }
 
+.platform-card.generated {
+  border-color: rgba(11,204,142,.58);
+  background: linear-gradient(180deg, rgba(6, 70, 52, .72), rgba(5, 26, 42, .94));
+}
+
 .platform-main {
   display: grid;
   grid-template-columns: auto auto minmax(0, 1fr);
@@ -410,6 +415,10 @@ h1 em,
 }
 
 .platform-card.selected .platform-check {
+  color: #22c55e;
+}
+
+.platform-card.generated .platform-check {
   color: #22c55e;
 }
 
@@ -489,6 +498,27 @@ h1 em,
   min-height: 56px;
   border-radius: 10px;
   font-size: 18px;
+}
+
+.platform-start.generated {
+  color: #051a2a;
+  background: #0bcc8e;
+}
+
+.platform-generated-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.platform-start.generated:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.platform-start.view-teams {
+  color: #051a2a;
+  background: var(--gold);
 }
 
 .platform-policy {

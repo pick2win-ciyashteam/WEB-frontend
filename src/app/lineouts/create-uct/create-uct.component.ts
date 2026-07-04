@@ -27,6 +27,7 @@ interface CreateUctContext {
   venue?: string;
   venue_name?: string;
   venue_city?: string;
+  generatedGames?: FantasyPlatform[] | string[];
 }
 
 @Component({
@@ -75,6 +76,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   selectedCombinationKeys = new Set<string>();
   generatedTeams: GeneratedTeam[] = [];
   salaries = new Map<number, string>();
+  private userGeneratedGames = new Set<FantasyPlatform>();
 
   readonly maxSubs = 3;
   readonly maxMandateYes = 1;
@@ -153,6 +155,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         switchMap(params => {
           this.matchId = params.get('id') || '';
           this.createUctContext = this.getCreateUctContext(this.matchId);
+          this.loadUserGeneratedGames(this.matchId);
           this.loading = true;
           this.errorMessage = '';
           return this.api.getMatchDetails(this.matchId);
@@ -315,6 +318,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.selectedPlatform === 'draftkings') return 50000;
     if (this.selectedPlatform === 'fanduel') return 100;
     return null;
+  }
+
+  isPlatformGenerated(platform: FantasyPlatform): boolean {
+    return this.generatedGames().includes(platform);
   }
 
   get salaryPlaceholder(): string {
@@ -492,6 +499,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.router.navigate(['/lineouts']);
   }
 
+  goToGeneratedTeams(game?: FantasyPlatform): void {
+    this.router.navigate(['/user/profile'], { queryParams: { tab: 'teams', match: this.matchId, game: game || this.selectedGame() } });
+  }
+
   togglePlayingXi(): void {
     this.showPlayingXi = !this.showPlayingXi;
   }
@@ -577,6 +588,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.isPlatformGenerated(platform)) {
+      this.goToGeneratedTeams(platform);
+      return;
+    }
+
     if (this.selectedPlatform && this.selectedPlatform !== platform && this.availablePool.length) {
       this.resetUctSelections();
     }
@@ -584,6 +600,15 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.selectedPlatform = platform;
     this.generationStatus = `Resolving ${this.activePlatformName} rules - validating selections - computing teams`;
     this.setActiveStep(1);
+  }
+
+  handlePlatformAction(platform: FantasyPlatform): void {
+    if (this.isPlatformGenerated(platform)) {
+      this.goToGeneratedTeams(platform);
+      return;
+    }
+
+    this.selectPlatform(platform);
   }
 
   salaryValue(player: UctPlayer): string {
@@ -1106,7 +1131,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           this.submitting = false;
 
           if (res?.success !== false) {
-            this.router.navigate(['/user/profile'], { queryParams: { tab: 'teams', match: this.matchId, generated: 'success' } });
+            this.router.navigate(['/user/profile'], { queryParams: { tab: 'teams', match: this.matchId, game: this.selectedGame(), generated: 'success' } });
             return;
           }
 
@@ -1239,6 +1264,125 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     } catch {
       return null;
     }
+  }
+
+  private generatedGames(): FantasyPlatform[] {
+    const games = new Set<FantasyPlatform>();
+    this.userGeneratedGames.forEach(game => games.add(game));
+    this.addGeneratedGames(games, this.createUctContext?.generatedGames);
+
+    const match = this.detail?.match as unknown as Record<string, unknown> | undefined;
+    if (match) {
+      this.addGeneratedGames(games, match['generated_games']);
+      this.addGeneratedGames(games, match['generatedGames']);
+      this.addGeneratedGames(games, match['games_generated']);
+      this.addGeneratedGames(games, match['gamesGenerated']);
+      this.addGeneratedGames(games, match['generated_platforms']);
+      this.addGeneratedGames(games, match['generatedPlatforms']);
+      this.addGeneratedGames(games, match['platforms_generated']);
+      this.addGeneratedGames(games, match['platformsGenerated']);
+
+      (['sorare', 'draftkings', 'fanduel'] as FantasyPlatform[]).forEach(game => {
+        const values = [
+          match[`${game}_generated`],
+          match[`${game}_uct_generated`],
+          match[`${game}_teams_generated`],
+          match[`${game}_generated_at`],
+          match[`${game}_teams_count`]
+        ];
+
+        if (values.some(value => this.isTruthy(value) || Number(value) > 0)) {
+          games.add(game);
+        }
+      });
+    }
+
+    return Array.from(games);
+  }
+
+  private loadUserGeneratedGames(matchId: string): void {
+    this.userGeneratedGames.clear();
+
+    if (!matchId) {
+      return;
+    }
+
+    this.api.GetMyTeams()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          const rows = Array.isArray(res?.data) ? res.data : [];
+
+          rows
+            .filter((row: any) => this.rowMatchesCurrentMatch(row, matchId))
+            .forEach((row: any) => {
+              const directGame = this.normalizeGame(row?.game || row?.fantasy_platform || row?.platform);
+              if (directGame) {
+                this.userGeneratedGames.add(directGame);
+              }
+
+              this.addGeneratedGames(this.userGeneratedGames, row?.generated_games);
+              this.addGeneratedGames(this.userGeneratedGames, row?.games_generated);
+              this.addGeneratedGames(this.userGeneratedGames, row?.generated_platforms);
+              this.addGeneratedGames(this.userGeneratedGames, row?.platforms_generated);
+            });
+        },
+        error: () => {
+          this.userGeneratedGames.clear();
+        }
+      });
+  }
+
+  private rowMatchesCurrentMatch(row: any, matchId: string): boolean {
+    return [
+      row?.match_id,
+      row?.id,
+      row?.provider_match_id,
+      row?.fixture_id
+    ].some(value => String(value ?? '') === String(matchId));
+  }
+
+  private addGeneratedGames(games: Set<FantasyPlatform>, value: unknown): void {
+    if (Array.isArray(value)) {
+      value.forEach(item => this.addGeneratedGames(games, item));
+      return;
+    }
+
+    if (value && typeof value === 'object') {
+      const source = value as Record<string, unknown>;
+      const game = this.normalizeGame(source['game'] || source['platform'] || source['fantasy_platform'] || source['name']);
+      const generated = source['generated'] ?? source['teams_generated'] ?? source['is_generated'] ?? source['generated_at'];
+
+      if (game && (generated === undefined || generated === null || this.isTruthy(generated) || Number(generated) > 0)) {
+        games.add(game);
+      }
+      return;
+    }
+
+    String(value ?? '')
+      .split(/[,|]/)
+      .map(item => this.normalizeGame(item))
+      .filter((game): game is FantasyPlatform => !!game)
+      .forEach(game => games.add(game));
+  }
+
+  private normalizeGame(value: unknown): FantasyPlatform | null {
+    const text = String(value ?? '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+    if (text === 'sorare') return 'sorare';
+    if (text === 'draftkings' || text === 'draftking' || text === 'dk') return 'draftkings';
+    if (text === 'fanduel' || text === 'fd') return 'fanduel';
+
+    return null;
+  }
+
+  private isTruthy(value: unknown): boolean {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value > 0;
+
+    return ['1', 'true', 'yes', 'y', 'available', 'released', 'confirmed', 'ready', 'generated'].includes(
+      String(value ?? '').trim().toLowerCase()
+    );
   }
 
   private resetUctSelections(): void {

@@ -24,12 +24,15 @@ interface LineoutMatch {
   lineupReady: boolean;
   lineupJustReleased?: boolean;
   teamsGenerated: boolean;
+  generatedGames: FantasyGame[];
   generatedTeamsCount?: number;
   generatedAt?: string | null;
   venue: string;
   status: string;
   active: boolean;
 }
+
+type FantasyGame = 'sorare' | 'draftkings' | 'fanduel';
 
 interface MatchDayGroup {
   label: string;
@@ -151,7 +154,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   isGenerated(match: LineoutMatch): boolean {
-    return match.teamsGenerated;
+    return match.teamsGenerated || match.generatedGames.length >= 3;
   }
 
   statusLabel(match: LineoutMatch): string {
@@ -323,7 +326,7 @@ canRunUct(match: LineoutMatch): boolean {
     }
   }
 
-  private createUctContext(match: LineoutMatch): Record<string, string> {
+  private createUctContext(match: LineoutMatch): Record<string, unknown> {
     return {
       id: match.id,
       homeName: match.home.name,
@@ -332,7 +335,8 @@ canRunUct(match: LineoutMatch): boolean {
       awayCode: match.away.code,
       venue: match.venue,
       series: match.league,
-      kickoffISO: match.kickoffISO
+      kickoffISO: match.kickoffISO,
+      generatedGames: match.generatedGames
     };
   }
 
@@ -525,6 +529,7 @@ canRunUct(match: LineoutMatch): boolean {
       lineupReady: this.isLineupAvailable(match),
       lineupJustReleased: this.isLineupAvailable(match),
       teamsGenerated: this.hasGeneratedTeams(match),
+      generatedGames: this.generatedGames(match),
       generatedTeamsCount: Number(match.generated_teams_count ?? 0),
       generatedAt: match.generated_at ?? null,
       venue: this.formatVenue(match),
@@ -628,14 +633,85 @@ canRunUct(match: LineoutMatch): boolean {
   }
 
   private hasGeneratedTeams(match: Match): boolean {
-    const generated = this.firstMatchValue(match, [
-      'teams_generated',
-      'teamsGenerated',
-      'uct_generated',
-      'is_uct_generated'
-    ]);
+    return this.generatedGames(match).length >= 3 || this.generatedGameCount(match) >= 3;
+  }
 
-    return this.isTruthyFlag(generated);
+  private generatedGames(match: Match): FantasyGame[] {
+    const games = new Set<FantasyGame>();
+    const source = match as unknown as Record<string, unknown>;
+
+    this.addGeneratedGames(games, this.firstMatchValue(match, [
+      'generated_games',
+      'generatedGames',
+      'games_generated',
+      'gamesGenerated',
+      'generated_platforms',
+      'generatedPlatforms',
+      'platforms_generated',
+      'platformsGenerated'
+    ]));
+
+    (['sorare', 'draftkings', 'fanduel'] as FantasyGame[]).forEach(game => {
+      const values = [
+        source[`${game}_generated`],
+        source[`${game}_uct_generated`],
+        source[`${game}_teams_generated`],
+        source[`${game}_generated_at`],
+        source[`${game}_teams_count`]
+      ];
+
+      if (values.some(value => this.isTruthyFlag(value) || Number(value) > 0)) {
+        games.add(game);
+      }
+    });
+
+    return Array.from(games);
+  }
+
+  private generatedGameCount(match: Match): number {
+    const value = this.firstMatchValue(match, [
+      'generated_game_count',
+      'generated_games_count',
+      'games_generated_count',
+      'platforms_generated_count',
+      'uct_generated_count'
+    ]);
+    const count = Number(value);
+
+    return Number.isFinite(count) ? count : 0;
+  }
+
+  private addGeneratedGames(games: Set<FantasyGame>, value: unknown): void {
+    if (Array.isArray(value)) {
+      value.forEach(item => this.addGeneratedGames(games, item));
+      return;
+    }
+
+    if (this.isRecord(value)) {
+      const game = this.normalizeGame(value['game'] || value['platform'] || value['fantasy_platform'] || value['name']);
+      const generated = value['generated'] ?? value['teams_generated'] ?? value['is_generated'] ?? value['generated_at'];
+
+      if (game && (generated === undefined || generated === null || this.isTruthyFlag(generated) || Number(generated) > 0)) {
+        games.add(game);
+      }
+      return;
+    }
+
+    String(value ?? '')
+      .split(/[,|]/)
+      .map(item => this.normalizeGame(item))
+      .filter((game): game is FantasyGame => !!game)
+      .forEach(game => games.add(game));
+  }
+
+  private normalizeGame(value: unknown): FantasyGame | null {
+    const text = this.normalizedText(value);
+
+    if (text === 'sorare') return 'sorare';
+    if (text === 'draftkings' || text === 'draftking' || text === 'dk') return 'draftkings';
+    if (text === 'fanduel' || text === 'fd') return 'fanduel';
+
+    return null;
   }
 
   private hasStartingLineupCounts(match: Match): boolean {
