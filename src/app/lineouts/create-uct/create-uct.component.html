@@ -7,12 +7,14 @@
         <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
       </button>
       <div class="mobile-title">
+        <h2 *ngIf="step === 0">Fantasy Platform</h2>
         <h2 *ngIf="step === 1">My Squad</h2>
         <h2 *ngIf="step === 2">Mandatory Players <span>(Optional)</span></h2>
         <h2 *ngIf="step === 3">Captain Pool <span>(Required)</span></h2>
         <h2 *ngIf="step === 5">UCT Preview</h2>
         <h2 *ngIf="step >= 6">UCT Teams</h2>
         <!-- <p *ngIf="step === 1">Select 10-22 players from XI and optional substitutes</p> -->
+        <p *ngIf="step === 0">Choose Sorare, DraftKings, or FanDuel</p>
         <p *ngIf="step === 2">Optional: select 0-2 mandatory players</p>
         <p *ngIf="step === 3">Choose 2-6 captains for Sorare</p>
         <p *ngIf="step === 5">Review your <b>CONFIG</b> before generating</p>
@@ -34,6 +36,61 @@
     </div>
 
     <ng-container *ngIf="!loading && detail as d">
+      <section class="platform-screen" *ngIf="step === 0">
+        <div class="platform-hero">
+          <div class="platform-breadcrumb">
+            <span>FOOTBALL</span>
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+            <span>{{ matchTeamFullName(d, 'home') }} vs {{ matchTeamFullName(d, 'away') }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+            <b>RUN UCT</b>
+          </div>
+          <h1>Choose Your Fantasy Platform</h1>
+          <p>Choose your fantasy platform. PICK2WIN UCT loads the right workflow and helps you prepare <b>up to 20 strategic team combinations</b> for this match.</p>
+        </div>
+
+        <div class="platform-card-grid">
+          <article class="platform-card" *ngFor="let platform of platforms" [class.selected]="selectedPlatform === platform.id">
+            <div class="platform-main">
+              <span class="platform-check material-symbols-outlined" aria-hidden="true">{{ selectedPlatform === platform.id ? 'check_circle' : 'radio_button_unchecked' }}</span>
+              <span class="platform-logo material-symbols-outlined" aria-hidden="true">{{ platform.icon }}</span>
+              <div>
+                <h2>{{ platform.name }}</h2>
+                <div class="platform-tags">
+                  <span><i class="material-symbols-outlined" aria-hidden="true">groups</i>{{ platform.teamLabel }}</span>
+                  <span><i class="material-symbols-outlined" aria-hidden="true">payments</i>{{ platform.salaryLabel }}</span>
+                  <span><i class="material-symbols-outlined" aria-hidden="true">block</i>{{ platform.captainLabel }}</span>
+                </div>
+                <p><b>{{ platform.id === 'sorare' ? 'CURRENT WORKFLOW' : 'READY TO START' }}</b><br>{{ platform.summary }}</p>
+              </div>
+            </div>
+            <div class="platform-side">
+              <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
+              <p>{{ platform.capText }}</p>
+              <button class="primary-btn platform-start" type="button" (click)="selectPlatform(platform.id)">
+                Start
+                <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <div class="platform-policy">
+          <span class="material-symbols-outlined" aria-hidden="true">info</span>
+          <div>
+            <b>UCT Generation Policy</b>
+            <p>1 coin is consumed only after successful UCT generation. No coin is deducted if generation fails, you cancel before completion, or generation does not complete.</p>
+            <p>Each platform can be generated only once per match. Generated teams can be viewed anytime in My Teams.</p>
+          </div>
+        </div>
+
+        <button class="ghost-btn platform-back" type="button" (click)="goBack()">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          Back to Lineups
+        </button>
+      </section>
+
+      <ng-container *ngIf="step > 0">
       <section class="uct-match-card" aria-label="UCT match summary">
         <div class="uct-match-kicker">
           <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
@@ -102,11 +159,11 @@
         <button type="button" [class.active]="step === 2" [class.done]="step > 2" (click)="setStep(2)">
           <b>02</b><span>Mandatory Players</span><small>Optional</small>
         </button>
-        <button type="button" [class.active]="step === 3" [class.done]="step > 3" (click)="setStep(3)">
+        <button type="button" *ngIf="isSorarePlatform" [class.active]="step === 3" [class.done]="step > 3" (click)="setStep(3)">
           <b>03</b><span>Captain Pool</span><small>Required</small>
         </button>
         <button type="button" [class.active]="step === 5" [class.done]="step > 5" (click)="setStep(5)">
-          <b>04</b><span>Preview</span>
+          <b>{{ isSorarePlatform ? '04' : '03' }}</b><span>Preview</span>
         </button>
         <!-- <button type="button" [class.active]="step === 6 || step === 7" [class.done]="step > 6" (click)="setStep(6)">
           <b>06</b><span>My Teams</span>
@@ -139,7 +196,7 @@
               <small>Select players from both teams</small>
             </div>
           </div> -->
-          <span class="selection-pill">{{ availablePool.length }} / {{ maxSquad }} squad - {{ selectedSubIds.size }} / {{ maxSubs }} subs</span>
+          <span class="selection-pill">{{ activePlatformName }} - {{ availablePool.length }} / {{ maxSquad }} squad - {{ selectedSubIds.size }} / {{ maxSubs }} subs</span>
         </div>
 
         <div class="team-pool-grid locked-xi-grid" id="playingXiPanel">
@@ -155,6 +212,9 @@
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+              </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
           </article>
@@ -170,6 +230,9 @@
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+              </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
           </article>
@@ -202,6 +265,9 @@
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+              </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
             <div class="player-empty" *ngIf="!homeSubstitutes.length">No home substitutes received for this match.</div>
@@ -218,6 +284,9 @@
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" [attr.maxlength]="selectedPlatform === 'draftkings' ? 5 : 3" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+              </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
             <div class="player-empty" *ngIf="!awaySubstitutes.length">No away substitutes received for this match.</div>
@@ -229,6 +298,11 @@
             <span>Selected Players</span>
             <b [class.ok]="hasValidSquadSize" [class.no]="!hasValidSquadSize">{{ availablePool.length }}</b>
             <small>/ {{ maxSquad }}</small>
+          </div>
+          <div class="squad-rule-item" *ngIf="requiresSalary">
+            <span>Salary Entries</span>
+            <b [class.ok]="!salaryValidationMessage()" [class.no]="!!salaryValidationMessage()">{{ salaryEnteredCount }}</b>
+            <small>/ {{ availablePool.length }}</small>
           </div>
           <div class="squad-rule-item">
             <span>Substitutes</span>
@@ -247,7 +321,7 @@
 
         <label class="confirm-box squad-confirm">
           <input type="checkbox" [checked]="confirmed" (change)="confirmed = !confirmed">
-          <span>I confirm that I have selected only the players whose eligible Sorare cards I own. I understand that PICK2WIN generates team combinations solely from my selected My Squad and does not verify card ownership, card eligibility, or competition eligibility.</span>
+          <span>I confirm that I have selected only eligible {{ activePlatformName }} players and entered accurate official salaries where required. I understand that PICK2WIN generates team combinations solely from my selected My Squad.</span>
         </label>
       </section>
 
@@ -336,7 +410,7 @@
         </div>
       </section>
 
-      <section class="flow-panel captain-pool-panel" id="uctStepContent" *ngIf="step === 3">
+      <section class="flow-panel captain-pool-panel" id="uctStepContent" *ngIf="step === 3 && isSorarePlatform">
         <div class="panel-head">
           <div>
             <!-- <h2>Captain Pool</h2> -->
@@ -482,13 +556,13 @@
 
           <article class="preview-card">
             <div class="preview-card-head">
-              <span class="material-symbols-outlined" aria-hidden="true">military_tech</span>
+              <span class="material-symbols-outlined" aria-hidden="true">{{ isSorarePlatform ? 'military_tech' : 'payments' }}</span>
               <div>
-                <b>Captain Pool</b>
-                <small>Sorare Captain only</small>
+                <b>{{ isSorarePlatform ? 'Captain Pool' : 'Salary Review' }}</b>
+                <small>{{ isSorarePlatform ? 'Sorare Captain only' : activePlatformName + ' salary validation' }}</small>
               </div>
             </div>
-            <div class="preview-player-grid">
+            <div class="preview-player-grid" *ngIf="isSorarePlatform; else salaryPreview">
               <div class="preview-player" *ngFor="let player of captainPlayers; trackBy: trackPlayer">
                 <span class="avatar image-avatar">
                   <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
@@ -497,6 +571,21 @@
                 <em>C</em>
               </div>
             </div>
+            <ng-template #salaryPreview>
+              <div class="salary-preview-total">
+                <b>{{ salaryEnteredCount }}/{{ availablePool.length }}</b>
+                <span>{{ activePlatformName }} salary entries ready. Cap is checked per generated lineup.</span>
+              </div>
+              <div class="preview-player-grid">
+                <div class="preview-player" *ngFor="let player of availablePool; trackBy: trackPlayer">
+                  <span class="avatar image-avatar">
+                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                  </span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
+                  <em>{{ salaryValue(player) }}</em>
+                </div>
+              </div>
+            </ng-template>
           </article>
 
         </div>
@@ -581,10 +670,10 @@
             <span aria-hidden="true">→</span>
           </button>
           <button class="primary-btn" type="button" *ngIf="step === 2" [disabled]="!canLeaveMandateStep()" (click)="nextStep()">
-            Next
+            {{ isSorarePlatform ? 'Next' : 'Preview' }}
             <span aria-hidden="true">→</span>
           </button>
-          <button class="primary-btn" type="button" *ngIf="step === 3" [disabled]="!canLeaveCaptainStep()" (click)="nextStep()">
+          <button class="primary-btn" type="button" *ngIf="step === 3 && isSorarePlatform" [disabled]="!canLeaveCaptainStep()" (click)="nextStep()">
             Next
             <span aria-hidden="true">→</span>
           </button>
@@ -595,6 +684,7 @@
           </button>
         </div>
       </div>
+      </ng-container>
     </ng-container>
   </div>
 </main>

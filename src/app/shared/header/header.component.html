@@ -21,8 +21,12 @@
     </nav>
 
     <div class="header-auth" *ngIf="loggedIn$ | async; else desktopGuestActions">
+      <button type="button" class="header-notification-btn" aria-label="Notifications" (click)="openNotifications($event)">
+        <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
+        <span class="notification-badge" *ngIf="(unreadCount$ | async) as unreadCount">{{ unreadCount }}</span>
+      </button>
       <button type="button" class="header-profile-pill" (click)="openMySpace()">
-        <span class="header-avatar" aria-hidden="true">{{ profileInitial$ | async }}</span>
+        <span class="header-avatar material-symbols-outlined" aria-hidden="true">account_circle</span>
         My Space
       </button>
       <button type="button" class="header-signout-pill" (click)="signOut()">
@@ -64,6 +68,16 @@
   </nav>
 
   <div class="drawer-actions" *ngIf="loggedIn$ | async; else drawerGuestActions">
+    <button type="button" class="drawer-notification" (click)="openNotifications($event)">
+      <span class="drawer-action-icon material-symbols-outlined notification-icon-wrap" aria-hidden="true">
+        notifications
+        <span class="notification-badge drawer-badge" *ngIf="(unreadCount$ | async) as unreadCount">{{ unreadCount }}</span>
+      </span>
+      <span class="drawer-action-copy">
+        <span class="drawer-action-title">Notifications</span>
+        <span class="drawer-action-meta">Latest updates</span>
+      </span>
+    </button>
     <button type="button" class="drawer-profile" (click)="openMySpace()">
       <span class="drawer-action-icon material-symbols-outlined" aria-hidden="true">account_circle</span>
       <span class="drawer-action-copy">
@@ -88,3 +102,34 @@
   </ng-template>
 
 </aside>
+
+<div class="notification-modal-backdrop" *ngIf="isNotificationsOpen" (click)="closeNotifications()">
+  <section class="notification-modal" role="dialog" aria-modal="true" aria-label="Notifications" (click)="$event.stopPropagation()">
+    <header class="notification-modal-head">
+      <div>
+        <h2>Notifications</h2>
+        <p>Latest updates</p>
+      </div>
+      <button type="button" class="notification-close material-symbols-outlined" aria-label="Close" (click)="closeNotifications()">close</button>
+    </header>
+
+    <div class="notification-modal-list" *ngIf="notifications$ | async as notifications">
+      <article class="notification-modal-item" *ngFor="let notification of notifications | slice:0:5">
+        <span class="notification-status" [class.read]="notification.read"></span>
+        <div>
+          <h3>{{ notification.title }}</h3>
+          <p>{{ notification.body }}</p>
+          <time>{{ notification.createdAt | date:'short' }}</time>
+        </div>
+      </article>
+
+      <div class="notification-empty" *ngIf="!notifications.length">
+        <span class="material-symbols-outlined" aria-hidden="true">notifications_off</span>
+        <h3>No notifications</h3>
+        <p>New admin updates will appear here.</p>
+      </div>
+    </div>
+
+    <button type="button" class="notification-view-all" (click)="viewAllNotifications()">View all</button>
+  </section>
+</div>

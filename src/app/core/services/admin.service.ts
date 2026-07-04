@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminActivityLogCategory, AdminBannerCreatePayload, AdminCoinExpiryWindow, AdminCountryCreatePayload, AdminFixturesPayload, AdminLeagueCreatePayload, AdminLoginPayload, AdminMatchTogglePayload, AdminRevenueTab, AdminSubscriptionCreatePayload, AdminSupportListReports, AdminSupportStatus, AdminSupportTicketReports, AdminUsersQuery } from '../interfaces/admin';
@@ -220,6 +220,12 @@ export class AdminService {
 
   broadcastCoinExpiry(window: AdminCoinExpiryWindow): Observable<any> {
     return this.http.post(`${this.BASE}/admin/reports/coin-expiry/broadcast`, { window });
+  }
+
+  sendNotificationToAll(data: { title: string; body: string; data?: Record<string, string> }): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/notification/send-to-all`, data, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
   }
 
   updateAdminUser(id: number | string, data: Record<string, unknown>): Observable<any> {

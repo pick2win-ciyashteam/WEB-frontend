@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { ProfileService } from './profile.service';
+import { FirebaseNotificationService } from './firebase-notification.service';
 
 const API = 'https://pick2win.io/backend/api';
 
@@ -23,7 +24,8 @@ export class AuthService {
     private http: HttpClient,
     private tokenService: TokenService,
     private router: Router,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private notificationService: FirebaseNotificationService
   ) {
     this.loggedInSubject.next(this.isLoggedIn());
   }
@@ -80,6 +82,7 @@ export class AuthService {
     localStorage.removeItem('pick2win_user');
     sessionStorage.clear();
     this.profileService.clearProfile();
+    this.notificationService.clearSession();
     this.loggedInSubject.next(false);
     this.router.navigate(['/'], { replaceUrl: true });
   }

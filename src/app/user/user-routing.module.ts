@@ -5,6 +5,7 @@ import { MyTeamsComponent } from './my-teams/my-teams.component';
 import { TeamsInfoComponent } from './teams-info/teams-info.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 const routes: Routes = [
     {
@@ -30,6 +31,10 @@ const routes: Routes = [
     {
       path: 'support/:id',
       component: SupportComponent
+    },
+    {
+      path: 'notifications',
+      component: NotificationsComponent
     },
 ];
 

@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { PurchaseHistoryComponent } from './purchase-history/purchase-history.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SupportComponent } from './support/support.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { SupportComponent } from './support/support.component';
     TeamsInfoComponent,
     FeedbackComponent,
     PurchaseHistoryComponent,
-    SupportComponent
+    SupportComponent,
+    NotificationsComponent
   ],
   imports: [
     CommonModule,

@@ -197,10 +197,12 @@ export interface UctGeneratePlayer {
   role: string;
   mandate?: 'YES' | 'NO';
   captain?: 'C' | 'VC' | 'CVC';
+  salary?: number;
 }
 
 export interface UctGeneratePayload {
   match_id: number | string;
+  platform?: 'sorare' | 'draftkings' | 'fanduel';
   team_a: UctGeneratePlayer[];
   team_b: UctGeneratePlayer[];
 }

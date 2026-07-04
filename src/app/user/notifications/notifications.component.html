@@ -1,0 +1,32 @@
+<app-header></app-header>
+
+<main class="notifications-page">
+  <section class="notifications-shell">
+    <div class="notifications-head">
+      <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
+      <div>
+        <h1>Notifications</h1>
+        <p>All updates sent to you will appear here.</p>
+      </div>
+    </div>
+
+    <div class="notifications-list" *ngIf="notifications$ | async as notifications">
+      <article class="notification-card" *ngFor="let notification of notifications">
+        <span class="notification-dot" [class.read]="notification.read"></span>
+        <div>
+          <h2>{{ notification.title }}</h2>
+          <p>{{ notification.body }}</p>
+          <time>{{ notification.createdAt | date:'medium' }}</time>
+        </div>
+      </article>
+
+      <div class="empty-state" *ngIf="!notifications.length">
+        <span class="material-symbols-outlined" aria-hidden="true">notifications_off</span>
+        <h2>No notifications yet</h2>
+        <p>When admin sends all-user or user-wise notifications, they will show here.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

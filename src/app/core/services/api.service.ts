@@ -73,6 +73,10 @@ export class ApiService {
     return this.http.post(`${this.BASE}/user/user-auth/reset-password`, data);
   }
 
+  registerDevice(data: { fcm_token: string; device_type: 'web' }): Observable<any> {
+    return this.http.post(`${this.BASE}/user/user-auth/register-device`, data);
+  }
+
   getFeedback(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/feedback/feedback-get`, this.userAuthOptions());
   }

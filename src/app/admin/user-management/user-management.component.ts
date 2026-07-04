@@ -306,24 +306,31 @@ export class UserManagementComponent implements OnInit {
 
   notifyExpiryUser(user: AdminCoinExpiryUser): void {
     this.runAction(
-      this.adminService.notifyCoinExpiryUser(user.id, this.expiryWindow),
-      `Expiry pop-up sent to ${user.fullname}.`
+      this.adminService.sendNotificationToAll({
+        title: 'Test Notification',
+        body: 'Hello from Firebase',
+        data: {
+          screen: 'home'
+        }
+      }),
+      `Test notification sent from ${user.fullname} row.`
     );
   }
 
   broadcastExpiry(): void {
-    if (!this.expiryUsers.length) {
-      this.actionMessage = 'No users in this expiry window.';
-      return;
-    }
-
     this.requestConfirm({
-      title: 'Broadcast expiry pop-up',
-      message: `Broadcast expiry pop-up to ${this.expiryUsers.length} users in this window?`,
+      title: 'Broadcast notification',
+      message: 'Send this test Firebase notification to all users?',
       confirmText: 'Broadcast',
       action: () => this.runAction(
-        this.adminService.broadcastCoinExpiry(this.expiryWindow),
-        `Expiry pop-up broadcast to ${this.expiryUsers.length} users.`
+        this.adminService.sendNotificationToAll({
+          title: 'Test Notification',
+          body: 'Hello from Firebase',
+          data: {
+            screen: 'home'
+          }
+        }),
+        'Test notification broadcast sent to all users.'
       )
     });
   }

@@ -22,7 +22,12 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+               {
+                  "glob": "firebase-messaging-sw.js",
+                  "input": "src",
+                  "output": "/"
+                }
             ],
             "styles": [
               "src/styles.css"
@@ -85,7 +90,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/sitemap.xml"
+              "src/sitemap.xml",
+              "src/firebase-messaging-sw.js"
             ],
             "styles": [
               "src/styles.css"

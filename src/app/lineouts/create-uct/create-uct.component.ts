@@ -8,6 +8,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 type Mandate = 'YES' | 'NO' | 'NA';
 type UctAlertType = 'info' | 'warning' | 'error';
 type DistributionMode = 'AUTO' | 'CUSTOM';
+type FantasyPlatform = 'sorare' | 'draftkings' | 'fanduel';
 
 interface UctPlayer extends MatchPlayer {
   teamSide: 'home' | 'away';
@@ -43,7 +44,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   errorMessage = '';
   detail: MatchDetail | null = null;
   private createUctContext: CreateUctContext | null = null;
-  step = 1;
+  step = 0;
+  selectedPlatform: FantasyPlatform | null = null;
   confirmed = false;
   submitting = false;
   submitError = '';
@@ -72,6 +74,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   distributionMode: DistributionMode = 'AUTO';
   selectedCombinationKeys = new Set<string>();
   generatedTeams: GeneratedTeam[] = [];
+  salaries = new Map<number, string>();
 
   readonly maxSubs = 3;
   readonly maxMandateYes = 1;
@@ -81,6 +84,47 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   readonly minSquad = 10;
   readonly maxSquad = 22;
   readonly teamSize = 5;
+  readonly platforms: Array<{
+    id: FantasyPlatform;
+    name: string;
+    icon: string;
+    teamLabel: string;
+    salaryLabel: string;
+    captainLabel: string;
+    capText: string;
+    summary: string;
+  }> = [
+    {
+      id: 'sorare',
+      name: 'Sorare',
+      icon: 'sports_soccer',
+      teamLabel: '5 Player Teams',
+      salaryLabel: 'No Salary Cap',
+      captainLabel: 'Captain Mode',
+      capText: 'Current Sorare rules',
+      summary: 'No salary entry. Existing PICK2WIN Sorare rules remain unchanged.'
+    },
+    {
+      id: 'draftkings',
+      name: 'DraftKings',
+      icon: 'emoji_events',
+      teamLabel: '8 Player Teams',
+      salaryLabel: '$50,000 Salary Cap',
+      captainLabel: 'No Captain',
+      capText: 'GK 1, DEF 2, MID 2, FWD 2, UTIL 1',
+      summary: 'Enter official DraftKings 5-digit salary for every selected player.'
+    },
+    {
+      id: 'fanduel',
+      name: 'FanDuel',
+      icon: 'shield',
+      teamLabel: '7 Player Teams',
+      salaryLabel: '100 Salary Units',
+      captainLabel: 'No Captain',
+      capText: 'GK 1, DEF 2, FWD/MID 4',
+      summary: 'Enter official FanDuel 2-digit salary for every selected player.'
+    }
+  ];
   readonly singleGoalkeeperMandateMessage = 'Your squad contains only one Goalkeeper. This Goalkeeper will automatically appear in all generated teams. Selecting it as M-YES is not required.';
   readonly teamCombinationOptions = [
     { home: 4, away: 1 },
@@ -245,8 +289,44 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.availablePool.filter(player => this.isGoalkeeper(player));
   }
 
+  get isSorarePlatform(): boolean {
+    return this.selectedPlatform === 'sorare';
+  }
+
+  get requiresSalary(): boolean {
+    return this.selectedPlatform === 'draftkings' || this.selectedPlatform === 'fanduel';
+  }
+
+  get activePlatformName(): string {
+    return this.platforms.find(platform => platform.id === this.selectedPlatform)?.name || 'Fantasy Platform';
+  }
+
+  get activeMinSquad(): number {
+    return this.isSorarePlatform ? this.minSquad : 18;
+  }
+
+  get activeTeamSize(): number {
+    if (this.selectedPlatform === 'draftkings') return 8;
+    if (this.selectedPlatform === 'fanduel') return 7;
+    return this.teamSize;
+  }
+
+  get activeSalaryCap(): number | null {
+    if (this.selectedPlatform === 'draftkings') return 50000;
+    if (this.selectedPlatform === 'fanduel') return 100;
+    return null;
+  }
+
+  get totalSelectedSalary(): number {
+    return this.availablePool.reduce((total, player) => total + Number(this.salaries.get(player.id) || 0), 0);
+  }
+
+  get salaryEnteredCount(): number {
+    return this.availablePool.filter(player => !!this.salaries.get(player.id)).length;
+  }
+
   get hasValidSquadSize(): boolean {
-    return this.availablePool.length >= this.minSquad && this.availablePool.length <= this.maxSquad;
+    return this.availablePool.length >= this.activeMinSquad && this.availablePool.length <= this.maxSquad;
   }
 
   get hasValidSubstituteCount(): boolean {
@@ -269,15 +349,18 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get squadStatusText(): string {
-    if (this.availablePool.length < this.minSquad) return `Select >=${this.minSquad} players`;
+    if (this.availablePool.length < this.activeMinSquad) return `Select >=${this.activeMinSquad} players`;
     if (this.availablePool.length > this.maxSquad) return `Max ${this.maxSquad} players`;
     if (!this.hasSquadGoalkeeper) return 'Goalkeeper required';
     if (!this.hasRequiredPositionCoverage) return 'Cover GK/DEF/MID/FWD';
+    if (this.requiresSalary && this.salaryValidationMessage()) return 'Salary required';
     if (!this.confirmed) return 'Confirm below';
     return 'Ready';
   }
 
   get canReview(): boolean {
+    if (!this.selectedPlatform) return false;
+
     return this.canLeaveSquadStep()
       && this.canLeaveMandateStep()
       && this.canLeaveCaptainStep();
@@ -414,6 +497,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   nextStep(): void {
+    if (this.step === 0) {
+      this.showAlert('Choose platform', 'Select Sorare, DraftKings, or FanDuel to start the UCT workflow.', 'warning');
+      return;
+    }
+
     if (this.step === 1 && !this.canLeaveSquadStep()) {
       this.showAlert('My Squad rules incomplete', this.squadValidationMessage(), 'warning');
       return;
@@ -425,6 +513,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         this.mandateValidationMessage(),
         'warning'
       );
+      return;
+    }
+
+    if (this.step === 2 && !this.isSorarePlatform) {
+      this.setActiveStep(5);
       return;
     }
 
@@ -455,19 +548,79 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (this.step > 1) {
       if (this.step === 5) {
-        this.setActiveStep(3);
+        this.setActiveStep(this.isSorarePlatform ? 3 : 2);
         return;
       }
 
       this.setActiveStep(this.step - 1);
     } else {
-      this.goBack();
+      this.setActiveStep(0);
     }
   }
 
   setStep(step: number): void {
+    if (step === 3 && !this.isSorarePlatform) {
+      return;
+    }
+
     if (step <= this.step) {
       this.setActiveStep(step);
+    }
+  }
+
+  selectPlatform(platform: FantasyPlatform): void {
+    if (this.submitting) {
+      return;
+    }
+
+    if (this.selectedPlatform && this.selectedPlatform !== platform && this.availablePool.length) {
+      this.resetUctSelections();
+    }
+
+    this.selectedPlatform = platform;
+    this.generationStatus = `Resolving ${this.activePlatformName} rules - validating selections - computing teams`;
+    this.setActiveStep(1);
+  }
+
+  salaryValue(player: UctPlayer): string {
+    return this.salaries.get(player.id) || '';
+  }
+
+  updateSalary(player: UctPlayer, input: HTMLInputElement): void {
+    if (!this.requiresSalary) return;
+
+    const digits = String(input.value || '').replace(/\D/g, '');
+    const maxLength = this.selectedPlatform === 'draftkings' ? 5 : 3;
+    const cleanValue = digits.slice(0, maxLength);
+    input.value = cleanValue;
+
+    if (cleanValue) {
+      this.salaries.set(player.id, cleanValue);
+    } else {
+      this.salaries.delete(player.id);
+    }
+  }
+
+  allowSalaryKey(event: KeyboardEvent): void {
+    const allowedKeys = [
+      'Backspace',
+      'Delete',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Tab',
+      'Home',
+      'End',
+      'Enter'
+    ];
+
+    if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
     }
   }
 
@@ -476,6 +629,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.selectedStartingIds.delete(player.id);
       this.mandates.delete(player.id);
       this.captainIds.delete(player.id);
+      this.salaries.delete(player.id);
       this.syncDistributionAfterSquadChange();
       this.syncMandatesAfterSquadChange();
       this.refreshActionBarLayout();
@@ -502,6 +656,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.selectedSubIds.delete(player.id);
       this.mandates.delete(player.id);
       this.captainIds.delete(player.id);
+      this.salaries.delete(player.id);
       this.syncDistributionAfterSquadChange();
       this.syncMandatesAfterSquadChange();
       this.refreshActionBarLayout();
@@ -675,6 +830,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   canLeaveCaptainStep(): boolean {
+    if (!this.isSorarePlatform) return true;
     return this.captainIds.size >= this.minCaptainPool && this.captainIds.size <= this.maxCaptainPool;
   }
 
@@ -689,8 +845,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   squadValidationMessage(): string {
     const count = this.availablePool.length;
 
-    if (count < this.minSquad) {
-      return `Select at least ${this.minSquad} players in My Squad.`;
+    if (!this.selectedPlatform) {
+      return 'Choose fantasy platform first.';
+    }
+
+    if (count < this.activeMinSquad) {
+      return `Select at least ${this.activeMinSquad} players in My Squad.`;
     }
 
     if (count > this.maxSquad) {
@@ -709,7 +869,47 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     if (!this.confirmed) {
-      return 'Please confirm that you selected only eligible Sorare cards.';
+      return `Please confirm that you selected only eligible ${this.activePlatformName} players.`;
+    }
+
+    const salaryMessage = this.salaryValidationMessage();
+    if (salaryMessage) {
+      return salaryMessage;
+    }
+
+    return '';
+  }
+
+  salaryValidationMessage(): string {
+    if (!this.requiresSalary) {
+      return '';
+    }
+
+    const label = this.activePlatformName;
+    const cap = this.activeSalaryCap;
+    const invalidPlayer = this.availablePool.find(player => {
+      const salaryValue = this.salaries.get(player.id) || '';
+      const salary = Number(salaryValue);
+
+      return !/^\d+$/.test(salaryValue)
+        || !Number.isFinite(salary)
+        || salary <= 0
+        || (cap !== null && salary > cap);
+    });
+
+    if (invalidPlayer) {
+      const salaryValue = this.salaries.get(invalidPlayer.id) || '';
+      const salary = Number(salaryValue);
+
+      if (!salaryValue) {
+        return `${label} salary is required for ${invalidPlayer.player_name}.`;
+      }
+
+      if (!/^\d+$/.test(salaryValue) || !Number.isFinite(salary) || salary <= 0) {
+        return `Enter a valid ${label} salary for ${invalidPlayer.player_name}.`;
+      }
+
+      return `${label} salary for ${invalidPlayer.player_name} cannot exceed ${cap}.`;
     }
 
     return '';
@@ -1039,6 +1239,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.selectedSubIds.clear();
     this.mandates.clear();
     this.captainIds.clear();
+    this.salaries.clear();
     this.selectedCombinationKeys.clear();
     this.distributionMode = 'AUTO';
     this.confirmed = false;
@@ -1057,6 +1258,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   private buildSubmitPayload(): UctGeneratePayload {
     return {
       match_id: this.matchId,
+      platform: this.selectedPlatform || 'sorare',
       team_a: this.homeAvailablePool.map(player => this.toGeneratePlayer(player)),
       team_b: this.awayAvailablePool.map(player => this.toGeneratePlayer(player))
     };
@@ -1073,7 +1275,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       payload.mandate = mandate;
     }
 
-    if (this.captainIds.has(player.id)) {
+    if (this.requiresSalary) {
+      payload.salary = Number(this.salaries.get(player.id) || 0);
+    }
+
+    if (this.isSorarePlatform && this.captainIds.has(player.id)) {
       payload.captain = 'C';
     }
 
