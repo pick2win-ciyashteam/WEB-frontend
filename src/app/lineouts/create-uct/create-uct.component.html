@@ -543,13 +543,50 @@
 
           <article class="preview-card">
             <div class="preview-card-head">
-              <span class="material-symbols-outlined" aria-hidden="true">{{ isSorarePlatform ? 'military_tech' : 'groups' }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">groups</span>
               <div>
-                <b>{{ isSorarePlatform ? 'Captain Pool' : 'My Squad' }}</b>
-                <small>{{ isSorarePlatform ? 'Sorare Captain only' : activePlatformName + ' My Squad' }}</small>
+                <b>My Squad</b>
+                <small>{{ activePlatformName }} My Squad</small>
               </div>
             </div>
-            <div class="preview-player-grid" *ngIf="isSorarePlatform; else salaryPreview">
+            <div class="salary-preview-total">
+              <b>{{ availablePool.length }}/22</b>
+            </div>
+            <div class="preview-player-grid">
+              <div class="preview-player" *ngFor="let player of selectedStartingPlayers; trackBy: trackPlayer">
+                <span class="avatar image-avatar">
+                  <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                </span>
+                <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
+                <em>{{ requiresSalary ? salaryValue(player) : 'XI' }}</em>
+              </div>
+            </div>
+            <div class="preview-substitute-section" *ngIf="selectedSubstitutes.length">
+              <div class="preview-substitute-title">
+                <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+                <b>Substitute Players</b>
+              </div>
+              <div class="preview-player-grid">
+                <div class="preview-player" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer">
+                  <span class="avatar image-avatar">
+                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                  </span>
+                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
+                  <em>{{ requiresSalary ? salaryValue(player) : 'SUB' }}</em>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="preview-card" *ngIf="isSorarePlatform">
+            <div class="preview-card-head">
+              <span class="material-symbols-outlined" aria-hidden="true">military_tech</span>
+              <div>
+                <b>Captain Pool</b>
+                <small>Sorare Captain only</small>
+              </div>
+            </div>
+            <div class="preview-player-grid">
               <div class="preview-player" *ngFor="let player of captainPlayers; trackBy: trackPlayer">
                 <span class="avatar image-avatar">
                   <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
@@ -558,35 +595,6 @@
                 <em>C</em>
               </div>
             </div>
-            <ng-template #salaryPreview>
-              <div class="salary-preview-total">
-                <b>{{ availablePool.length }}/22</b>
-              </div>
-              <div class="preview-player-grid">
-                <div class="preview-player" *ngFor="let player of selectedStartingPlayers; trackBy: trackPlayer">
-                  <span class="avatar image-avatar">
-                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
-                  </span>
-                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
-                  <em>{{ salaryValue(player) }}</em>
-                </div>
-              </div>
-              <div class="preview-substitute-section" *ngIf="selectedSubstitutes.length">
-                <div class="preview-substitute-title">
-                  <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
-                  <b>Substitute Players</b>
-                </div>
-                <div class="preview-player-grid">
-                  <div class="preview-player" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer">
-                    <span class="avatar image-avatar">
-                      <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
-                    </span>
-                    <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
-                    <em>{{ salaryValue(player) }}</em>
-                  </div>
-                </div>
-              </div>
-            </ng-template>
           </article>
 
         </div>
