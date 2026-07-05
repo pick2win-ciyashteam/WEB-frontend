@@ -1,4 +1,5 @@
 <router-outlet></router-outlet>
+<app-cookie-consent></app-cookie-consent>
 
 <div class="auth-backdrop" *ngIf="authModal.modal$ | async as modal">
   <div class="auth-modal animate-auth" (click)="$event.stopPropagation()">

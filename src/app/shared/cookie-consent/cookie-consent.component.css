@@ -1,0 +1,98 @@
+.cookie-consent {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  z-index: 12000;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  width: min(980px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 18px;
+  border: 1px solid rgba(91, 176, 230, .35);
+  border-radius: 14px;
+  background: rgba(3, 19, 35, .96);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, .42);
+  color: #f8fafc;
+}
+
+.cookie-copy {
+  display: flex;
+  gap: 13px;
+  min-width: 0;
+}
+
+.cookie-copy .material-symbols-outlined {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  color: #ffc000;
+  background: rgba(255, 192, 0, .12);
+}
+
+.cookie-copy b {
+  display: block;
+  margin-bottom: 5px;
+  font: 900 16px/1.2 "Plus Jakarta Sans", Inter, sans-serif;
+}
+
+.cookie-copy p {
+  margin: 0;
+  color: #cbd5e1;
+  font: 600 13px/1.55 Inter, sans-serif;
+}
+
+.cookie-copy a {
+  display: inline-flex;
+  margin-top: 7px;
+  color: #5bb0e6;
+  font: 900 12px/1 Inter, sans-serif;
+  text-decoration: none;
+}
+
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.cookie-actions button {
+  min-width: 104px;
+  min-height: 42px;
+  border-radius: 999px;
+  font: 900 13px/1 Inter, sans-serif;
+  cursor: pointer;
+}
+
+.cookie-actions .reject {
+  border: 1px solid rgba(203, 213, 225, .26);
+  color: #f8fafc;
+  background: rgba(255, 255, 255, .05);
+}
+
+.cookie-actions .accept {
+  border: 1px solid #ffc000;
+  color: #061321;
+  background: #ffc000;
+}
+
+@media (max-width: 700px) {
+  .cookie-consent {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  .cookie-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cookie-actions button {
+    width: 100%;
+  }
+}

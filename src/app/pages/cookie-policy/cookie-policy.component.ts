@@ -13,7 +13,7 @@ interface CookieSection {
 })
 export class CookiePolicyComponent {
   readonly docTitle = 'Cookie Policy';
-  readonly docMeta = 'Last updated 27 June 2026 - PICK2WIN Technologies Private Limited';
+  readonly docMeta = 'Last updated 05 July 2026 - PICK2WIN Technologies Private Limited';
   readonly pageIcon = 'cookie';
 
   readonly sections: CookieSection[] = [
@@ -38,9 +38,10 @@ export class CookiePolicyComponent {
     {
       title: 'How PICK2WIN Uses Cookies & Local Storage',
       paragraphs: [
-        'PICK2WIN uses cookies and local storage solely for essential platform operations.',
+        'PICK2WIN uses cookies and local storage for essential platform operations.',
+        'With your consent, PICK2WIN may also use Google Analytics and Google Ads cookies to measure traffic, understand campaign performance, and improve the platform.',
         'Examples include:',
-        'We do not use cookies or local storage to build advertising profiles or track users across other websites.'
+        'Non-essential analytics and advertising cookies are not activated unless you accept them in the cookie banner.'
       ],
       items: [
         'Keeping users signed in.',
@@ -89,21 +90,18 @@ export class CookiePolicyComponent {
       ]
     },
     {
-      title: 'No Advertising, Analytics Tracking, or Cross-Site Profiling',
+      title: 'Optional Analytics & Advertising Cookies',
       paragraphs: [
-        'PICK2WIN respects user privacy.',
-        'PICK2WIN does not use:',
-        'PICK2WIN does not sell, rent, lease, trade, or monetize personal information through advertising activities.',
-        'We believe user privacy, security, and trust are more important than advertising revenue.'
+        'PICK2WIN respects user privacy and asks for consent before loading non-essential analytics or advertising technologies.',
+        'If you accept, Google Analytics and Google Ads may be enabled through Google Tag Manager.',
+        'If you reject, these non-essential tags are not loaded by PICK2WIN.',
+        'PICK2WIN does not sell, rent, lease, or trade personal information.'
       ],
       items: [
-        'Advertising cookies.',
-        'Behavioural advertising technologies.',
-        'Cross-site tracking technologies.',
-        'Third-party advertising trackers.',
-        'Marketing pixels.',
-        'Advertising networks.',
-        'User profiling technologies for advertising purposes.'
+        'Google Analytics measurement cookies.',
+        'Google Ads conversion and campaign measurement cookies.',
+        'Cookie consent preference stored in local storage and a browser cookie.',
+        'Essential platform cookies and local storage required for account and security features.'
       ]
     },
     {
@@ -132,7 +130,7 @@ export class CookiePolicyComponent {
         'During payment or checkout, Razorpay may use cookies or similar technologies for:',
         'Such technologies are governed by Razorpay’s own policies and practices.',
         '<strong>Infrastructure & Security Providers</strong><br>Cloud hosting, content delivery, security services, and infrastructure providers may also use essential technologies required for secure platform operation.',
-        'Aside from essential service providers, PICK2WIN does not use third-party advertising or marketing cookies.'
+        'Google Analytics and Google Ads cookies are used only when a user accepts non-essential cookies in the cookie banner.'
       ],
       items: [
         'Authentication.',
@@ -182,8 +180,9 @@ export class CookiePolicyComponent {
     {
       title: 'Consent & Future Technologies',
       paragraphs: [
-        'PICK2WIN currently uses only essential cookies and local storage required for platform functionality and security.',
-        'If PICK2WIN introduces any future non-essential technologies that require user consent under applicable law, users will be notified and consent will be obtained before such technologies are activated.'
+        'PICK2WIN uses essential cookies and local storage required for platform functionality and security.',
+        'Google Analytics and Google Ads are optional and are activated only after consent is saved.',
+        'Users who reject non-essential cookies can continue using essential platform features.'
       ]
     },
     {

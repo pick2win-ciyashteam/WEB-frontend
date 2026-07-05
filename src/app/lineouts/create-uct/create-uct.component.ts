@@ -114,7 +114,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       salaryLabel: '$50,000 Salary Cap',
       captainLabel: 'No Captain',
       capText: 'GK 1, DEF 2, MID 2, FWD 2, UTIL 1',
-      summary: 'Enter official DraftKings 5-digit salary for every selected player.'
+      summary: 'Enter official DraftKings 4-5 digit salary for every selected player.'
     },
     {
       id: 'fanduel',
@@ -124,7 +124,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       salaryLabel: '100 Salary Units',
       captainLabel: 'No Captain',
       capText: 'GK 1, DEF 2, FWD/MID 4',
-      summary: 'Enter official FanDuel 2-digit salary for every selected player.'
+      summary: 'Enter official FanDuel 1-2 digit salary for every selected player.'
     }
   ];
   readonly singleGoalkeeperMandateMessage = 'Your squad contains only one Goalkeeper. This Goalkeeper will automatically appear in all generated teams. Selecting it as M-YES is not required.';
@@ -328,8 +328,22 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Units';
   }
 
+  get salaryInputMode(): string {
+    return this.selectedPlatform === 'fanduel' ? 'decimal' : 'numeric';
+  }
+
+  get salaryPattern(): string {
+    return this.selectedPlatform === 'fanduel' ? '[0-9]{1,2}(\\.[0-9])?' : '[0-9]{4,5}';
+  }
+
+  get salaryMaxLength(): number {
+    return this.selectedPlatform === 'fanduel' ? 4 : 5;
+  }
+
   get totalSelectedSalary(): number {
-    return this.availablePool.reduce((total, player) => total + Number(this.salaries.get(player.id) || 0), 0);
+    const total = this.availablePool.reduce((sum, player) => sum + Number(this.salaries.get(player.id) || 0), 0);
+
+    return Math.round(total * 100) / 100;
   }
 
   get salaryEnteredCount(): number {
@@ -618,9 +632,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   updateSalary(player: UctPlayer, input: HTMLInputElement): void {
     if (!this.requiresSalary) return;
 
-    const digits = String(input.value || '').replace(/\D/g, '');
-    const maxLength = this.selectedPlatform === 'draftkings' ? 5 : 3;
-    const cleanValue = digits.slice(0, maxLength);
+    const cleanValue = this.cleanSalaryInput(input.value);
     input.value = cleanValue;
 
     if (cleanValue) {
@@ -645,6 +657,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     ];
 
     if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    if (this.selectedPlatform === 'fanduel' && event.key === '.') {
       return;
     }
 
@@ -918,22 +934,18 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     const cap = this.activeSalaryCap;
     const invalidPlayer = this.availablePool.find(player => {
       const salaryValue = this.salaries.get(player.id) || '';
-      const salary = Number(salaryValue);
 
-      return !/^\d+$/.test(salaryValue)
-        || !Number.isFinite(salary)
-        || salary <= 0;
+      return !this.isValidSalaryValue(salaryValue);
     });
 
     if (invalidPlayer) {
       const salaryValue = this.salaries.get(invalidPlayer.id) || '';
-      const salary = Number(salaryValue);
 
       if (!salaryValue) {
         return `${label} salary is required for ${invalidPlayer.player_name}.`;
       }
 
-      if (!/^\d+$/.test(salaryValue) || !Number.isFinite(salary) || salary <= 0) {
+      if (!this.isValidSalaryValue(salaryValue)) {
         return `Enter a valid ${label} salary for ${invalidPlayer.player_name}.`;
       }
 
@@ -945,6 +957,41 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     return '';
+  }
+
+  private cleanSalaryInput(value: string): string {
+    if (this.selectedPlatform !== 'fanduel') {
+      return String(value || '').replace(/\D/g, '').slice(0, this.salaryMaxLength);
+    }
+
+    const normalized = String(value || '')
+      .replace(/[^0-9.]/g, '')
+      .replace(/^(\d*\.?)|(\.)/g, '$1');
+    const [whole = '', decimal] = normalized.split('.');
+    const cappedWhole = whole.slice(0, 2);
+
+    if (decimal === undefined) {
+      return cappedWhole;
+    }
+
+    const firstDecimal = decimal.slice(0, 1);
+
+    if (firstDecimal === '0') {
+      return cappedWhole;
+    }
+
+    return `${cappedWhole}.${firstDecimal}`.slice(0, this.salaryMaxLength);
+  }
+
+  private isValidSalaryValue(value: string): boolean {
+    const salary = Number(value);
+    const validFormat = this.selectedPlatform === 'fanduel'
+      ? /^\d{1,2}(\.\d)?$/.test(value)
+      : /^\d{4,5}$/.test(value);
+
+    return validFormat
+      && Number.isFinite(salary)
+      && salary > 0;
   }
 
   validTeamCombinations(): Array<{ home: number; away: number }> {
@@ -1547,7 +1594,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private scrollToStepView(step: number): void {
     setTimeout(() => {
-      const elementId = step === 7 ? 'uctGeneratingPanel' : 'uctStepContent';
+      const elementId = step === 0
+        ? 'platformCardGrid'
+        : step === 7
+          ? 'uctGeneratingPanel'
+          : 'uctStepContent';
       const element = document.getElementById(elementId);
 
       if (!element) {

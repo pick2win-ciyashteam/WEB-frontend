@@ -1,0 +1,18 @@
+<section class="cookie-consent" *ngIf="showBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <div class="cookie-copy">
+    <span class="material-symbols-outlined" aria-hidden="true">cookie</span>
+    <div>
+      <b>Cookie Preferences</b>
+      <p>
+        We use essential cookies to run PICK2WIN. With your consent, we also use Google Analytics and Google Ads
+        cookies to measure traffic and improve campaigns.
+      </p>
+      <a routerLink="/cookie-policy">Cookie Policy</a>
+    </div>
+  </div>
+
+  <div class="cookie-actions">
+    <button class="reject" type="button" (click)="reject()">Reject</button>
+    <button class="accept" type="button" (click)="accept()">Accept</button>
+  </div>
+</section>

@@ -299,7 +299,7 @@ private openMatchFromQueryParam(): void {
 
   this.api.MatchByTeams(match.id, game).subscribe({
     next: (res: any) => {
-      // console.log('My Teams download response:', res);
+      console.log('My Teams download response:', res);
 
       const generatedTeams = this.generatedTeamsFromResponse(res);
       const responsePreview = this.teamsPreviewFromResponse(res);
@@ -488,7 +488,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         const generatedTeams = this.generatedTeamsFromResponse(res);
 
         if (generatedTeams.length) {
-          // console.log('My teams response:', res);
+          console.log('My teams response:', res);
           this.previewTeams = generatedTeams.map((team: ApiGeneratedTeam) => this.mapGeneratedTeam(team));
           this.selectedMatch = {
             ...match,
@@ -637,7 +637,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     this.api.TeamsByPlayers(teamId).subscribe({
       next: (res: any) => {
-        // console.log('My Teams team players response:', res);
+        console.log('My Teams team players response:', res);
 
         const players = Array.isArray(res?.players) ? res.players : [];
 

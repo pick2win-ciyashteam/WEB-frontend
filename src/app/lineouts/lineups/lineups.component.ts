@@ -495,10 +495,41 @@ canRunUct(match: LineoutMatch): boolean {
   }
 
   private mapSeriesMatches(seriesList: Series[]): LineoutMatch[] {
+    const seenMatches = new Set<string>();
+
     return seriesList
-      .flatMap(series => (series.matches ?? []).map(match => this.mapMatch(series, match)))
+      .flatMap(series => (series.matches ?? [])
+        .filter(match => {
+          const key = this.matchIdentity(match);
+
+          if (seenMatches.has(key)) {
+            return false;
+          }
+
+          seenMatches.add(key);
+          return true;
+        })
+        .map(match => this.mapMatch(series, match)))
       .filter((match): match is LineoutMatch => !!match)
       .sort((a, b) => new Date(a.kickoffISO).getTime() - new Date(b.kickoffISO).getTime());
+  }
+
+  private matchIdentity(match: Match): string {
+    const id = this.firstMatchValue(match, ['provider_match_id', 'id']);
+
+    if (id !== undefined && id !== null && String(id).trim()) {
+      return String(id).trim();
+    }
+
+    return [
+      this.firstMatchValue(match, ['match_name', 'matchName']),
+      this.firstMatchValue(match, ['hometeamname', 'home_team_name', 'homeTeamName']),
+      this.firstMatchValue(match, ['awayteamname', 'away_team_name', 'awayTeamName']),
+      this.firstMatchValue(match, ['start_time', 'matchdate'])
+    ]
+      .map(value => this.normalizedText(value))
+      .filter(Boolean)
+      .join('|');
   }
 
   private mapMatch(series: Series, match: Match): LineoutMatch | null {

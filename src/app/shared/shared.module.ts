@@ -7,6 +7,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PipesComponent } from './pipes/pipes.component';
 import { LoadersComponent } from './loaders/loaders.component';
+import { CookieConsentComponent } from './cookie-consent/cookie-consent.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { LoadersComponent } from './loaders/loaders.component';
     FooterComponent,
     HeaderComponent,
     PipesComponent,
-    LoadersComponent
+    LoadersComponent,
+    CookieConsentComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { LoadersComponent } from './loaders/loaders.component';
     FooterComponent,
     HeaderComponent,
     PipesComponent,
-    LoadersComponent
+    LoadersComponent,
+    CookieConsentComponent
   ]
 })
 export class SharedModule { }

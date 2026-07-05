@@ -600,6 +600,29 @@ h1 em,
   font-weight: 800;
 }
 
+.preview-substitute-section {
+  margin: 0 14px 14px;
+  border: 1px solid rgba(91, 176, 230, .24);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .025);
+}
+
+.preview-substitute-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 0;
+  color: var(--paper);
+  font-family: var(--f-display);
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.preview-substitute-title .material-symbols-outlined {
+  color: var(--blue);
+  font-size: 20px;
+}
+
 @media (max-width: 780px) {
   .platform-card {
     grid-template-columns: 1fr;
