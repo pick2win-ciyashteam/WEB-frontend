@@ -66,6 +66,29 @@ export class AuthService {
     return this.http.get<any>(url);
   }
 
+  buyCoins(data: {
+    plan_id: number;
+    amount: number;
+    coins: number;
+  }): Observable<any> {
+    return this.http.post<any>(`${API}/user/deposite/buy-coins`, data, this.authOptions());
+  }
+
+  verifyRazorpayPayment(data: {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+    plan_id: number;
+    coins: number;
+    amount: number;
+  }): Observable<any> {
+    return this.http.post<any>(`${API}/user/deposite/verify-payment`, data, this.authOptions());
+  }
+
+  getRazorpayConfig(): Observable<any> {
+    return this.http.get<any>(`${API}/user/deposite/razorpay/config`, this.authOptions());
+  }
+
   logout() {
     const token = this.tokenService.getToken();
     const logoutOptions = token
@@ -103,5 +126,18 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.tokenService.getToken();
+  }
+
+  private authOptions() {
+    const token = this.tokenService.getToken();
+
+    return token
+      ? {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          })
+        }
+      : httpOptions;
   }
 }

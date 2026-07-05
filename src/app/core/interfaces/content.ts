@@ -43,69 +43,43 @@ export interface SubscriptionPlan {
   is_offer_active?: number | boolean;
 }
 
-export interface CheckoutSessionPayload {
-  plan_id: number;
-  success_url: string;
-  cancel_url: string;
-}
-
-export interface CheckoutSessionResponse {
-  success: boolean;
-  message?: string;
-  url?: string;
-  checkout_url?: string;
-  session_url?: string;
-  payment_url?: string;
-  redirect_url?: string;
-  session_id?: string;
-  sessionId?: string;
-  id?: string;
-  publishableKey?: string;
-  publishable_key?: string;
-  public_key?: string;
-  stripe_publishable_key?: string;
-  data?: {
-    url?: string;
-    checkout_url?: string;
-    session_url?: string;
-    payment_url?: string;
-    redirect_url?: string;
-    session_id?: string;
-    sessionId?: string;
-    id?: string;
-    publishableKey?: string;
-    publishable_key?: string;
-    public_key?: string;
-    stripe_publishable_key?: string;
-  };
-}
-
-export interface StripeConfigResponse {
-  success: boolean;
-  message?: string;
-  publishableKey?: string;
-  publishable_key?: string;
-  public_key?: string;
-  stripe_publishable_key?: string;
-  data?: {
-    publishableKey?: string;
-    publishable_key?: string;
-    public_key?: string;
-    stripe_publishable_key?: string;
-  };
-}
-
 export interface BuyCoinsPayload {
   plan_id: number;
   amount: number;
   coins: number;
+  currency?: string;
+  country?: string;
+  razorpay_order_id?: string;
+  razorpay_payment_id?: string;
+  razorpay_signature?: string;
 }
 
 export interface BuyCoinsResponse {
   success: boolean;
   message?: string;
-  data?: unknown;  
-  clientSecret?: string;
+  order_id?: string;
+  amount?: number;
+  currency?: string;
+  key_id?: string;
+  key?: string;
+  data?: unknown;
+}
+
+export interface RazorpayVerifyPaymentPayload {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  plan_id: number;
+  coins: number;
+  amount: number;
+}
+
+export interface RazorpayConfigResponse {
+  success: boolean;
+  key_id?: string;
+  key?: string;
+  message?: string;
+  data?: unknown;
 }
 
 export interface FeedbackPostPayload {

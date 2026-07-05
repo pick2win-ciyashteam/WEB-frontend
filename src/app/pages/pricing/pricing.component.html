@@ -53,13 +53,13 @@
           <i>=</i>
           <span><b>Total</b> {{ pack.totalCoins }}</span>
         </div>
-        <div class="credit-pack-offer-label">Price (USD)</div>
+        <div class="credit-pack-offer-label">Price ({{ pack.currencyCode }})</div>
         <div class="credit-pack-price">
           <span class="credit-pack-cur">{{ pack.currencySymbol }}</span>
           <span class="credit-pack-amount">{{ pack.price }}</span>
         </div>
         <div class="credit-pack-per">
-          &asymp; <b>{{ pack.currencySymbol }}{{ pack.perCoin }}</b> per coin
+          &asymp; <b>{{ pack.currencySymbol }}{{ pack.perCoin }} {{ pack.currencyCode }}</b> per coin
         </div>
         <div class="credit-pack-validity">
           <span class="credit-pack-validity-icon material-symbols-outlined" aria-hidden="true">calendar_month</span>
@@ -136,11 +136,11 @@
             </tr>
             <tr>
               <td>Price</td>
-              <td *ngFor="let pack of pricingPacks"><span class="pt-price"><span class="pt-price-currency">{{ pack.currencySymbol }}</span>{{ pack.price }}</span></td>
+              <td *ngFor="let pack of pricingPacks"><span class="pt-price"><span class="pt-price-currency">{{ pack.currencySymbol }}</span>{{ pack.price }}</span> {{ pack.currencyCode }}</td>
             </tr>
             <tr>
               <td>Price / Coin</td>
-              <td *ngFor="let pack of pricingPacks"><b class="best-rate">{{ pack.currencySymbol }}{{ pack.perCoin }}</b></td>
+              <td *ngFor="let pack of pricingPacks"><b class="best-rate">{{ pack.currencySymbol }}{{ pack.perCoin }} {{ pack.currencyCode }}</b></td>
             </tr>
             <tr>
               <td>Expiry</td>
@@ -160,7 +160,7 @@
             </tr>
             <tr>
               <td>Payment partner</td>
-              <td [attr.colspan]="pricingPacks.length" class="center-cell">Razorpay - 3D Secure - Radar fraud detection</td>
+              <td [attr.colspan]="pricingPacks.length" class="center-cell">Razorpay Checkout - secure online payments</td>
             </tr>
           </tbody>
         </table>
@@ -219,49 +219,6 @@
     </div>
   </div>
 </section>
-
-<div class="checkout-overlay" *ngIf="checkoutOpen && selectedPlan">
-  <div class="checkout-box" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
-    <div class="checkout-head">
-      <h2 id="checkoutTitle">Complete Payment</h2>
-      <button type="button" aria-label="Close payment" (click)="closeCheckout()"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
-    </div>
-
-    <div class="order-summary">
-      <p>{{ selectedPlan.name }} - {{ totalCoinsForPlan(selectedPlan) }} coins</p>
-      <strong>{{ selectedPlan.currency_symbol }}{{ selectedPlan.price | number:'1.0-2' }}</strong>
-    </div>
-
-    <div class="checkout-success" *ngIf="paymentSucceeded; else paymentForm">
-      <div class="checkout-success-icon material-symbols-outlined" aria-hidden="true">check_circle</div>
-      <h3>Payment successful</h3>
-      <p>Your coins were added successfully. Redirecting to My Profile...</p>
-    </div>
-
-    <ng-template #paymentForm>
-      <div class="checkout-form">
-        <div class="payment-field-card">
-          <div class="payment-field-label">Card / Payment Details</div>
-          <div id="payment-element"></div>
-        </div>
-
-        <p class="pack-status error" *ngIf="paymentError">{{ paymentError }}</p>
-
-        <button
-          class="btn btn-primary checkout-pay-btn"
-          type="button"
-          [disabled]="paymentProcessing"
-          (click)="confirmPayment()">
-          {{ paymentProcessing ? 'Processing...' : 'Pay Now' }}
-        </button>
-
-        <button type="button" class="btn btn-ghost checkout-cancel-btn" [disabled]="paymentProcessing" (click)="closeCheckout()">
-          Cancel
-        </button>
-      </div>
-    </ng-template>
-  </div>
-</div>
 
 <div class="payment-methods-overlay" *ngIf="paymentMethodsOpen" role="presentation" (click)="closePaymentMethods()">
   <section class="payment-methods-modal" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title" (click)="$event.stopPropagation()">

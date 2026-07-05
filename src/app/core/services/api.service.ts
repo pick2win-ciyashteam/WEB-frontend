@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
-import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, CheckoutSessionPayload, CheckoutSessionResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, Series, StripeConfigResponse, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
+import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, RazorpayConfigResponse, RazorpayVerifyPaymentPayload, Series, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
 import { TokenService } from './token.service';
 
 @Injectable({
@@ -129,12 +129,16 @@ export class ApiService {
   }
 
 
-getStripeConfig(): Observable<StripeConfigResponse> {
-  return this.http.get<StripeConfigResponse>(`${this.BASE}/user/deposite/stripe/config`);
-}
-
 buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
   return this.http.post<BuyCoinsResponse>(`${this.BASE}/user/deposite/buy-coins`, data);
+}
+
+verifyRazorpayPayment(data: RazorpayVerifyPaymentPayload): Observable<BuyCoinsResponse> {
+  return this.http.post<BuyCoinsResponse>(`${this.BASE}/user/deposite/verify-payment`, data);
+}
+
+getRazorpayConfig(): Observable<RazorpayConfigResponse> {
+  return this.http.get<RazorpayConfigResponse>(`${this.BASE}/user/deposite/razorpay/config`);
 }
 
   getBanners(): Observable<ApiListResponse<Banner>> {

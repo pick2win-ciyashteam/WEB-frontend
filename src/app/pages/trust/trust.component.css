@@ -520,8 +520,8 @@
   box-shadow: 0 16px 40px rgba(0,15,30,0.4);
 }
 
-.partner-card.stripe {
-  border-left: 3px solid #635bff;
+.partner-card.razorpay {
+  border-left: 3px solid #2b84ea;
 }
 
 .partner-card.sportmonks {
@@ -542,8 +542,8 @@
   text-transform: lowercase;
 }
 
-.partner-card.stripe .partner-logo {
-  color: #9f95ff;
+.partner-card.razorpay .partner-logo {
+  color: #74b7ff;
   font-style: italic;
 }
 

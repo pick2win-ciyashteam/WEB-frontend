@@ -1072,12 +1072,6 @@
   text-transform: uppercase;
 }
 
-#payment-element {
-  display: block;
-  width: 100%;
-  min-height: 210px;
-}
-
 .checkout-success {
   display: grid;
   place-items: center;
@@ -1213,9 +1207,6 @@
     display: grid;
   }
 
-  #payment-element {
-    min-height: 230px;
-  }
 }
 
 /* Payment-method explainer and responsive modal. */

@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
-import { loadStripe } from '@stripe/stripe-js';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { CheckoutSessionResponse, StripeConfigResponse, SubscriptionPlan, UserProfile } from 'src/app/core/interfaces/content';
+import { SubscriptionPlan, UserProfile } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -20,7 +18,16 @@ interface PricingPack {
   price: string;
   perCoin: string;
   currencySymbol: string;
+  currencyCode: string;
   tone: string;
+}
+
+type RazorpayConstructor = new (options: Record<string, unknown>) => { open: () => void };
+
+declare global {
+  interface Window {
+    Razorpay?: RazorpayConstructor;
+  }
 }
 
 @Component({
@@ -41,15 +48,8 @@ export class PricingComponent implements OnInit, OnDestroy {
   generatedStateLoaded = false;
   hasGeneratedAnyUct = false;
   pricingPacks: PricingPack[] = [];
-  private stripePublishableKey = '';
 
-  stripe: any;
-elements: any;
-paymentElement: any;
-
-clientSecret = '';
 selectedPlan: SubscriptionPlan | null = null;
-checkoutOpen = false;
 paymentProcessing = false;
 paymentSucceeded = false;
 paymentMethodsOpen = false;
@@ -64,10 +64,8 @@ paymentMethodsOpen = false;
   ) {}
 
   ngOnInit(): void {
-    this.handleStripeReturn();
-
     if (this.authService.isLoggedIn()) {
-      this.profileService.loadProfile(true).subscribe();
+      this.profileService.loadProfile(true).subscribe(() => this.refreshPricingPacks());
       this.loadGeneratedMatchState();
     } else {
       this.generatedStateLoaded = true;
@@ -79,7 +77,7 @@ paymentMethodsOpen = false;
 
         if (res?.success && Array.isArray(res.data) && res.data.length) {
           this.plans = [...res.data].sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
-          this.pricingPacks = this.plans.map((plan, index) => this.toPricingPack(plan, index));
+          this.refreshPricingPacks();
         } else {
           this.plans = [];
           this.pricingPacks = [];
@@ -94,13 +92,6 @@ paymentMethodsOpen = false;
   }
 
   ngOnDestroy(): void {
-    if (this.paymentElement) {
-      this.paymentElement.unmount();
-      this.paymentElement = null;
-    }
-
-    this.elements = null;
-    this.stripe = null;
   }
 
   openSignup(): void {
@@ -169,126 +160,50 @@ paymentMethodsOpen = false;
   this.paymentSucceeded = false;
 
   try {
-    const config = await firstValueFrom(this.api.getStripeConfig());
-    const publishableKey = this.stripeConfigKeyFrom(config);
+    await this.loadRazorpayScript();
 
-    if (!publishableKey) {
-      this.paymentError = 'Stripe publishable key missing.';
-      this.purchasingPlanId = null;
-      return;
-    }
-
+    const amount = Math.round(Number(plan.price || 0) * 100);
+    const currency = this.displayCurrencyCodeForPlan(plan);
     const res = await firstValueFrom(this.api.buyCoins({
       plan_id: plan.id,
-      amount: Number(plan.price),
+      amount,
       coins: this.totalCoinsForPlan(plan)
     }));
 
-    if (!res?.success || !res.clientSecret) {
-      this.paymentError = res?.message || 'Client secret not received.';
+    if (res?.success === false) {
+      this.paymentError = res?.message || 'Unable to start Razorpay payment.';
       this.purchasingPlanId = null;
       return;
     }
 
-    this.clientSecret = res.clientSecret;
+    const paymentUrl = this.paymentUrlFrom(res);
+    if (paymentUrl) {
+      window.location.href = paymentUrl;
+      return;
+    }
+
+    const key = this.razorpayKeyFrom(res);
+    const order = this.razorpayOrderFrom(res, amount, currency);
+
+    if (!key) {
+      this.paymentError = res?.message || 'Payment started, but backend did not return Razorpay key.';
+      this.purchasingPlanId = null;
+      return;
+    }
+
     this.selectedPlan = plan;
-    this.checkoutOpen = true;
-
-    this.stripe = await loadStripe(publishableKey);
-
-    this.elements = this.stripe.elements({
-      clientSecret: this.clientSecret,
-      appearance: {
-        theme: 'stripe',
-        variables: {
-          colorPrimary: '#f4b400',
-          colorBackground: '#ffffff',
-          colorText: '#102235',
-          colorDanger: '#d72638',
-          fontFamily: 'Inter, system-ui, sans-serif',
-          borderRadius: '10px',
-          spacingUnit: '4px'
-        }
-      }
-    });
-
-    setTimeout(() => {
-      this.paymentElement = this.elements.create('payment');
-      this.paymentElement.mount('#payment-element');
-    });
+    this.openRazorpayCheckout(plan, order, key);
 
   } catch (err: any) {
+    const status = err?.status ? ` (${err.status})` : '';
     this.paymentError =
       err?.error?.message ||
       err?.error?.error ||
-      'Unable to start payment.';
+      err?.message ||
+      `Unable to start Razorpay payment${status}.`;
   }
 
   this.purchasingPlanId = null;
-}
-
-async confirmPayment(): Promise<void> {
-  if (!this.stripe || !this.elements) return;
-
-  this.paymentProcessing = true;
-  this.paymentError = '';
-
-  const submitResult = await this.elements.submit();
-
-  if (submitResult.error) {
-    this.paymentError = submitResult.error.message;
-    this.paymentProcessing = false;
-    return;
-  }
-
-  const { error, paymentIntent } = await this.stripe.confirmPayment({
-    elements: this.elements,
-    redirect: 'if_required'
-  });
-
-  if (error) {
-    this.paymentError = error.message || 'Payment failed.';
-  } else if (paymentIntent?.status === 'succeeded') {
-    this.paymentSucceeded = true;
-    this.paymentMessage = 'Payment successful. Coins added successfully.';
-    this.clientSecret = '';
-
-    if (this.paymentElement) {
-      this.paymentElement.unmount();
-      this.paymentElement = null;
-    }
-
-    this.profileService.loadProfile(true).subscribe();
-
-   setTimeout(() => {
-  this.checkoutOpen = false;
-  this.selectedPlan = null;
-  this.paymentSucceeded = false;
-
-  this.router.navigate(['/user/profile'], {
-    queryParams: { refresh: Date.now() }
-  });
-}, 1800);
-
-  }
-
-  this.paymentProcessing = false;
-}
-
-closeCheckout(): void {
-  if (this.paymentProcessing) {
-    return;
-  }
-
-  this.checkoutOpen = false;
-  this.clientSecret = '';
-  this.selectedPlan = null;
-  this.paymentSucceeded = false;
-
-  if (this.paymentElement) {
-    this.paymentElement.unmount();
-    this.paymentElement = null;
-  }
 }
 
   planClass(plan: SubscriptionPlan): string {
@@ -387,6 +302,8 @@ closeCheckout(): void {
     const totalCoins = this.totalCoinsForPlan(plan);
     const price = Number(plan.price || 0);
     const perCoin = totalCoins > 0 ? price / totalCoins : 0;
+    const currencyCode = this.displayCurrencyCodeForPlan(plan);
+
     return {
       id: plan.id,
       name: plan.name,
@@ -397,9 +314,50 @@ closeCheckout(): void {
       validityDays: Number(plan.validity_days || 365),
       price: price.toFixed(2),
       perCoin: perCoin.toFixed(2),
-      currencySymbol: plan.currency_symbol || '$',
+      currencySymbol: this.currencySymbolForCode(currencyCode, plan.currency_symbol || '$'),
+      currencyCode,
       tone: this.packTone(index)
     };
+  }
+
+  private refreshPricingPacks(): void {
+    this.pricingPacks = this.plans.map((plan, index) => this.toPricingPack(plan, index));
+  }
+
+  private displayCurrencyCodeForPlan(plan: SubscriptionPlan): string {
+    const countryCurrency = this.currencyCodeForCountry(this.profileService.profile?.country || '');
+    const backendCurrency = String(plan.currency || '').trim().toUpperCase();
+
+    return countryCurrency || backendCurrency || 'USD';
+  }
+
+  private currencyCodeForCountry(country: string): string {
+    const text = String(country || '').trim().toLowerCase();
+
+    if (!text) return '';
+    if (['united states', 'usa', 'us'].includes(text)) return 'USD';
+    if (['canada', 'ca'].includes(text)) return 'CAD';
+    if (['united kingdom', 'uk', 'great britain', 'england', 'scotland', 'wales'].includes(text)) return 'GBP';
+    if (['france', 'germany', 'spain', 'italy', 'ireland', 'netherlands', 'belgium', 'portugal', 'austria', 'finland'].includes(text)) return 'EUR';
+    if (['australia', 'au'].includes(text)) return 'AUD';
+    if (['new zealand', 'nz'].includes(text)) return 'NZD';
+    if (['india', 'in'].includes(text)) return 'INR';
+
+    return '';
+  }
+
+  private currencySymbolForCode(code: string, fallback: string): string {
+    const symbols: Record<string, string> = {
+      USD: '$',
+      CAD: 'C$',
+      GBP: '£',
+      EUR: '€',
+      AUD: 'A$',
+      NZD: 'NZ$',
+      INR: '₹'
+    };
+
+    return symbols[code] || fallback || code;
   }
 
   private isProPack(plan: SubscriptionPlan): boolean {
@@ -412,61 +370,175 @@ closeCheckout(): void {
     return Number(plan.total_coins || 0) || coins + bonusCoins;
   }
 
-  private handleStripeReturn(): void {
-    const params = this.route.snapshot.queryParamMap;
-    const payment = params.get('payment');
-
-    if (payment === 'cancelled') {
-      this.paymentError = 'Payment cancelled. No coins were added.';
-      return;
+  private loadRazorpayScript(): Promise<void> {
+    if (window.Razorpay) {
+      return Promise.resolve();
     }
 
-    if (payment !== 'success') {
-      return;
-    }
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector<HTMLScriptElement>('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
 
-    const planId = Number(params.get('plan_id') || params.get('plan'));
-    const amount = Number(params.get('amount'));
-    const coins = Number(params.get('coins'));
-    const creditRef = params.get('credit_ref') || `${planId}_${amount}_${coins}`;
-    const creditKey = `pick2win_coin_credit_${creditRef}`;
-
-    if (!planId || !amount || !coins) {
-      this.paymentError = 'Payment succeeded, but coin pack details are missing. Please contact support.';
-      return;
-    }
-
-    if (sessionStorage.getItem(creditKey)) {
-      this.paymentMessage = 'Payment already processed. Coins should be available in your account.';
-      return;
-    }
-
-    this.creditingCoins = true;
-    this.paymentMessage = 'Payment successful. Adding coins to your account...';
-
-    this.api.buyCoins({ plan_id: planId, amount, coins }).subscribe({
-      next: (res) => {
-        this.creditingCoins = false;
-
-        if (res?.success !== false) {
-          sessionStorage.setItem(creditKey, '1');
-          this.paymentMessage = res?.message || `${coins} coins added successfully.`;
-          this.router.navigate(['/pricing'], { replaceUrl: true });
+      if (existing) {
+        if (window.Razorpay) {
+          resolve();
           return;
         }
 
-        this.paymentError = res?.message || 'Payment succeeded, but coins could not be added. Please contact support.';
-        this.paymentMessage = '';
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(new Error('Unable to load Razorpay Checkout.')), { once: true });
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Unable to load Razorpay Checkout.'));
+      document.body.appendChild(script);
+    });
+  }
+
+  private openRazorpayCheckout(
+    plan: SubscriptionPlan,
+    order: { orderId: string; amount: number; currency: string },
+    key: string
+  ): void {
+    if (!window.Razorpay) {
+      this.paymentError = 'Razorpay Checkout is not available. Please try again.';
+      return;
+    }
+
+    const options: Record<string, unknown> = {
+      key,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'PICK2WIN',
+      description: `${plan.name} - ${this.totalCoinsForPlan(plan)} coins`,
+      notes: {
+        plan_id: String(plan.id),
+        coins: String(this.totalCoinsForPlan(plan))
+      },
+      theme: {
+        color: '#f4b400'
+      },
+      handler: (response: Record<string, unknown>) => this.handleRazorpaySuccess(plan, order, response),
+      modal: {
+        ondismiss: () => {
+          this.paymentProcessing = false;
+          this.purchasingPlanId = null;
+        }
+      }
+    };
+
+    if (order.orderId) {
+      options['order_id'] = order.orderId;
+    }
+
+    this.paymentProcessing = true;
+    this.paymentError = '';
+    new window.Razorpay(options).open();
+  }
+
+  private handleRazorpaySuccess(
+    plan: SubscriptionPlan,
+    order: { orderId: string; amount: number; currency: string },
+    response: Record<string, unknown>
+  ): void {
+    this.paymentMessage = 'Payment successful. Verifying and adding coins...';
+    this.paymentError = '';
+
+    this.api.verifyRazorpayPayment({
+      plan_id: plan.id,
+      amount: order.amount || Number(plan.price),
+      coins: this.totalCoinsForPlan(plan),
+      razorpay_order_id: String(response['razorpay_order_id'] || order.orderId || ''),
+      razorpay_payment_id: String(response['razorpay_payment_id'] || ''),
+      razorpay_signature: String(response['razorpay_signature'] || '')
+    }).subscribe({
+      next: (res: any) => {
+        this.paymentProcessing = false;
+
+        if (res?.success === false) {
+          this.paymentMessage = '';
+          this.paymentError = res?.message || 'Payment verified by Razorpay, but coins could not be added. Please contact support.';
+          return;
+        }
+
+        this.paymentSucceeded = true;
+        this.paymentMessage = res?.message || 'Payment successful. Coins added successfully.';
+        this.profileService.loadProfile(true).subscribe();
+
+        setTimeout(() => {
+          this.selectedPlan = null;
+          this.paymentSucceeded = false;
+          this.router.navigate(['/user/profile'], {
+            queryParams: { refresh: Date.now() }
+          });
+        }, 1500);
       },
       error: (err) => {
-        this.creditingCoins = false;
+        this.paymentProcessing = false;
         this.paymentMessage = '';
         this.paymentError =
           err?.error?.message ||
           err?.error?.error ||
-          'Payment succeeded, but coins could not be added. Please contact support.';
+          'Payment completed, but verification failed. Please contact support with your Razorpay payment ID.';
       }
     });
+  }
+
+  private razorpayKeyFrom(res: any): string {
+    const data = res?.data || {};
+    const razorpay = res?.razorpay || data?.razorpay || {};
+
+    return (
+      res?.key ||
+      res?.key_id ||
+      res?.razorpay_key ||
+      res?.razorpay_key_id ||
+      data?.key ||
+      data?.key_id ||
+      data?.razorpay_key ||
+      data?.razorpay_key_id ||
+      razorpay?.key ||
+      razorpay?.key_id ||
+      razorpay?.razorpay_key ||
+      razorpay?.razorpay_key_id ||
+      ''
+    );
+  }
+
+  private razorpayOrderFrom(res: any, fallbackAmount: number, fallbackCurrency: string): { orderId: string; amount: number; currency: string } {
+    const data = res?.data || {};
+    const order = data?.order || res?.order || {};
+    const orderId =
+      res?.order_id ||
+      res?.razorpay_order_id ||
+      data?.order_id ||
+      data?.razorpay_order_id ||
+      order?.id ||
+      order?.order_id ||
+      '';
+    const amount = Number(res?.amount || data?.amount || order?.amount || fallbackAmount);
+    const currency = String(res?.currency || data?.currency || order?.currency || fallbackCurrency || 'USD');
+
+    return { orderId, amount, currency };
+  }
+
+  private paymentUrlFrom(res: any): string {
+    const data = res?.data || {};
+
+    return (
+      res?.payment_url ||
+      res?.paymentUrl ||
+      res?.payment_link ||
+      res?.short_url ||
+      data?.payment_url ||
+      data?.paymentUrl ||
+      data?.payment_link ||
+      data?.short_url ||
+      ''
+    );
   }
 
   private loadGeneratedMatchState(): void {
@@ -489,114 +561,4 @@ closeCheckout(): void {
     });
   }
 
-  private async openStripeCheckout(res: CheckoutSessionResponse): Promise<void> {
-    const checkoutUrl = this.checkoutUrlFrom(res);
-
-    if (res?.success !== false && checkoutUrl) {
-      window.location.href = checkoutUrl;
-      return;
-    }
-
-    const sessionId = this.checkoutSessionIdFrom(res);
-    const publishableKey = this.stripePublishableKeyFrom(res) || await this.loadStripePublishableKey();
-
-    if (res?.success !== false && sessionId && publishableKey) {
-      const stripe = await loadStripe(publishableKey);
-
-      if (!stripe) {
-        this.purchasingPlanId = null;
-        this.paymentError = 'Stripe could not be loaded. Please try again.';
-        return;
-      }
-
-      const stripeCheckout = stripe as unknown as {
-        redirectToCheckout?: (options: { sessionId: string }) => Promise<{ error?: { message?: string } }>;
-      };
-
-      if (!stripeCheckout.redirectToCheckout) {
-        this.purchasingPlanId = null;
-        this.paymentError = 'Stripe checkout redirect is not available. Backend should return checkout_url for hosted checkout.';
-        return;
-      }
-
-      const result = await stripeCheckout.redirectToCheckout({ sessionId });
-
-      this.purchasingPlanId = null;
-      this.paymentError = result.error?.message || 'Unable to redirect to Stripe checkout. Please try again.';
-      return;
-    }
-
-    this.purchasingPlanId = null;
-    this.paymentError = res?.message || 'Stripe checkout session was not returned by backend. Please try again.';
-  }
-
-  private checkoutUrlFrom(res: CheckoutSessionResponse): string {
-    return (
-      res?.url ||
-      res?.checkout_url ||
-      res?.session_url ||
-      res?.payment_url ||
-      res?.redirect_url ||
-      res?.data?.url ||
-      res?.data?.checkout_url ||
-      res?.data?.session_url ||
-      res?.data?.payment_url ||
-      res?.data?.redirect_url ||
-      ''
-    );
-  }
-
-  private checkoutSessionIdFrom(res: CheckoutSessionResponse): string {
-    return (
-      res?.session_id ||
-      res?.sessionId ||
-      res?.id ||
-      res?.data?.session_id ||
-      res?.data?.sessionId ||
-      res?.data?.id ||
-      ''
-    );
-  }
-
-  private stripePublishableKeyFrom(res: CheckoutSessionResponse): string {
-    return (
-      res?.publishableKey ||
-      res?.publishable_key ||
-      res?.public_key ||
-      res?.stripe_publishable_key ||
-      res?.data?.publishableKey ||
-      res?.data?.publishable_key ||
-      res?.data?.public_key ||
-      res?.data?.stripe_publishable_key ||
-      ''
-    );
-  }
-
-  private async loadStripePublishableKey(): Promise<string> {
-    if (this.stripePublishableKey) {
-      return this.stripePublishableKey;
-    }
-
-    try {
-      const res = await firstValueFrom(this.api.getStripeConfig());
-      this.stripePublishableKey = this.stripeConfigKeyFrom(res);
-      return this.stripePublishableKey;
-    } catch {
-      return '';
-    }
-  }
-
-  private stripeConfigKeyFrom(res: StripeConfigResponse): string {
-    return (
-      res?.publishableKey ||
-      res?.publishable_key ||
-      res?.public_key ||
-      res?.stripe_publishable_key ||
-      res?.data?.publishableKey ||
-      res?.data?.publishable_key ||
-      res?.data?.public_key ||
-      res?.data?.stripe_publishable_key ||
-      ''
-    );
-  }
 }
