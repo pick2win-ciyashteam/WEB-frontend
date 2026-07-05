@@ -1614,7 +1614,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   private toGeneratePlayer(player: UctPlayer): UctGeneratePlayer {
     const payload: UctGeneratePlayer = {
       name: player.player_name,
-      role: player.position
+      role: player.position,
+      is_substitute: Number(player.is_substitute) === 1
     };
     const mandate = this.mandates.get(player.id);
 

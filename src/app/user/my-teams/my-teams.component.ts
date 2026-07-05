@@ -41,6 +41,7 @@ interface ApiPlayer {
   id: number;
   match_id?: number;
   team_side?: 'team_a' | 'team_b';
+  team_name?: string;
   name: string;
   original_name?: string;
   role: PlayerPosition;
@@ -48,6 +49,7 @@ interface ApiPlayer {
   captain?: string | null;
   cap?: string | null;
   dt_no?: number;
+  salary?: number | string | null;
   logo?: string | null;
   elogo?: string | null;
   image?: string | null;
@@ -67,6 +69,8 @@ interface ApiPreviewPlayer {
   role?: PlayerPosition;
   image?: string | null;
   side?: 'team_a' | 'team_b';
+  team_name?: string;
+  salary?: number | string | null;
 }
 
 interface ApiTeamsPreview {
@@ -984,6 +988,10 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   private teamTextBlocks(teams: ApiGeneratedTeam[], match?: GeneratedMatch, preview?: ApiTeamsPreview | null, rawResponse?: any): string {
+    if (match) {
+      return this.platformTeamTextBlocks(teams, match, preview, rawResponse);
+    }
+
     const blocks = teams.map((team: ApiGeneratedTeam) => this.teamTextBlock(team, teams.length, match));
 
     if (!match) {
@@ -1004,6 +1012,388 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       blocks.join('\r\n\r\n'),
       this.teamTextFooter()
     ].filter(Boolean).join('\r\n\r\n');
+  }
+
+  private platformTeamTextBlocks(teams: ApiGeneratedTeam[], match: GeneratedMatch, preview?: ApiTeamsPreview | null, rawResponse?: any): string {
+    const blocks = teams.map(team => this.platformTeamTextBlock(team, teams.length, match));
+
+    return [
+      this.platformTextHeader(match, teams.length, rawResponse),
+      this.mySquadTextBlock(teams, match, preview),
+      this.platformConfigTextBlock(match, preview),
+      this.platformGeneratedTeamsTitle(),
+      blocks.join('\r\n\r\n'),
+      this.platformTextFooter()
+    ].filter(Boolean).join('\r\n\r\n');
+  }
+
+  private platformTextHeader(match: GeneratedMatch, totalTeams: number, rawResponse?: any): string {
+    const isSalaryGame = match.game === 'draftkings' || match.game === 'fanduel';
+    const sport = isSalaryGame ? 'Football (Soccer)' : (match.sport || 'Football');
+    const lines = [
+      this.reportLine('='),
+      this.centerReportText('PICK2WIN - USER CONFIGURATION TEAMS'),
+      this.centerReportText('(UCT)'),
+      this.reportLine('='),
+      '',
+      this.reportField('Fantasy Platform', match.fantasyPlatform || this.gameLabel(match.game || 'sorare')),
+      this.reportField('Sport', sport)
+    ];
+
+    if (isSalaryGame) {
+      lines.push(this.reportField('Contest Type', 'Classic'));
+    }
+
+    lines.push(
+      this.reportField('Competition', match.league || 'N/A'),
+      this.reportField('Match', this.reportMatchTitle(match)),
+      this.reportField('Match Date', this.reportMatchDate(match)),
+      this.reportField('Kickoff Time', this.reportKickoffTime(match)),
+      '',
+      this.reportField('Generated On', this.reportGeneratedOn(match, this.reportMatchDate(match), rawResponse)),
+      this.reportField('Total Teams', String(totalTeams || match.teamsGenerated || 0)),
+      this.reportField('Generation Time', this.reportGenerationTime(match, rawResponse)),
+      this.reportField('Coin Consumed', this.reportCoinConsumed(match, rawResponse))
+    );
+
+    return lines.join('\r\n');
+  }
+
+  private mySquadTextBlock(teams: ApiGeneratedTeam[], match: GeneratedMatch, preview?: ApiTeamsPreview | null): string {
+    const players = this.reportSquadPlayers(teams, preview);
+    const isSalaryGame = match.game === 'draftkings' || match.game === 'fanduel';
+    const homeCode = this.reportSideCode(match, 'home');
+    const awayCode = this.reportSideCode(match, 'away');
+    const homeCount = players.filter(player => player.side === 'team_a').length;
+    const awayCount = players.filter(player => player.side === 'team_b').length;
+    const substituteCount = players.filter(player => player.isSubstitute).length;
+    const playingXiCount = Math.max(0, players.length - substituteCount);
+    const separator = this.reportLine('-');
+    const lines = [
+      this.reportLine('='),
+      this.centerReportText('MY SQUAD'),
+      this.reportLine('='),
+      '',
+      'The following players were selected while configuring your UCT.',
+      '',
+      `${isSalaryGame ? 'Required Selection' : 'Selection Range'} : ${isSalaryGame ? '18-22' : '10-22'} Players`,
+      '',
+      separator
+    ];
+
+    if (isSalaryGame) {
+      lines.push(`${'No'.padEnd(5)}${'Player'.padEnd(42)}${'Pos'.padEnd(9)}${'Team'.padEnd(10)}Salary`);
+    } else {
+      lines.push(`${'No'.padEnd(5)}${'Player'.padEnd(32)}${'Position'.padEnd(14)}${'Team'.padEnd(8)}Status`);
+    }
+
+    lines.push(separator);
+
+    players.forEach((player, index) => {
+      const name = `${player.name}${player.isMandatory ? ' [M]' : ''}${player.isSubstitute ? ' [S]' : ''}`;
+      const teamCode = this.reportTeamCode(match, player.side);
+
+      if (isSalaryGame) {
+        lines.push(`${String(index + 1).padEnd(5)}${name.padEnd(42)}${player.role.padEnd(9)}${teamCode.padEnd(10)}${this.reportSalary(player.salary, match.game)}`);
+      } else {
+        lines.push(`${String(index + 1).padEnd(5)}${name.padEnd(32)}${player.role.padEnd(14)}${teamCode.padEnd(8)}${player.isSubstitute ? 'Substitute' : 'Playing XI'}`);
+      }
+    });
+
+    lines.push(separator, '');
+
+    if (isSalaryGame) {
+      lines.push(`Selected Players   : ${players.length} (${homeCode} x ${homeCount} | ${awayCode} x ${awayCount})`);
+    } else {
+      lines.push(`Selected Players   : ${players.length}`);
+    }
+
+    lines.push(
+      `Playing XI         : ${playingXiCount}`,
+      `Substitutes        : ${substituteCount}`
+    );
+
+    if (isSalaryGame) {
+      lines.push('', '[M] = Mandatory Player (Included in all 20 generated teams)', '[S] = Substitute Player');
+    }
+
+    return lines.join('\r\n');
+  }
+
+  private reportSquadPlayers(teams: ApiGeneratedTeam[], preview?: ApiTeamsPreview | null): Array<{
+    key: string;
+    name: string;
+    role: PlayerPosition;
+    side: 'team_a' | 'team_b';
+    salary?: number | string | null;
+    isMandatory: boolean;
+    isSubstitute: boolean;
+  }> {
+    const substitutes = Array.isArray(preview?.substitutes) ? preview?.substitutes || [] : [];
+    const mandateYes = Array.isArray(preview?.mandate_yes) ? preview?.mandate_yes || [] : [];
+    const substituteKeys = new Set(substitutes.map(player => this.reportPlayerKey(player.name, player.side)));
+    const mandatoryKeys = new Set(mandateYes.map(player => this.reportPlayerKey(player.name, player.side)));
+    const players = new Map<string, {
+      key: string;
+      name: string;
+      role: PlayerPosition;
+      side: 'team_a' | 'team_b';
+      salary?: number | string | null;
+      isMandatory: boolean;
+      isSubstitute: boolean;
+    }>();
+
+    teams.forEach(team => {
+      (team.players || []).forEach(player => {
+        const side = player.team_side || 'team_a';
+        const name = player.original_name || player.name || '-';
+        const key = this.reportPlayerKey(name, side);
+
+        if (!players.has(key)) {
+          players.set(key, {
+            key,
+            name,
+            role: player.role || 'MID',
+            side,
+            salary: player.salary,
+            isMandatory: player.mandate === 'yes' || player.mandate === 'YES' || mandatoryKeys.has(key),
+            isSubstitute: substituteKeys.has(key)
+          });
+          return;
+        }
+
+        const existing = players.get(key);
+        if (existing) {
+          existing.salary = existing.salary ?? player.salary;
+          existing.isMandatory = existing.isMandatory || player.mandate === 'yes' || player.mandate === 'YES' || mandatoryKeys.has(key);
+          existing.isSubstitute = existing.isSubstitute || substituteKeys.has(key);
+        }
+      });
+    });
+
+    substitutes.forEach(player => this.upsertPreviewSquadPlayer(players, player, true, mandatoryKeys.has(this.reportPlayerKey(player.name, player.side))));
+    mandateYes.forEach(player => this.upsertPreviewSquadPlayer(players, player, substituteKeys.has(this.reportPlayerKey(player.name, player.side)), true));
+
+    const order: Record<PlayerPosition, number> = { GK: 0, DEF: 1, MID: 2, FWD: 3 };
+
+    return Array.from(players.values()).sort((a, b) =>
+      order[a.role] - order[b.role] || a.side.localeCompare(b.side) || a.name.localeCompare(b.name)
+    );
+  }
+
+  private upsertPreviewSquadPlayer(
+    players: Map<string, { key: string; name: string; role: PlayerPosition; side: 'team_a' | 'team_b'; salary?: number | string | null; isMandatory: boolean; isSubstitute: boolean }>,
+    player: ApiPreviewPlayer,
+    isSubstitute: boolean,
+    isMandatory: boolean
+  ): void {
+    const side = player.side || 'team_a';
+    const key = this.reportPlayerKey(player.name, side);
+    const existing = players.get(key);
+
+    if (existing) {
+      existing.salary = existing.salary ?? player.salary;
+      existing.isSubstitute = existing.isSubstitute || isSubstitute;
+      existing.isMandatory = existing.isMandatory || isMandatory;
+      return;
+    }
+
+    players.set(key, {
+      key,
+      name: player.name || '-',
+      role: player.role || 'MID',
+      side,
+      salary: player.salary,
+      isMandatory,
+      isSubstitute
+    });
+  }
+
+  private reportPlayerKey(name: string, side?: 'team_a' | 'team_b'): string {
+    return `${String(name || '').trim().toLowerCase()}|${side || ''}`;
+  }
+
+  private reportSalary(value: number | string | null | undefined, game?: FantasyGame): string {
+    const amount = Number(value || 0);
+
+    if (!amount) {
+      return '-';
+    }
+
+    if (game === 'draftkings') {
+      return `$${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(amount)}`;
+    }
+
+    return Number.isInteger(amount) ? String(amount) : String(amount);
+  }
+
+  private platformPreviewList(title: string, players: ApiPreviewPlayer[]): string {
+    const lines = [
+      this.reportLine('-'),
+      title,
+      this.reportLine('-'),
+      ''
+    ];
+
+    if (!players.length) {
+      lines.push('None', '', this.reportLine('-'));
+      return lines.join('\r\n');
+    }
+
+    players.forEach((player, index) => {
+      lines.push(`${index + 1}. ${player.name || '-'}`);
+    });
+
+    lines.push('', this.reportLine('-'));
+
+    return lines.join('\r\n');
+  }
+
+  private platformConfigTextBlock(match: GeneratedMatch, preview?: ApiTeamsPreview | null): string {
+    if (match.game === 'draftkings') {
+      return [
+        this.reportLine('='),
+        this.centerReportText('ROSTER REQUIREMENTS'),
+        this.reportLine('='),
+        '',
+        this.reportField('Goalkeeper (GK)', '1'),
+        this.reportField('Defenders (DEF)', '2'),
+        this.reportField('Midfielders (MID)', '2'),
+        this.reportField('Forwards (FWD)', '2'),
+        this.reportField('Utility (UTIL)', '1 (DEF / MID / FWD only)'),
+        '',
+        this.reportField('Total Players', '8'),
+        this.reportField('Salary Cap', '$50,000'),
+        this.reportField('Maximum Per Club', '7 Players'),
+        this.reportField('Minimum Opponent', '1 Player')
+      ].join('\r\n');
+    }
+
+    if (match.game === 'fanduel') {
+      return [
+        this.reportLine('='),
+        this.centerReportText('ROSTER REQUIREMENTS'),
+        this.reportLine('='),
+        '',
+        this.reportField('Goalkeeper (GK)', '1', 25),
+        this.reportField('Defenders (DEF)', '2', 25),
+        this.reportField('Forwards / Midfielders', '4 (Any Combination)', 25),
+        '',
+        'Valid FWD/MID Combinations:',
+        '- 4 FWD + 0 MID',
+        '- 3 FWD + 1 MID',
+        '- 2 FWD + 2 MID',
+        '- 1 FWD + 3 MID',
+        '- 0 FWD + 4 MID',
+        '',
+        this.reportField('Total Players', '7', 25),
+        this.reportField('Salary Cap', '100', 25),
+        this.reportField('Maximum Per Club', '6 Players', 25),
+        this.reportField('Minimum Opponent', '1 Player', 25)
+      ].join('\r\n');
+    }
+
+    const mandateYes = Array.isArray(preview?.mandate_yes) ? preview?.mandate_yes || [] : [];
+    const cvcPlayers = Array.isArray(preview?.cvc_players) ? preview?.cvc_players || [] : [];
+    const captains = Array.isArray(preview?.captains) ? preview?.captains || [] : [];
+    const captainPool = captains.length ? captains : cvcPlayers;
+
+    return [
+      this.reportLine('='),
+      this.centerReportText('TEAM CONFIGURATION'),
+      this.reportLine('='),
+      '',
+      this.platformPreviewList('Mandatory Players', mandateYes),
+      '',
+      this.platformPreviewList('Captain Pool', captainPool)
+    ].join('\r\n');
+  }
+
+  private platformGeneratedTeamsTitle(): string {
+    return [
+      this.reportLine('='),
+      this.centerReportText('######################  YOUR 20 GENERATED TEAMS  ######################'),
+      this.reportLine('='),
+      '',
+      'Use the generated teams below as a reference while creating your teams',
+      'on your fantasy platform.',
+      '',
+      this.reportLine('=')
+    ].join('\r\n');
+  }
+
+  private platformTeamTextBlock(team: ApiGeneratedTeam, totalTeams: number, match: GeneratedMatch): string {
+    const previewTeam = this.mapGeneratedTeam(team);
+    const players = previewTeam.players;
+    const isSalaryGame = match.game === 'draftkings' || match.game === 'fanduel';
+    const homeCode = this.reportSideCode(match, 'home');
+    const awayCode = this.reportSideCode(match, 'away');
+    const teamNo = String(team.team_no || previewTeam.id).padStart(2, '0');
+    const total = String(totalTeams || 20).padStart(2, '0');
+    const separator = this.reportLine('-');
+    const combination = isSalaryGame
+      ? `Team Combination : ${homeCode} (${previewTeam.homeCount}) x ${awayCode} (${previewTeam.awayCount})`
+      : `Combination : ${previewTeam.homeCount} x ${previewTeam.awayCount}`;
+    const lines = [
+      this.reportLine('#'),
+      this.centerReportText(`UCT TEAM : ${teamNo} / ${total}`),
+      this.reportLine('#'),
+      '',
+      combination,
+      '',
+      separator,
+      `${'No'.padEnd(5)}${'Player'.padEnd(32)}${'Position'.padEnd(14)}Team`,
+      separator
+    ];
+
+    players.forEach((player, index) => {
+      lines.push(`${String(index + 1).padEnd(5)}${this.reportPlayerName(player, previewTeam).padEnd(32)}${player.pos.padEnd(14)}${this.reportSideCode(match, player.team)}`);
+    });
+
+    lines.push(separator);
+
+    return lines.join('\r\n');
+  }
+
+  private platformTextFooter(): string {
+    return [
+      this.reportLine('='),
+      this.centerReportText('IMPORTANT NOTES'),
+      this.reportLine('='),
+      '',
+      '- Use these generated teams as a reference while creating your teams.',
+      '',
+      '- You may use the generated teams as they are or modify them based on',
+      '  your own strategy.',
+      '',
+      '- UCT teams are generated using the official lineup information',
+      '  available at the time of generation.',
+      '',
+      '- If any lineup changes occur after UCT generation, review and update',
+      '  your teams based on the latest player availability and lineup',
+      '  information available in your fantasy platform.',
+      '',
+      '- If you identify any issues with the generated output, please contact',
+      '  support@pick2win.io and attach this generated report without making',
+      '  any modifications, so we can investigate the issue accurately.',
+      '',
+      this.reportLine('='),
+      '',
+      this.centerReportText('PICK2WIN UCT'),
+      '',
+      this.centerReportText('Your Strategy. Your Players.'),
+      this.centerReportText('Your Team Combinations.'),
+      '',
+      this.centerReportText('Configure Faster. Generate Smarter.'),
+      '',
+      'Website : www.pick2win.io',
+      'Support : support@pick2win.io',
+      '',
+      '(C) 2026 PICK2WIN Technologies Pvt Ltd.',
+      'All Rights Reserved.',
+      '',
+      this.reportLine('=')
+    ].join('\r\n');
   }
 
   private teamTextHeader(match: GeneratedMatch, totalTeams: number, rawResponse?: any): string {

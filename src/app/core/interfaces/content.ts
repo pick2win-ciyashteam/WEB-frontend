@@ -195,6 +195,7 @@ export interface FeedbackAnswerPayload {
 export interface UctGeneratePlayer {
   name: string;
   role: string;
+  is_substitute?: boolean | number;
   mandate?: 'YES' | 'NO';
   captain?: 'C' | 'VC' | 'CVC';
   salary?: number;
