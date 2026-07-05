@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
@@ -24,12 +25,14 @@ interface GeneratedMatch {
   viewable?: boolean;
   matchDate?: string;
   startDate?: string;
+  filterDates?: string[];
   startTimeISO?: string;
   generatedAtISO?: string;
   generationTime?: string | number;
   fantasyPlatform?: string;
   game?: FantasyGame;
   generatedGames?: FantasyGame[];
+  teamsGeneratedByGame?: Partial<Record<FantasyGame, number>>;
   sport?: string;
   coinConsumed?: string | number;
 }
@@ -137,7 +140,11 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
   filteredMatches: GeneratedMatch[] = [];
   private expiryTimer: any;
 
-  constructor(private api: ApiService,  private route: ActivatedRoute) {}
+  constructor(
+    private api: ApiService,
+    private authService: AuthService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.loadMatches();
@@ -166,13 +173,24 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
         const game = this.normalizeGame(m.game || m.fantasy_platform || m.platform);
         const generatedGames = this.generatedGamesFromValue(m.generated_games || m.games_generated || m.generated_platforms);
         if (game) generatedGames.add(game);
+        const teamsGenerated = Number(m.teams_generated || m.total_teams || 0);
+        const filterDates = this.dateCandidatesFromMatch(m, startTimeISO);
+        const startDate = filterDates[0] || '';
 
         const existing = matchMap.get(id);
         if (existing) {
           const currentGames = new Set(existing.generatedGames || []);
           generatedGames.forEach(item => currentGames.add(item));
           existing.generatedGames = Array.from(currentGames);
-          existing.teamsGenerated = Math.max(Number(existing.teamsGenerated || 0), Number(m.teams_generated || m.total_teams || 0));
+          existing.filterDates = Array.from(new Set([...(existing.filterDates || []), ...filterDates]));
+          existing.startDate = existing.startDate || startDate;
+          existing.teamsGenerated = Math.max(Number(existing.teamsGenerated || 0), teamsGenerated);
+          if (game) {
+            existing.teamsGeneratedByGame = {
+              ...(existing.teamsGeneratedByGame || {}),
+              [game]: teamsGenerated
+            };
+          }
           return;
         }
 
@@ -191,6 +209,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           fantasyPlatform: this.gameLabel(game || 'sorare'),
           game: game || 'sorare',
           generatedGames: Array.from(generatedGames),
+          teamsGeneratedByGame: game ? { [game]: teamsGenerated } : {},
           sport: m.sport || 'Football',
           coinConsumed: m.coin_consumed ?? m.coins_consumed ?? 1,
           homeLogo: m.home_logo,
@@ -198,9 +217,11 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           homeFullName: m.home_full_team_name || m.home_full_name || m.home_team_name || '',
           awayFullName: m.away_full_team_name || m.away_full_name || m.away_team_name || '',
           status: m.status,
-          teamsGenerated: Number(m.teams_generated || m.total_teams || 0),
+          teamsGenerated,
           viewable: !expired,
-          startDate: startTimeISO ? this.toDateInputValue(new Date(startTimeISO)) : '',
+          matchDate: startDate,
+          startDate,
+          filterDates,
           startTimeISO
         });
       });
@@ -231,7 +252,7 @@ applyDateFilter() {
   this.previewTeams = [];
 
   if (!this.selectedDate) {
-    this.filteredMatches = this.matches.filter(match => this.isGameGenerated(match, this.activeGame));
+    this.filteredMatches = [...this.matches];
     console.log('My Teams filtered matches:', {
       activeGame: this.activeGame,
       selectedDate: this.selectedDate,
@@ -240,8 +261,8 @@ applyDateFilter() {
     return;
   }
 
-  this.filteredMatches = this.matches.filter(
-    (match: any) => match.startDate === this.selectedDate && this.isGameGenerated(match, this.activeGame)
+  this.filteredMatches = this.matches.filter(match =>
+    this.matchHasDate(match, this.selectedDate)
   );
   console.log('My Teams filtered matches:', {
     activeGame: this.activeGame,
@@ -297,7 +318,7 @@ private openMatchFromQueryParam(): void {
   const game = this.selectedGameForMatch(match);
   const matchForGame = this.withGame(match, game);
 
-  this.api.MatchByTeams(match.id, game).subscribe({
+  this.authService.getUserMyTeams(match.id, game).subscribe({
     next: (res: any) => {
       console.log('My Teams download response:', res);
 
@@ -481,7 +502,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     console.log('My Teams loading teams:', { match, game });
 
-    this.api.MatchByTeams(match.id, game).subscribe({
+    this.authService.getUserMyTeams(match.id, game).subscribe({
       next: (res: any) => {
         console.log('My Teams match teams response:', { matchId: match.id, game, response: res });
 
@@ -492,7 +513,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
           this.previewTeams = generatedTeams.map((team: ApiGeneratedTeam) => this.mapGeneratedTeam(team));
           this.selectedMatch = {
             ...match,
-            ...this.withGame(match, game),
+            ...this.withGame(this.matchWithResponseMeta(match, res), game),
             teamsGenerated: Number(res?.total_teams || res?.data?.total_teams || generatedTeams.length),
             viewable: true
           };
@@ -548,14 +569,24 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   isGameGenerated(match: GeneratedMatch, game: FantasyGame): boolean {
-    return (match.generatedGames || []).includes(game);
+    const generatedGames = match.generatedGames || [];
+    const hasGameCounts = Object.keys(match.teamsGeneratedByGame || {}).length > 0;
+
+    if (!generatedGames.length && !hasGameCounts) {
+      return true;
+    }
+
+    return generatedGames.includes(game) || match.game === game || match.teamsGeneratedByGame?.[game] !== undefined;
   }
 
   gameMatchCount(game: FantasyGame): number {
     return this.matches.filter(match =>
-      this.isGameGenerated(match, game)
-      && (!this.selectedDate || match.startDate === this.selectedDate)
+      !this.selectedDate || this.matchHasDate(match, this.selectedDate)
     ).length;
+  }
+
+  teamCountForGame(match: GeneratedMatch, game: FantasyGame): number {
+    return Number(match.teamsGeneratedByGame?.[game] ?? match.teamsGenerated ?? 0);
   }
 
   private selectedGameForMatch(match: GeneratedMatch): FantasyGame {
@@ -570,7 +601,29 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return {
       ...match,
       game,
-      fantasyPlatform: this.gameLabel(game)
+      fantasyPlatform: this.gameLabel(game),
+      teamsGenerated: match.teamsGeneratedByGame?.[game] ?? match.teamsGenerated
+    };
+  }
+
+  private matchWithResponseMeta(match: GeneratedMatch, res: any): GeneratedMatch {
+    const payload = res?.data && typeof res.data === 'object' ? res.data : res;
+    const homeTeam = payload?.home_team || this.matchTeamName(match, 'home');
+    const awayTeam = payload?.away_team || this.matchTeamName(match, 'away');
+    const game = this.normalizeGame(payload?.game) || match.game;
+    const totalTeams = Number(payload?.total_teams || match.teamsGenerated || 0);
+
+    return {
+      ...match,
+      title: `${homeTeam || 'HOME'} vs ${awayTeam || 'AWAY'}`,
+      homeFullName: payload?.home_full_team_name || payload?.home_full_name || match.homeFullName,
+      awayFullName: payload?.away_full_team_name || payload?.away_full_name || match.awayFullName,
+      game: game || match.game,
+      generatedGames: game ? Array.from(new Set([...(match.generatedGames || []), game])) : match.generatedGames,
+      teamsGenerated: totalTeams,
+      teamsGeneratedByGame: game
+        ? { ...(match.teamsGeneratedByGame || {}), [game]: totalTeams }
+        : match.teamsGeneratedByGame
     };
   }
 
@@ -618,6 +671,48 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     if (text === 'fanduel' || text === 'fd') return 'fanduel';
 
     return null;
+  }
+
+  private matchHasDate(match: GeneratedMatch, selectedDate: string): boolean {
+    return (match.filterDates?.length ? match.filterDates : [match.startDate || match.matchDate || ''])
+      .filter(Boolean)
+      .includes(selectedDate);
+  }
+
+  private dateCandidatesFromMatch(match: any, startTimeISO: string): string[] {
+    const dates = [
+      this.dateInputFromApiValue(match.match_date),
+      this.dateInputFromApiValue(match.matchDate),
+      this.dateInputFromApiValue(match.start_date),
+      this.dateInputFromApiValue(match.startDate),
+      this.dateInputFromApiValue(match.date),
+      this.dateInputFromApiValue(match.fixture_date),
+      this.dateInputFromApiValue(match.kickoff_date),
+      this.dateInputFromApiValue(startTimeISO),
+      this.dateInputFromApiValue(match.generated_at)
+    ].filter((date): date is string => !!date);
+
+    return Array.from(new Set(dates));
+  }
+
+  private dateInputFromApiValue(value: unknown): string {
+    const text = String(value ?? '').trim();
+
+    if (!text) {
+      return '';
+    }
+
+    const dateOnly = text.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (dateOnly) {
+      return dateOnly[1];
+    }
+
+    const date = new Date(text);
+    if (Number.isNaN(date.getTime())) {
+      return '';
+    }
+
+    return this.toDateInputValue(date);
   }
 
   openTeamPreview(teamId: number): void {

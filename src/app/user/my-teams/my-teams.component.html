@@ -81,7 +81,7 @@
         </div>
 
         <div class="mb-stats">
-          <div class="mb-count-pill">{{ match.teamsGenerated || 0 }} teams</div>
+          <div class="mb-count-pill">{{ teamCountForGame(match, activeGame) }} teams</div>
           <button class="mb-csv" type="button" *ngIf="canAccessTeams(match)" (click)="downloadMatchTeams(match); $event.stopPropagation()">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
             TXT
@@ -136,7 +136,7 @@
         </div>
 
         <div class="mb-stats">
-          <div class="mb-count-pill">{{ detailMatch.teamsGenerated || previewTeams.length }} teams</div>
+          <div class="mb-count-pill">{{ teamCountForGame(detailMatch, activeGame) || previewTeams.length }} teams</div>
           <button class="mb-csv" type="button" *ngIf="canAccessTeams(detailMatch)" (click)="downloadMatchTeams(detailMatch)">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
             TXT

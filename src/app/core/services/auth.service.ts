@@ -7,6 +7,7 @@ import { ProfileService } from './profile.service';
 import { FirebaseNotificationService } from './firebase-notification.service';
 
 const API = 'https://pick2win.io/backend/api';
+type FantasyGame = 'sorare' | 'draftkings' | 'fanduel';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -50,6 +51,19 @@ export class AuthService {
         }
       })
     );
+  }
+
+  getUserMyTeams(matchId: number | string, game: FantasyGame): Observable<any> {
+    const gamePath: Record<FantasyGame, string> = {
+      sorare: 'sorare',
+      draftkings: 'draftkings',
+      fanduel: 'fanduel'
+    };
+    const url = `${API}/user/teams/user-my-teams/${matchId}/${gamePath[game]}`;
+
+    console.log('My Teams API URL:', url);
+
+    return this.http.get<any>(url);
   }
 
   logout() {

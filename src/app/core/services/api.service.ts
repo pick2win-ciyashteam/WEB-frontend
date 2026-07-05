@@ -173,9 +173,9 @@ buyCoins(data: BuyCoinsPayload): Observable<BuyCoinsResponse> {
   }
 
   MatchByTeams(id: number, game?: 'sorare' | 'draftkings' | 'fanduel'): Observable<any> {
-    const options = game ? { params: new HttpParams().set('game', game) } : undefined;
+    const gamePath = game ? `/${game}` : '';
 
-    return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}`, options);
+    return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}${gamePath}`);
   }
 
   TeamsByPlayers(id: number): Observable<any> {
