@@ -17,6 +17,7 @@ interface LineoutTeam {
 interface LineoutMatch {
   id: string;
   league: string;
+  sport?: string;
   country: string;
   home: LineoutTeam;
   away: LineoutTeam;
@@ -275,7 +276,8 @@ canRunUct(match: LineoutMatch): boolean {
     this.router.navigate(['/user/profile'], {
       queryParams: {
         tab: 'teams',
-        match: match.id
+        match: match.id,
+        sport: match.sport || 'Football'
       }
     });
   }
@@ -329,6 +331,7 @@ canRunUct(match: LineoutMatch): boolean {
   private createUctContext(match: LineoutMatch): Record<string, unknown> {
     return {
       id: match.id,
+      sport: match.sport || 'Football',
       homeName: match.home.name,
       awayName: match.away.name,
       homeCode: match.home.code,
@@ -545,6 +548,7 @@ canRunUct(match: LineoutMatch): boolean {
     return {
       id: String(match.id || match.provider_match_id),
       league: match.seriesname || series.name,
+      sport: String(this.firstMatchValue(match, ['sport', 'sport_name', 'sportName']) || 'Football'),
       country: series.season || series.status || 'Football',
       home: this.createTeam(
         homeName,

@@ -644,6 +644,27 @@ h1 em,
   }
 }
 
+.team-pool .player-row.selected,
+.locked-pool .player-row.selected,
+.substitute-pool-grid .player-row.selected,
+.locked-pool .player-row.gk-highlight.selected {
+  border-color: rgba(16, 185, 129, .78) !important;
+  background: rgba(16, 185, 129, .14) !important;
+  box-shadow: inset 4px 0 0 rgba(16, 185, 129, .95), 0 10px 22px rgba(16, 185, 129, .12) !important;
+}
+
+.team-pool .player-row.selected::before,
+.locked-pool .player-row.selected::before,
+.substitute-pool-grid .player-row.selected::before {
+  background: #10b981 !important;
+}
+
+.team-pool .player-row.selected .row-check,
+.locked-pool .player-row.selected .row-check,
+.substitute-pool-grid .player-row.selected .row-check {
+  accent-color: #10b981 !important;
+}
+
 .stepper button:nth-child(1) {
   --step-rgb: 124, 58, 237;
 }

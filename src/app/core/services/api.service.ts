@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
-import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, RazorpayConfigResponse, RazorpayVerifyPaymentPayload, Series, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserProfile } from '../interfaces/content';
+import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, RazorpayConfigResponse, RazorpayVerifyPaymentPayload, Series, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserNotificationsResponse, UserProfile } from '../interfaces/content';
 import { TokenService } from './token.service';
 
 @Injectable({
@@ -75,6 +75,25 @@ export class ApiService {
 
   registerDevice(data: { fcm_token: string; device_type: 'web' }): Observable<any> {
     return this.http.post(`${this.BASE}/user/user-auth/register-device`, data);
+  }
+
+  getUserNotifications(page = 1, limit = 20): Observable<UserNotificationsResponse> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('limit', limit);
+
+    return this.http.get<UserNotificationsResponse>(`${this.BASE}/user/user-auth/get-notification`, {
+      ...this.userAuthOptions(),
+      params
+    });
+  }
+
+  markUserNotificationRead(id: number | string): Observable<any> {
+    return this.http.post(`${this.BASE}/user/user-auth/notification/read/${id}`, {}, this.userAuthOptions());
+  }
+
+  deleteUserNotification(id: number | string): Observable<any> {
+    return this.http.delete(`${this.BASE}/user/user-auth/notification/${id}`, this.userAuthOptions());
   }
 
   getFeedback(): Observable<any> {

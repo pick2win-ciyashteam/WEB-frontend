@@ -25,6 +25,7 @@ interface GeneratedTeam {
 
 interface CreateUctContext {
   id?: string;
+  sport?: string;
   venue?: string;
   venue_name?: string;
   venue_city?: string;
@@ -304,6 +305,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.selectedPlatform === 'draftkings' || this.selectedPlatform === 'fanduel';
   }
 
+  get visiblePlatforms(): typeof this.platforms {
+    return this.platforms.filter(platform => platform.id !== 'sorare');
+  }
+
   get activePlatformName(): string {
     return this.platforms.find(platform => platform.id === this.selectedPlatform)?.name || 'Fantasy Platform';
   }
@@ -367,7 +372,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get hasRequiredPositionCoverage(): boolean {
-    return ['GK', 'DEF', 'MID', 'FWD'].every(position => this.positionCount(this.availablePool, position) >= 1);
+    return !this.squadCompositionMessage();
   }
 
   get isSquadRulesReady(): boolean {
@@ -381,7 +386,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     if (this.availablePool.length < this.activeMinSquad) return `Select >=${this.activeMinSquad} players`;
     if (this.availablePool.length > this.maxSquad) return `Max ${this.maxSquad} players`;
     if (!this.hasSquadGoalkeeper) return 'Goalkeeper required';
-    if (!this.hasRequiredPositionCoverage) return 'Cover GK/DEF/MID/FWD';
+    if (!this.hasRequiredPositionCoverage) return this.squadCompositionMessage();
     if (this.requiresSalary && this.salaryValidationMessage()) return 'Salary required';
     if (!this.confirmed) return 'Confirm below';
     return 'Ready';
@@ -502,7 +507,8 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   hasPositionCoverage(position: string): boolean {
-    return this.positionCount(this.availablePool, position) >= 1;
+    const minimum = this.minimumSquadPositionCount(position);
+    return this.positionCount(this.availablePool, position) >= minimum;
   }
 
   teamAccent(side: 'home' | 'away'): string {
@@ -519,7 +525,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   goToGeneratedTeams(game?: FantasyPlatform): void {
     this.router.navigate(['/user/profile'], {
-      queryParams: { tab: 'teams', match: this.matchId, game: game || this.selectedGame() }
+      queryParams: {
+        tab: 'teams',
+        match: this.matchId,
+        sport: this.currentSport(),
+        game: game || this.selectedGame()
+      }
     });
   }
 
@@ -533,7 +544,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   nextStep(): void {
     if (this.step === 0) {
-      this.showAlert('Choose platform', 'Select Sorare, DraftKings, or FanDuel to start the UCT workflow.', 'warning');
+      this.showAlert('Choose platform', 'Select DraftKings or FanDuel to start the UCT workflow.', 'warning');
       return;
     }
 
@@ -687,6 +698,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.canSelectAnotherSalaryPlayer(player)) {
+      return;
+    }
+
     if (this.availablePool.length >= this.maxSquad) {
       this.showAlert('My Squad limit reached', 'My Squad size must stay between 10 and 22 players.', 'warning');
       return;
@@ -716,6 +731,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (this.isGoalkeeper(player)) {
       this.showAlert('Substitute GK not allowed', 'Only DEF, MID or FWD substitute players can be selected.', 'warning');
+      return;
+    }
+
+    if (!this.canSelectAnotherSalaryPlayer(player)) {
       return;
     }
 
@@ -912,11 +931,9 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return `Select maximum ${this.maxSubs} substitute players.`;
     }
 
-    const missingPositions = ['GK', 'DEF', 'MID', 'FWD']
-      .filter(position => this.positionCount(this.availablePool, position) < 1);
-
-    if (missingPositions.length) {
-      return `My Squad must include at least 1 ${missingPositions.join(', ')} player.`;
+    const compositionMessage = this.squadCompositionMessage();
+    if (compositionMessage) {
+      return compositionMessage;
     }
 
     if (!this.confirmed) {
@@ -998,6 +1015,99 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return validFormat
       && Number.isFinite(salary)
       && salary > 0;
+  }
+
+  private canSelectAnotherSalaryPlayer(player: UctPlayer): boolean {
+    if (!this.requiresSalary) {
+      return true;
+    }
+
+    const pendingPlayer = this.pendingSalaryPlayer();
+
+    if (!pendingPlayer || pendingPlayer.id === player.id) {
+      return true;
+    }
+
+    const pendingValue = this.salaries.get(pendingPlayer.id) || '';
+    const message = pendingValue
+      ? `Enter ${this.salaryFormatHint()} for ${pendingPlayer.player_name} before selecting the next player.`
+      : `Enter a valid ${this.salaryPlaceholder.toLowerCase()} for ${pendingPlayer.player_name} before selecting the next player.`;
+
+    this.showAlert(
+      `${this.activePlatformName} ${this.salaryPlaceholder} required`,
+      message,
+      'warning'
+    );
+
+    return false;
+  }
+
+  private pendingSalaryPlayer(): UctPlayer | null {
+    if (!this.requiresSalary) {
+      return null;
+    }
+
+    return this.availablePool.find(player => !this.isValidSalaryValue(this.salaries.get(player.id) || '')) || null;
+  }
+
+  private squadCompositionMessage(): string {
+    const gkCount = this.positionCount(this.availablePool, 'GK');
+    const defCount = this.positionCount(this.availablePool, 'DEF');
+    const midCount = this.positionCount(this.availablePool, 'MID');
+    const fwdCount = this.positionCount(this.availablePool, 'FWD');
+
+    if (gkCount < 1) {
+      return 'My Squad must include at least 1 Goalkeeper (GK).';
+    }
+
+    if (this.selectedPlatform === 'draftkings') {
+      const missing = [
+        defCount < 2 ? `2 Defenders (DEF)` : '',
+        midCount < 2 ? `2 Midfielders (MID)` : '',
+        fwdCount < 2 ? `2 Forwards (FWD)` : ''
+      ].filter(Boolean);
+
+      if (missing.length) {
+        return `DraftKings My Squad must include at least ${missing.join(', ')}.`;
+      }
+    }
+
+    if (this.selectedPlatform === 'fanduel') {
+      if (defCount < 2) {
+        return 'FanDuel My Squad must include at least 2 Defenders (DEF).';
+      }
+
+      if (midCount + fwdCount < 4) {
+        return 'FanDuel My Squad must include at least 4 total Midfielders/Forwards in any valid combination.';
+      }
+    }
+
+    if (!this.requiresSalary) {
+      const missingPositions = ['GK', 'DEF', 'MID', 'FWD']
+        .filter(position => this.positionCount(this.availablePool, position) < 1);
+
+      if (missingPositions.length) {
+        return `My Squad must include at least 1 ${missingPositions.join(', ')} player.`;
+      }
+    }
+
+    return '';
+  }
+
+  private minimumSquadPositionCount(position: string): number {
+    const normalized = String(position || '').toUpperCase();
+
+    if (normalized === 'GK') return 1;
+    if (this.selectedPlatform === 'draftkings' && ['DEF', 'MID', 'FWD'].includes(normalized)) return 2;
+    if (this.selectedPlatform === 'fanduel' && normalized === 'DEF') return 2;
+
+    return 1;
+  }
+
+  private salaryFormatHint(): string {
+    return this.selectedPlatform === 'fanduel'
+      ? 'FanDuel units in 1-2 digits, with optional one decimal'
+      : 'DraftKings salary in 4-5 digits';
   }
 
   validTeamCombinations(): Array<{ home: number; away: number }> {
@@ -1188,7 +1298,13 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
             this.userGeneratedGames.add(game);
             this.router.navigate(['/user/profile'], {
-              queryParams: { tab: 'teams', match: this.matchId, game, generated: 'success' }
+              queryParams: {
+                tab: 'teams',
+                match: this.matchId,
+                sport: this.currentSport(),
+                game,
+                generated: 'success'
+              }
             });
             return;
           }
@@ -1316,6 +1432,15 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     return '';
+  }
+
+  private currentSport(): string {
+    const context = this.createUctContext as Record<string, unknown> | null;
+    const match = this.detail?.match as unknown as Record<string, unknown> | undefined;
+
+    return this.firstValue(context, ['sport', 'sport_name', 'sportName'])
+      || this.firstValue(match, ['sport', 'sport_name', 'sportName'])
+      || 'Football';
   }
 
   private getCreateUctContext(matchId: string): CreateUctContext | null {

@@ -133,6 +133,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
     { id: 'draftkings', label: 'DraftKings' },
     { id: 'fanduel', label: 'FanDuel' }
   ];
+  activeSport = '';
   activeGame: FantasyGame = 'sorare';
 
   loadingMatches = false;
@@ -195,6 +196,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
               [game]: teamsGenerated
             };
           }
+          existing.sport = existing.sport || m.sport || 'Football';
           return;
         }
 
@@ -231,6 +233,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
       });
 
       this.matches = Array.from(matchMap.values());
+      this.ensureActiveSport();
       console.log('My Teams grouped matches:', this.matches);
       this.applyDateFilter();
       this.openMatchFromQueryParam();
@@ -254,21 +257,16 @@ applyDateFilter() {
   this.selectedMatch = null;
   this.previewTeam = null;
   this.previewTeams = [];
-
-  if (!this.selectedDate) {
-    this.filteredMatches = [...this.matches];
-    console.log('My Teams filtered matches:', {
-      activeGame: this.activeGame,
-      selectedDate: this.selectedDate,
-      filteredMatches: this.filteredMatches
-    });
-    return;
-  }
+  this.ensureActiveSport();
 
   this.filteredMatches = this.matches.filter(match =>
-    this.matchHasDate(match, this.selectedDate)
+    (!this.selectedDate || this.matchHasDate(match, this.selectedDate))
+    && this.matchHasSport(match, this.activeSport)
+    && this.isGameGenerated(match, this.activeGame)
   );
+
   console.log('My Teams filtered matches:', {
+    activeSport: this.activeSport,
     activeGame: this.activeGame,
     selectedDate: this.selectedDate,
     filteredMatches: this.filteredMatches
@@ -291,12 +289,21 @@ openDatePicker(input: HTMLInputElement): void {
 private openMatchFromQueryParam(): void {
   const matchId = this.route.snapshot.queryParamMap.get('match');
   const queryGame = this.normalizeGame(this.route.snapshot.queryParamMap.get('game'));
-  if (queryGame) {
-    this.activeGame = queryGame;
-    this.applyDateFilter();
-  }
+  const querySport = this.route.snapshot.queryParamMap.get('sport');
 
   if (!matchId) {
+    if (querySport) {
+      this.activeSport = this.sportKey(querySport);
+    }
+
+    if (queryGame) {
+      this.activeGame = queryGame;
+    }
+
+    if (querySport || queryGame) {
+      this.applyDateFilter();
+    }
+
     return;
   }
 
@@ -307,6 +314,12 @@ private openMatchFromQueryParam(): void {
   }
 
   this.selectedDate = match.startDate || '';
+  this.activeSport = querySport ? this.sportKey(querySport) : this.sportKey(match.sport);
+
+  if (queryGame) {
+    this.activeGame = queryGame;
+  }
+
   this.applyDateFilter();
 
   if (this.canAccessTeams(match)) {
@@ -572,6 +585,21 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     }
   }
 
+  selectSportTab(sport: string): void {
+    if (this.activeSport === sport) {
+      return;
+    }
+
+    this.activeSport = sport;
+    console.log('My Teams selected sport tab:', sport);
+    this.applyDateFilter();
+
+    const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
+    if (firstViewableMatch) {
+      this.openMatchTeams(firstViewableMatch, this.activeGame);
+    }
+  }
+
   isGameGenerated(match: GeneratedMatch, game: FantasyGame): boolean {
     const generatedGames = match.generatedGames || [];
     const hasGameCounts = Object.keys(match.teamsGeneratedByGame || {}).length > 0;
@@ -585,8 +613,30 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
   gameMatchCount(game: FantasyGame): number {
     return this.matches.filter(match =>
-      !this.selectedDate || this.matchHasDate(match, this.selectedDate)
+      (!this.selectedDate || this.matchHasDate(match, this.selectedDate))
+      && this.matchHasSport(match, this.activeSport)
+      && this.isGameGenerated(match, game)
     ).length;
+  }
+
+  sportTabs(): Array<{ id: string; label: string; count: number }> {
+    const sports = new Map<string, { label: string; count: number }>();
+
+    this.matches.forEach(match => {
+      if (this.selectedDate && !this.matchHasDate(match, this.selectedDate)) {
+        return;
+      }
+
+      const id = this.sportKey(match.sport);
+      const current = sports.get(id);
+
+      sports.set(id, {
+        label: this.sportLabel(match.sport),
+        count: (current?.count || 0) + 1
+      });
+    });
+
+    return Array.from(sports.entries()).map(([id, item]) => ({ id, ...item }));
   }
 
   teamCountForGame(match: GeneratedMatch, game: FantasyGame): number {
@@ -637,6 +687,15 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return 'Sorare';
   }
 
+  sportLabel(sport?: string): string {
+    const value = String(sport || 'Football').trim();
+    return value.toLowerCase() === 'football' ? 'Soccer' : value;
+  }
+
+  activeSportLabel(): string {
+    return this.sportTabs().find(tab => tab.id === this.activeSport)?.label || this.sportLabel(this.activeSport);
+  }
+
   private generatedGamesFromValue(value: unknown): Set<FantasyGame> {
     const games = new Set<FantasyGame>();
 
@@ -681,6 +740,28 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return (match.filterDates?.length ? match.filterDates : [match.startDate || match.matchDate || ''])
       .filter(Boolean)
       .includes(selectedDate);
+  }
+
+  private matchHasSport(match: GeneratedMatch, sport: string): boolean {
+    return !sport || this.sportKey(match.sport) === sport;
+  }
+
+  private ensureActiveSport(): void {
+    const tabs = this.sportTabs();
+
+    if (!tabs.length) {
+      this.activeSport = '';
+      return;
+    }
+
+    if (!this.activeSport || !tabs.some(tab => tab.id === this.activeSport)) {
+      this.activeSport = tabs[0].id;
+    }
+  }
+
+  private sportKey(sport?: string): string {
+    const value = String(sport || 'Football').trim().toLowerCase() || 'football';
+    return value === 'soccer' ? 'football' : value;
   }
 
   private dateCandidatesFromMatch(match: any, startTimeISO: string): string[] {
@@ -1029,7 +1110,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
   private platformTextHeader(match: GeneratedMatch, totalTeams: number, rawResponse?: any): string {
     const isSalaryGame = match.game === 'draftkings' || match.game === 'fanduel';
-    const sport = isSalaryGame ? 'Football (Soccer)' : (match.sport || 'Football');
+    const sport = this.sportLabel(match.sport);
     const lines = [
       this.reportLine('='),
       this.centerReportText('PICK2WIN - USER CONFIGURATION TEAMS'),
@@ -1410,7 +1491,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       this.reportLine('='),
       '',
       this.reportField('Fantasy Platform', match.fantasyPlatform || 'Sorare'),
-      this.reportField('Sport', match.sport || 'Football'),
+      this.reportField('Sport', this.sportLabel(match.sport)),
       this.reportField('Competition', match.league || 'N/A'),
       this.reportField('Match', this.reportMatchTitle(match)),
       this.reportField('Match Date', matchDate),

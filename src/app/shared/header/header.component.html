@@ -114,7 +114,12 @@
     </header>
 
     <div class="notification-modal-list" *ngIf="notifications$ | async as notifications">
-      <article class="notification-modal-item" *ngFor="let notification of notifications | slice:0:5">
+      <article
+        class="notification-modal-item"
+        *ngFor="let notification of getHeaderNotifications(notifications)"
+        [class.unread]="!notification.read"
+        (click)="markRead(notification)"
+      >
         <span class="notification-status" [class.read]="notification.read"></span>
         <div>
           <h3>{{ notification.title }}</h3>

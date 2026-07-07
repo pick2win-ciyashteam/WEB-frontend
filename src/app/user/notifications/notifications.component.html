@@ -11,19 +11,39 @@
     </div>
 
     <div class="notifications-list" *ngIf="notifications$ | async as notifications">
-      <article class="notification-card" *ngFor="let notification of notifications">
+      <article
+        class="notification-card"
+        *ngFor="let notification of notifications"
+        [class.unread]="!notification.read"
+        (click)="markRead(notification)"
+      >
         <span class="notification-dot" [class.read]="notification.read"></span>
         <div>
           <h2>{{ notification.title }}</h2>
           <p>{{ notification.body }}</p>
-          <time>{{ notification.createdAt | date:'medium' }}</time>
+          <div class="notification-meta">
+            <time>{{ notification.createdAt | date:'medium' }}</time>
+            <button
+              type="button"
+              class="notification-delete"
+              aria-label="Delete notification"
+              (click)="deleteNotification($event, notification)"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+            </button>
+          </div>
         </div>
       </article>
 
-      <div class="empty-state" *ngIf="!notifications.length">
+      <div class="empty-state" *ngIf="!notifications.length && !loading">
         <span class="material-symbols-outlined" aria-hidden="true">notifications_off</span>
         <h2>No notifications yet</h2>
         <p>When admin sends all-user or user-wise notifications, they will show here.</p>
+      </div>
+
+      <div class="empty-state" *ngIf="loading && !notifications.length">
+        <span class="material-symbols-outlined" aria-hidden="true">hourglass_top</span>
+        <h2>Loading notifications</h2>
       </div>
     </div>
   </section>

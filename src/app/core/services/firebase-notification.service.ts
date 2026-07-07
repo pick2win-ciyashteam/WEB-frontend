@@ -1,8 +1,10 @@
 import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, isSupported, Messaging, onMessage } from 'firebase/messaging';
 import { ApiService } from './api.service';
+import { UserNotificationRaw } from '../interfaces/content';
 
 export interface AppNotification {
   id: string;
@@ -10,6 +12,7 @@ export interface AppNotification {
   body: string;
   createdAt: string;
   read: boolean;
+  raw?: UserNotificationRaw;
 }
 
 const firebaseConfig = {
@@ -180,14 +183,64 @@ export class FirebaseNotificationService {
     });
   }
 
-  loadNotifications(): Observable<AppNotification[]> {
-    return of(this.notificationsSubject.value);
+  loadNotifications(page = 1, limit = 20): Observable<AppNotification[]> {
+    return this.api.getUserNotifications(page, limit).pipe(
+      tap(response => console.log('[Notifications API] get-notification response:', response)),
+      map(response => {
+        const notifications = (response.data || [])
+          .map(item => this.normalizeNotification(item))
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+        this.notificationsSubject.next(notifications);
+        this.unreadCount$.next(Number(response.unread_count || 0));
+        return notifications;
+      }),
+      catchError(error => {
+        console.error('[Notifications API] get-notification failed:', error);
+        return of(this.notificationsSubject.value);
+      })
+    );
+  }
+
+  markNotificationRead(id: number | string): Observable<any> {
+    return this.api.markUserNotificationRead(id).pipe(
+      tap(response => console.log('[Notifications API] notification/read response:', response)),
+      tap(() => {
+        const notifications = this.notificationsSubject.value.map(item =>
+          String(item.id) === String(id) ? { ...item, read: true } : item
+        );
+
+        this.notificationsSubject.next(notifications);
+        this.updateUnreadCount(notifications);
+      }),
+      catchError(error => {
+        console.error('[Notifications API] notification/read failed:', error);
+        return of(null);
+      })
+    );
+  }
+
+  deleteNotification(id: number | string): Observable<any> {
+    return this.api.deleteUserNotification(id).pipe(
+      tap(response => console.log('[Notifications API] notification delete response:', response)),
+      tap(() => {
+        const notifications = this.notificationsSubject.value.filter(item => String(item.id) !== String(id));
+        this.notificationsSubject.next(notifications);
+        this.updateUnreadCount(notifications);
+      }),
+      catchError(error => {
+        console.error('[Notifications API] notification delete failed:', error);
+        return of(null);
+      })
+    );
   }
 
   markAllRead(): void {
-    const notifications = this.notificationsSubject.value.map(item => ({ ...item, read: true }));
-    this.notificationsSubject.next(notifications);
-    this.updateUnreadCount(notifications);
+    const unreadNotifications = this.notificationsSubject.value.filter(item => !item.read);
+
+    unreadNotifications.forEach(notification => {
+      this.markNotificationRead(notification.id).subscribe();
+    });
   }
 
   clearSession(): void {
@@ -200,6 +253,34 @@ export class FirebaseNotificationService {
     const notifications = [notification, ...this.notificationsSubject.value].slice(0, 50);
     this.notificationsSubject.next(notifications);
     this.updateUnreadCount(notifications);
+  }
+
+  private normalizeNotification(item: UserNotificationRaw): AppNotification {
+    const id = item.id ?? item._id ?? item.notification_id ?? `${Date.now()}-${Math.random()}`;
+    const title = item.title ?? item.subject ?? 'Pick2Win notification';
+    const body = item.message ?? item.body ?? item.description ?? item.content ?? 'You have a new update.';
+    const createdAt = item.created_at ?? item.createdAt ?? item.updated_at ?? new Date().toISOString();
+    const readValue = item.is_read ?? item.read ?? item.read_at ?? false;
+
+    return {
+      id: String(id),
+      title: String(title),
+      body: String(body),
+      createdAt: String(createdAt),
+      read: this.toBoolean(readValue),
+      raw: item
+    };
+  }
+
+  private toBoolean(value: unknown): boolean {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value === 1;
+    if (typeof value === 'string') {
+      const normalized = value.toLowerCase().trim();
+      return ['1', 'true', 'yes', 'read'].includes(normalized) || normalized.length > 9;
+    }
+
+    return Boolean(value);
   }
 
   private updateUnreadCount(notifications: AppNotification[]): void {

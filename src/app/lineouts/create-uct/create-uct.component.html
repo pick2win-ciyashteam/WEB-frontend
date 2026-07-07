@@ -14,7 +14,7 @@
         <h2 *ngIf="step === 5">UCT Preview</h2>
         <h2 *ngIf="step >= 6">UCT Teams</h2>
         <!-- <p *ngIf="step === 1">Select 10-22 players from XI and optional substitutes</p> -->
-        <p *ngIf="step === 0">Choose Sorare, DraftKings, or FanDuel</p>
+        <p *ngIf="step === 0">Choose DraftKings or FanDuel</p>
         <p *ngIf="step === 2">Optional: select 0-2 mandatory players</p>
         <p *ngIf="step === 3">Choose 2-6 captains for Sorare</p>
         <p *ngIf="step === 5">Review your <b>CONFIG</b> before generating</p>
@@ -50,7 +50,7 @@
         </div>
 
         <div class="platform-card-grid" id="platformCardGrid">
-          <article class="platform-card" *ngFor="let platform of platforms" [class.selected]="selectedPlatform === platform.id" [class.generated]="isPlatformGenerated(platform.id)">
+          <article class="platform-card" *ngFor="let platform of visiblePlatforms" [class.selected]="selectedPlatform === platform.id" [class.generated]="isPlatformGenerated(platform.id)">
             <div class="platform-main">
               <span class="platform-check material-symbols-outlined" aria-hidden="true">{{ isPlatformGenerated(platform.id) ? 'check_circle' : (selectedPlatform === platform.id ? 'check_circle' : 'radio_button_unchecked') }}</span>
               <div>
@@ -86,6 +86,14 @@
               </ng-template>
             </div>
           </article>
+        </div>
+
+        <div class="platform-policy">
+          <span class="material-symbols-outlined" aria-hidden="true">info</span>
+          <div>
+            <!-- <b>UCT Disclaimer</b> -->
+            <p>PICK2WIN is an independent Daily Fantasy Sports (DFS) team configuration platform. DraftKings and FanDuel are independent fantasy sports platforms. PICK2WIN is not affiliated with, endorsed by, sponsored by, or officially associated with DraftKings, FanDuel, or any other fantasy sports platform. All trademarks, logos, and brand names are the property of their respective owners and are used solely to identify compatible platforms.</p>
+          </div>
         </div>
 
         <div class="platform-policy">
@@ -194,7 +202,6 @@
               <ul>
                 <li>Build your My Squad from the Official Playing XI and, if required, Optional Substitute Players from both teams.</li>
                 <li>Substitutes can be <b>DEF</b>, <b>MID</b>, or <b>FWD</b> only. Goalkeepers are not allowed as substitutes.</li>
-                <li>Select only the players whose eligible Sorare cards you own.</li>
                 <li>PICK2WIN does not verify card ownership, card eligibility, or competition eligibility.</li>
               </ul>
             </div>

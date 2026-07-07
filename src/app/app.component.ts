@@ -29,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.notificationService.initializeAfterLogin();
+        this.notificationService.loadNotifications(1, 20).subscribe();
       });
   }
 

@@ -215,6 +215,16 @@
   padding: 0 24px 18px;
 }
 
+.myteams-sport-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ink-2), var(--ink));
+}
+
 .main-game-tabs {
   padding: 14px 18px;
   border: 1px solid var(--line);
@@ -222,6 +232,7 @@
   background: linear-gradient(180deg, var(--ink-2), var(--ink));
 }
 
+.myteams-sport-tab,
 .myteams-game-tab {
   display: inline-flex;
   align-items: center;
@@ -236,6 +247,13 @@
   cursor: pointer;
 }
 
+.myteams-sport-tab {
+  min-height: 44px;
+  border-color: rgba(91,176,230,0.24);
+  background: rgba(91,176,230,0.06);
+}
+
+.myteams-sport-tab small,
 .myteams-game-tab small {
   color: var(--paper-3);
   font-family: var(--f-mono);
@@ -248,12 +266,14 @@
   color: var(--pitch-2);
 }
 
+.myteams-sport-tab.active,
 .myteams-game-tab.active {
   color: var(--ink);
   border-color: rgba(244,180,0,0.74);
   background: var(--gold);
 }
 
+.myteams-sport-tab.active small,
 .myteams-game-tab.active small {
   color: rgba(5,26,42,0.76);
 }

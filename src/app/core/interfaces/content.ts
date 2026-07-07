@@ -132,6 +132,40 @@ export interface SupportTicketResponse {
   message?: string;
 }
 
+export interface UserNotificationRaw {
+  id?: number | string;
+  _id?: number | string;
+  notification_id?: number | string;
+  title?: string;
+  subject?: string;
+  message?: string;
+  body?: string;
+  description?: string;
+  content?: string;
+  is_read?: boolean | number | string;
+  read?: boolean | number | string;
+  read_at?: string | null;
+  created_at?: string;
+  createdAt?: string;
+  updated_at?: string;
+  [key: string]: unknown;
+}
+
+export interface UserNotificationPagination {
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+}
+
+export interface UserNotificationsResponse {
+  success: boolean;
+  unread_count: number;
+  pagination: UserNotificationPagination;
+  data: UserNotificationRaw[];
+  message?: string;
+}
+
 export interface FeedbackQuestionOption {
   id: number;
   emoji: string;
