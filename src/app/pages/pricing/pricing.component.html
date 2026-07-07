@@ -1,31 +1,44 @@
 <app-header></app-header>
 
-<section class="pricing-page" id="pricing">
+<section class="pricing-page panel" id="pricing">
   <div class="wrap">
+    <!-- ⚽ COIN USAGE -->
     <div class="pricing-header-row reveal">
       <div class="section-head reveal">
-        <span class="pricing-eyebrow">PRICING - COIN PACKS</span>
-        <h2 class="h-display h2 section-title">
-          <span class="head-ic material-symbols-outlined" aria-hidden="true">paid</span>
-          All Coin Packs in <span class="italic-accent">PICK2WIN</span>
-        </h2>
+        <span class="pricing-eyebrow">PRICING · COIN PACKS</span>
+        <h2 class="h-display h2 section-title"><span class="head-ic">💰</span> All Coin Packs in <span class="italic-accent" style="color:var(--gold)">PICK2WIN</span></h2>
       </div>
-
-      <div class="coin-stamp coin-stamp-rect" role="img" aria-label="1 coin equals 1 match, any match, any league">
-        <svg viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <div class="coin-stamp coin-stamp-rect" role="img" aria-label="1 coin equals one successful UCT of up to 20 teams · any match, any league">
+        <svg viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <!-- transparent P2W coin watermark -->
           <g class="cs-wm-group">
             <circle cx="120" cy="61" r="42" fill="currentColor" opacity="0.06"/>
             <circle cx="120" cy="61" r="42" fill="none" stroke="currentColor" stroke-width="2" opacity="0.15"/>
             <circle cx="120" cy="61" r="35" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" opacity="0.12"/>
             <text x="120" y="74" text-anchor="middle" class="cs-wm" opacity="0.14">P2W</text>
           </g>
+          <!-- stamp frame -->
           <rect x="6" y="6" width="228" height="108" rx="15" fill="none" stroke="currentColor" stroke-width="2" opacity="0.6"/>
           <rect x="13" y="13" width="214" height="94" rx="11" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.32"/>
-          <text x="120" y="52" text-anchor="middle"><tspan class="cs-num">1</tspan><tspan class="cs-word"> COIN </tspan><tspan class="cs-eq">= </tspan><tspan class="cs-num">1</tspan><tspan class="cs-word"> MATCH</tspan></text>
+          <!-- main line -->
+          <text x="120" y="52" text-anchor="middle"><tspan class="cs-num">1</tspan><tspan class="cs-word"> COIN </tspan><tspan class="cs-eq">= </tspan><tspan class="cs-num">1</tspan><tspan class="cs-word"> UCT</tspan></text>
           <line x1="46" y1="66" x2="194" y2="66" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-          <text x="120" y="88" text-anchor="middle" class="cs-arc" opacity="0.95">ANY MATCH - ANY LEAGUE</text>
+          <!-- tagline -->
+          <text x="120" y="88" text-anchor="middle" class="cs-arc" opacity="0.95">★ 1 SUCCESSFUL RUN · 20 TEAMS ★</text>
         </svg>
       </div>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━ CREDIT PACKS ━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="launch-offer-banner reveal" style="flex-direction:column; align-items:stretch; text-align:left; gap:9px; padding:18px 22px;">
+      <div style="text-align:center;"><span class="lob-tag">🏆 World Cup 2026 Launch Offer</span></div>
+      <p style="font-size:13.5px; line-height:1.55; color:var(--paper-2); margin:0; text-align:center;">Limited-time introductory pricing. Every coin pack includes <b style="color:var(--paper);">bonus coins</b>, credited instantly to your PICK2WIN account.</p>
+      <p style="font-size:13px; line-height:1.5; color:var(--gold); font-weight:700; margin:0; text-align:center;">⏳ Offer valid until the FIFA World Cup 2026 Final (19 July 2026).</p>
+      <div style="border-top:1px solid rgba(244,180,0,0.28); margin-top:4px; padding-top:12px;">
+        <div style="font-family:var(--f-mono); font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--paper-3); font-weight:800; margin-bottom:9px;">After the promotional period ends:</div>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px;"><li style="display:flex; gap:9px; font-size:12.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--gold); flex:0 0 auto;">•</span><span>Coin pack pricing may be revised.</span></li><li style="display:flex; gap:9px; font-size:12.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--gold); flex:0 0 auto;">•</span><span>Bonus coin offers may change or be discontinued.</span></li><li style="display:flex; gap:9px; font-size:12.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--gold); flex:0 0 auto;">•</span><span>Coin validity periods may be updated.</span></li><li style="display:flex; gap:9px; font-size:12.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--gold); flex:0 0 auto;">•</span><span>New sports and supported fantasy platforms may become available using the same PICK2WIN coin balance.</span></li></ul>
+      </div>
+      <p style="font-size:13px; line-height:1.55; color:var(--paper); margin:4px 0 0; text-align:center;"><b>Purchase during the launch offer</b> to enjoy our introductory pricing and bonus coin benefits.</p>
     </div>
 
     <div class="pack-status" *ngIf="loading">Loading latest packs...</div>
@@ -34,215 +47,193 @@
     <div class="pack-status error" *ngIf="paymentError">{{ paymentError }}</div>
 
     <div class="credit-packs reveal" *ngIf="!loading && pricingPacks.length">
-      <div class="credit-pack" *ngFor="let pack of pricingPacks" [ngClass]="pack.tone">
-        <div class="credit-pack-head">
-          <div class="credit-pack-title">
-            <span class="credit-pack-icon material-symbols-outlined" aria-hidden="true">{{ pack.icon }}</span>
-            <div class="credit-pack-name">{{ pack.name }}</div>
-          </div>
-          <span class="credit-pack-coin-icon material-symbols-outlined" aria-hidden="true">paid</span>
-        </div>
+      <div class="credit-pack" *ngFor="let pack of pricingPacks; let i = index" [ngClass]="pack.tone">
+        <div class="credit-pack-badge" *ngIf="i === pricingPacks.length - 1">Lowest $/coin</div>
+        <div class="credit-pack-name">{{ pack.name }}</div>
+        <div class="credit-pack-sub">{{ i === 0 ? 'Perfect to get started' : i === 1 ? 'Great for regular users' : i === 2 ? 'Best value for serious users' : 'Maximum value for power users' }}</div>
         <div class="credit-pack-coins">
-          <span class="credit-pack-num">{{ pack.coins }}</span>
-          <span class="credit-pack-cred-label">coins</span>
+          <span class="credit-pack-num">{{ pack.totalCoins }}</span>
+          <span class="credit-pack-cred-label">total coins</span>
         </div>
-        <div class="credit-pack-breakdown" aria-label="Coin breakdown">
-          <span><b>Base</b> {{ pack.coins }}</span>
-          <i>+</i>
-          <span><b>Bonus</b> {{ pack.bonusCoins }}</span>
-          <i>=</i>
-          <span><b>Total</b> {{ pack.totalCoins }}</span>
+        <div class="credit-pack-bonus">
+          <span class="cpb-base">{{ pack.coins }} base</span>
+          <span class="cpb-plus" *ngIf="pack.bonusCoins > 0">+{{ pack.bonusCoins }} bonus</span>
         </div>
-        <div class="credit-pack-offer-label">Price ({{ pack.currencyCode }})</div>
+        <p class="credit-pack-matches"><b>{{ pack.totalCoins }} matches</b> of UCT workflow</p>
         <div class="credit-pack-price">
           <span class="credit-pack-cur">{{ pack.currencySymbol }}</span>
           <span class="credit-pack-amount">{{ pack.price }}</span>
         </div>
-        <div class="credit-pack-per">
-          &asymp; <b>{{ pack.currencySymbol }}{{ pack.perCoin }} {{ pack.currencyCode }}</b> per coin
-        </div>
-        <div class="credit-pack-validity">
-          <span class="credit-pack-validity-icon material-symbols-outlined" aria-hidden="true">calendar_month</span>
-          <span class="credit-pack-validity-copy">
-            <span>Validity</span>
-            <b>{{ pack.validityDays }} Days</b>
-          </span>
-        </div>
+        <div class="credit-pack-per">≈ <b>{{ pack.currencySymbol }}{{ pack.perCoin }}</b> per coin · {{ pack.validityDays }}-day validity</div>
         <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPricingPack(pack)">
-          {{ purchasingPlanId ? 'Opening Razorpay...' : 'Buy ' + pack.coins + ' Coins' }}
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+          {{ purchasingPlanId === pack.id ? 'Opening Razorpay...' : 'Buy ' + pack.name }}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </div>
     </div>
 
-    <section class="payment-methods-note reveal" aria-labelledby="payment-methods-title">
-      <div class="payment-brand-icons" aria-label="Supported payment methods">
-        <span class="brand-visa">VISA</span><span class="brand-rupay">RuPay</span><span class="brand-mastercard"><i></i><i></i></span><span class="brand-amex">AMERICAN<br>EXPRESS</span><span class="brand-diners">◉ DINERS</span>
-      </div>
-      <div class="payment-methods-copy">
-        <span class="payment-methods-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">payments</span> PAYMENT METHODS</span>
-        <h3 id="payment-methods-title">Check your payment method before you buy coins.</h3>
-        <p>Use your own card for every transaction. Confirm that it is enabled for online and international payments before you proceed.</p>
-      </div>
-      <button type="button" class="payment-methods-btn" (click)="openPaymentMethods()">
-        View payment methods &amp; important notes
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-      </button>
-    </section>
-
     <div class="coin-usage reveal">
       <div class="coin-usage-head">
-        <span class="coin-usage-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">sports_soccer</span> COIN USAGE</span>
-        <h3 class="coin-usage-title">What every coin gives you</h3>
+        <span class="coin-usage-eyebrow">⚽ COIN USAGE</span>
+        <h3 class="coin-usage-title">One Coin. One Successful UCT Generation.</h3>
+        <p style="max-width:64ch; margin:10px auto 0; text-align:center; font-size:14.5px; line-height:1.62; color:var(--paper-2);">A coin is deducted <b style="color:var(--paper);">only after a UCT generation completes successfully</b>. Each successful UCT generation creates <b style="color:var(--paper);">up to 20 structured, rule-valid team combinations</b> based entirely on your player selections and configuration.</p>
       </div>
+      <div style="text-align:center; font-family:var(--f-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin:20px 0 10px;">Every coin includes</div>
       <ul class="coin-usage-list">
-        <li><span class="cu-check material-symbols-outlined" aria-hidden="true">check_circle</span><span><b>1 coin = 1 match</b> UCT run</span></li>
-        <li><span class="cu-check material-symbols-outlined" aria-hidden="true">check_circle</span><span>Create up to <b>20 team combinations</b> per UCT run</span></li>
-        <li><span class="cu-check material-symbols-outlined" aria-hidden="true">check_circle</span><span>Valid for <b>365 days</b> from purchase date</span></li>
-        <li><span class="cu-check material-symbols-outlined" aria-hidden="true">check_circle</span><span>Use coins across <b>any supported league or match</b></span></li>
+        <li><span class="cu-check">✅</span><span><b>1 coin = 1 successful UCT generation</b> &mdash; up to 20 team combinations</span></li>
+        <li><span class="cu-check">✅</span><span>Generate up to <b>20 structured, rule-valid lineups</b> in a single UCT generation</span></li>
+        <li><span class="cu-check">✅</span><span><b>365-day validity</b> from the date of coin pack purchase</span></li>
+        <li><span class="cu-check">✅</span><span>Use your coins on <b>any supported match, league, tournament, or championship</b> available on PICK2WIN</span></li>
+        <li><span class="cu-check">✅</span><span><b>Bonus coins</b> are credited instantly after a successful purchase</span></li>
       </ul>
-      <div class="cur-note">
-        <span class="cur-note-pill">Prices and currency are loaded from the current package data</span>
+      <div class="cur-note" style="margin: 14px auto 0; text-align:center;">
+        <span class="cur-note-pill">$ All prices are shown in USD and billed in U.S. Dollars</span>
       </div>
     </div>
 
-    <div class="pricing-table-wrap reveal" *ngIf="!loading && pricingPacks.length">
+    <div class="coin-usage reveal" style="margin-top:22px;">
+      <div class="coin-usage-head">
+        <span class="coin-usage-eyebrow">🪙 ONE COIN WALLET</span>
+        <h3 class="coin-usage-title">One Coin Wallet. Every Supported Sport.</h3>
+        <p style="max-width:66ch; margin:10px auto 0; text-align:center; font-size:14.5px; line-height:1.62; color:var(--paper-2);">Your PICK2WIN coins are stored in <b style="color:var(--paper);">one universal wallet</b> and are not tied to any specific sport, league, tournament, championship, or fantasy platform.</p>
+        <p style="max-width:66ch; margin:8px auto 0; text-align:center; font-size:14px; line-height:1.6; color:var(--paper-2);">Use your available coin balance across <b style="color:var(--paper);">all current and future sports and supported fantasy platforms</b> available on PICK2WIN &mdash; without purchasing separate coin packs for different sports or platforms.</p>
+      </div>
+      <div style="margin-top:20px;">
+        <div style="font-family:var(--f-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); font-weight:800; text-align:center; margin-bottom:12px;">📅 One Wallet. Unlimited Possibilities.</div>
+        <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px;">
+          <div style="border:1px solid var(--line-2); border-radius:14px; padding:15px 17px; background:rgba(255,255,255,0.02);"><div style="font-family:var(--f-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:7px;">Today</div><div style="font-size:13.5px; line-height:1.5; color:var(--paper-2);">⚽ Generate Football (Soccer) lineups for supported fantasy platforms.</div></div>
+          <div style="border:1px solid var(--line-2); border-radius:14px; padding:15px 17px; background:rgba(255,255,255,0.02);"><div style="font-family:var(--f-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:7px;">Tomorrow</div><div style="font-size:13.5px; line-height:1.5; color:var(--paper-2);">🏈 Use your remaining coins for NFL lineup generation when it becomes available.</div></div>
+          <div style="border:1px solid var(--line-2); border-radius:14px; padding:15px 17px; background:rgba(255,255,255,0.02);"><div style="font-family:var(--f-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:7px;">As PICK2WIN grows</div><div style="font-size:13.5px; line-height:1.5; color:var(--paper-2);">🏀🏏⚾ As additional sports and supported fantasy platforms are introduced, your existing coin balance remains available to use throughout its validity period.</div></div>
+        </div>
+      </div>
+      <div style="margin-top:18px; border:1px solid rgba(91,176,230,0.34); border-radius:16px; padding:18px 20px; background:rgba(91,176,230,0.05);">
+        <div style="font-family:var(--f-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#5BB0E6; font-weight:800; margin-bottom:13px;">💙 Designed to be simple, transparent &amp; user-friendly</div>
+        <ul style="list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:9px 22px;"><li style="display:flex; gap:9px; font-size:13.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800; flex:0 0 auto;">✓</span><span>One universal wallet for all supported sports.</span></li><li style="display:flex; gap:9px; font-size:13.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800; flex:0 0 auto;">✓</span><span>One universal wallet for all supported fantasy platforms.</span></li><li style="display:flex; gap:9px; font-size:13.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800; flex:0 0 auto;">✓</span><span>No sport-specific coin packs.</span></li><li style="display:flex; gap:9px; font-size:13.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800; flex:0 0 auto;">✓</span><span>No platform-specific coin packs.</span></li><li style="display:flex; gap:9px; font-size:13.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800; flex:0 0 auto;">✓</span><span>No need to purchase new coin packs when new supported sports are added.</span></li><li style="display:flex; gap:9px; font-size:13.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800; flex:0 0 auto;">✓</span><span>Use your remaining coin balance across all supported PICK2WIN services during its validity period.</span></li><li style="display:flex; gap:9px; font-size:13.5px; line-height:1.5; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800; flex:0 0 auto;">✓</span><span>Pay only after a successful UCT generation.</span></li></ul>
+      </div>
+      <div style="margin-top:16px; border:1px solid rgba(244,180,0,0.32); border-left:4px solid var(--gold); background:rgba(244,180,0,0.06); border-radius:12px; padding:16px 20px;">
+        <div style="font-family:var(--f-mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:8px;">✦ Your coins stay with you</div>
+        <p style="font-size:14px; line-height:1.64; color:var(--paper-2); margin:0 0 8px;">Your remaining coin balance stays available for use across <b style="color:var(--paper);">all current and future sports and supported fantasy platforms</b> offered by PICK2WIN until your coins expire in accordance with the Coin Policy.</p>
+        <p style="font-size:13.5px; line-height:1.6; color:var(--paper); margin:0; font-weight:600;">No separate wallets. No separate balances. No unnecessary purchases. <span style="color:var(--gold);">One universal coin wallet for every supported PICK2WIN service.</span></p>
+      </div>
+    </div>
+
+    <!-- ─── At-a-glance comparison table ─── -->
+    <div class="pricing-table-wrap reveal">
       <div class="pricing-table-head">
-        <span class="pricing-table-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">table_chart</span> PACKAGE DETAILS</span>
-        <h3 class="pricing-table-h">Compare available coin packs</h3>
-        <p class="pricing-table-sub">Packages are loaded from the latest backend response. Total coins are calculated as base coins plus bonus coins.</p>
+        <span class="pricing-table-eyebrow">📋 ALL PACKS · SIDE BY SIDE</span>
+        <h3 class="pricing-table-h">Compare Every Coin Pack at a Glance</h3>
+        <p class="pricing-table-sub">Every coin pack provides the same PICK2WIN UCT experience. The only differences are the number of coins, bonus coins, and the effective price per coin.</p>
+        <div style="max-width:680px; margin:14px auto 0; display:flex; flex-wrap:wrap; justify-content:center; gap:9px 18px;"><span style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2);">✅</span>365-day coin validity from the purchase date</span><span style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2);">✅</span>One-time payment (no subscriptions or auto-renewal)</span><span style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2);">✅</span>Instant bonus coin credit (where applicable)</span><span style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2);">✅</span>One universal coin wallet across all supported PICK2WIN services</span><span style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2);">✅</span>Secure payments via Razorpay</span></div>
       </div>
 
       <div class="pricing-table-scroll">
-        <table class="pricing-table dynamic-pack-table">
+        <table class="pricing-table" *ngIf="pricingPacks.length">
           <thead>
             <tr>
               <th>Detail</th>
-              <th *ngFor="let pack of pricingPacks" [ngClass]="pack.tone">{{ pack.name }}</th>
+              <th *ngFor="let pack of pricingPacks" [class.highlight]="pack.name.toLowerCase().includes('pro')">{{ pack.name }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Coins</td>
-              <td *ngFor="let pack of pricingPacks">{{ pack.coins }}</td>
-            </tr>
-            <tr>
-              <td>Bonus Coins</td>
-              <td *ngFor="let pack of pricingPacks">+{{ pack.bonusCoins }}</td>
-            </tr>
-            <tr>
-              <td>Total Coins</td>
-              <td *ngFor="let pack of pricingPacks"><span class="pt-price">{{ pack.totalCoins }}</span></td>
-            </tr>
-            <tr>
-              <td>Price</td>
-              <td *ngFor="let pack of pricingPacks"><span class="pt-price"><span class="pt-price-currency">{{ pack.currencySymbol }}</span>{{ pack.price }}</span> {{ pack.currencyCode }}</td>
-            </tr>
-            <tr>
-              <td>Price / Coin</td>
-              <td *ngFor="let pack of pricingPacks"><b class="best-rate">{{ pack.currencySymbol }}{{ pack.perCoin }} {{ pack.currencyCode }}</b></td>
-            </tr>
-            <tr>
-              <td>Expiry</td>
-              <td *ngFor="let pack of pricingPacks"><span class="pt-yes">{{ pack.validityDays }} days</span></td>
-            </tr>
-            <tr>
-              <td>Leagues included</td>
-              <td [attr.colspan]="pricingPacks.length" class="center-cell">Every competition PICK2WIN supports - Premier League - UCL - La Liga - Serie A - Bundesliga - Ligue 1 - MLS - FIFA WC 2026 + more</td>
-            </tr>
-            <tr>
-              <td>Auto-renewal</td>
-              <td [attr.colspan]="pricingPacks.length" class="center-cell"><span class="pt-no">No - one-time purchases only</span></td>
-            </tr>
-            <tr>
-              <td>Refunds</td>
-              <td [attr.colspan]="pricingPacks.length" class="center-cell"><span class="pt-no">No refunds - once coins are issued they are non-refundable</span></td>
-            </tr>
-            <tr>
-              <td>Payment partner</td>
-              <td [attr.colspan]="pricingPacks.length" class="center-cell">Razorpay Checkout - secure online payments</td>
-            </tr>
+            <tr><td>Base Coins</td><td *ngFor="let pack of pricingPacks">{{ pack.coins }}</td></tr>
+            <tr><td>Launch Bonus Coins</td><td *ngFor="let pack of pricingPacks"><b style="color:var(--pitch-2);">+{{ pack.bonusCoins }}</b></td></tr>
+            <tr style="background:rgba(27,232,154,0.07);"><td>Total Coins</td><td *ngFor="let pack of pricingPacks"><b style="font-size:16px; color:var(--paper);">{{ pack.totalCoins }}</b></td></tr>
+            <tr style="background:rgba(244,180,0,0.07);"><td>Total Price ({{ pricingPacks[0].currencyCode }})</td><td *ngFor="let pack of pricingPacks"><span class="pt-price"><span class="pt-price-currency">{{ pack.currencySymbol }}</span>{{ pack.price }}</span></td></tr>
+            <tr><td>Effective Price per Coin</td><td *ngFor="let pack of pricingPacks; let i = index"><b [class.best-rate]="i === pricingPacks.length - 1">{{ pack.currencySymbol }}{{ pack.perCoin }}</b></td></tr>
+            <tr><td>Successful UCT Generations <span style="font-size:10px; color:var(--paper-3); font-weight:600;">&middot; 1 coin = 1 successful UCT</span></td><td *ngFor="let pack of pricingPacks">{{ pack.totalCoins }}</td></tr>
+            <tr><td>Coin Validity</td><td *ngFor="let pack of pricingPacks"><span class="pt-yes">{{ pack.validityDays }} Days</span></td></tr>
+            <tr><td>Where You Can Use Your Coins</td><td [attr.colspan]="pricingPacks.length" style="text-align:center; text-transform:none; letter-spacing:0; font-family:var(--f-sans);">Use your coins across any supported sport, fantasy platform, match, league, tournament, or championship available on PICK2WIN during your coin validity period.</td></tr>
           </tbody>
         </table>
       </div>
+
+      <div style="margin-top:18px; border:1px solid rgba(91,176,230,0.3); border-left:4px solid #5BB0E6; background:rgba(91,176,230,0.06); border-radius:12px; padding:16px 20px;">
+        <div style="font-family:var(--f-mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:#5BB0E6; font-weight:800; margin-bottom:8px;">💡 One Universal Coin Wallet</div>
+        <p style="font-size:14px; line-height:1.62; color:var(--paper-2); margin:0 0 8px;">Every coin you purchase is stored in a single universal PICK2WIN wallet. Whether you use your coins today for Football (Soccer) or later for NFL, Basketball, Baseball, Cricket, or any future sport supported by PICK2WIN, your remaining coin balance stays available until it expires in accordance with the Coin Policy.</p>
+        <p style="font-size:13.5px; line-height:1.6; color:var(--paper); margin:0; font-weight:600;">No separate wallets. No separate coin packs. One simple coin balance across all supported PICK2WIN services.</p>
+      </div>
     </div>
 
-
+    <!-- ─── Pricing promise · note + commitments consolidated under one headline ─── -->
     <div class="pricing-commitments reveal">
       <div class="pricing-commitments-head">
-        <span class="pricing-commitments-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">article</span> IMPORTANT PRICING NOTE</span>
-        <h3>Pricing may evolve. Your purchased coins are protected.</h3>
-        <p>Coin pricing may change in future - always with <b>prior notice</b>, and only for <b>new purchases</b>. Coins you already bought keep their exact terms: <b>no shortened validity, no higher per-coin rate, no change to a pack you paid for.</b></p>
+        <span class="pricing-commitments-eyebrow">📜 IMPORTANT PRICING NOTE</span>
+        <h3>Always Fair. Always Transparent.</h3>
+        <p>Coin pack pricing may change from time to time. Any pricing changes will apply <b>only to future purchases</b> and will <b>never affect coins you have already purchased</b>.</p>
+        <div style="max-width:560px; margin:15px auto 0; text-align:left; border:1px solid var(--line-2); border-radius:12px; padding:14px 18px; background:rgba(255,255,255,0.02);">
+          <div style="font-size:13px; color:var(--paper-2); margin-bottom:10px;">Your purchased coins keep the terms that applied when you bought them, including:</div>
+          <ul style="list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:7px 18px;"><li style="display:flex; gap:8px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800;">✓</span><span>Original coin quantity</span></li><li style="display:flex; gap:8px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800;">✓</span><span>Original bonus coins (if applicable)</span></li><li style="display:flex; gap:8px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800;">✓</span><span>Original validity period</span></li><li style="display:flex; gap:8px; font-size:12.5px; color:var(--paper-2);"><span style="color:var(--pitch-2); font-weight:800;">✓</span><span>Original usage rights</span></li></ul>
+        </div>
+        <p style="margin-top:13px;"><b style="color:var(--paper);">PICK2WIN will never reduce the value of coins that you have already purchased.</b></p>
       </div>
 
-      <span class="commitments-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">handshake</span> Our promise to coin buyers</span>
+      <div style="margin:0 0 26px; padding:24px 26px; border-radius:16px; background:linear-gradient(135deg, rgba(244,180,0,0.10), rgba(11,204,142,0.06)); border:1px solid rgba(244,180,0,0.40); border-left:4px solid var(--gold);">
+        <div style="font-family:var(--f-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:10px;">★ Our commitment</div>
+        <div style="font-size:22px; font-weight:800; color:var(--paper); line-height:1.3; margin-bottom:12px;">1 Coin = 1 Successful UCT Generation</div>
+        <p style="margin:0 0 10px; font-size:15px; line-height:1.62; color:var(--paper-2);">Every successful UCT generation allows you to create <b>up to 20 structured, rule-valid team combinations</b> based on your own player selections and configuration.</p>
+        <p style="margin:0 0 10px; font-size:15px; line-height:1.62; color:var(--paper-2);">As part of our long-term commitment to users, the standard price of one coin will <b style="color:var(--gold);">never exceed USD $1.00</b>.</p>
+        <p style="margin:0 0 12px; font-size:15px; line-height:1.62; color:var(--paper-2);">Today&rsquo;s launch pricing is significantly lower than this commitment, starting from <b>USD $0.67 per coin</b>, and we remain committed to delivering more value through new sports, supported fantasy platforms, and continuous product improvements.</p>
+        <p style="margin:0; padding-top:12px; border-top:1px solid rgba(244,180,0,0.25); font-size:15px; line-height:1.62; color:var(--paper-2);"><b style="color:var(--paper);">Our goal is simple:</b> help users save time, prepare better, and enjoy a transparent SaaS experience &mdash; not maximize the price of every coin.</p>
+      </div>
+
+      <span class="commitments-eyebrow">🤝 Our promise to coin buyers</span>
       <div class="pricing-commitments-grid compact">
+
         <div class="commitment-card commitment-highlight">
           <div class="commitment-num">01</div>
-          <div class="commitment-icon">P2W</div>
-          <h4>Your unused coins are always yours</h4>
-          <p>Already-purchased coins stay valid until their original expiry - no conversion, no early forfeiture.</p>
+          <div class="commitment-icon"><svg class="p2w-coin" style="width:40px;height:40px;" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="p2wCoinE" cx="38%" cy="30%" r="78%"><stop offset="0%" stop-color="#FFE9A8"/><stop offset="48%" stop-color="#F4B400"/><stop offset="100%" stop-color="#C8860A"/></radialGradient></defs><circle cx="32" cy="32" r="30" fill="url(#p2wCoinE)" stroke="#8A5A06" stroke-width="2"/><circle cx="32" cy="32" r="27" fill="none" stroke="#FFF1C2" stroke-width="1" opacity="0.55"/><circle cx="32" cy="32" r="23.5" fill="none" stroke="#8A5A06" stroke-width="1.2" opacity="0.5"/><ellipse cx="24" cy="22" rx="10" ry="6" fill="#FFFFFF" opacity="0.18"/><text x="32" y="38.5" text-anchor="middle" class="p2w-coin-txt">P2W</text></svg></div>
+          <h4>🪙 Your purchased coins are protected</h4>
+          <p>Coins you have already purchased remain valid until their original expiry date in accordance with the Coin Policy. They will never be reduced, converted, or shortened because of future pricing updates.</p>
         </div>
 
         <div class="commitment-card">
           <div class="commitment-num">02</div>
-          <div class="commitment-icon"><span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span></div>
-          <h4>New purchases use current packages</h4>
-          <p>Buy more later and you simply pick from the packages listed at that time, at their current price.</p>
+          <div class="commitment-icon">🛒</div>
+          <h4>Future purchases use current pricing</h4>
+          <p>If you purchase additional coin packs in the future, your purchase will simply use the pricing, offers, and terms available at that time. Previously purchased coins remain unaffected.</p>
         </div>
 
         <div class="commitment-card">
           <div class="commitment-num">03</div>
-          <div class="commitment-icon"><span class="material-symbols-outlined" aria-hidden="true">monitoring</span></div>
-          <h4>Higher-tier packs cost less per coin</h4>
-          <p>More coins in one pack means a lower per-coin price.</p>
+          <div class="commitment-icon">📊</div>
+          <h4>Better value with larger packs</h4>
+          <p>Higher-value coin packs may offer a lower effective price per coin than smaller packs, giving users better value when purchasing larger bundles.</p>
         </div>
+
+        <div class="commitment-card">
+          <div class="commitment-num">04</div>
+          <div class="commitment-icon">✅</div>
+          <h4>Our commitment to transparency</h4>
+          <p>Pricing updates apply only to future purchases. Previously purchased coins always retain the terms that applied when they were purchased. We believe in being transparent, fair, and consistent with every PICK2WIN user.</p>
+        </div>
+
       </div>
 
       <div class="pricing-commitments-foot">
-        <span class="ico material-symbols-outlined" aria-hidden="true">check_circle</span>
-        <p>These commitments apply to every coin pack - past and future. They are part of our published terms, not marketing.</p>
+        <span class="ico">✅</span>
+        <p>These commitments apply to every coin pack &mdash; past and future. They are part of our published terms, not marketing.</p>
       </div>
     </div>
 
+
+    <!-- ─── Signup nudge · shown only to anonymous visitors ─── -->
+    
+
     <div class="account-ready-block reveal" *ngIf="loggedIn$ | async">
-      <div class="ar-icon"><span class="material-symbols-outlined" aria-hidden="true">person</span></div>
+      <div class="ar-icon">👤</div>
       <div class="ar-body">
         <div class="ar-eyebrow">ACCOUNT READY</div>
         <h3 class="ar-title">Manage your coin packs from <em>My Space</em>.</h3>
-        <p class="ar-sub">View your active coin lots, remaining balance, expiry dates per pack, and purchase history - all in one place.</p>
+        <p class="ar-sub">View your active coin lots, remaining balance, expiry dates per pack, and purchase history — all in one place.</p>
       </div>
-      <a class="ar-cta" routerLink="/user/profile">
-        Go to profile
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-      </a>
+      <a class="ar-cta" routerLink="/user/profile">Go to profile <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
 </section>
 
-<div class="payment-methods-overlay" *ngIf="paymentMethodsOpen" role="presentation" (click)="closePaymentMethods()">
-  <section class="payment-methods-modal" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title" (click)="$event.stopPropagation()">
-    <header class="payment-methods-modal-head">
-      <div>
-        <span class="payment-methods-eyebrow">💳 PAYMENT METHODS</span>
-        <h2 id="payment-modal-title">Pay securely with confidence.</h2>
-      </div>
-      <button type="button" class="payment-modal-close" aria-label="Close payment methods" (click)="closePaymentMethods()"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
-    </header>
-    <div class="payment-modal-icons" aria-label="Supported card and bank-transfer payment methods">
-      <div><span>International Credit and Debit Cards</span><div class="payment-brand-icons"><span class="brand-visa">VISA</span><span class="brand-rupay">RuPay</span><span class="brand-mastercard"><i></i><i></i></span><span class="brand-amex">AMERICAN<br>EXPRESS</span><span class="brand-diners">◉ DINERS</span></div></div>
-      <div><span>International Bank Transfers</span><div class="bank-brand-icons"><b>✣ ACH<br><small>Network</small></b><b class="bacs">bacs</b><b class="swift">SWIFT</b></div></div>
-    </div>
-    <p class="payment-modal-lead">PICK2WIN supports secure international payments through Razorpay.</p>
-    <div class="payment-modal-grid">
-      <article><h3>Accepted Payment Methods</h3><ul><li>✅ Visa</li><li>✅ Mastercard</li><li>✅ American Express <small>(where supported)</small></li><li>✅ Diners Club International <small>(where supported)</small></li><li>🏦 International Bank Transfers <small>(where available)</small></li></ul></article>
-      <article><h3>Card Requirements</h3><ul><li>Your card must be enabled for online payments.</li><li>Your card must be enabled for international transactions if required by your bank.</li><li>Additional authentication such as OTP, 3D Secure, or bank verification may be required.</li><li>Payment approval is subject to your bank and payment provider.</li></ul></article>
-      <article><h3>Security</h3><ul><li>🔒 Payments are processed securely through Razorpay.</li><li>🔒 PICK2WIN does not store your complete card details.</li><li>🔒 Additional verification may be performed to help prevent unauthorized transactions and fraud.</li></ul></article>
-      <article><h3>Important Information</h3><ul><li>Available payment methods may vary depending on your country, bank, card issuer, and payment provider.</li><li>Some prepaid, virtual, or restricted cards may not be supported.</li><li>Transaction approvals and declines are determined by the card issuer and payment provider.</li></ul></article>
-    </div>
-    <div class="supported-countries"><h3>Supported Countries</h3><div><span>United Kingdom</span><span>Ireland</span><span>Germany</span><span>France</span><span>Spain</span><span>Italy</span><span>Netherlands</span><span>Sweden</span><span>Norway</span><span>Denmark</span><span>Finland</span><span>Austria</span><span>Belgium</span><span>Portugal</span><span>Poland</span><span>United States</span><span>Canada</span><span>Australia</span><span>New Zealand</span></div></div>
-    <p class="payment-modal-warning"><span class="material-symbols-outlined" aria-hidden="true">warning</span> Please ensure your payment method is authorized for international online transactions before attempting a purchase.</p>
-  </section>
-</div>
+
+<!-- ╭──────────── COVERAGE ────────────╮ -->
+
+<!-- ╭──────────── TRUST / COMPLIANCE ────────────╮ -->
 
 <app-footer></app-footer>

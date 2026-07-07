@@ -278,6 +278,11 @@
   color: rgba(5,26,42,0.76);
 }
 
+.myteams-game-tab:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 .mb-league {
   color: var(--gold);
   font-family: var(--f-mono);
@@ -456,6 +461,10 @@
   color: var(--paper-2);
   background: rgba(91,176,230,0.06);
   font-size: 13px;
+}
+
+.myteams-tab-loading {
+  font-weight: 800;
 }
 
 .my-teams-empty {

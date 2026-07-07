@@ -35,7 +35,7 @@
     Loading generated matches...
   </div>
 
-  <div class="myteams-sport-tabs" role="tablist" aria-label="Sport tabs" *ngIf="!loadingMatches && sportTabs().length">
+  <div class="myteams-sport-tabs" role="tablist" aria-label="Sport tabs" *ngIf="!loadingMatches && hasTeamsForSelectedDate() && sportTabs().length">
     <button
       class="myteams-sport-tab"
       type="button"
@@ -49,7 +49,7 @@
     </button>
   </div>
 
-  <div class="myteams-game-tabs main-game-tabs" role="tablist" aria-label="Fantasy game tabs" *ngIf="!loadingMatches">
+  <div class="myteams-game-tabs main-game-tabs" role="tablist" aria-label="Fantasy game tabs" *ngIf="!loadingMatches && hasTeamsForSelectedDate()">
     <button
       class="myteams-game-tab"
       type="button"
@@ -57,13 +57,18 @@
       *ngFor="let game of gameTabs"
       [class.active]="activeGame === game.id"
       [attr.aria-selected]="activeGame === game.id"
+      [disabled]="gameTabLoading"
       (click)="selectMainGameTab(game.id)">
       <span>{{ game.label }}</span>
       <small>{{ gameMatchCount(game.id) }} matches</small>
     </button>
   </div>
 
-  <div class="myteams-list" *ngIf="!loadingMatches && filteredMatches.length > 0; else noMatches">
+  <div class="mt-helper-note myteams-tab-loading" *ngIf="!loadingMatches && gameTabLoading">
+    Loading {{ gameLabel(activeGame) }} teams...
+  </div>
+
+  <div class="myteams-list" *ngIf="!loadingMatches && !gameTabLoading && filteredMatches.length > 0; else noMatches">
     <article
       class="match-batch"
       *ngFor="let match of filteredMatches"
@@ -116,10 +121,18 @@
   </div>
 
   <ng-template #noMatches>
-    <div class="my-teams-empty" *ngIf="!loadingMatches">
+    <div class="my-teams-empty" *ngIf="!loadingMatches && !gameTabLoading">
       <div class="empty-icon">P2W</div>
-      <h3>No {{ activeSportLabel() }} {{ gameLabel(activeGame) }} teams yet</h3>
-      <p>No {{ activeSportLabel() }} {{ gameLabel(activeGame) }} generated teams found for the selected date. Choose another sport, game tab, or date.</p>
+      <h3 *ngIf="hasTeamsForSelectedDate(); else noTeamsTitle">No {{ activeSportLabel() }} {{ gameLabel(activeGame) }} teams yet</h3>
+      <ng-template #noTeamsTitle>
+        <h3>No teams yet</h3>
+      </ng-template>
+      <p *ngIf="hasTeamsForSelectedDate(); else noTeamsCopy">
+        No {{ activeSportLabel() }} {{ gameLabel(activeGame) }} generated teams found for the selected date. Choose another sport, game tab, or date.
+      </p>
+      <ng-template #noTeamsCopy>
+        <p>No generated teams found for the selected date.</p>
+      </ng-template>
     </div>
   </ng-template>
 </div>

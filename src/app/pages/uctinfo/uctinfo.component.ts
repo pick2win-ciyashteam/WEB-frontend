@@ -23,4 +23,11 @@ export class UctinfoComponent {
   openLogin() {
     this.authModal.open('login');
   }
+
+  scrollToSection(sectionId: string) {
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
 }

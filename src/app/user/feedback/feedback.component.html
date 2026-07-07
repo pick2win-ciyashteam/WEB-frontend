@@ -1,14 +1,28 @@
+<div class="fb-hero reveal">
+  <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">lightbulb</span> User Voice - Direct Line To The Team</span>
+  <h1 class="fb-h">Your feedback shapes what we build next.</h1>
+  <p class="fb-lead">
+    Choose one below - everything you send goes straight to the PICK2WIN product team
+    and helps shape upcoming versions. A real person reads every submission.
+  </p>
+</div>
 
 <div class="fb-tabs reveal" >
   <div class="fb-tabbar" role="tablist" style="margin-top: 1rem;">
     <button class="fb-tab" data-fbtab="vote" type="button" [class.active]="feedbackTab === 'vote'" [class.done]="surveySubmitted" (click)="setFeedbackTab('vote')">
-      <span class="material-symbols-outlined" aria-hidden="true">how_to_vote</span>
-      Votes
+      <span class="material-symbols-outlined" aria-hidden="true">analytics</span>
+      <span class="fb-tab-copy">
+        <b>Quick Votes</b>
+        <small>A 2-3 minute survey to help us prioritise what we build next.</small>
+      </span>
       <span class="fb-tab-done" aria-hidden="true">done</span>
     </button>
     <button class="fb-tab" data-fbtab="suggest" type="button" [class.active]="feedbackTab === 'suggest'" [class.done]="feedbackSubmitted" (click)="setFeedbackTab('suggest')">
       <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
-      Detailed Feedback
+      <span class="fb-tab-copy">
+        <b>Detailed Feedback</b>
+        <small>Write a suggestion, report a bug, or tell us what you love.</small>
+      </span>
       <span class="fb-tab-done" aria-hidden="true">done</span>
     </button>
   </div>
@@ -16,9 +30,8 @@
   <div class="fb-tabpanel" *ngIf="feedbackTab === 'vote'" >
     <div class="fb-survey">
       <div class="fb-survey-h">
-        <span class="fb-eyebrow vote"><span class="material-symbols-outlined" aria-hidden="true">ballot</span> Votes - Help Shape The Next Version</span>
         <h3>How do you feel about UCT - and what should we build next?</h3>
-        <p>A quick required survey - about a minute. Please answer every question; you will finish with a star rating. One submission per user.</p>
+        <p>A quick required survey - about 2-3 minutes. Please answer every required question; you will finish with a star rating. One submission per user.</p>
       </div>
 
       <form #surveyForm class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (input)="updateSurveyCompletion(surveyForm)" (change)="updateSurveyCompletion(surveyForm)" (submit)="submitSurvey($event)">
@@ -164,10 +177,11 @@
 
       <ng-template #surveyThanks>
         <div class="fb-thanks" id="surveyThanksMessage">
-          <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">how_to_vote</div>
+          <div class="fb-thanks-icon material-symbols-outlined" aria-hidden="true">business_center</div>
           <h3>Votes recorded - thank you!</h3>
-          <p>Your survey reference: <code>{{ surveyRef }}</code><br>Aggregate results are reviewed in the Tuesday product call. Any direct questions? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> - we reply within 48 hours.</p>
-          <p class="fb-locked-note">One vote per user - your response has been recorded. You cannot submit the vote form again.</p>
+          <p>Your survey reference: <code>{{ surveyRef }}</code></p>
+          <p>Aggregate results are reviewed in the Tuesday product call - we will publish the winning decisions on the next page release.<br>Any direct questions? Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> - we aim to reply within 48 hours.</p>
+          <p class="fb-locked-note"><span class="material-symbols-outlined" aria-hidden="true">lock</span> One vote per user - your response has been recorded and cannot be submitted again.</p>
         </div>
       </ng-template>
     </div>
@@ -178,7 +192,7 @@
       <div class="fb-form-card">
         <div class="fb-form-h">
           <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">edit_note</span> Submit Feedback</span>
-          <h3>Share your suggestion - we read every submission within 48 hours.</h3>
+          <h3>Write a suggestion, report a bug, or tell us what you love.</h3>
         </div>
 
         <form class="fb-form" *ngIf="!feedbackSubmitted; else feedbackThanks" (submit)="submitFeedback($event)">
@@ -272,68 +286,6 @@
   </div>
 </div>
 
-<div class="fb-hero reveal" style="margin-top: 2rem;">
-  <span class="fb-eyebrow"><span class="material-symbols-outlined" aria-hidden="true">tips_and_updates</span> User Voice - Direct Line To The Team</span>
-  <h1 class="fb-h">Your feedback shapes the next tuning.</h1>
-  <p class="fb-lead">
-    Every suggestion, tuning request, league wish-list, and bug report comes straight to the PICK2WIN team.
-    We read every submission, and the patterns we see in user feedback directly drive what gets shipped next.
-    <b>All replies are sent from</b> <a href="mailto:support@pick2win.io">support@pick2win.io</a> within 48 hours.
-  </p>
-</div>
-
-<div class="fb-roadmap-banner reveal">
-  <div class="fb-rb-icon material-symbols-outlined" aria-hidden="true">rocket_launch</div>
-  <div class="fb-rb-body">
-    <div class="fb-rb-eyebrow">A full roadmap is already lined up - your voice decides what ships first</div>
-    <h3>PICK2WIN has many version updates planned. But the best <em>refinements</em> come from you.</h3>
-    <p>Your votes, comments, and bug reports tell us what genuinely saves users time and brings real satisfaction to people using UCT every gameweek.</p>
-  </div>
-</div>
-
-<div class="fb-section-head reveal">
-  <h3>What can you tell us?</h3>
-  <p>Six kinds of feedback - all read by a real person within 48 hours.</p>
-</div>
-
-<div class="fb-categories reveal">
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">target</div>
-    <h4>UCT tuning requests</h4>
-    <p>"Increase variance on captains" - "Add 8-3 / 3-8 splits" - "Hard-lock a specific formation" - anything about how the engine generates teams.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">settings</div>
-    <h4>Feature suggestions</h4>
-    <p>New exports, integrations, workflow shortcuts, presets, team-comparison views - anything that would make your workflow smoother.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">emoji_events</div>
-    <h4>League / coverage requests</h4>
-    <p>Want a league we do not cover yet? A specific cup competition? Women's football? Tell us which competition matters most to you.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">science</div>
-    <h4>Engine accuracy feedback</h4>
-    <p>Noticed a player missing? Lineup did not refresh in time? Constraint validation behaved oddly? The engineering team triages these within 24 hours.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">bug_report</div>
-    <h4>Bug reports</h4>
-    <p>UI glitches, mobile issues, payment problems, account access - anything not working as expected. Include screenshots if you can.</p>
-  </div>
-  <div class="fb-category-card">
-    <div class="fb-cat-icon material-symbols-outlined" aria-hidden="true">favorite</div>
-    <h4>What you love</h4>
-    <p>Equally important - what is working well? Knowing what users genuinely value helps us protect those things during future changes.</p>
-  </div>
-</div>
-
-<div class="fb-section-head reveal fb-build-head">
-  <h3>You decide what we build next</h3>
-  <p>Two quick steps - cast your <b class="green">Votes</b>, then share your <b class="gold">Detailed Feedback</b>. Finishing both shapes the next version the most.</p>
-</div>
-
 
 <div class="fb-shipped reveal">
   <div class="fb-shipped-h">
@@ -345,23 +297,23 @@
     <div class="fb-shipped-item">
       <div class="fb-shipped-date">May 2026</div>
       <div class="fb-shipped-body">
-        <div class="fb-shipped-title">TXT download now uses structured player rows</div>
-        <p>Requested by users who wanted better paste-compatibility with several fantasy app entry forms.</p>
+        <div class="fb-shipped-title">Team downloads now use .txt format with structured player rows</div>
+        <p>Requested by 47 users - gave better paste-compatibility with several external entry forms.</p>
       </div>
       <div class="fb-shipped-tag tag-shipped">Shipped</div>
     </div>
     <div class="fb-shipped-item">
       <div class="fb-shipped-date">May 2026</div>
       <div class="fb-shipped-body">
-        <div class="fb-shipped-title">Mobile menu now opens a proper drawer</div>
-        <p>Reported by users as a critical mobile UX issue.</p>
+        <div class="fb-shipped-title">Mobile menu now opens a proper drawer (not the signup modal)</div>
+        <p>Reported by 12 users - originally a critical UX bug.</p>
       </div>
       <div class="fb-shipped-tag tag-shipped">Shipped</div>
     </div>
     <div class="fb-shipped-item">
       <div class="fb-shipped-date">Apr 2026</div>
       <div class="fb-shipped-body">
-        <div class="fb-shipped-title">Added more supported leagues</div>
+        <div class="fb-shipped-title">Added 4 more leagues (J1 League, Eredivisie, MLS Cup, Super Lig)</div>
         <p>Requested across Japan, Netherlands, Turkey, and the US.</p>
       </div>
       <div class="fb-shipped-tag tag-shipped">Shipped</div>
@@ -378,7 +330,7 @@
       <div class="fb-shipped-date">Jun 2026</div>
       <div class="fb-shipped-body">
         <div class="fb-shipped-title">Custom team count (10 / 15 / 20 / 25 / 30)</div>
-        <p>Currently high in the suggestion backlog and planned for a future engine release.</p>
+        <p>Currently #1 in the suggestion backlog - planned for the v2.4 engine release.</p>
       </div>
       <div class="fb-shipped-tag tag-planned">Planned</div>
     </div>

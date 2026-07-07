@@ -16,6 +16,7 @@
   --f-display: Inter, "Plus Jakarta Sans", system-ui, sans-serif;
   --f-body: Inter, system-ui, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, monospace;
+  --policy-w: 1180px;
 }
 
 .pol-page {
@@ -36,9 +37,10 @@
 }
 
 .pol-container {
-  max-width: 920px;
+  width: min(var(--policy-w), calc(100% - 40px));
+  max-width: var(--policy-w);
   margin: 0 auto;
-  padding: 48px 22px 80px;
+  padding: 48px 0 80px;
 }
 
 .pol-top {
@@ -206,7 +208,7 @@
 }
 
 .pol-panel {
-  padding: 26px 28px 12px;
+  padding: 32px 40px 14px;
 }
 
 .pol-section {
@@ -294,7 +296,8 @@
 
 @media (max-width: 640px) {
   .pol-container {
-    padding: 34px 18px 60px;
+    width: min(100% - 24px, var(--policy-w));
+    padding: 34px 0 60px;
   }
 
   .pol-tabbar {
@@ -314,7 +317,14 @@
 /* Final mobile density pass for legal/policy documents. */
 @media (max-width: 640px) {
   .pol-container {
-    padding: 24px 12px 46px !important;
+    width: min(100% - 22px, var(--policy-w)) !important;
+    padding: 24px 0 46px !important;
+  }
+
+  .pol-hero,
+  .pol-panel {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 
   .pol-doc {
