@@ -113,20 +113,20 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       name: 'DraftKings',
       icon: 'emoji_events',
       teamLabel: '8 Player Teams',
-      salaryLabel: '$50,000 Salary Cap',
+      salaryLabel: 'Player Max $15,000',
       captainLabel: 'No Captain',
       capText: 'GK 1, DEF 2, MID 2, FWD 2, UTIL 1',
-      summary: 'Enter official DraftKings 4-5 digit salary for every selected player.'
+      summary: 'Enter official DraftKings salary for every selected player. Per-player maximum is 15000.'
     },
     {
       id: 'fanduel',
       name: 'FanDuel',
       icon: 'shield',
       teamLabel: '7 Player Teams',
-      salaryLabel: '100 Salary Units',
+      salaryLabel: 'Player Max 29 salary',
       captainLabel: 'No Captain',
       capText: 'GK 1, DEF 2, FWD/MID 4',
-      summary: 'Enter official FanDuel 1-2 digit salary for every selected player.'
+      summary: 'Enter official FanDuel salary for every selected player. Per-player maximum is 29.'
     }
   ];
   readonly singleGoalkeeperMandateMessage = 'Your squad contains only one Goalkeeper. This Goalkeeper will automatically appear in all generated teams. Selecting it as M-YES is not required.';
@@ -324,8 +324,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get activeSalaryCap(): number | null {
-    if (this.selectedPlatform === 'draftkings') return 50000;
-    if (this.selectedPlatform === 'fanduel') return 100;
     return null;
   }
 
@@ -334,19 +332,19 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get salaryPlaceholder(): string {
-    return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Units';
+    return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Salary';
   }
 
   get salaryInputMode(): string {
-    return this.selectedPlatform === 'fanduel' ? 'decimal' : 'numeric';
+    return 'numeric';
   }
 
   get salaryPattern(): string {
-    return this.selectedPlatform === 'fanduel' ? '[0-9]{1,2}(\\.[0-9])?' : '[0-9]{4,5}';
+    return this.selectedPlatform === 'fanduel' ? '[0-9]{1,2}' : '[0-9]{4,5}';
   }
 
   get salaryMaxLength(): number {
-    return this.selectedPlatform === 'fanduel' ? 4 : 5;
+    return this.selectedPlatform === 'fanduel' ? 2 : 5;
   }
 
   get totalSelectedSalary(): number {
@@ -677,10 +675,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.selectedPlatform === 'fanduel' && event.key === '.') {
-      return;
-    }
-
     if (!/^\d$/.test(event.key)) {
       event.preventDefault();
     }
@@ -954,7 +948,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     const label = this.activePlatformName;
-    const cap = this.activeSalaryCap;
     const invalidPlayer = this.availablePool.find(player => {
       const salaryValue = this.salaries.get(player.id) || '';
 
@@ -965,56 +958,34 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       const salaryValue = this.salaries.get(invalidPlayer.id) || '';
 
       if (!salaryValue) {
-        return `${label} salary is required for ${invalidPlayer.player_name}.`;
+        return `${label} ${this.salaryPlaceholder.toLowerCase()} is required for ${invalidPlayer.player_name}.`;
       }
 
       if (!this.isValidSalaryValue(salaryValue)) {
-        return `Enter a valid ${label} salary for ${invalidPlayer.player_name}.`;
+        return this.salaryRangeMessage(invalidPlayer);
       }
 
-      return `Enter a valid ${label} salary for ${invalidPlayer.player_name}.`;
-    }
-
-    if (cap !== null && this.totalSelectedSalary > cap) {
-      return `${label} total salary cannot exceed ${cap}. Current total is ${this.totalSelectedSalary}.`;
+      return this.salaryRangeMessage(invalidPlayer);
     }
 
     return '';
   }
 
   private cleanSalaryInput(value: string): string {
-    if (this.selectedPlatform !== 'fanduel') {
-      return String(value || '').replace(/\D/g, '').slice(0, this.salaryMaxLength);
-    }
-
-    const normalized = String(value || '')
-      .replace(/[^0-9.]/g, '')
-      .replace(/^(\d*\.?)|(\.)/g, '$1');
-    const [whole = '', decimal] = normalized.split('.');
-    const cappedWhole = whole.slice(0, 2);
-
-    if (decimal === undefined) {
-      return cappedWhole;
-    }
-
-    const firstDecimal = decimal.slice(0, 1);
-
-    if (firstDecimal === '0') {
-      return cappedWhole;
-    }
-
-    return `${cappedWhole}.${firstDecimal}`.slice(0, this.salaryMaxLength);
+    return String(value || '').replace(/\D/g, '').slice(0, this.salaryMaxLength);
   }
 
   private isValidSalaryValue(value: string): boolean {
     const salary = Number(value);
     const validFormat = this.selectedPlatform === 'fanduel'
-      ? /^\d{1,2}(\.\d)?$/.test(value)
+      ? /^\d{1,2}$/.test(value)
       : /^\d{4,5}$/.test(value);
+    const maxValue = this.selectedPlatform === 'fanduel' ? 29 : 15000;
 
     return validFormat
       && Number.isFinite(salary)
-      && salary > 0;
+      && salary > 0
+      && salary <= maxValue;
   }
 
   private canSelectAnotherSalaryPlayer(player: UctPlayer): boolean {
@@ -1106,8 +1077,14 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private salaryFormatHint(): string {
     return this.selectedPlatform === 'fanduel'
-      ? 'FanDuel units in 1-2 digits, with optional one decimal'
-      : 'DraftKings salary in 4-5 digits';
+      ? 'FanDuel salary from 1 to 29'
+      : 'DraftKings salary from 1000 to 15000';
+  }
+
+  private salaryRangeMessage(player: UctPlayer): string {
+    return this.selectedPlatform === 'fanduel'
+      ? `Enter valid FanDuel salary from 1 to 29 for ${player.player_name}.`
+      : `Enter a valid DraftKings salary from 1000 to 15000 for ${player.player_name}.`;
   }
 
   validTeamCombinations(): Array<{ home: number; away: number }> {

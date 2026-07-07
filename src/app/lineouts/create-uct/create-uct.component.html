@@ -52,7 +52,6 @@
         <div class="platform-card-grid" id="platformCardGrid">
           <article class="platform-card" *ngFor="let platform of visiblePlatforms" [class.selected]="selectedPlatform === platform.id" [class.generated]="isPlatformGenerated(platform.id)">
             <div class="platform-main">
-              <span class="platform-check material-symbols-outlined" aria-hidden="true">{{ isPlatformGenerated(platform.id) ? 'check_circle' : (selectedPlatform === platform.id ? 'check_circle' : 'radio_button_unchecked') }}</span>
               <div>
                 <h2>{{ platform.name }}</h2>
                 <div class="platform-tags">
@@ -202,7 +201,7 @@
               <ul>
                 <li>Build your My Squad from the Official Playing XI and, if required, Optional Substitute Players from both teams.</li>
                 <li>Substitutes can be <b>DEF</b>, <b>MID</b>, or <b>FWD</b> only. Goalkeepers are not allowed as substitutes.</li>
-                <li>PICK2WIN does not verify card ownership, card eligibility, or competition eligibility.</li>
+                <li>Enter accurate player values for your selected platform. DraftKings allows up to 15000 per player; FanDuel allows up to 29 units per player.</li>
               </ul>
             </div>
           </div>
