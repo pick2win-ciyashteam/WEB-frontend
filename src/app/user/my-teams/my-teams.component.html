@@ -192,8 +192,7 @@
         (keyup.enter)="openTeamPreview(team.id)">
 
         <div class="t-card-h">
-          <div class="t-card-name">You (T{{ i + 1 }})</div>
-          <div class="t-card-num">{{ team.split }} split</div>
+          <div class="t-card-name">Your (T{{ i + 1 }})</div>
         </div>
 
         <div class="t-card-body">
@@ -205,17 +204,6 @@
             <div class="ts-team">
               <div class="ts-code away">{{ teamCode('away') }}</div>
               <div class="ts-count">{{ team.awayCount }}</div>
-            </div>
-          </div>
-
-          <div class="t-card-cv">
-            <div class="cv-pill">
-              <div class="cv-avatar" [style.background]="team.captain && !team.captain.logo ? teamColor(team.captain.team) : null">
-  <img *ngIf="team.captain?.logo; else capInitials" [src]="team.captain?.logo" [alt]="team.captain?.name">
-  <ng-template #capInitials>{{ team.captain ? playerInitials(team.captain) : 'C' }}</ng-template>
-</div>
-              <div class="cv-badge">C</div>
-              <div class="cv-name">{{ team.captain?.name || 'N/A' }}</div>
             </div>
           </div>
         </div>
@@ -294,7 +282,6 @@
             <div class="pitch-line">
               <div class="pitch-player" *ngFor="let player of playersByPosition(position)">
                 <div class="pp-ava">
-                  <div class="pp-cvc c" *ngIf="isCaptain(player)">C</div>
                   <div class="pp-jersey" [style.background]="!player.logo ? teamColor(player.team) : null">
   <img *ngIf="player.logo; else pitchInitials" [src]="player.logo" [alt]="player.name">
   <ng-template #pitchInitials>{{ playerInitials(player) }}</ng-template>

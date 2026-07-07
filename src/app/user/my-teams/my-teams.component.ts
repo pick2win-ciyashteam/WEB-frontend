@@ -255,10 +255,13 @@ this.loadingMatches = false;
   });
 }
 
-applyDateFilter() {
-  this.selectedMatch = null;
-  this.previewTeam = null;
-  this.previewTeams = [];
+applyDateFilter(resetSelection = true) {
+  if (resetSelection) {
+    this.selectedMatch = null;
+    this.previewTeam = null;
+    this.previewTeams = [];
+  }
+
   this.ensureActiveSport();
 
   this.filteredMatches = this.matches.filter(match =>
@@ -619,10 +622,10 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     const hasGameCounts = Object.keys(match.teamsGeneratedByGame || {}).length > 0;
 
     if (!generatedGames.length && !hasGameCounts) {
-      return true;
+      return match.game ? match.game === game : false;
     }
 
-    return generatedGames.includes(game) || match.game === game || match.teamsGeneratedByGame?.[game] !== undefined;
+    return generatedGames.includes(game) || match.game === game || Number(match.teamsGeneratedByGame?.[game] || 0) > 0;
   }
 
   gameMatchCount(game: FantasyGame): number {
@@ -1212,7 +1215,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     ];
 
     if (isSalaryGame) {
-      lines.push(`${'No'.padEnd(5)}${'Player'.padEnd(42)}${'Pos'.padEnd(9)}${'Team'.padEnd(10)}Salary`);
+      lines.push(`${'No'.padEnd(5)}${'Player'.padEnd(36)}${'Pos'.padEnd(8)}${'Team'.padEnd(10)}Salary`);
     } else {
       lines.push(`${'No'.padEnd(5)}${'Player'.padEnd(32)}${'Position'.padEnd(14)}${'Team'.padEnd(8)}Status`);
     }
@@ -1224,7 +1227,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       const teamCode = this.reportTeamCode(match, player.side);
 
       if (isSalaryGame) {
-        lines.push(`${String(index + 1).padEnd(5)}${name.padEnd(42)}${player.role.padEnd(9)}${teamCode.padEnd(10)}${this.reportSalary(player.salary, match.game)}`);
+        lines.push(`${String(index + 1).padEnd(5)}${this.truncateReportText(name, 34).padEnd(36)}${player.role.padEnd(8)}${teamCode.padEnd(10)}${this.reportSalary(player.salary, match.game)}`);
       } else {
         lines.push(`${String(index + 1).padEnd(5)}${name.padEnd(32)}${player.role.padEnd(14)}${teamCode.padEnd(8)}${player.isSubstitute ? 'Substitute' : 'Playing XI'}`);
       }
@@ -1393,7 +1396,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         this.reportField('Utility (UTIL)', '1 (DEF / MID / FWD only)'),
         '',
         this.reportField('Total Players', '8'),
-        this.reportField('Salary Cap', '$50,000'),
+        this.reportField('Player Salary Max', '15000'),
         this.reportField('Maximum Per Club', '7 Players'),
         this.reportField('Minimum Opponent', '1 Player')
       ].join('\r\n');
@@ -1417,7 +1420,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         '- 0 FWD + 4 MID',
         '',
         this.reportField('Total Players', '7', 25),
-        this.reportField('Salary Cap', '100', 25),
+        this.reportField('Player Unit Max', '29', 25),
         this.reportField('Maximum Per Club', '6 Players', 25),
         this.reportField('Minimum Opponent', '1 Player', 25)
       ].join('\r\n');
@@ -1953,6 +1956,11 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return `${label.padEnd(labelWidth)}: ${value ?? '-'}`;
   }
 
+  private truncateReportText(value: string, maxLength: number): string {
+    const text = String(value || '');
+    return text.length > maxLength ? text.slice(0, Math.max(0, maxLength - 1)).trimEnd() : text;
+  }
+
   private reportMatchDate(match: GeneratedMatch): string {
     const value = match.startTimeISO || match.startDate || match.matchDate || '';
     return this.reportDate(value);
@@ -2128,6 +2136,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   private refreshExpiryLabels(): void {
+    const selectedId = this.selectedMatch?.id;
     this.matches = this.matches.map(match => ({
       ...match,
       expires: this.expiryLabel(match.startTimeISO || '', match.status),
@@ -2135,7 +2144,14 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       viewable: !this.isExpired(match.startTimeISO || '', match.status)
     }));
 
-    this.applyDateFilter();
+    if (selectedId) {
+      const refreshedMatch = this.matches.find(match => match.id === selectedId);
+      if (refreshedMatch) {
+        this.selectedMatch = this.withGame(refreshedMatch, this.activeGame);
+      }
+    }
+
+    this.applyDateFilter(false);
   }
 
   private isExpired(startTime: string, status?: string): boolean {

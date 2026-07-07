@@ -57,7 +57,7 @@
                 <div class="platform-tags">
                   <span><i class="material-symbols-outlined" aria-hidden="true">groups</i>{{ platform.teamLabel }}</span>
                   <span><i class="material-symbols-outlined" aria-hidden="true">payments</i>{{ platform.salaryLabel }}</span>
-                  <span><i class="material-symbols-outlined" aria-hidden="true">block</i>{{ platform.captainLabel }}</span>
+                  <!-- <span><i class="material-symbols-outlined" aria-hidden="true">block</i>{{ platform.captainLabel }}</span> -->
                 </div>
                 <p>
                   <!-- <b>{{ isPlatformGenerated(platform.id) ? 'UCT GENERATED' : (platform.id === 'sorare' ? 'CURRENT WORKFLOW' : 'READY TO START') }}</b><br> -->
@@ -100,7 +100,7 @@
           <div>
             <b>UCT Generation Policy</b>
             <p>1 coin is consumed only after successful UCT generation. No coin is deducted if generation fails, you cancel before completion, or generation does not complete.</p>
-            <p>Each platform can be generated only once per match. Generated teams can be viewed anytime in My Teams.</p>
+            <p>Each platform can be generated only once per match. Generated teams remain available in My Teams until the match starts (kickoff).</p>
           </div>
         </div>
 
@@ -201,7 +201,7 @@
               <ul>
                 <li>Build your My Squad from the Official Playing XI and, if required, Optional Substitute Players from both teams.</li>
                 <li>Substitutes can be <b>DEF</b>, <b>MID</b>, or <b>FWD</b> only. Goalkeepers are not allowed as substitutes.</li>
-                <li>Enter accurate player values for your selected platform. DraftKings allows up to 15000 per player; FanDuel allows up to 29 units per player.</li>
+                <li>PICK2WIN does not validate player salary values. Please enter accurate salaries to generate valid team configurations for your selected fantasy platform</li>
               </ul>
             </div>
           </div>
@@ -215,7 +215,9 @@
               <small>Select players from both teams</small>
             </div>
           </div> -->
-          <span class="selection-pill">{{ activePlatformName }} - {{ availablePool.length }} / {{ maxSquad }} squad - {{ selectedSubIds.size }} / {{ maxSubs }} subs</span>
+          <div class="squad-title-summary">
+            <span class="selection-pill">{{ activePlatformName }} - {{ availablePool.length }} / {{ maxSquad }} squad - {{ selectedSubIds.size }} / {{ maxSubs }} subs</span>
+          </div>
         </div>
 
         <div class="team-pool-grid locked-xi-grid" id="playingXiPanel">
@@ -225,12 +227,12 @@
               <!-- <b>{{ homeStartingPlayers.length }} PLAYERS</b> -->
               <b> Playing XI</b>
             </div>
-            <button class="player-row locked-row" type="button" *ngFor="let player of homeStartingPlayers; trackBy: trackPlayer" [class.selected]="selectedStartingIds.has(player.id)" [class.gk-highlight]="isGoalkeeperPlayer(player)" [disabled]="isStartingDisabled(player)" (click)="toggleStartingPlayer(player)">
+            <button class="player-row locked-row pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of homeStartingPlayers; trackBy: trackPlayer" [class.selected]="selectedStartingIds.has(player.id)" [class.gk-highlight]="isGoalkeeperPlayer(player)" [disabled]="isStartingDisabled(player)" (click)="toggleStartingPlayer(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
-              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
                 <input type="text" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
@@ -243,12 +245,12 @@
               <h3><span class="team-color away"></span>{{ d.away_team.name }}</h3>
               <b> Playing XI</b>
             </div>
-            <button class="player-row locked-row" type="button" *ngFor="let player of awayStartingPlayers; trackBy: trackPlayer" [class.selected]="selectedStartingIds.has(player.id)" [class.gk-highlight]="isGoalkeeperPlayer(player)" [disabled]="isStartingDisabled(player)" (click)="toggleStartingPlayer(player)">
+            <button class="player-row locked-row pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of awayStartingPlayers; trackBy: trackPlayer" [class.selected]="selectedStartingIds.has(player.id)" [class.gk-highlight]="isGoalkeeperPlayer(player)" [disabled]="isStartingDisabled(player)" (click)="toggleStartingPlayer(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
-              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
                 <input type="text" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
@@ -278,12 +280,12 @@
               <!-- <b>{{ homeSubstitutes.length }} players</b> -->
               <b>{{ homeSubstitutes.length }} players</b>
             </div>
-            <button class="player-row" type="button" *ngFor="let player of homeSubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
+            <button class="player-row pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of homeSubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
-              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
                 <input type="text" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
@@ -297,12 +299,12 @@
               <h3><span class="team-color away"></span>{{ d.away_team.name }}</h3>
               <b>{{ awaySubstitutes.length }} players</b>
             </div>
-            <button class="player-row away" type="button" *ngFor="let player of awaySubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
+            <button class="player-row away pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of awaySubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
               <span class="avatar image-avatar">
                 <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
-              <span class="player-main"><b>{{ player.player_name }}</b></span>
+              <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
                 <input type="text" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
@@ -358,10 +360,7 @@
             <b>You have chosen Mandatory Players (M-YES).</b>
             <p>Select exactly 1 player to include in all 20 generated teams.</p>
             <small>DEF, MID or FWD only. Goalkeeper (GK) is not available for M-YES.</small>
-            <ul>
-              <li>Choose any one eligible Playing XI or Substitute player.</li>
-              <li>GK players are hidden in M-YES selection.</li>
-            </ul>
+           
           </div>
         </div>
         <div class="na-card" *ngIf="mandateMode === 'NA'">
@@ -369,11 +368,8 @@
           <div>
             <b>By default, no Mandatory (M-YES) players are selected.</b>
             <p>If you do not want to force any player into all 20 generated teams, leave <b>N/A</b> selected and continue.</p>
-            <p>PICK2WIN will generate teams using only your selected <b>My Squad</b>.</p>
-            <small>Tap <b>Next</b> to select your <b>Captain Pool</b> players.</small>
           </div>
         </div>
-
         <div class="team-pool-grid" *ngIf="mandateMode !== 'NA'">
           <article class="team-pool" *ngFor="let side of [{name: d.home_team.name, players: homeMandateMainPool, cls: 'home'}, {name: d.away_team.name, players: awayMandateMainPool, cls: 'away'}]">
             <div class="team-pool-head">
@@ -551,7 +547,15 @@
             <div class="preview-card-head">
               <span class="material-symbols-outlined" aria-hidden="true">groups</span>
               <div>
-                <b>My Squad</b>
+                <b class="preview-squad-title">
+                  Preview My Squad
+                  <span class="preview-title-counts">
+                    GK({{ squadPositionCount('GK') }})
+                    DEF({{ squadPositionCount('DEF') }})
+                    MID({{ squadPositionCount('MID') }})
+                    FWD({{ squadPositionCount('FWD') }})
+                  </span>
+                </b>
                 <small>{{ activePlatformName }} My Squad</small>
               </div>
             </div>
@@ -559,11 +563,17 @@
               <b>{{ availablePool.length }}/22</b>
             </div>
             <div class="preview-player-grid">
-              <div class="preview-player" *ngFor="let player of selectedStartingPlayers; trackBy: trackPlayer">
+              <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of selectedStartingPlayers; trackBy: trackPlayer">
                 <span class="avatar image-avatar">
                   <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                 </span>
-                <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
+                <span>
+                  <b>{{ player.player_name }}</b>
+                  <small class="preview-player-meta">
+                    <span>{{ player.teamShort }}</span>
+                    <i class="pos {{ positionClass(player) }}">{{ player.position }}</i>
+                  </small>
+                </span>
                 <em>{{ requiresSalary ? salaryValue(player) : 'XI' }}</em>
               </div>
             </div>
@@ -573,11 +583,17 @@
                 <b>Substitute Players</b>
               </div>
               <div class="preview-player-grid">
-                <div class="preview-player" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer">
+                <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer">
                   <span class="avatar image-avatar">
                     <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
                   </span>
-                  <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
+                  <span>
+                    <b>{{ player.player_name }}</b>
+                    <small class="preview-player-meta">
+                      <span>{{ player.teamShort }}</span>
+                      <i class="pos {{ positionClass(player) }}">{{ player.position }}</i>
+                    </small>
+                  </span>
                   <em>{{ requiresSalary ? salaryValue(player) : 'SUB' }}</em>
                 </div>
               </div>
@@ -685,7 +701,7 @@
             <span aria-hidden="true">→</span>
           </button>
           <button class="primary-btn" type="button" *ngIf="step === 2" [disabled]="!canLeaveMandateStep()" (click)="nextStep()">
-            {{ isSorarePlatform ? 'Next' : 'Preview' }}
+            {{ isSorarePlatform ? 'Next' : 'Next' }}
             <span aria-hidden="true">→</span>
           </button>
           <button class="primary-btn" type="button" *ngIf="step === 3 && isSorarePlatform" [disabled]="!canLeaveCaptainStep()" (click)="nextStep()">
@@ -759,6 +775,11 @@
       <div class="uct-confirm-notice">
         <span class="notice-icon material-symbols-outlined" aria-hidden="true">info</span>
         <p>Please review your configuration carefully. <strong class="gold">Once team generation is completed, the generated teams cannot be modified or regenerated for the same lineup.</strong></p>
+      </div>
+        <div class="uct-confirm-notice">
+        <span class="notice-icon material-symbols-outlined" aria-hidden="true">info</span>
+        <p> <strong class="gold">1 coin will be deducted</strong> from your available coin balance upon successful UCT generation.
+        </p>
       </div>
     </div>
 

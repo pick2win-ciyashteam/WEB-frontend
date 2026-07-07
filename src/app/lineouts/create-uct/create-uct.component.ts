@@ -59,16 +59,36 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   generateConsent = false;
   mandateMode: Mandate = 'NA';
   uctAlert: { title: string; message: string; type: UctAlertType } | null = null;
-  generationStatus = 'Resolving Sorare rules - applying mandates - computing splits';
-  readonly generationMessages = [
-  'Applying your Sorare configuration...',
-  'Processing selected My Squad players...',
-  'Building valid 5-card combinations...',
-  'Assigning Captain Pool rotations...',
-  'Checking duplicate teams...',
-  'Validating all Sorare rules...',
-  'Finalising your 20 teams...'
-  ];
+  generationStatus = 'Choose a platform to start UCT generation.';
+  readonly generationMessages: Record<FantasyPlatform, string[]> = {
+    sorare: [
+      'Applying your Sorare configuration...',
+      'Processing selected My Squad players...',
+      'Building valid 5-card combinations...',
+      'Assigning Captain Pool rotations...',
+      'Checking duplicate teams...',
+      'Validating all Sorare rules...',
+      'Finalising your 20 teams...'
+    ],
+    draftkings: [
+      'Processing your DraftKings configuration...',
+      'Analysing your selected My Squad players...',
+      'Validating DraftKings roster rules and player salary limits...',
+      'Building valid lineups (GK 1 - DEF 2 - MID 2 - FWD 2 - UTIL 1)...',
+      'Applying advanced calculations to maximise team coverage...',
+      'Performing final checks to ensure every team is unique...',
+      'Preparing your final teams...'
+    ],
+    fanduel: [
+      'Processing your FanDuel configuration...',
+      'Analysing your selected My Squad players...',
+      'Validating FanDuel roster rules and player unit limits...',
+      'Building valid lineups (GK 1 - DEF 2 - FWD/MID 4)...',
+      'Applying advanced calculations to maximise team coverage...',
+      'Performing final checks to ensure every team is unique...',
+      'Preparing your final teams...'
+    ]
+  };
 
   selectedStartingIds = new Set<number>();
   selectedSubIds = new Set<number>();
@@ -94,7 +114,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     icon: string;
     teamLabel: string;
     salaryLabel: string;
-    captainLabel: string;
+    // captainLabel: string;
     capText: string;
     summary: string;
   }> = [
@@ -104,7 +124,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       icon: 'sports_soccer',
       teamLabel: '5 Player Teams',
       salaryLabel: 'No Salary Cap',
-      captainLabel: 'Captain Mode',
+      // captainLabel: 'Captain Mode',
       capText: 'Current Sorare rules',
       summary: 'No salary entry. Existing PICK2WIN Sorare rules remain unchanged.'
     },
@@ -113,20 +133,20 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       name: 'DraftKings',
       icon: 'emoji_events',
       teamLabel: '8 Player Teams',
-      salaryLabel: 'Player Max $15,000',
-      captainLabel: 'No Captain',
+      salaryLabel: 'Salary Cap $50,000',
+      // captainLabel: 'No Captain',
       capText: 'GK 1, DEF 2, MID 2, FWD 2, UTIL 1',
-      summary: 'Enter official DraftKings salary for every selected player. Per-player maximum is 15000.'
+      summary: 'Select players for My Squad from the official Starting XI and substitutes, then enter each selected player\'s DraftKings salary. UCT builds valid 8-player lineups (GK 1 - DEF 2 - MID 2 - FWD 2 - UTIL 1) within the $50,000 salary cap'
     },
     {
       id: 'fanduel',
       name: 'FanDuel',
       icon: 'shield',
       teamLabel: '7 Player Teams',
-      salaryLabel: 'Player Max 29 salary',
-      captainLabel: 'No Captain',
+      salaryLabel: 'Salary Cap 100',
+      // captainLabel: 'No Captain',
       capText: 'GK 1, DEF 2, FWD/MID 4',
-      summary: 'Enter official FanDuel salary for every selected player. Per-player maximum is 29.'
+      summary: 'Select players for My Squad from the official Starting XI and substitutes, then enter each selected player\'s FanDuel Salary. UCT builds valid 7-player lineups (GK 1 - DEF 2 - FWD/MID 4) within the 100 salary-unit cap.'
     }
   ];
   readonly singleGoalkeeperMandateMessage = 'Your squad contains only one Goalkeeper. This Goalkeeper will automatically appear in all generated teams. Selecting it as M-YES is not required.';
@@ -332,7 +352,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get salaryPlaceholder(): string {
-    return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Salary';
+    return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Units';
   }
 
   get salaryInputMode(): string {
@@ -509,6 +529,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.positionCount(this.availablePool, position) >= minimum;
   }
 
+  squadPositionCount(position: string): number {
+    return this.positionCount(this.availablePool, position);
+  }
+
   teamAccent(side: 'home' | 'away'): string {
     return side === 'home' ? '#f8fafc' : '#31b8ff';
   }
@@ -627,7 +651,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.selectedPlatform = platform;
-    this.generationStatus = `Resolving ${this.activePlatformName} rules - validating selections - computing teams`;
+    this.generationStatus = this.generationMessages[platform][0];
     this.setActiveStep(1);
   }
 
@@ -654,6 +678,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       this.salaries.set(player.id, cleanValue);
     } else {
       this.salaries.delete(player.id);
+    }
+
+    if (cleanValue && this.isValidSalaryValue(cleanValue) && this.isSalaryInputAlert() && !this.pendingSalaryPlayer()) {
+      this.uctAlert = null;
     }
   }
 
@@ -1001,7 +1029,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     const pendingValue = this.salaries.get(pendingPlayer.id) || '';
     const message = pendingValue
-      ? `Enter ${this.salaryFormatHint()} for ${pendingPlayer.player_name} before selecting the next player.`
+      ? `${this.salaryRangeMessage(pendingPlayer)} Correct it before selecting the next player.`
       : `Enter a valid ${this.salaryPlaceholder.toLowerCase()} for ${pendingPlayer.player_name} before selecting the next player.`;
 
     this.showAlert(
@@ -1011,6 +1039,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     );
 
     return false;
+  }
+
+  private isSalaryInputAlert(): boolean {
+    const title = this.uctAlert?.title || '';
+
+    return title === `${this.activePlatformName} ${this.salaryPlaceholder} required`;
   }
 
   private pendingSalaryPlayer(): UctPlayer | null {
@@ -1906,11 +1940,14 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private startGeneratingStatus(): void {
     this.stopGeneratingStatus();
+    const messages = this.selectedPlatform
+      ? this.generationMessages[this.selectedPlatform]
+      : this.generationMessages.sorare;
     let index = 0;
-    this.generationStatus = this.generationMessages[index];
+    this.generationStatus = messages[index];
     this.generatingStatusTimer = setInterval(() => {
-      index = (index + 1) % this.generationMessages.length;
-      this.generationStatus = this.generationMessages[index];
+      index = (index + 1) % messages.length;
+      this.generationStatus = messages[index];
     }, 750);
   }
 

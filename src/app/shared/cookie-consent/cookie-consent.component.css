@@ -83,16 +83,64 @@
 
 @media (max-width: 700px) {
   .cookie-consent {
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    left: 10px;
     grid-template-columns: 1fr;
+    width: auto;
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 15px;
+    border-radius: 12px;
+    gap: 14px;
+  }
+
+  .cookie-copy {
+    gap: 10px;
+  }
+
+  .cookie-copy .material-symbols-outlined {
+    width: 36px;
+    height: 36px;
+    font-size: 21px;
+  }
+
+  .cookie-copy b {
+    font-size: 14px;
+  }
+
+  .cookie-copy p {
+    font-size: 12px;
+    line-height: 1.45;
   }
 
   .cookie-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .cookie-actions button {
     width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .cookie-consent {
+    right: 8px;
+    left: 8px;
+    padding: 12px;
+  }
+
+  .cookie-copy {
+    align-items: flex-start;
+  }
+
+  .cookie-actions {
+    grid-template-columns: 1fr;
   }
 }
