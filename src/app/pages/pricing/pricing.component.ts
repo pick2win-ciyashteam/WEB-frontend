@@ -163,7 +163,7 @@ paymentMethodsOpen = false;
     await this.loadRazorpayScript();
 
     const amount = Math.round(Number(plan.price || 0) * 100);
-    const currency = this.displayCurrencyCodeForPlan(plan);
+    const currency = this.displayCurrencyCodeForPlan();
     const res = await firstValueFrom(this.api.buyCoins({
       plan_id: plan.id,
       amount,
@@ -281,7 +281,7 @@ paymentMethodsOpen = false;
 
   perCoinText(plan: SubscriptionPlan): string {
     const suffix = this.isLowestPricePerCoin(plan) ? ' - lowest' : '';
-    return `~ ${plan.currency_symbol}${Number(plan.price_per_coin || 0).toFixed(2)} per coin${suffix}`;
+    return `~ $${Number(plan.price_per_coin || 0).toFixed(2)} per coin${suffix}`;
   }
 
   isLowestPricePerCoin(plan: SubscriptionPlan): boolean {
@@ -302,7 +302,7 @@ paymentMethodsOpen = false;
     const totalCoins = this.totalCoinsForPlan(plan);
     const price = Number(plan.price || 0);
     const perCoin = totalCoins > 0 ? price / totalCoins : 0;
-    const currencyCode = this.displayCurrencyCodeForPlan(plan);
+    const currencyCode = this.displayCurrencyCodeForPlan();
 
     return {
       id: plan.id,
@@ -314,7 +314,7 @@ paymentMethodsOpen = false;
       validityDays: Number(plan.validity_days || 365),
       price: price.toFixed(2),
       perCoin: perCoin.toFixed(2),
-      currencySymbol: this.currencySymbolForCode(currencyCode, plan.currency_symbol || '$'),
+      currencySymbol: this.currencySymbolForCode(currencyCode, '$'),
       currencyCode,
       tone: this.packTone(index)
     };
@@ -324,26 +324,8 @@ paymentMethodsOpen = false;
     this.pricingPacks = this.plans.map((plan, index) => this.toPricingPack(plan, index));
   }
 
-  private displayCurrencyCodeForPlan(plan: SubscriptionPlan): string {
-    const countryCurrency = this.currencyCodeForCountry(this.profileService.profile?.country || '');
-    const backendCurrency = String(plan.currency || '').trim().toUpperCase();
-
-    return countryCurrency || backendCurrency || 'USD';
-  }
-
-  private currencyCodeForCountry(country: string): string {
-    const text = String(country || '').trim().toLowerCase();
-
-    if (!text) return '';
-    if (['united states', 'usa', 'us'].includes(text)) return 'USD';
-    if (['canada', 'ca'].includes(text)) return 'CAD';
-    if (['united kingdom', 'uk', 'great britain', 'england', 'scotland', 'wales'].includes(text)) return 'GBP';
-    if (['france', 'germany', 'spain', 'italy', 'ireland', 'netherlands', 'belgium', 'portugal', 'austria', 'finland'].includes(text)) return 'EUR';
-    if (['australia', 'au'].includes(text)) return 'AUD';
-    if (['new zealand', 'nz'].includes(text)) return 'NZD';
-    if (['india', 'in'].includes(text)) return 'INR';
-
-    return '';
+  private displayCurrencyCodeForPlan(): string {
+    return 'USD';
   }
 
   private currencySymbolForCode(code: string, fallback: string): string {
@@ -412,7 +394,8 @@ paymentMethodsOpen = false;
       key,
       amount: order.amount,
       currency: order.currency,
-      name: 'PICK2WIN',
+      name: 'PICK2WIN Technologies Pvt Ltd',
+      logo: 'assets/favicon.png',
       description: `${plan.name} - ${this.totalCoinsForPlan(plan)} coins`,
       notes: {
         plan_id: String(plan.id),

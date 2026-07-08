@@ -258,9 +258,9 @@
           </div>
           <div class="uct-selfield">
             <label>Fantasy app <span style="color:var(--paper-3); font-weight:600; letter-spacing:0;">· all live now</span></label>
-            <div class="uct-seg" id="guideAppSeg" role="tablist">
-              <button type="button" class="uct-seg-btn active" data-app="draftkings"><span class="uct-live-d"></span>DraftKings</button>
-              <button type="button" class="uct-seg-btn" data-app="fanduel"><span class="uct-live-d"></span>FanDuel</button>
+            <div class="uct-seg" id="guideAppSeg" role="tablist" aria-label="Fantasy app rules guide">
+              <button type="button" class="uct-seg-btn" role="tab" [class.active]="selectedGuideApp === 'draftkings'" [attr.aria-selected]="selectedGuideApp === 'draftkings'" (click)="selectGuideApp('draftkings')"><span class="uct-live-d"></span>DraftKings</button>
+              <button type="button" class="uct-seg-btn" role="tab" [class.active]="selectedGuideApp === 'fanduel'" [attr.aria-selected]="selectedGuideApp === 'fanduel'" (click)="selectGuideApp('fanduel')"><span class="uct-live-d"></span>FanDuel</button>
             </div>
           </div>
         </div>
@@ -268,7 +268,7 @@
       </div>
       <div class="uct-appcard-body">
     
-    <div class="about-block app-guide-card" id="dk-rules-guide" style="--section-accent:#5BB0E6;">
+    <div class="about-block app-guide-card" id="dk-rules-guide" *ngIf="selectedGuideApp === 'draftkings'" style="--section-accent:#5BB0E6;">
       <div class="srg-guide">
         <div class="srg-head" style="background:linear-gradient(135deg, rgba(91,176,230,0.14), var(--surface-deep-2));">
           <div class="srg-head-l">
@@ -345,7 +345,7 @@
         <div class="srg-foot" style="background:linear-gradient(135deg, rgba(11,204,142,0.12), rgba(91,176,230,0.06)); border-color:rgba(11,204,142,0.32);">🏆 <span><b style="color:var(--pitch-2);">DraftKings &mdash; live on PICK2WIN.</b> Up to 20 unique, salary-cap compliant 8-player lineups from your selected squad, for 1 coin.</span></div>
       </div>
     </div>
-    <div class="about-block app-guide-card" id="fd-rules-guide" style="--section-accent:#5BB0E6;">
+    <div class="about-block app-guide-card" id="fd-rules-guide" *ngIf="selectedGuideApp === 'fanduel'" style="--section-accent:#5BB0E6;">
       <div class="srg-guide">
         <div class="srg-head" style="background:linear-gradient(135deg, rgba(91,176,230,0.14), var(--surface-deep-2));">
           <div class="srg-head-l">
@@ -357,26 +357,32 @@
         <p style="max-width:var(--card-w); margin:20px auto 4px; font-size:14.5px; line-height:1.6; color:var(--paper-2);"><b style="color:var(--paper);">Your squad, your salaries.</b> On FanDuel you build a <b>7-player</b> lineup — <b>1 GK + 2 DEF + 4 FWD/MID</b> — within a <b>100 Salary Unit</b> cap (FanDuel’s Classic soccer format). For every player you add to My Squad you enter that player&rsquo;s <b>FanDuel salary (cap value)</b> &mdash; UCT then generates up to <b>20 valid, salary-compliant lineups</b> from your pool. PICK2WIN never selects players and never enters contests for you.</p>
         <div class="srg-panel" style="margin-top:16px;">
           <h4><span class="srg-ic">📋</span> FanDuel &mdash; roster requirements</h4>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:22px; margin-top:10px; align-items:start;">
-            <table style="width:100%; border-collapse:collapse; font-size:14px; color:var(--paper-2);"><tbody>
-              <tr><td style="padding:5px 0;">Goalkeeper (GK)</td><td style="text-align:right; color:var(--paper); font-weight:700;">1</td></tr>
-              <tr><td style="padding:5px 0;">Defenders (DEF)</td><td style="text-align:right; color:var(--paper); font-weight:700;">2</td></tr>
-              <tr><td style="padding:5px 0;">Forwards / Midfielders <span style="color:var(--paper-3);">(any combination)</span></td><td style="text-align:right; color:var(--paper); font-weight:700;">4</td></tr>
-              <tr><td colspan="2" style="border-top:1px solid rgba(255,255,255,0.10); height:8px;"></td></tr>
-              <tr><td style="padding:5px 0;">Total players</td><td style="text-align:right; color:var(--paper); font-weight:700;">7</td></tr>
-              <tr><td style="padding:5px 0;">Salary cap</td><td style="text-align:right; color:var(--paper); font-weight:700;">100</td></tr>
-              <tr><td style="padding:5px 0;">Maximum per club</td><td style="text-align:right; color:var(--paper); font-weight:700;">6</td></tr>
-              <tr><td style="padding:5px 0;">Minimum opponent</td><td style="text-align:right; color:var(--paper); font-weight:700;">1</td></tr>
-            </tbody></table>
-            <div>
-              <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--paper-3); margin-bottom:12px;">Valid FWD / MID combinations &mdash; pick any 4</div>
-              <div style="display:flex; align-items:center; gap:12px; margin:9px 0;"><span style="display:inline-flex; gap:4px; width:64px;"><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span></span><span style="font-size:13.5px; color:var(--paper-2);"><b style="color:var(--paper);">4</b> FWD &nbsp;+&nbsp; <b style="color:var(--paper);">0</b> MID</span></div>
-              <div style="display:flex; align-items:center; gap:12px; margin:9px 0;"><span style="display:inline-flex; gap:4px; width:64px;"><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span><span style="font-size:13.5px; color:var(--paper-2);"><b style="color:var(--paper);">3</b> FWD &nbsp;+&nbsp; <b style="color:var(--paper);">1</b> MID</span></div>
-              <div style="display:flex; align-items:center; gap:12px; margin:9px 0;"><span style="display:inline-flex; gap:4px; width:64px;"><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span><span style="font-size:13.5px; color:var(--paper-2);"><b style="color:var(--paper);">2</b> FWD &nbsp;+&nbsp; <b style="color:var(--paper);">2</b> MID</span></div>
-              <div style="display:flex; align-items:center; gap:12px; margin:9px 0;"><span style="display:inline-flex; gap:4px; width:64px;"><span style="width:12px;height:12px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span><span style="font-size:13.5px; color:var(--paper-2);"><b style="color:var(--paper);">1</b> FWD &nbsp;+&nbsp; <b style="color:var(--paper);">3</b> MID</span></div>
-              <div style="display:flex; align-items:center; gap:12px; margin:9px 0;"><span style="display:inline-flex; gap:4px; width:64px;"><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:12px;height:12px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span><span style="font-size:13.5px; color:var(--paper-2);"><b style="color:var(--paper);">0</b> FWD &nbsp;+&nbsp; <b style="color:var(--paper);">4</b> MID</span></div>
-              <div style="margin-top:14px; font-size:12px; color:var(--paper-3);"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#F4A24B;vertical-align:middle;margin-right:5px;"></span>Forward<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#5BB0E6;vertical-align:middle;margin:0 5px 0 14px;"></span>Midfielder</div>
-            </div>
+          <div style="margin-top:10px; overflow-x:auto; border:1px solid rgba(255,255,255,0.10); border-radius:12px;">
+            <table style="width:100%; min-width:680px; border-collapse:collapse; font-size:14px; color:var(--paper-2);">
+              <thead>
+                <tr>
+                  <th style="text-align:left; padding:11px 14px; font-family:var(--f-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--paper-3); background:rgba(2,10,18,0.35);">Rule</th>
+                  <th style="text-align:center; padding:11px 14px; font-family:var(--f-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--paper-3); background:rgba(2,10,18,0.35);">Value</th>
+                  <th style="text-align:left; padding:11px 14px; font-family:var(--f-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--paper-3); background:rgba(2,10,18,0.35);">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Goalkeeper (GK)</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; color:var(--paper); font-weight:800;">1</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Exactly one goalkeeper.</td></tr>
+                <tr><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Defenders (DEF)</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; color:var(--paper); font-weight:800;">2</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Exactly two defenders.</td></tr>
+                <tr><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Forwards / Midfielders</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; color:var(--paper); font-weight:800;">4</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Any FWD/MID combination from the valid rows below.</td></tr>
+                <tr><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Total players</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; color:var(--paper); font-weight:800;">7</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">1 GK + 2 DEF + 4 FWD/MID.</td></tr>
+                <tr><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Salary cap</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; color:var(--paper); font-weight:800;">100</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Maximum 100 Salary Units.</td></tr>
+                <tr><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Maximum per club</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; color:var(--paper); font-weight:800;">6</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">At least one player must come from the opponent.</td></tr>
+                <tr><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Minimum opponent</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; color:var(--paper); font-weight:800;">1</td><td style="padding:11px 14px; border-top:1px solid rgba(255,255,255,0.08);">Required for valid team split.</td></tr>
+                <tr><td colspan="3" style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.10); background:rgba(91,176,230,0.07); font-family:var(--f-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:#5BB0E6; font-weight:800;">Valid FWD / MID combinations - pick any 4</td></tr>
+                <tr><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">4 FWD + 0 MID</td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center;"><span style="display:inline-flex; gap:4px;"><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span></span></td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">All four flexible slots are forwards.</td></tr>
+                <tr><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">3 FWD + 1 MID</td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center;"><span style="display:inline-flex; gap:4px;"><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span></td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">Three forwards and one midfielder.</td></tr>
+                <tr><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">2 FWD + 2 MID</td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center;"><span style="display:inline-flex; gap:4px;"><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span></td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">Two forwards and two midfielders.</td></tr>
+                <tr><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">1 FWD + 3 MID</td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center;"><span style="display:inline-flex; gap:4px;"><span style="width:11px;height:11px;border-radius:50%;background:#F4A24B;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span></td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">One forward and three midfielders.</td></tr>
+                <tr><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">0 FWD + 4 MID</td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08); text-align:center;"><span style="display:inline-flex; gap:4px;"><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span><span style="width:11px;height:11px;border-radius:50%;background:#5BB0E6;display:inline-block;"></span></span></td><td style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08);">All four flexible slots are midfielders.</td></tr>
+                <tr><td colspan="3" style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.08); color:var(--paper-3); font-size:12px;"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#F4A24B;vertical-align:middle;margin-right:5px;"></span>Forward <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#5BB0E6;vertical-align:middle;margin:0 5px 0 14px;"></span>Midfielder</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -464,7 +470,7 @@
 <div class="lop">
         <div class="lop-top">
           <span class="lop-title">Before lineups</span>
-          <span class="lop-count">UCT Locked</span>
+          <!-- <span class="lop-count">UCT Locked</span> -->
         </div>
 
         <div class="lop-card">
@@ -490,7 +496,7 @@
       <div class="lop">
         <div class="lop-top">
           <span class="lop-title">After lineups</span>
-          <span class="lop-count">Lineups Live</span>
+          <!-- <span class="lop-count">Lineups Live</span> -->
         </div>
 
         <div class="lop-card">

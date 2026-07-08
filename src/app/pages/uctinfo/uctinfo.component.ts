@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class UctinfoComponent {
 
   loggedIn$ = this.authService.loggedIn$;
+  selectedGuideApp: 'draftkings' | 'fanduel' = 'draftkings';
 
   constructor(
     private authModal: AuthModalService,
@@ -29,5 +30,9 @@ export class UctinfoComponent {
       behavior: 'smooth',
       block: 'start'
     });
+  }
+
+  selectGuideApp(app: 'draftkings' | 'fanduel') {
+    this.selectedGuideApp = app;
   }
 }

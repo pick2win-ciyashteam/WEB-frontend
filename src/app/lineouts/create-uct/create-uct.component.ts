@@ -733,6 +733,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.syncDistributionAfterSquadChange();
     this.syncMandatesAfterSquadChange();
     this.refreshActionBarLayout();
+    this.focusSalaryInput(player);
   }
 
   isStartingDisabled(player: UctPlayer): boolean {
@@ -774,6 +775,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.syncDistributionAfterSquadChange();
     this.syncMandatesAfterSquadChange();
     this.refreshActionBarLayout();
+    this.focusSalaryInput(player);
   }
 
   isSubstituteDisabled(player: UctPlayer): boolean {
@@ -1005,6 +1007,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   private isValidSalaryValue(value: string): boolean {
     const salary = Number(value);
+    // Critical per-player entry rules: no total salary cap is enforced here.
     const validFormat = this.selectedPlatform === 'fanduel'
       ? /^\d{1,2}$/.test(value)
       : /^\d{4,5}$/.test(value);
@@ -1027,18 +1030,29 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    const pendingValue = this.salaries.get(pendingPlayer.id) || '';
-    const message = pendingValue
-      ? `${this.salaryRangeMessage(pendingPlayer)} Correct it before selecting the next player.`
-      : `Enter a valid ${this.salaryPlaceholder.toLowerCase()} for ${pendingPlayer.player_name} before selecting the next player.`;
+    const message = `Enter valid ${this.activePlatformName} ${this.salaryPlaceholder.toLowerCase()} for ${pendingPlayer.player_name}.`;
 
     this.showAlert(
       `${this.activePlatformName} ${this.salaryPlaceholder} required`,
       message,
       'warning'
     );
+    this.focusSalaryInput(pendingPlayer);
 
     return false;
+  }
+
+  private focusSalaryInput(player: UctPlayer): void {
+    if (!this.requiresSalary) {
+      return;
+    }
+
+    setTimeout(() => {
+      const input = document.querySelector<HTMLInputElement>(`input[data-salary-player-id="${player.id}"]`);
+
+      input?.focus();
+      input?.select();
+    });
   }
 
   private isSalaryInputAlert(): boolean {
