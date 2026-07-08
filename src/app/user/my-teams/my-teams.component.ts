@@ -59,6 +59,9 @@ interface ApiPlayer {
 
 interface ApiGeneratedTeam {
   team_no: number;
+  id?: number;
+  team_id?: number;
+  number?: number;
   captain?: string;
   vice_captain?: string;
   players: ApiPlayer[];
@@ -178,9 +181,19 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
         const expired = this.isExpired(startTimeISO, m.status);
         const id = Number(m.match_id);
         const game = this.normalizeGame(m.game || m.fantasy_platform || m.platform);
-        const generatedGames = this.generatedGamesFromValue(m.generated_games || m.games_generated || m.generated_platforms);
+        const generatedGames = this.generatedGamesFromValue([
+          m.generated_games,
+          m.games_generated,
+          m.generated_platforms,
+          m.generatedGames,
+          m.gamesGenerated,
+          m.platforms_generated,
+          m.platformsGenerated,
+          m
+        ]);
         if (game) generatedGames.add(game);
         const teamsGenerated = Number(m.teams_generated || m.total_teams || 0);
+        const teamsGeneratedByGame = this.teamsGeneratedByGameFromMatch(m, game, teamsGenerated);
         const filterDates = this.dateCandidatesFromMatch(m, startTimeISO);
         const startDate = filterDates[0] || '';
 
@@ -195,9 +208,10 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           if (game) {
             existing.teamsGeneratedByGame = {
               ...(existing.teamsGeneratedByGame || {}),
-              [game]: teamsGenerated
+              [game]: Math.max(Number(existing.teamsGeneratedByGame?.[game] || 0), teamsGenerated)
             };
           }
+          existing.teamsGeneratedByGame = this.mergeTeamCounts(existing.teamsGeneratedByGame, teamsGeneratedByGame);
           existing.sport = existing.sport || m.sport || 'Football';
           return;
         }
@@ -217,7 +231,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           fantasyPlatform: this.gameLabel(this.visibleGameOrDefault(game)),
           game: this.visibleGameOrDefault(game),
           generatedGames: Array.from(generatedGames),
-          teamsGeneratedByGame: game ? { [game]: teamsGenerated } : {},
+          teamsGeneratedByGame,
           sport: m.sport || 'Football',
           coinConsumed: m.coin_consumed ?? m.coins_consumed ?? 1,
           homeLogo: m.home_logo,
@@ -671,6 +685,66 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     return Number(match.teamsGeneratedByGame?.[game] ?? match.teamsGenerated ?? 0);
   }
 
+  private teamsGeneratedByGameFromMatch(match: any, directGame: FantasyGame | null, totalTeams: number): Partial<Record<FantasyGame, number>> {
+    const counts: Partial<Record<FantasyGame, number>> = {};
+
+    this.visibleGames.forEach(game => {
+      const value = this.firstNumericValue(match, [
+        `${game}_teams_count`,
+        `${game}_team_count`,
+        `${game}_total_teams`,
+        `${game}_teams_generated`,
+        `${game}_generated_count`,
+        `${game}_generated_teams_count`,
+        `${game}_count`,
+        game === 'fanduel' ? 'fan_duel_teams_count' : '',
+        game === 'fanduel' ? 'fan_duel_total_teams' : '',
+        game === 'fanduel' ? 'fan_duel_teams_generated' : '',
+        game === 'draftkings' ? 'draftking_teams_count' : '',
+        game === 'draftkings' ? 'draftking_total_teams' : ''
+      ]);
+
+      if (value > 0) {
+        counts[game] = value;
+      }
+    });
+
+    if (directGame && totalTeams > 0) {
+      counts[directGame] = Math.max(Number(counts[directGame] || 0), totalTeams);
+    }
+
+    return counts;
+  }
+
+  private mergeTeamCounts(
+    current: Partial<Record<FantasyGame, number>> | undefined,
+    incoming: Partial<Record<FantasyGame, number>>
+  ): Partial<Record<FantasyGame, number>> {
+    const merged: Partial<Record<FantasyGame, number>> = { ...(current || {}) };
+
+    this.visibleGames.forEach(game => {
+      const value = Number(incoming[game] || 0);
+
+      if (value > 0) {
+        merged[game] = Math.max(Number(merged[game] || 0), value);
+      }
+    });
+
+    return merged;
+  }
+
+  private firstNumericValue(source: Record<string, unknown>, keys: string[]): number {
+    for (const key of keys.filter(Boolean)) {
+      const value = Number(source?.[key]);
+
+      if (value > 0) {
+        return value;
+      }
+    }
+
+    return 0;
+  }
+
   private selectedGameForMatch(match: GeneratedMatch): FantasyGame {
     return this.selectedMatch?.id === match.id ? this.activeGame : this.activeGame;
   }
@@ -729,7 +803,19 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     if (Array.isArray(value)) {
       value.forEach(item => {
-        const game = this.normalizeGame(typeof item === 'object' && item ? (item as any).game || (item as any).platform || (item as any).fantasy_platform : item);
+        if (item && typeof item === 'object') {
+          const game = this.normalizeGame((item as any).game || (item as any).platform || (item as any).fantasy_platform || (item as any).name);
+
+          if (game) {
+            games.add(game);
+          } else {
+            this.generatedGamesFromValue(item).forEach(nestedGame => games.add(nestedGame));
+          }
+
+          return;
+        }
+
+        const game = this.normalizeGame(item);
         if (game) games.add(game);
       });
       return games;
@@ -758,8 +844,8 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     const text = String(value ?? '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
 
     if (text === 'sorare') return 'sorare';
-    if (text === 'draftkings' || text === 'draftking' || text === 'dk') return 'draftkings';
-    if (text === 'fanduel' || text === 'fd') return 'fanduel';
+    if (text.includes('draftkings') || text.includes('draftking') || text === 'dk') return 'draftkings';
+    if (text.includes('fanduel') || text.includes('fanduelclassic') || text === 'fd') return 'fanduel';
 
     return null;
   }
@@ -994,13 +1080,14 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   private mapGeneratedTeam(team: ApiGeneratedTeam): PreviewTeam {
     const players = (Array.isArray(team.players) ? team.players : []).map(player => this.mapPreviewPlayer(player));
     const captain = players.find(player => player.captain === 'C' || player.name === team.captain) || null;
+    const teamNumber = Number(team.team_no ?? team.id ?? team.team_id ?? team.number ?? 0);
 
     if (captain && !captain.captain) {
       captain.captain = 'C';
     }
 
     return {
-      id: Number(team.team_no),
+      id: teamNumber,
       split: `${players.filter(player => player.team === 'home').length}-${players.filter(player => player.team === 'away').length}`,
       players,
       captain,
@@ -1012,15 +1099,71 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   private generatedTeamsFromResponse(res: any): ApiGeneratedTeam[] {
-    if (Array.isArray(res?.teams)) {
-      return res.teams;
-    }
+    const teamCollections = [
+      res?.teams,
+      res?.generated_teams,
+      res?.generatedTeams,
+      res?.lineups,
+      res?.data?.teams,
+      res?.data?.generated_teams,
+      res?.data?.generatedTeams,
+      res?.data?.lineups,
+      Array.isArray(res?.data) ? res.data : null,
+      Array.isArray(res) ? res : null
+    ];
 
-    if (Array.isArray(res?.data?.teams)) {
-      return res.data.teams;
+    for (const collection of teamCollections) {
+      const teams = this.normalizeGeneratedTeams(collection);
+
+      if (teams.length) {
+        return teams;
+      }
     }
 
     return [];
+  }
+
+  private normalizeGeneratedTeams(value: unknown): ApiGeneratedTeam[] {
+    if (Array.isArray(value)) {
+      return value
+        .map((team, index) => this.normalizeGeneratedTeam(team, index + 1))
+        .filter((team): team is ApiGeneratedTeam => !!team && team.players.length > 0);
+    }
+
+    if (value && typeof value === 'object') {
+      return Object.entries(value as Record<string, unknown>)
+        .map(([key, team], index) => this.normalizeGeneratedTeam(team, Number(key) || index + 1))
+        .filter((team): team is ApiGeneratedTeam => !!team && team.players.length > 0);
+    }
+
+    return [];
+  }
+
+  private normalizeGeneratedTeam(value: unknown, fallbackTeamNo: number): ApiGeneratedTeam | null {
+    if (Array.isArray(value)) {
+      return {
+        team_no: fallbackTeamNo,
+        players: value as ApiPlayer[]
+      };
+    }
+
+    if (!value || typeof value !== 'object') {
+      return null;
+    }
+
+    const source = value as Record<string, any>;
+    const players =
+      source['players'] ||
+      source['team_players'] ||
+      source['teamPlayers'] ||
+      source['lineup'] ||
+      source['player_list'];
+
+    return {
+      ...(source as ApiGeneratedTeam),
+      team_no: Number(source['team_no'] ?? source['teamNo'] ?? source['team_number'] ?? source['id'] ?? fallbackTeamNo),
+      players: Array.isArray(players) ? players : []
+    };
   }
 
   private teamsPreviewFromResponse(res: any): ApiTeamsPreview | null {

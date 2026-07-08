@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, switchMap, tap, throwError } from 'rxjs';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { ProfileService } from './profile.service';
@@ -54,16 +54,57 @@ export class AuthService {
   }
 
   getUserMyTeams(matchId: number | string, game: FantasyGame): Observable<any> {
-    const gamePath: Record<FantasyGame, string> = {
-      sorare: 'sorare',
-      draftkings: 'draftkings',
-      fanduel: 'fanduel'
-    };
-    const url = `${API}/user/teams/user-my-teams/${matchId}/${gamePath[game]}`;
+    return this.getUserMyTeamsByPaths(matchId, this.myTeamsGamePaths(game));
+  }
+
+  private getUserMyTeamsByPaths(matchId: number | string, paths: string[]): Observable<any> {
+    const [path, ...fallbackPaths] = paths;
+    const url = `${API}/user/teams/user-my-teams/${matchId}/${path}`;
 
     console.log('My Teams API URL:', url);
 
-    return this.http.get<any>(url);
+    return this.http.get<any>(url).pipe(
+      switchMap(res => {
+        if (fallbackPaths.length && this.isEmptyTeamsResponse(res)) {
+          return this.getUserMyTeamsByPaths(matchId, fallbackPaths);
+        }
+
+        return of(res);
+      }),
+      catchError(error => fallbackPaths.length
+        ? this.getUserMyTeamsByPaths(matchId, fallbackPaths)
+        : throwError(() => error)
+      )
+    );
+  }
+
+  private myTeamsGamePaths(game: FantasyGame): string[] {
+    const paths: Record<FantasyGame, string[]> = {
+      sorare: ['sorare'],
+      draftkings: ['draftkings', 'draftking', 'draft-kings', 'dk'],
+      fanduel: ['fanduel', 'fan-duel', 'fan_duel', 'FanDuel']
+    };
+
+    return paths[game];
+  }
+
+  private isEmptyTeamsResponse(res: any): boolean {
+    const candidateLists = [
+      res,
+      res?.teams,
+      res?.generated_teams,
+      res?.generatedTeams,
+      res?.lineups,
+      res?.data,
+      res?.data?.teams,
+      res?.data?.generated_teams,
+      res?.data?.generatedTeams,
+      res?.data?.lineups,
+      res?.team_a,
+      res?.team_b
+    ];
+
+    return !candidateLists.some(value => Array.isArray(value) && value.length > 0);
   }
 
   buyCoins(data: {
