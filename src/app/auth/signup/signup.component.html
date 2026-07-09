@@ -38,9 +38,10 @@
         <label>Country of residence <span>*</span></label>
         <select class="country-select" formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
           <option value="">{{ countriesLoading ? 'Loading countries...' : 'Select your country' }}</option>
-          <optgroup *ngFor="let group of countryRegionGroups; trackBy: trackByRegionLabel" [label]="group.label">
+          <option *ngFor="let c of countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
+          <!-- <optgroup *ngFor="let group of countryRegionGroups; trackBy: trackByRegionLabel" [label]="group.label">
             <option *ngFor="let c of group.countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
-          </optgroup>
+          </optgroup> -->
         </select>
         <div class="hint">Sets your billing currency & dial code.</div>
       </div>

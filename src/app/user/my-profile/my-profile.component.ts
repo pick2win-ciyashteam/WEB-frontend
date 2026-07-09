@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { UserProfile } from 'src/app/core/interfaces/content';
-import { ApiService } from 'src/app/core/services/api.service';
+import { ActivityLog, ApiService } from 'src/app/core/services/api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
 
@@ -38,6 +39,18 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   deleteError = '';
   deletionTimestamp = '';
   showTodayLineupsCta = false;
+  activityLogs: ActivityLog[] = [];
+  activityLogsLoading = false;
+  activityLogsError = '';
+  activityFilterMode: 'today' | 'range' = 'today';
+  activityDate = this.dateInputValue(new Date());
+  activityFromDate = this.dateInputValue(this.oneYearAgo());
+  activityToDate = this.dateInputValue(new Date());
+  activityPage = 1;
+  activityTotalPages = 1;
+  activityTotal = 0;
+  readonly activityMaxDate = this.dateInputValue(new Date());
+  readonly activityMinDate = this.dateInputValue(this.oneYearAgo());
   private todayLineupsTimer: any;
   private profileRefreshTimer: any;
 
@@ -53,8 +66,166 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   this.applyTabFromRoute();
   this.refreshProfileFromRoute();
   this.loadTodayLineupsCta();
+  this.loadActivityLogs();
   this.startTodayLineupsRefresh();
 }
+
+  setActivityFilterMode(mode: 'today' | 'range'): void {
+    this.activityFilterMode = mode;
+    this.activityPage = 1;
+    this.loadActivityLogs();
+  }
+
+  loadActivityLogs(page = this.activityPage): void {
+    const rangeError = this.activityRangeValidation();
+
+    if (rangeError) {
+      this.activityLogsError = rangeError;
+      this.activityLogs = [];
+      return;
+    }
+
+    this.activityLogsLoading = true;
+    this.activityLogsError = '';
+    this.activityPage = page;
+
+    this.api.getActivityLogs(this.activityLogFilters(page, 20)).subscribe({
+      next: response => {
+        this.activityLogs = response?.success && Array.isArray(response.data) ? response.data : [];
+        this.activityTotal = Number(response?.pagination?.total || this.activityLogs.length);
+        this.activityTotalPages = Math.max(1, Number(response?.pagination?.total_pages || 1));
+        this.activityPage = Number(response?.pagination?.page || page);
+        this.activityLogsLoading = false;
+      },
+      error: error => {
+        this.activityLogs = [];
+        this.activityLogsLoading = false;
+        this.activityLogsError = error?.error?.message || 'Unable to load activity logs.';
+      }
+    });
+  }
+
+  downloadActivityLogs(): void {
+    const rangeError = this.activityRangeValidation();
+    if (rangeError) {
+      this.activityLogsError = rangeError;
+      return;
+    }
+
+    this.activityLogsLoading = true;
+    this.api.getActivityLogs(this.activityLogFilters(1, 100)).subscribe({
+      next: firstResponse => {
+        const totalPages = Math.max(1, Number(firstResponse?.pagination?.total_pages || 1));
+        const firstRows = Array.isArray(firstResponse?.data) ? firstResponse.data : [];
+
+        if (totalPages === 1) {
+          this.saveActivityLogsCsv(firstRows);
+          this.activityLogsLoading = false;
+          return;
+        }
+
+        forkJoin(
+          Array.from({ length: totalPages - 1 }, (_, index) =>
+            this.api.getActivityLogs(this.activityLogFilters(index + 2, 100))
+          )
+        ).subscribe({
+          next: responses => {
+            this.saveActivityLogsCsv([
+              ...firstRows,
+              ...responses.flatMap(response => response?.data || [])
+            ]);
+            this.activityLogsLoading = false;
+          },
+          error: () => {
+            this.activityLogsLoading = false;
+            this.activityLogsError = 'Unable to download the complete activity history.';
+          }
+        });
+      },
+      error: () => {
+        this.activityLogsLoading = false;
+        this.activityLogsError = 'Unable to download activity logs.';
+      }
+    });
+  }
+
+  formatActivityDate(value: string): string {
+    return new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date(value));
+  }
+
+  activityDevice(userAgent: string): string {
+    if (/postman/i.test(userAgent)) return 'Postman';
+    if (/edg\//i.test(userAgent)) return 'Edge';
+    if (/chrome\//i.test(userAgent)) return 'Chrome';
+    if (/firefox\//i.test(userAgent)) return 'Firefox';
+    if (/safari\//i.test(userAgent)) return 'Safari';
+    return 'Browser';
+  }
+
+  private activityLogFilters(page: number, limit: number) {
+    return {
+      page,
+      limit,
+      date: this.activityFilterMode === 'today' ? this.activityDate : undefined,
+      from_date: this.activityFilterMode === 'range' ? this.activityFromDate : undefined,
+      to_date: this.activityFilterMode === 'range' ? this.activityToDate : undefined
+    };
+  }
+
+  private activityRangeValidation(): string {
+    if (this.activityFilterMode !== 'range') return '';
+    if (!this.activityFromDate || !this.activityToDate) return 'Select both From and To dates.';
+
+    const from = new Date(`${this.activityFromDate}T00:00:00`);
+    const to = new Date(`${this.activityToDate}T00:00:00`);
+    const days = (to.getTime() - from.getTime()) / 86400000;
+
+    if (days < 0) return 'From date must be before To date.';
+    if (days > 365) return 'Activity log date range cannot exceed one year.';
+    return '';
+  }
+
+  private saveActivityLogsCsv(logs: ActivityLog[]): void {
+    const escape = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`;
+    const rows = [
+      ['Date', 'Category', 'Action', 'Details', 'IP Address', 'Device', 'User Agent'],
+      ...logs.map(log => [
+        log.created_at,
+        log.category,
+        log.action,
+        log.details,
+        log.ip_address,
+        this.activityDevice(log.user_agent),
+        log.user_agent
+      ])
+    ];
+    const csv = '\uFEFF' + rows.map(row => row.map(escape).join(',')).join('\r\n');
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    link.download = `pick2win-activity-logs-${this.activityFromDate || this.activityDate}-to-${this.activityToDate || this.activityDate}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  private oneYearAgo(): Date {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 1);
+    return date;
+  }
+
+  private dateInputValue(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
   ngOnDestroy(): void {
     clearInterval(this.todayLineupsTimer);

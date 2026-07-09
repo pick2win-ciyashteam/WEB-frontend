@@ -5,6 +5,29 @@ import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayloa
 import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, RazorpayConfigResponse, RazorpayVerifyPaymentPayload, Series, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserNotificationsResponse, UserProfile } from '../interfaces/content';
 import { TokenService } from './token.service';
 
+export interface ActivityLog {
+  id: number;
+  category: string;
+  action: string;
+  details: string;
+  ip_address: string;
+  user_agent: string;
+  metadata: unknown;
+  created_at: string;
+}
+
+export interface ActivityLogsResponse {
+  success: boolean;
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+  };
+  filters?: Record<string, unknown>;
+  data: ActivityLog[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -75,6 +98,29 @@ export class ApiService {
 
   registerDevice(data: { registration_token: string; device_type: 'web' }): Observable<any> {
     return this.http.post(`${this.BASE}/user/user-auth/register-device`, data);
+  }
+
+  getActivityLogs(filters: {
+    page?: number;
+    limit?: number;
+    category?: string;
+    date?: string;
+    from_date?: string;
+    to_date?: string;
+  } = {}): Observable<ActivityLogsResponse> {
+    let params = new HttpParams()
+      .set('page', String(filters.page || 1))
+      .set('limit', String(filters.limit || 20));
+
+    (['category', 'date', 'from_date', 'to_date'] as const).forEach(key => {
+      const value = filters[key];
+      if (value) params = params.set(key, value);
+    });
+
+    return this.http.get<ActivityLogsResponse>(
+      `${this.BASE}/user/user-auth/activity-logs`,
+      { ...this.userAuthOptions(), params }
+    );
   }
 
   getUserNotifications(page = 1, limit = 20): Observable<UserNotificationsResponse> {
