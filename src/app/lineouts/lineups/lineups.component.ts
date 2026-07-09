@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { EMPTY, Subject, catchError, interval, switchMap, takeUntil } from 'rxjs';
+import { EMPTY, Subject, catchError, forkJoin, interval, of, switchMap, takeUntil } from 'rxjs';
 import { Match, Series } from '../../core/interfaces/content';
 import { ApiService } from '../../core/services/api.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
@@ -464,17 +464,19 @@ canRunUct(match: LineoutMatch): boolean {
         next: (res) => {
           console.log('Lineups series response:', res);
 
-          this.matches = res?.success && Array.isArray(res.data)
+          const mappedMatches = res?.success && Array.isArray(res.data)
             ? this.mapSeriesMatches(res.data)
             : [];
 
-          // console.log('Lineups mapped matches:', this.matches);
+          this.hydrateGeneratedGames(mappedMatches, () => {
+            this.matches = mappedMatches;
 
-          if (!this.matches.length) {
-            this.matchesError = 'No upcoming matches in our coverage right now.';
-          }
+            if (!this.matches.length) {
+              this.matchesError = 'No upcoming matches in our coverage right now.';
+            }
 
-          this.loadingMatches = false;
+            this.loadingMatches = false;
+          });
         },
         error: () => {
           this.matches = [];
@@ -492,9 +494,80 @@ canRunUct(match: LineoutMatch): boolean {
       )
       .subscribe(res => {
         if (res?.success && Array.isArray(res.data)) {
-          this.refreshTodayMatches(this.mapSeriesMatches(res.data));
+          const freshMatches = this.mapSeriesMatches(res.data);
+          this.hydrateGeneratedGames(freshMatches, () => this.refreshTodayMatches(freshMatches));
         }
       });
+  }
+
+  private hydrateGeneratedGames(matches: LineoutMatch[], done: () => void): void {
+    if (!this.isLoggedIn || !matches.length) {
+      done();
+      return;
+    }
+
+    const games: FantasyGame[] = ['draftkings', 'fanduel'];
+    const probes = matches.flatMap(match =>
+      games.map(game => ({
+        match,
+        game,
+        request: this.authService
+          .getUserMyTeams(match.id, this.normalizedSport(match.sport), game)
+          .pipe(catchError(() => of(null)))
+      }))
+    );
+
+    forkJoin(probes.map(probe => probe.request))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: responses => {
+          responses.forEach((response, index) => {
+            if (!this.hasGeneratedTeamsResponse(response)) {
+              return;
+            }
+
+            const probe = probes[index];
+
+            if (!probe.match.generatedGames.includes(probe.game)) {
+              probe.match.generatedGames = [...probe.match.generatedGames, probe.game];
+            }
+          });
+
+          matches.forEach(match => {
+            match.teamsGenerated = games.every(game => match.generatedGames.includes(game));
+          });
+
+          done();
+        },
+        error: () => done()
+      });
+  }
+
+  private hasGeneratedTeamsResponse(response: any): boolean {
+    if (!response || response?.success === false) {
+      return false;
+    }
+
+    const collections = [
+      response?.teams,
+      response?.generated_teams,
+      response?.generatedTeams,
+      response?.lineups,
+      response?.data?.teams,
+      response?.data?.generated_teams,
+      response?.data?.generatedTeams,
+      response?.data?.lineups,
+      Array.isArray(response?.data) ? response.data : null,
+      Array.isArray(response) ? response : null
+    ];
+
+    return Number(response?.total_teams || response?.data?.total_teams || 0) > 0
+      || collections.some(collection => Array.isArray(collection) && collection.length > 0);
+  }
+
+  private normalizedSport(sport?: string): string {
+    const value = String(sport || 'football').trim().toLowerCase();
+    return value === 'soccer' ? 'football' : value;
   }
 
   private refreshTodayMatches(freshMatches: LineoutMatch[]): void {
