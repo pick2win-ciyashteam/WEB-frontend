@@ -48,7 +48,7 @@
 
     <div class="credit-packs reveal" *ngIf="!loading && pricingPacks.length">
       <div class="credit-pack" *ngFor="let pack of pricingPacks; let i = index" [ngClass]="pack.tone">
-        <div class="credit-pack-badge" *ngIf="i === pricingPacks.length - 1">Lowest $/coin</div>
+        <!-- <div class="credit-pack-badge" *ngIf="i === pricingPacks.length - 1">Lowest $/coin</div> -->
         <div class="credit-pack-name">{{ pack.name }}</div>
         <div class="credit-pack-sub">{{ i === 0 ? 'Perfect to get started' : i === 1 ? 'Great for regular users' : i === 2 ? 'Best value for serious users' : 'Maximum value for power users' }}</div>
         <div class="credit-pack-coins">

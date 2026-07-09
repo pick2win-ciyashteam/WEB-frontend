@@ -23,6 +23,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   bannersLoading = true;
   showSplash = false;
   showLaunchModal = false;
+  currentLaunchBanner = 0;
+  readonly launchingBanners = [
+    'assets/launching_banner.jpeg',
+    'assets/launching_banner2.jpeg'
+  ];
   showTodayLineupsCta = false;
   loggedIn$ = this.authService.loggedIn$;
 
@@ -30,10 +35,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   private bannerTimer: any;
   private todayLineupsTimer: any;
   private splashTimer: any;
+  private launchBannerTimer: any;
   private launchDate = new Date('2026-06-24T09:00:00Z').getTime();
   private launchSplashStorageKey = 'pick2win_launch_splash_seen';
   private launchingBannerStorageKey = 'pick2win_launching_banner_july_2026_seen';
-  private launchingBannerEndsAt = new Date(2026, 6, 12).getTime();
+  private launchingBannerEndsAt = new Date('2026-07-11T23:11:11+05:30').getTime();
   private staticHomeBannerCount = 6;
 
   constructor(
@@ -67,6 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.updateCountdown();
     this.showSplash = this.shouldShowSplash();
     this.showLaunchModal = this.shouldShowLaunchModal();
+    this.startLaunchingBannerTimer();
     // Dynamic banners paused for now. Static home banners are rendered in the template.
     // this.loadBanners();
     this.startStaticBannerTimer();
@@ -79,6 +86,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     clearInterval(this.timer);
     clearInterval(this.bannerTimer);
     clearInterval(this.todayLineupsTimer);
+    clearInterval(this.launchBannerTimer);
     clearTimeout(this.splashTimer);
   }
 
@@ -124,7 +132,23 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   closeLaunchModal(): void {
     this.showLaunchModal = false;
+    clearInterval(this.launchBannerTimer);
     this.markLaunchingBannerSeen();
+  }
+
+  showLaunchingBanner(index: number): void {
+    this.currentLaunchBanner = index;
+    this.startLaunchingBannerTimer();
+  }
+
+  previousLaunchingBanner(): void {
+    this.currentLaunchBanner =
+      (this.currentLaunchBanner - 1 + this.launchingBanners.length) % this.launchingBanners.length;
+    this.startLaunchingBannerTimer();
+  }
+
+  nextLaunchingBanner(): void {
+    this.currentLaunchBanner = (this.currentLaunchBanner + 1) % this.launchingBanners.length;
   }
 
   updateCountdown(): void {
@@ -190,6 +214,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   private startTodayLineupsRefresh(): void {
     clearInterval(this.todayLineupsTimer);
     this.todayLineupsTimer = setInterval(() => this.loadTodayLineupsCta(), 60000);
+  }
+
+  private startLaunchingBannerTimer(): void {
+    clearInterval(this.launchBannerTimer);
+
+    if (this.showLaunchModal && this.launchingBanners.length > 1) {
+      this.launchBannerTimer = setInterval(() => this.nextLaunchingBanner(), 4500);
+    }
   }
 
   private shouldShowLaunchModal(): boolean {

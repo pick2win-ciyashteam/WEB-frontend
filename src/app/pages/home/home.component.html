@@ -20,7 +20,26 @@
 <div class="launch-modal-backdrop" *ngIf="showLaunchModal" role="dialog" aria-modal="true" aria-label="PICK2WIN launch announcement">
   <div class="launch-banner-card">
     <button class="launch-modal-close" type="button" aria-label="Close launch banner" (click)="closeLaunchModal()">&times;</button>
-    <img src="assets/launching_banner.jpeg" alt="PICK2WIN launch announcement">
+    <div class="launch-banner-slider">
+      <img
+        *ngFor="let banner of launchingBanners; let i = index"
+        [src]="banner"
+        [class.active]="currentLaunchBanner === i"
+        [alt]="i === 0 ? 'PICK2WIN launch announcement' : 'PICK2WIN launch offer'">
+    </div>
+
+    <button class="launch-banner-arrow previous" type="button" aria-label="Previous banner" (click)="previousLaunchingBanner()">&#8249;</button>
+    <button class="launch-banner-arrow next" type="button" aria-label="Next banner" (click)="nextLaunchingBanner()">&#8250;</button>
+
+    <div class="launch-banner-dots" aria-label="Launch banner slides">
+      <button
+        *ngFor="let banner of launchingBanners; let i = index"
+        type="button"
+        [class.active]="currentLaunchBanner === i"
+        [attr.aria-label]="'Show banner ' + (i + 1)"
+        (click)="showLaunchingBanner(i)">
+      </button>
+    </div>
   </div>
 </div>
 
@@ -108,7 +127,7 @@
       </div>
     </article>
 
-    <article class="banner tone-free" [class.active]="currentBanner === 4">
+    <!-- <article class="banner tone-free" [class.active]="currentBanner === 4">
       <div>
         <div class="banner-eyebrow">FIFA WC 2026 - LAUNCH OFFER</div>
         <h3 class="banner-h">30% off every <em>coin pack.</em></h3>
@@ -120,7 +139,7 @@
           <span></span><i></i><b></b>
         </div>
       </div>
-    </article>
+    </article> -->
 
     <article class="banner tone-skill" [class.active]="currentBanner === 5">
       <div>
@@ -142,7 +161,7 @@
     <button type="button" [class.active]="currentBanner === 1" aria-label="Four-step workflow" (click)="showBanner(1)"></button>
     <button type="button" [class.active]="currentBanner === 2" aria-label="Coverage" (click)="showBanner(2)"></button>
     <button type="button" [class.active]="currentBanner === 3" aria-label="Pricing" (click)="showBanner(3)"></button>
-    <button type="button" [class.active]="currentBanner === 4" aria-label="Launch offer" (click)="showBanner(4)"></button>
+    <!-- <button type="button" [class.active]="currentBanner === 4" aria-label="Launch offer" (click)="showBanner(4)"></button> -->
     <button type="button" [class.active]="currentBanner === 5" aria-label="Trust" (click)="showBanner(5)"></button>
   </div>
 </section>

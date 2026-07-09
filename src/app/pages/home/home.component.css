@@ -179,6 +179,8 @@
 
 .launch-banner-card {
   position: relative;
+  align-self: center;
+  height: fit-content;
   width: min(920px, 100%);
   max-height: calc(100vh - 40px);
   overflow: hidden;
@@ -189,10 +191,82 @@
 }
 
 .launch-banner-card img {
-  display: block;
+  display: none;
   width: 100%;
   max-height: calc(100vh - 40px);
   object-fit: contain;
+}
+
+.launch-banner-card img.active {
+  display: block;
+  animation: launchBannerFade 320ms ease;
+}
+
+.launch-banner-slider {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #020812;
+}
+
+.launch-banner-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 54px;
+  border: 1px solid rgba(255,255,255,0.24);
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(2,8,18,0.70);
+  font-size: 40px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  backdrop-filter: blur(8px);
+}
+
+.launch-banner-arrow:hover {
+  border-color: rgba(244,180,0,0.62);
+  background: rgba(2,8,18,0.9);
+}
+
+.launch-banner-arrow.previous { left: 14px; }
+.launch-banner-arrow.next { right: 14px; }
+
+.launch-banner-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(2,8,18,0.68);
+  transform: translateX(-50%);
+}
+
+.launch-banner-dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.48);
+  cursor: pointer;
+}
+
+.launch-banner-dots button.active {
+  width: 24px;
+  border-radius: 999px;
+  background: var(--gold);
+}
+
+@keyframes launchBannerFade {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
 }
 
 .launch-banner-card .launch-modal-close {
@@ -442,8 +516,12 @@
   }
 
   .launch-modal-backdrop {
-    align-items: start;
-    padding: max(14px, env(safe-area-inset-top)) 14px 14px;
+    align-items: center;
+    justify-items: center;
+    padding:
+      max(14px, env(safe-area-inset-top))
+      12px
+      max(14px, env(safe-area-inset-bottom));
   }
 
   .launch-modal-card {
@@ -453,6 +531,31 @@
   .launch-banner-card,
   .launch-banner-card img {
     max-height: calc(100vh - 28px);
+  }
+
+  .launch-banner-card {
+    width: min(100%, 680px);
+    height: auto;
+    padding-bottom: 28px;
+    border-radius: 14px;
+  }
+
+  .launch-banner-arrow {
+    display: none;
+  }
+
+  .launch-banner-dots {
+    bottom: 5px;
+    padding: 5px 9px;
+    background: transparent;
+  }
+
+  .launch-banner-card .launch-modal-close {
+    top: 7px;
+    right: 7px;
+    width: 34px;
+    height: 34px;
+    font-size: 23px;
   }
 
   .launch-modal-card .launch-card-inner {
