@@ -17,6 +17,13 @@
   </div>
 </div>
 
+<div class="launch-modal-backdrop" *ngIf="showLaunchModal" role="dialog" aria-modal="true" aria-label="PICK2WIN launch announcement">
+  <div class="launch-banner-card">
+    <button class="launch-modal-close" type="button" aria-label="Close launch banner" (click)="closeLaunchModal()">&times;</button>
+    <img src="assets/launching_banner.jpeg" alt="PICK2WIN launch announcement">
+  </div>
+</div>
+
 <section class="carousel-section">
   <div class="banner-deck" id="bannerDeck">
     <article class="banner tone-uct" [class.active]="currentBanner === 0">

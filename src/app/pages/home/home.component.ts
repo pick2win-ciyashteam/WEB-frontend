@@ -32,6 +32,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   private splashTimer: any;
   private launchDate = new Date('2026-06-24T09:00:00Z').getTime();
   private launchSplashStorageKey = 'pick2win_launch_splash_seen';
+  private launchingBannerStorageKey = 'pick2win_launching_banner_july_2026_seen';
+  private launchingBannerEndsAt = new Date(2026, 6, 12).getTime();
   private staticHomeBannerCount = 6;
 
   constructor(
@@ -122,6 +124,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   closeLaunchModal(): void {
     this.showLaunchModal = false;
+    this.markLaunchingBannerSeen();
   }
 
   updateCountdown(): void {
@@ -131,7 +134,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (diff <= 0) {
       this.launchStatus = 'LIVE NOW';
       this.days = this.hours = this.minutes = this.seconds = '00';
-      this.showLaunchModal = false;
       clearInterval(this.timer);
       return;
     }
@@ -191,7 +193,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private shouldShowLaunchModal(): boolean {
-    return Date.now() < this.launchDate;
+    if (Date.now() >= this.launchingBannerEndsAt) {
+      return false;
+    }
+
+    try {
+      const shouldShow = localStorage.getItem(this.launchingBannerStorageKey) !== 'true';
+
+      if (shouldShow) {
+        localStorage.setItem(this.launchingBannerStorageKey, 'true');
+      }
+
+      return shouldShow;
+    } catch {
+      return true;
+    }
+  }
+
+  private markLaunchingBannerSeen(): void {
+    try {
+      localStorage.setItem(this.launchingBannerStorageKey, 'true');
+    } catch {
+      // If storage is blocked, the modal still closes for the current component instance.
+    }
   }
 
   private shouldShowSplash(): boolean {

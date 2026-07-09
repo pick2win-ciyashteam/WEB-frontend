@@ -177,6 +177,30 @@
   box-shadow: 0 32px 100px rgba(0,0,0,0.52);
 }
 
+.launch-banner-card {
+  position: relative;
+  width: min(920px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: hidden;
+  border: 1px solid rgba(244,180,0,0.34);
+  border-radius: 24px;
+  background: #06182a;
+  box-shadow: 0 32px 100px rgba(0,0,0,0.58);
+}
+
+.launch-banner-card img {
+  display: block;
+  width: 100%;
+  max-height: calc(100vh - 40px);
+  object-fit: contain;
+}
+
+.launch-banner-card .launch-modal-close {
+  z-index: 2;
+  background: rgba(2, 8, 18, 0.78);
+  backdrop-filter: blur(8px);
+}
+
 .launch-card-inner {
   position: relative;
   max-width: 1050px;
@@ -423,6 +447,11 @@
   }
 
   .launch-modal-card {
+    max-height: calc(100vh - 28px);
+  }
+
+  .launch-banner-card,
+  .launch-banner-card img {
     max-height: calc(100vh - 28px);
   }
 

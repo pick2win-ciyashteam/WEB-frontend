@@ -277,7 +277,7 @@
         <span class="pitch-wm pitch-wm-3">P2W</span>
 
         <ng-container *ngFor="let position of positionRows">
-          <div class="pitch-row" *ngIf="playersByPosition(position).length">
+          <div class="pitch-row" [class.pitch-row-empty]="playersByPosition(position).length === 0">
             <div class="pitch-rlabel">{{ roleLabel(position) }}</div>
             <div class="pitch-line">
               <div class="pitch-player" *ngFor="let player of playersByPosition(position)">

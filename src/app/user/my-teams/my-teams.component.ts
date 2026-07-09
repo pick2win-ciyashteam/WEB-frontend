@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, forkJoin, of } from 'rxjs';
 
 type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
 type FantasyGame = 'sorare' | 'draftkings' | 'fanduel';
@@ -229,8 +230,8 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
           expires: this.expiryLabel(startTimeISO, m.status),
           live: !expired,
           free: false,
-          fantasyPlatform: this.gameLabel(this.visibleGameOrDefault(game)),
-          game: this.visibleGameOrDefault(game),
+          fantasyPlatform: game ? this.gameLabel(game) : '',
+          game: game || undefined,
           generatedGames: Array.from(generatedGames),
           teamsGeneratedByGame,
           sport: m.sport || 'Football',
@@ -250,17 +251,22 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
       });
 
       this.matches = Array.from(matchMap.values());
-      this.ensureActiveSport();
       console.log('My Teams grouped matches:', this.matches);
-      this.applyDateFilter();
-      this.openMatchFromQueryParam();
-      if (!this.selectedMatch) {
-        const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
-        if (firstViewableMatch) {
-          this.openMatchTeams(firstViewableMatch);
+      this.hydrateGeneratedGameAvailability(() => {
+        this.selectInitialAvailableGame();
+        this.ensureActiveSport();
+        this.applyDateFilter();
+        this.openMatchFromQueryParam();
+
+        if (!this.selectedMatch) {
+          const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
+          if (firstViewableMatch) {
+            this.openMatchTeams(firstViewableMatch);
+          }
         }
-      }
-this.loadingMatches = false;
+
+        this.loadingMatches = false;
+      });
     },
     error: () => {
       this.matches = [];
@@ -636,6 +642,61 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     };
   }
 
+  private hydrateGeneratedGameAvailability(done: () => void): void {
+    const probes = this.matches.flatMap(match =>
+      this.visibleGames.map(game => ({
+        match,
+        game,
+        request: this.authService
+          .getUserMyTeams(match.id, this.sportKey(match.sport), game)
+          .pipe(catchError(() => of(null)))
+      }))
+    );
+
+    if (!probes.length) {
+      done();
+      return;
+    }
+
+    forkJoin(probes.map(probe => probe.request)).subscribe({
+      next: responses => {
+        responses.forEach((res, index) => {
+          if (!res || res?.success === false) {
+            return;
+          }
+
+          const teams = this.generatedTeamsFromResponse(res);
+          const teamCount = Number(res?.total_teams || res?.data?.total_teams || teams.length || 0);
+
+          if (teamCount > 0) {
+            this.markGameAvailable(probes[index].match.id, probes[index].game, teamCount);
+          }
+        });
+
+        done();
+      },
+      error: () => done()
+    });
+  }
+
+  private selectInitialAvailableGame(): void {
+    if (this.visibleGameFromValue(this.route.snapshot.queryParamMap.get('game'))) {
+      return;
+    }
+
+    if (this.matches.some(match => this.isGameGenerated(match, this.defaultGame))) {
+      return;
+    }
+
+    const firstAvailable = this.visibleGames.find(game =>
+      this.matches.some(match => this.isGameGenerated(match, game))
+    );
+
+    if (firstAvailable) {
+      this.activeGame = firstAvailable;
+    }
+  }
+
   selectGameTab(match: GeneratedMatch, game: FantasyGame): void {
     if (!this.canAccessTeams(match)) {
       return;
@@ -699,7 +760,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       return match.game ? match.game === game : false;
     }
 
-    return generatedGames.includes(game) || match.game === game || Number(match.teamsGeneratedByGame?.[game] || 0) > 0;
+    return generatedGames.includes(game) || Number(match.teamsGeneratedByGame?.[game] || 0) > 0;
   }
 
   gameMatchCount(game: FantasyGame): number {
@@ -731,10 +792,11 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
       const id = this.sportKey(match.sport);
       const current = sports.get(id);
+      const generatedGameCount = this.visibleGames.filter(game => this.isGameGenerated(match, game)).length;
 
       sports.set(id, {
         label: this.sportLabel(match.sport),
-        count: (current?.count || 0) + 1
+        count: (current?.count || 0) + generatedGameCount
       });
     });
 
@@ -742,7 +804,15 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   teamCountForGame(match: GeneratedMatch, game: FantasyGame): number {
-    return Number(match.teamsGeneratedByGame?.[game] ?? match.teamsGenerated ?? 0);
+    const hasPlatformData =
+      (match.generatedGames || []).length > 0 ||
+      Object.keys(match.teamsGeneratedByGame || {}).length > 0;
+
+    if (hasPlatformData) {
+      return Number(match.teamsGeneratedByGame?.[game] || 0);
+    }
+
+    return match.game === game ? Number(match.teamsGenerated || 0) : 0;
   }
 
   private teamsGeneratedByGameFromMatch(match: any, directGame: FantasyGame | null, totalTeams: number): Partial<Record<FantasyGame, number>> {
@@ -818,7 +888,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       ...match,
       game,
       fantasyPlatform: this.gameLabel(game),
-      teamsGenerated: match.teamsGeneratedByGame?.[game] ?? match.teamsGenerated
+      teamsGenerated: match.teamsGeneratedByGame?.[game] ?? 0
     };
   }
 
@@ -2227,11 +2297,29 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
   }
 
   private reportGenerationTime(match: GeneratedMatch, rawResponse?: any): string {
+    const seconds =
+      rawResponse?.generation_time_seconds ??
+      rawResponse?.generation_seconds ??
+      rawResponse?.data?.generation_time_seconds ??
+      rawResponse?.data?.generation_seconds;
+
+    if (seconds !== null && seconds !== undefined && seconds !== '') {
+      return `${seconds} Seconds`;
+    }
+
+    const milliseconds =
+      rawResponse?.generation_time_ms ??
+      rawResponse?.data?.generation_time_ms;
+
+    if (milliseconds !== null && milliseconds !== undefined && milliseconds !== '') {
+      const convertedSeconds = Number(milliseconds) / 1000;
+      return Number.isFinite(convertedSeconds) ? `${convertedSeconds} Seconds` : '-';
+    }
+
     const value =
       rawResponse?.generation_time ??
-      rawResponse?.generation_seconds ??
       rawResponse?.data?.generation_time ??
-      rawResponse?.data?.generation_seconds ??
+      rawResponse?.data?.generationTime ??
       match.generationTime;
 
     if (value === null || value === undefined || value === '') {

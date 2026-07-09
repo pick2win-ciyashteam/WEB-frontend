@@ -865,9 +865,10 @@
 
 .pitch-field {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  align-items: center;
   gap: 14px;
   min-height: 620px;
   padding: 28px 24px 34px;
@@ -909,6 +910,12 @@
 .pitch-row {
   position: relative;
   z-index: 2;
+  width: 100%;
+  min-height: 0;
+}
+
+.pitch-row-empty .pitch-line {
+  min-height: 54px;
 }
 
 .pitch-rlabel {
@@ -1168,7 +1175,7 @@
   .pitch-field {
     height: 100%;
     min-height: 0;
-    justify-content: space-between;
+    justify-content: stretch;
     gap: 3px;
     padding: 7px 8px 9px;
   }

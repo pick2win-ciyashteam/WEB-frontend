@@ -155,7 +155,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   isGenerated(match: LineoutMatch): boolean {
-    return match.teamsGenerated || match.generatedGames.length >= 3;
+    return match.teamsGenerated || match.generatedGames.length > 0;
   }
 
   statusLabel(match: LineoutMatch): string {
@@ -674,7 +674,7 @@ canRunUct(match: LineoutMatch): boolean {
   }
 
   private hasGeneratedTeams(match: Match): boolean {
-    return this.generatedGames(match).length >= 3 || this.generatedGameCount(match) >= 3;
+    return this.generatedGames(match).length > 0 || this.generatedGameCount(match) > 0;
   }
 
   private generatedGames(match: Match): FantasyGame[] {
@@ -691,6 +691,17 @@ canRunUct(match: LineoutMatch): boolean {
       'platforms_generated',
       'platformsGenerated'
     ]));
+
+    const directGame = this.normalizeGame(this.firstMatchValue(match, [
+      'game',
+      'fantasy_platform',
+      'fantasyPlatform',
+      'platform'
+    ]));
+
+    if (directGame && this.generatedGameCount(match) > 0) {
+      games.add(directGame);
+    }
 
     (['sorare', 'draftkings', 'fanduel'] as FantasyGame[]).forEach(game => {
       const values = [
@@ -715,7 +726,10 @@ canRunUct(match: LineoutMatch): boolean {
       'generated_games_count',
       'games_generated_count',
       'platforms_generated_count',
-      'uct_generated_count'
+      'uct_generated_count',
+      'generated_teams_count',
+      'teams_generated',
+      'total_teams'
     ]);
     const count = Number(value);
 
