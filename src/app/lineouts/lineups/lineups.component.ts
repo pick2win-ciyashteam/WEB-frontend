@@ -155,7 +155,9 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   isGenerated(match: LineoutMatch): boolean {
-    return match.teamsGenerated || match.generatedGames.length > 0;
+    return match.teamsGenerated
+      || (['draftkings', 'fanduel'] as FantasyGame[])
+        .every(game => match.generatedGames.includes(game));
   }
 
   statusLabel(match: LineoutMatch): string {
@@ -674,7 +676,11 @@ canRunUct(match: LineoutMatch): boolean {
   }
 
   private hasGeneratedTeams(match: Match): boolean {
-    return this.generatedGames(match).length > 0 || this.generatedGameCount(match) > 0;
+    const games = this.generatedGames(match);
+    const allVisibleGamesGenerated = (['draftkings', 'fanduel'] as FantasyGame[])
+      .every(game => games.includes(game));
+
+    return allVisibleGamesGenerated || this.generatedGameCount(match) >= 2;
   }
 
   private generatedGames(match: Match): FantasyGame[] {
@@ -699,7 +705,13 @@ canRunUct(match: LineoutMatch): boolean {
       'platform'
     ]));
 
-    if (directGame && this.generatedGameCount(match) > 0) {
+    const directTeamCount = Number(this.firstMatchValue(match, [
+      'generated_teams_count',
+      'teams_generated',
+      'total_teams'
+    ]) || 0);
+
+    if (directGame && (this.generatedGameCount(match) > 0 || directTeamCount > 0)) {
       games.add(directGame);
     }
 
@@ -726,10 +738,7 @@ canRunUct(match: LineoutMatch): boolean {
       'generated_games_count',
       'games_generated_count',
       'platforms_generated_count',
-      'uct_generated_count',
-      'generated_teams_count',
-      'teams_generated',
-      'total_teams'
+      'uct_generated_count'
     ]);
     const count = Number(value);
 

@@ -23,7 +23,7 @@
       <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
     </div>
 
-    <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
 
     <form [formGroup]="form">
@@ -60,7 +60,10 @@
         <label>Mobile number <span>*</span></label>
         <div class="phone-row">
           <div class="dial-code-fixed">
-            <span *ngIf="selectedCountry?.flag" class="dial-flag">{{ selectedCountry?.flag }}</span>
+            <img *ngIf="selectedCountryFlagImage; else countryFlagEmoji" class="dial-flag-image" [src]="selectedCountryFlagImage" [alt]="selectedCountry?.name + ' flag'">
+            <ng-template #countryFlagEmoji>
+              <span *ngIf="selectedCountryFlag" class="dial-flag">{{ selectedCountryFlag }}</span>
+            </ng-template>
             {{ dialLabel || 'Code' }}
           </div>
           <input
@@ -156,12 +159,8 @@
     <h2>Verify <em>your</em> mobile.</h2>
     <p class="sub">We sent a 6-digit SMS code to <b>{{ form.value.dial }} {{ form.value.mobile }}</b></p>
 
-    <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
-
-    <div class="test-otp-chip" *ngIf="testMobileOtp">
-      Testing mobile OTP: <b>{{ testMobileOtp }}</b>
-    </div>
 
     <div class="otp-row">
       <input
@@ -210,12 +209,8 @@
     <h2>Verify <em>your</em> email.</h2>
     <p class="sub">We sent a 6-digit code to <b>{{ form.value.email }}</b></p>
 
-    <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
-
-    <div class="test-otp-chip" *ngIf="testEmailOtp">
-      Testing email OTP: <b>{{ testEmailOtp }}</b>
-    </div>
 
     <div class="otp-row">
       <input
@@ -261,7 +256,7 @@
     <h2>You're <em>in.</em></h2> -->
     <p class="sub">Mobile and email verified. Your PICK2WIN account is live.</p>
 
-    <div class="api-msg error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
 
     <div class="next-list">

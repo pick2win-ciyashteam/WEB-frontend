@@ -234,7 +234,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (blur)="normalizeSalaryOnBlur(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -252,7 +252,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedStartingIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (blur)="normalizeSalaryOnBlur(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -287,7 +287,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (blur)="normalizeSalaryOnBlur(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>
@@ -306,7 +306,7 @@
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
               <label class="salary-entry" *ngIf="requiresSalary && selectedSubIds.has(player.id)" (click)="$event.stopPropagation()">
-                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
+                <input type="text" [attr.data-salary-player-id]="player.id" [attr.inputmode]="salaryInputMode" [attr.pattern]="salaryPattern" [attr.placeholder]="salaryPlaceholder" [attr.maxlength]="salaryMaxLength" [value]="salaryValue(player)" (input)="updateSalary(player, $any($event.target))" (blur)="normalizeSalaryOnBlur(player, $any($event.target))" (keydown)="allowSalaryKey($event)">
               </label>
               <span class="pos {{ positionClass(player) }}">{{ player.position }}</span>
             </button>

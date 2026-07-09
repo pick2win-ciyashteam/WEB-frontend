@@ -186,8 +186,6 @@ export class SignupComponent implements OnDestroy {
   showPassword = false;
   mobileOtp = ['', '', '', '', '', ''];
   emailOtp = ['', '', '', '', '', ''];
-  testMobileOtp = '';
-  testEmailOtp = '';
   maxDob = this.getMaxDob();
 
 countries: SignupCountry[] = [];
@@ -214,8 +212,24 @@ resending: 'mobile' | 'email' | null = null;
 readonly resendCooldownSeconds = 60;
 resendCooldown: Record<'mobile' | 'email', number> = { mobile: 0, email: 0 };
 private resendCooldownTimers: Partial<Record<'mobile' | 'email', ReturnType<typeof setInterval>>> = {};
-errorMessage = '';
+private _errorMessage = '';
 successMessage = '';
+
+get errorMessage(): string {
+  return this._errorMessage;
+}
+
+set errorMessage(message: string) {
+  this._errorMessage = message;
+
+  if (message) {
+    setTimeout(() => {
+      const error = document.querySelector<HTMLElement>('.signup-box .api-msg.error');
+      error?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      error?.focus({ preventScroll: true });
+    });
+  }
+}
 
   constructor(
     private fb: FormBuilder,
@@ -276,6 +290,7 @@ continueStep1() {
   this.successMessage = '';
 
   if (this.form.invalid || !this.ageValid || !this.validateMobileByCountry()) {
+    this.scrollToFirstSignupError();
     return;
   }
 
@@ -287,7 +302,7 @@ continueStep1() {
   const payload = {
     fullname: this.form.value.name || '',
     email: this.withoutSpaces(this.form.value.email || ''),
-    mobile: this.onlyDigits(this.form.value.mobile || '').slice(0, this.mobileLimit),
+    mobile: this.backendMobileNumber(),
     country: this.form.value.country || '',
     date_of_birth: this.form.value.dob || '',
     password: this.withoutSpaces(this.form.value.password || '')
@@ -298,12 +313,10 @@ continueStep1() {
   this.api.signup(payload).subscribe({
     next: (res: any) => {
       this.loading = false;
-      this.successMessage = res?.message || 'OTP sent successfully';
+      this.successMessage = 'OTP sent to your mobile';
       this.step = 2;
       this.mobileOtp = ['', '', '', '', '', ''];
       this.emailOtp = ['', '', '', '', '', ''];
-      this.testMobileOtp = this.extractOtpFromResponse(res, 'mobile');
-      this.testEmailOtp = this.extractOtpFromResponse(res, 'email');
       this.startResendCooldown('mobile');
 
       setTimeout(() => this.focusOtp('mobile'), 100);
@@ -699,7 +712,7 @@ verifyMobile() {
   }
 
   const payload = {
-    mobile: this.form.value.mobile || '',
+    mobile: this.backendMobileNumber(),
     otp: this.mobileOtp.join('')
   };
 
@@ -710,8 +723,7 @@ verifyMobile() {
   this.api.verifyMobileOtp(payload).subscribe({
     next: (res: any) => {
       this.loading = false;
-      this.successMessage = res?.message || 'Mobile verified successfully';
-      this.testEmailOtp = this.extractOtpFromResponse(res, 'email') || this.testEmailOtp;
+      this.successMessage = 'Please verify your email OTP';
       this.step = 3;
       this.startResendCooldown('email');
       setTimeout(() => this.focusOtp('email'), 100);
@@ -765,7 +777,7 @@ resendOtp(type: 'mobile' | 'email') {
 
   const payload =
     type === 'mobile'
-      ? { mobile: this.form.value.mobile || '', type }
+      ? { mobile: this.backendMobileNumber(), type }
       : { email: this.form.value.email || '', type };
 
   this.api.resendOtp(payload).subscribe({
@@ -774,10 +786,8 @@ resendOtp(type: 'mobile' | 'email') {
       this.successMessage = res?.message || `${type === 'mobile' ? 'Mobile' : 'Email'} OTP resent successfully`;
       if (type === 'mobile') {
         this.mobileOtp = ['', '', '', '', '', ''];
-        this.testMobileOtp = this.extractOtpFromResponse(res, 'mobile');
       } else {
         this.emailOtp = ['', '', '', '', '', ''];
-        this.testEmailOtp = this.extractOtpFromResponse(res, 'email');
       }
       this.startResendCooldown(type);
       setTimeout(() => this.focusOtp(type), 100);
@@ -802,10 +812,8 @@ private handleOtpVerifyError(err: any, type: 'mobile' | 'email'): void {
   if (this.isOtpExpiredMessage(expiredText)) {
     if (type === 'mobile') {
       this.mobileOtp = ['', '', '', '', '', ''];
-      this.testMobileOtp = '';
     } else {
       this.emailOtp = ['', '', '', '', '', ''];
-      this.testEmailOtp = '';
     }
 
     this.errorMessage = this.otpExpiredMessage(type);
@@ -947,8 +955,53 @@ private groupCountriesByRegion(countries: SignupCountry[]): CountryRegionGroup[]
   return this.countries.find(c => c.name === this.form.value.country);
 }
 
+get selectedCountryFlag(): string {
+  const country = this.selectedCountry;
+  const backendFlag = String(country?.flag || '').trim();
+
+  if (backendFlag && !this.isFlagImage(backendFlag)) {
+    return backendFlag;
+  }
+
+  const code = String(country?.code || '').trim().toUpperCase();
+  return /^[A-Z]{2}$/.test(code)
+    ? String.fromCodePoint(...Array.from(code).map(letter => 127397 + letter.charCodeAt(0)))
+    : '';
+}
+
+get selectedCountryFlagImage(): string {
+  const flag = String(this.selectedCountry?.flag || '').trim();
+  return this.isFlagImage(flag) ? flag : '';
+}
+
+private isFlagImage(flag: string): boolean {
+  return /^(https?:\/\/|\/|assets\/|data:image\/)/i.test(flag)
+    || /\.(svg|png|jpe?g|webp|gif)(\?.*)?$/i.test(flag);
+}
+
+private scrollToFirstSignupError(): void {
+  setTimeout(() => {
+    const invalidControl = document.querySelector<HTMLElement>(
+      '.signup-box [formControlName].ng-invalid'
+    );
+    const target = invalidControl?.closest<HTMLElement>('.field, .terms') || invalidControl;
+
+    target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    invalidControl?.focus({ preventScroll: true });
+  });
+}
+
 get mobileLimit(): number {
   return this.selectedCountry?.max || DEFAULT_MOBILE_LENGTH.max;
+}
+
+private backendMobileNumber(): string {
+  const countryCode = this.onlyDigits(
+    String(this.form.value.dial || this.selectedCountry?.dial_code || '')
+  );
+  const mobile = this.onlyDigits(this.form.value.mobile || '').slice(0, this.mobileLimit);
+
+  return `${countryCode}${mobile}`;
 }
 
 get dialLabel(): string {
@@ -1087,26 +1140,4 @@ private normalizeCountryKey(value: string): string {
   return String(value || '').trim().toLowerCase();
 }
 
-private extractOtpFromResponse(res: any, type: 'mobile' | 'email'): string {
-  const source = res?.data || res || {};
-  const keys = type === 'mobile'
-    ? ['mobile_otp', 'mobileOtp', 'otp_mobile', 'mobileOTP']
-    : ['email_otp', 'emailOtp', 'otp_email', 'emailOTP'];
-
-  for (const key of keys) {
-    const value = source?.[key] ?? res?.[key];
-
-    if (value !== undefined && value !== null && String(value).trim()) {
-      return String(value).trim();
-    }
-  }
-
-  if (source?.otp !== undefined && source?.otp !== null && String(source.otp).trim()) {
-    return String(source.otp).trim();
-  }
-
-  return '';
-}
-
-  
 }

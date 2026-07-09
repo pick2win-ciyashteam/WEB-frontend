@@ -1669,7 +1669,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         this.reportField('Utility (UTIL)', '1 (DEF / MID / FWD only)'),
         '',
         this.reportField('Total Players', '8'),
-        this.reportField('Player Salary Max', '15000'),
+        this.reportField('Salary Cap', '$50000'),
         this.reportField('Maximum Per Club', '7 Players'),
         this.reportField('Minimum Opponent', '1 Player')
       ].join('\r\n');
@@ -1693,7 +1693,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         '- 0 FWD + 4 MID',
         '',
         this.reportField('Total Players', '7', 25),
-        this.reportField('Player Unit Max', '29', 25),
+        this.reportField('Salary Cap', '100', 25),
         this.reportField('Maximum Per Club', '6 Players', 25),
         this.reportField('Minimum Opponent', '1 Player', 25)
       ].join('\r\n');

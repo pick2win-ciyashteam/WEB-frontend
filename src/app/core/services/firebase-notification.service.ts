@@ -177,10 +177,13 @@ export class FirebaseNotificationService {
   }
 
   registerDevice(fcmToken: string): Observable<any> {
-    return this.api.registerDevice({
-      fcm_token: fcmToken,
+    const payload = {
+      registration_token: fcmToken,
       device_type: 'web'
-    });
+    } as const;
+
+    console.log('[FCM] Sending browser token to register-device:', payload);
+    return this.api.registerDevice(payload);
   }
 
   loadNotifications(page = 1, limit = 20): Observable<AppNotification[]> {

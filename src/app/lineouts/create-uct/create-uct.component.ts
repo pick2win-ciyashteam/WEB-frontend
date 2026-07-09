@@ -356,15 +356,17 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get salaryInputMode(): string {
-    return 'numeric';
+    return this.selectedPlatform === 'fanduel' ? 'decimal' : 'numeric';
   }
 
   get salaryPattern(): string {
-    return this.selectedPlatform === 'fanduel' ? '[0-9]{1,2}' : '[0-9]{4,5}';
+    return this.selectedPlatform === 'fanduel'
+      ? '[0-9]{1,2}(\\.[0-9])?'
+      : '[0-9]{4,5}';
   }
 
   get salaryMaxLength(): number {
-    return this.selectedPlatform === 'fanduel' ? 2 : 5;
+    return this.selectedPlatform === 'fanduel' ? 4 : 5;
   }
 
   get totalSelectedSalary(): number {
@@ -685,6 +687,23 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
   }
 
+  normalizeSalaryOnBlur(player: UctPlayer, input: HTMLInputElement): void {
+    if (this.selectedPlatform !== 'fanduel') {
+      return;
+    }
+
+    const currentValue = this.salaries.get(player.id) || '';
+    const numericValue = Number(currentValue);
+
+    if (!currentValue || !Number.isFinite(numericValue)) {
+      return;
+    }
+
+    const normalizedValue = String(numericValue);
+    input.value = normalizedValue;
+    this.salaries.set(player.id, normalizedValue);
+  }
+
   allowSalaryKey(event: KeyboardEvent): void {
     const allowedKeys = [
       'Backspace',
@@ -701,6 +720,14 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) {
       return;
+    }
+
+    if (this.selectedPlatform === 'fanduel' && event.key === '.') {
+      const input = event.target as HTMLInputElement | null;
+
+      if (input && !input.value.includes('.')) {
+        return;
+      }
     }
 
     if (!/^\d$/.test(event.key)) {
@@ -1002,6 +1029,15 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   private cleanSalaryInput(value: string): string {
+    if (this.selectedPlatform === 'fanduel') {
+      const normalized = String(value || '').replace(/[^\d.]/g, '');
+      const [whole = '', ...decimalParts] = normalized.split('.');
+      const decimal = decimalParts.join('').slice(0, 1);
+      const cleanWhole = whole.slice(0, 2);
+
+      return decimalParts.length ? `${cleanWhole}.${decimal}` : cleanWhole;
+    }
+
     return String(value || '').replace(/\D/g, '').slice(0, this.salaryMaxLength);
   }
 
@@ -1009,7 +1045,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     const salary = Number(value);
     // Critical per-player entry rules: no total salary cap is enforced here.
     const validFormat = this.selectedPlatform === 'fanduel'
-      ? /^\d{1,2}$/.test(value)
+      ? /^\d{1,2}(?:\.\d)?$/.test(value)
       : /^\d{4,5}$/.test(value);
     const maxValue = this.selectedPlatform === 'fanduel' ? 29 : 15000;
 
@@ -1089,15 +1125,21 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       if (missing.length) {
         return `DraftKings My Squad must include at least ${missing.join(', ')}.`;
       }
+
+      if (defCount + midCount + fwdCount < 7) {
+        return 'DraftKings My Squad needs at least 7 total DEF/MID/FWD players: 2 DEF, 2 MID, 2 FWD, plus 1 additional DEF/MID/FWD for UTIL.';
+      }
     }
 
     if (this.selectedPlatform === 'fanduel') {
-      if (defCount < 2) {
-        return 'FanDuel My Squad must include at least 2 Defenders (DEF).';
-      }
+      const missing = [
+        defCount < 2 ? '2 Defenders (DEF)' : '',
+        midCount < 2 ? '2 Midfielders (MID)' : '',
+        fwdCount < 1 ? '1 Forward (FWD)' : ''
+      ].filter(Boolean);
 
-      if (midCount + fwdCount < 4) {
-        return 'FanDuel My Squad must include at least 4 total Midfielders/Forwards in any valid combination.';
+      if (missing.length) {
+        return `FanDuel My Squad must include at least ${missing.join(', ')} from the Playing XI or substitutes.`;
       }
     }
 
@@ -1118,20 +1160,21 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     if (normalized === 'GK') return 1;
     if (this.selectedPlatform === 'draftkings' && ['DEF', 'MID', 'FWD'].includes(normalized)) return 2;
-    if (this.selectedPlatform === 'fanduel' && normalized === 'DEF') return 2;
+    if (this.selectedPlatform === 'fanduel' && ['DEF', 'MID'].includes(normalized)) return 2;
+    if (this.selectedPlatform === 'fanduel' && normalized === 'FWD') return 1;
 
     return 1;
   }
 
   private salaryFormatHint(): string {
     return this.selectedPlatform === 'fanduel'
-      ? 'FanDuel salary from 1 to 29'
+      ? 'FanDuel units greater than 0 up to 29 (decimals allowed)'
       : 'DraftKings salary from 1000 to 15000';
   }
 
   private salaryRangeMessage(player: UctPlayer): string {
     return this.selectedPlatform === 'fanduel'
-      ? `Enter valid FanDuel salary from 1 to 29 for ${player.player_name}.`
+      ? `Enter valid FanDuel units greater than 0 up to 29 for ${player.player_name}. Use at most one decimal digit, such as 1.2, 2.3 or 4.5.`
       : `Enter a valid DraftKings salary from 1000 to 15000 for ${player.player_name}.`;
   }
 
