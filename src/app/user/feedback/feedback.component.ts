@@ -149,7 +149,7 @@ export class FeedbackComponent implements OnInit {
     this.api.postFeedback(payload)
       .subscribe({
         next: (res) => {
-          console.log(res);
+       
           this.submittingFeedback = false;
           this.feedbackRef = String(res?.data?.reference || res?.reference || res?.id || this.localRef('FB'));
           this.feedbackSubmitted = true;

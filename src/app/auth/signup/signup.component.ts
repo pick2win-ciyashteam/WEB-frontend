@@ -716,8 +716,6 @@ verifyMobile() {
     otp: this.mobileOtp.join('')
   };
 
-  console.log('mobile otp:', payload.otp);
-
   this.loading = true;
 
   this.api.verifyMobileOtp(payload).subscribe({
@@ -748,8 +746,6 @@ verifyEmail() {
     email: this.form.value.email || '',
     otp: this.emailOtp.join('')
   };
-
-  console.log('email otp:', payload.otp);
 
   this.loading = true;
 

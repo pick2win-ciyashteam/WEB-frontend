@@ -276,7 +276,6 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     this.mobileChanging = true;
     this.api.changeMobile({ new_mobile: newMobile }).subscribe({
       next: (res) => {
-        console.log('change mobile response / OTP test:', res);
         this.mobileChanging = false;
 
         if (res?.success === false) {
@@ -308,7 +307,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     this.mobileChanging = true;
     this.api.verifyMobileChange({ type: 'mobile', otp }).subscribe({
       next: (res) => {
-        console.log('verify mobile change response:', res);
+      
         this.mobileChanging = false;
 
         if (res?.success === false) {
@@ -342,7 +341,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     this.emailChanging = true;
     this.api.changeEmail({ new_email: newEmail }).subscribe({
       next: (res) => {
-        console.log('change email response / OTP test:', res);
+       
         this.emailChanging = false;
 
         if (res?.success === false) {
@@ -374,7 +373,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     this.emailChanging = true;
     this.api.verifyEmailChange({ type: 'email', otp }).subscribe({
       next: (res) => {
-        console.log('verify email change response:', res);
+        
         this.emailChanging = false;
 
         if (res?.success === false) {
@@ -407,14 +406,14 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     const shouldRefreshAfterPayment = this.route.snapshot.queryParamMap.has('refresh');
 
     this.profileService.loadProfile(true).subscribe(profile => {
-      // console.log('Profile component data:', profile);
+     
     });
 
     if (shouldRefreshAfterPayment) {
       clearTimeout(this.profileRefreshTimer);
       this.profileRefreshTimer = setTimeout(() => {
         this.profileService.loadProfile(true).subscribe(profile => {
-          // console.log('Profile component refreshed data:', profile);
+         
         });
       }, 1200);
     }

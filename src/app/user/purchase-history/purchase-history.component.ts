@@ -149,7 +149,6 @@ export class PurchaseHistoryComponent implements OnInit {
       return;
     }
 
-    // console.log('Purchase history item missing package expiry date:', item);
   }
 
   private isPurchaseTransaction(item: PurchaseHistory): boolean {

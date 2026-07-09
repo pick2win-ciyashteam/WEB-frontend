@@ -224,11 +224,6 @@ getRazorpayConfig(): Observable<RazorpayConfigResponse> {
 
   createUctTeams(data: UctGeneratePayload): Observable<UctGenerateResponse> {
     const url = `${this.BASE}/user/teams/generate-teams`;
-    console.log('Generate UCT API request:', {
-      url,
-      headers: { 'Content-Type': 'application/json', 'x-api-key': '12345678' },
-      body: data
-    });
 
     return this.http.post<UctGenerateResponse>(
       url,

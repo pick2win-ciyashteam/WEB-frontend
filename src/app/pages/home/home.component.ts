@@ -173,14 +173,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.api.getBanners().subscribe({
       next: (res) => {
-        // console.log('Home banner API response:', res);
+      
         this.banners = res?.success && Array.isArray(res.data) ? res.data : [];
         this.currentBanner = 0;
         this.bannersLoading = false;
         this.startBannerTimer();
       },
       error: (error) => {
-        // console.log('Home banner API error:', error);
+       
         this.banners = [];
         this.bannersLoading = false;
       }

@@ -196,15 +196,7 @@ export class PlayingTeamComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // console.log('Playing team players:', {
-    //   matchId: this.detail.match.id,
-    //   homeTeam: this.detail.home_team.name,
-    //   homePlayingXi: this.detail.home_team.playing_xi,
-    //   homeSubstitutes: this.detail.home_team.substitutes,
-    //   awayTeam: this.detail.away_team.name,
-    //   awayPlayingXi: this.detail.away_team.playing_xi,
-    //   awaySubstitutes: this.detail.away_team.substitutes
-    // });
+    
   }
 
   private showToast(type: 'success' | 'error', message: string): void {

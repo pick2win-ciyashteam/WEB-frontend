@@ -35,7 +35,6 @@ export class LoginComponent {
   forgotModal = false;
   otpSent = false;
   forgotStep: 'email' | 'otp' | 'password' | 'success' = 'email';
-  testForgotOtp = '';
 
   toast: { type: 'success' | 'error'; message: string } | null = null;
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
@@ -78,7 +77,6 @@ export class LoginComponent {
   });
 
   this.otpSent = false;
-  this.testForgotOtp = '';
   this.forgotStep = 'email';
   this.forgotModal = true;
   this.showResetPassword = false;
@@ -88,7 +86,6 @@ export class LoginComponent {
   closeForgotPassword() {
     this.forgotModal = false;
     this.otpSent = false;
-    this.testForgotOtp = '';
     this.forgotStep = 'email';
     this.forgotForm.reset();
   }
@@ -111,7 +108,6 @@ export class LoginComponent {
         this.otpSent = true;
         this.forgotForm.patchValue({ otp: '' });
         this.forgotForm.get('otp')?.markAsUntouched();
-        this.testForgotOtp = String(res?.otp || res?.data?.otp || '');
         this.forgotStep = 'otp';
         this.showToast('success', res?.message || (isResend ? 'OTP resent to your email.' : 'OTP sent to your email.'));
       },

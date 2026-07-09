@@ -172,9 +172,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
 
   this.api.GetMyTeams().subscribe({
     next: (res: any) => {
-      console.log('My Teams raw matches response:', res);
       const data = Array.isArray(res?.data) ? res.data : [];
-      console.log('My Teams raw matches data:', data);
 
       const matchMap = new Map<number, GeneratedMatch>();
 
@@ -251,7 +249,6 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
       });
 
       this.matches = Array.from(matchMap.values());
-      console.log('My Teams grouped matches:', this.matches);
       this.hydrateGeneratedGameAvailability(() => {
         this.selectInitialAvailableGame();
         this.ensureActiveSport();
@@ -291,12 +288,6 @@ applyDateFilter(resetSelection = true) {
     && this.isGameGenerated(match, this.activeGame)
   );
 
-  console.log('My Teams filtered matches:', {
-    activeSport: this.activeSport,
-    activeGame: this.activeGame,
-    selectedDate: this.selectedDate,
-    filteredMatches: this.filteredMatches
-  });
 }
 
 resetDateFilter() {
@@ -363,7 +354,6 @@ private openMatchFromQueryParam(): void {
 
   this.authService.getUserMyTeams(match.id, this.sportKey(match.sport || this.activeSport), game).subscribe({
     next: (res: any) => {
-      console.log('My Teams download response:', res);
 
       const generatedTeams = this.generatedTeamsFromResponse(res);
       const responsePreview = this.teamsPreviewFromResponse(res);
@@ -548,16 +538,13 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     this.previewTeams = [];
     this.loadingTeams = true;
 
-    console.log('My Teams loading teams:', { match, game });
-
     this.authService.getUserMyTeams(match.id, this.sportKey(match.sport || this.activeSport), game).subscribe({
       next: (res: any) => {
-        console.log('My Teams match teams response:', { matchId: match.id, game, response: res });
 
         const generatedTeams = this.generatedTeamsFromResponse(res);
 
         if (generatedTeams.length) {
-          console.log('My teams response:', res);
+
           this.markGameAvailable(match.id, game, generatedTeams.length);
           this.previewTeams = generatedTeams.map((team: ApiGeneratedTeam) => this.mapGeneratedTeam(team));
           this.selectedMatch = {
@@ -711,19 +698,14 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       ? this.matches.find(match => match.id === this.selectedMatch?.id) || this.selectedMatch
       : null;
 
-    console.log('[My Teams] Platform tab clicked:', {
-      platform: game,
-      currentPlatform: this.activeGame
-    });
 
     if (this.activeGame === game) {
-      console.log('[My Teams] Platform already active; no new endpoint call:', game);
       return;
     }
 
     this.activeGame = game;
     this.gameTabLoading = true;
-    console.log('My Teams selected game tab:', game);
+
     this.applyDateFilter();
 
     const matchToLoad =
@@ -743,7 +725,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     }
 
     this.activeSport = sport;
-    console.log('My Teams selected sport tab:', sport);
+
     this.applyDateFilter();
 
     const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
@@ -1085,7 +1067,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     this.api.TeamsByPlayers(teamId).subscribe({
       next: (res: any) => {
-        console.log('My Teams team players response:', res);
+
 
         const players = Array.isArray(res?.players) ? res.players : [];
 

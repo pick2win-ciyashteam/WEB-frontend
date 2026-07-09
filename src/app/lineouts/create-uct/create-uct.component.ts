@@ -1350,14 +1350,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.startGeneratingStatus();
 
     const payload = this.buildSubmitPayload();
-    console.log('Generate UCT request payload:', payload);
-    console.log('Generate UCT request payload JSON:', JSON.stringify(payload, null, 2));
 
     this.api.createUctTeams(payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          console.log('Generate UCT backend response:', res);
+        
           this.stopGeneratingStatus();
           this.submitting = false;
 
@@ -2165,17 +2163,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // console.log('Create UCT player pools:', {
-    //   matchId: this.detail.match.id,
-    //   homeTeam: this.detail.home_team.name,
-    //   homePlayingXi: this.detail.home_team.playing_xi,
-    //   homeSubstitutes: this.detail.home_team.substitutes,
-    //   homeAvailablePool: this.homeAvailablePool,
-    //   awayTeam: this.detail.away_team.name,
-    //   awayPlayingXi: this.detail.away_team.playing_xi,
-    //   awaySubstitutes: this.detail.away_team.substitutes,
-    //   awayAvailablePool: this.awayAvailablePool
-    // });
   }
 
   private toUctPlayers(players: MatchPlayer[] | null | undefined, side: 'home' | 'away'): UctPlayer[] {
