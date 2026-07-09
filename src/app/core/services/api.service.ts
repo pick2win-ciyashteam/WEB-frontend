@@ -195,10 +195,12 @@ getRazorpayConfig(): Observable<RazorpayConfigResponse> {
     return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/teams/generate-matches`);
   }
 
-  MatchByTeams(id: number, game?: 'sorare' | 'draftkings' | 'fanduel'): Observable<any> {
-    const gamePath = game ? `/${game}` : '';
+  MatchByTeams(id: number, sport: string, game: 'sorare' | 'draftkings' | 'fanduel'): Observable<any> {
+    const sportPath = String(sport || 'football').trim().toLowerCase() === 'soccer'
+      ? 'football'
+      : String(sport || 'football').trim().toLowerCase();
 
-    return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}${gamePath}`);
+    return this.http.get(`${this.BASE}/user/teams/user-my-teams/${id}/${encodeURIComponent(sportPath)}/${game}`);
   }
 
   TeamsByPlayers(id: number): Observable<any> {

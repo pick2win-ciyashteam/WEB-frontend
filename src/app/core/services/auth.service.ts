@@ -53,29 +53,67 @@ export class AuthService {
     );
   }
 
-  getUserMyTeams(matchId: number | string, game: FantasyGame): Observable<any> {
-    return this.getUserMyTeamsByPaths(matchId, this.myTeamsGamePaths(game));
+  getUserMyTeams(matchId: number | string, sport: string, game: FantasyGame): Observable<any> {
+    const sportPath = this.normalizeMyTeamsSport(sport);
+    return this.getUserMyTeamsByPaths(matchId, sportPath, this.myTeamsGamePaths(game));
   }
 
-  private getUserMyTeamsByPaths(matchId: number | string, paths: string[]): Observable<any> {
+  private getUserMyTeamsByPaths(matchId: number | string, sport: string, paths: string[]): Observable<any> {
     const [path, ...fallbackPaths] = paths;
-    const url = `${API}/user/teams/user-my-teams/${matchId}/${path}`;
+    const url = `${API}/user/teams/user-my-teams/${matchId}/${sport}/${path}`;
 
-    console.log('My Teams API URL:', url);
+    console.log('[My Teams API] Request:', {
+      matchId,
+      sport,
+      platform: path,
+      endpoint: url
+    });
 
     return this.http.get<any>(url).pipe(
       switchMap(res => {
+        console.log('[My Teams API] Response:', {
+          matchId,
+          sport,
+          platform: path,
+          endpoint: url,
+          response: res
+        });
+
         if (fallbackPaths.length && this.isEmptyTeamsResponse(res)) {
-          return this.getUserMyTeamsByPaths(matchId, fallbackPaths);
+          console.warn('[My Teams API] Empty response; trying fallback endpoint:', {
+            matchId,
+            sport,
+            platform: path,
+            endpoint: url,
+            nextPlatformPath: fallbackPaths[0]
+          });
+          return this.getUserMyTeamsByPaths(matchId, sport, fallbackPaths);
         }
 
         return of(res);
       }),
-      catchError(error => fallbackPaths.length
-        ? this.getUserMyTeamsByPaths(matchId, fallbackPaths)
-        : throwError(() => error)
-      )
+      catchError(error => {
+        console.error('[My Teams API] Error:', {
+          matchId,
+          sport,
+          platform: path,
+          endpoint: url,
+          status: error?.status,
+          statusText: error?.statusText,
+          message: error?.message,
+          error: error?.error
+        });
+
+        return fallbackPaths.length
+          ? this.getUserMyTeamsByPaths(matchId, sport, fallbackPaths)
+          : throwError(() => error);
+      })
     );
+  }
+
+  private normalizeMyTeamsSport(sport: string): string {
+    const value = String(sport || 'football').trim().toLowerCase();
+    return encodeURIComponent(value === 'soccer' ? 'football' : value);
   }
 
   private myTeamsGamePaths(game: FantasyGame): string[] {

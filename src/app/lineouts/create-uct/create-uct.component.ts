@@ -1463,9 +1463,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     const context = this.createUctContext as Record<string, unknown> | null;
     const match = this.detail?.match as unknown as Record<string, unknown> | undefined;
 
-    return this.firstValue(context, ['sport', 'sport_name', 'sportName'])
+    const sport = this.firstValue(context, ['sport', 'sport_name', 'sportName'])
       || this.firstValue(match, ['sport', 'sport_name', 'sportName'])
       || 'Football';
+
+    const normalized = sport.trim().toLowerCase();
+    return normalized === 'soccer' ? 'football' : normalized;
   }
 
   private getCreateUctContext(matchId: string): CreateUctContext | null {
@@ -1547,7 +1550,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     (['sorare', 'draftkings', 'fanduel'] as FantasyPlatform[]).forEach(game => {
-      this.authService.getUserMyTeams(matchId, game)
+      this.authService.getUserMyTeams(matchId, this.currentSport(), game)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: any) => {

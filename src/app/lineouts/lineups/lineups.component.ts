@@ -273,11 +273,17 @@ canRunUct(match: LineoutMatch): boolean {
   }
 
   openViewTeams(match: LineoutMatch): void {
+    const sport = String(match.sport || 'football').trim().toLowerCase() === 'soccer'
+      ? 'football'
+      : String(match.sport || 'football').trim().toLowerCase();
+    const game = this.generatedGames(match as unknown as Match)[0] || 'draftkings';
+
     this.router.navigate(['/user/profile'], {
       queryParams: {
         tab: 'teams',
         match: match.id,
-        sport: match.sport || 'Football'
+        sport,
+        game
       }
     });
   }

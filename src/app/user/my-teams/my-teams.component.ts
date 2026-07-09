@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
 type FantasyGame = 'sorare' | 'draftkings' | 'fanduel';
@@ -153,7 +153,8 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -354,7 +355,7 @@ private openMatchFromQueryParam(): void {
   const game = this.selectedGameForMatch(match);
   const matchForGame = this.withGame(match, game);
 
-  this.authService.getUserMyTeams(match.id, game).subscribe({
+  this.authService.getUserMyTeams(match.id, this.sportKey(match.sport || this.activeSport), game).subscribe({
     next: (res: any) => {
       console.log('My Teams download response:', res);
 
@@ -528,7 +529,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
       return;
     }
 
-    if (this.selectedMatch?.id === match.id && this.activeGame === game) {
+    if (this.selectedMatch?.id === match.id && this.selectedMatch.game === game) {
       this.backToMatches();
       this.gameTabLoading = false;
       return;
@@ -536,13 +537,14 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
     this.activeGame = game;
     this.selectedMatch = this.withGame(match, game);
+    this.syncTeamsUrl(match, game);
     this.previewTeam = null;
     this.previewTeams = [];
     this.loadingTeams = true;
 
     console.log('My Teams loading teams:', { match, game });
 
-    this.authService.getUserMyTeams(match.id, game).subscribe({
+    this.authService.getUserMyTeams(match.id, this.sportKey(match.sport || this.activeSport), game).subscribe({
       next: (res: any) => {
         console.log('My Teams match teams response:', { matchId: match.id, game, response: res });
 
@@ -550,6 +552,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
         if (generatedTeams.length) {
           console.log('My teams response:', res);
+          this.markGameAvailable(match.id, game, generatedTeams.length);
           this.previewTeams = generatedTeams.map((team: ApiGeneratedTeam) => this.mapGeneratedTeam(team));
           this.selectedMatch = {
             ...match,
@@ -557,6 +560,7 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
             teamsGenerated: Number(res?.total_teams || res?.data?.total_teams || generatedTeams.length),
             viewable: true
           };
+          this.applyDateFilter(false);
           this.loadingTeams = false;
           this.gameTabLoading = false;
           return;
@@ -574,7 +578,15 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
         this.loadingTeams = false;
         this.gameTabLoading = false;
       },
-      error: () => {
+      error: (error: any) => {
+        console.error('[My Teams] Could not load teams:', {
+          matchId: match.id,
+          platform: game,
+          status: error?.status,
+          statusText: error?.statusText,
+          message: error?.message,
+          error: error?.error
+        });
         this.previewTeams = [];
         this.loadingTeams = false;
         this.gameTabLoading = false;
@@ -586,6 +598,42 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     this.selectedMatch = null;
     this.previewTeam = null;
     this.previewTeams = [];
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tab: 'teams',
+        sport: this.activeSport,
+        game: this.activeGame
+      },
+      replaceUrl: true
+    });
+  }
+
+  private syncTeamsUrl(match: GeneratedMatch, game: FantasyGame): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tab: 'teams',
+        match: match.id,
+        sport: this.sportKey(match.sport || this.activeSport),
+        game
+      },
+      replaceUrl: true
+    });
+  }
+
+  private markGameAvailable(matchId: number, game: FantasyGame, teamCount: number): void {
+    const match = this.matches.find(item => item.id === matchId);
+
+    if (!match) {
+      return;
+    }
+
+    match.generatedGames = Array.from(new Set([...(match.generatedGames || []), game]));
+    match.teamsGeneratedByGame = {
+      ...(match.teamsGeneratedByGame || {}),
+      [game]: teamCount
+    };
   }
 
   selectGameTab(match: GeneratedMatch, game: FantasyGame): void {
@@ -598,8 +646,17 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
   selectMainGameTab(game: FantasyGame): void {
     game = this.visibleGameOrDefault(game);
+    const currentMatch = this.selectedMatch
+      ? this.matches.find(match => match.id === this.selectedMatch?.id) || this.selectedMatch
+      : null;
+
+    console.log('[My Teams] Platform tab clicked:', {
+      platform: game,
+      currentPlatform: this.activeGame
+    });
 
     if (this.activeGame === game) {
+      console.log('[My Teams] Platform already active; no new endpoint call:', game);
       return;
     }
 
@@ -608,9 +665,12 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
     console.log('My Teams selected game tab:', game);
     this.applyDateFilter();
 
-    const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
-    if (firstViewableMatch) {
-      this.openMatchTeams(firstViewableMatch, game);
+    const matchToLoad =
+      this.filteredMatches.find(match => this.canAccessTeams(match)) ||
+      (currentMatch && this.canAccessTeams(currentMatch) ? currentMatch : null);
+
+    if (matchToLoad) {
+      this.openMatchTeams(matchToLoad, game);
     } else {
       this.gameTabLoading = false;
     }

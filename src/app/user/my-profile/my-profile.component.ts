@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -45,6 +45,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private authService: AuthService,
     private route: ActivatedRoute,
+    private router: Router,
     private profileService: ProfileService
   ) {}
 
@@ -62,6 +63,11 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
   setTab(tab: 'profile' | 'teams' | 'feedback') {
     this.activeTab = tab;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab },
+      replaceUrl: true
+    });
   }
 
   openEditModal(profile: UserProfile): void {
