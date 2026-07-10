@@ -27,8 +27,8 @@ export class UserManagementComponent implements OnInit {
   confirmDialog: { title: string; message: string; confirmText: string; danger?: boolean; action: () => void } | null = null;
   notificationDialog: NotificationTarget | null = null;
   notificationForm = {
-    title: 'Test Notification',
-    body: 'Hello from Firebase'
+    title: '',
+    body: ''
   };
   notificationError = '';
   expiryLoading = false;
@@ -337,8 +337,8 @@ export class UserManagementComponent implements OnInit {
     this.notificationDialog = target;
     this.notificationError = '';
     this.notificationForm = {
-      title: 'Test Notification',
-      body: 'Hello from Firebase'
+      title: '',
+      body: ''
     };
   }
 

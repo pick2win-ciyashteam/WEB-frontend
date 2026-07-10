@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import {
   AdminUctActivityDaily,
+  AdminUctGameBreakdown,
   AdminUctActivityListReports,
   AdminUctBuildPoint,
   AdminUctGeneration,
@@ -65,12 +66,34 @@ export class UctActivityComponent implements OnInit {
     return Array.isArray(this.activity?.recent_generations) ? this.activity!.recent_generations : [];
   }
 
+  get gameBreakdown(): AdminUctGameBreakdown[] {
+    return Array.isArray(this.overview?.game_breakdown) ? this.overview!.game_breakdown : [];
+  }
+
   get buildPoints(): AdminUctBuildPoint[] {
     return Array.isArray(this.drilldown?.lineouts_to_kickoff) ? this.drilldown!.lineouts_to_kickoff : [];
   }
 
   get totalFixtureTeams(): number {
     return this.matches.reduce((sum, match) => sum + Number(match.teams_generated || 0), 0);
+  }
+
+  get totalFixtureDraftKings(): number {
+    return this.matches.reduce((sum, match) => sum + this.draftKingsValue(match), 0);
+  }
+
+  get totalFixtureFanDuel(): number {
+    return this.matches.reduce((sum, match) => sum + this.fanDuelValue(match), 0);
+  }
+
+  get totalActivityDraftKings(): number {
+    const summaryValue = this.draftKingsValue(this.activity?.summary);
+    return summaryValue || this.dailyBreakdown.reduce((sum, row) => sum + this.draftKingsValue(row), 0);
+  }
+
+  get totalActivityFanDuel(): number {
+    const summaryValue = this.fanDuelValue(this.activity?.summary);
+    return summaryValue || this.dailyBreakdown.reduce((sum, row) => sum + this.fanDuelValue(row), 0);
   }
 
   get totalFixtureShare(): number {
@@ -156,12 +179,14 @@ export class UctActivityComponent implements OnInit {
 
   downloadFixturesCsv(): void {
     const rows = [
-      ['Match', 'League / Series', 'Status', 'Users used UCT', 'Teams generated', 'Share'],
+      ['Match', 'League / Series', 'Status', 'Users used UCT', 'DraftKings', 'FanDuel', 'Teams generated', 'Share'],
       ...this.matches.map(match => [
         match.match,
         match.series,
         match.status,
         String(match.ucts_used),
+        String(this.draftKingsValue(match)),
+        String(this.fanDuelValue(match)),
         String(match.teams_generated),
         `${match.share_pct}%`
       ])
@@ -171,10 +196,12 @@ export class UctActivityComponent implements OnInit {
 
   downloadActivityCsv(): void {
     const rows = [
-      ['Date', 'UCTs / coins consumed', 'Teams generated', 'Retries', 'Cancelled', 'Completion rate'],
+      ['Date', 'UCTs / coins consumed', 'DraftKings', 'FanDuel', 'Teams generated', 'Retries', 'Cancelled', 'Completion rate'],
       ...this.dailyBreakdown.map(row => [
         this.dateOnly(row.date),
         String(row.ucts),
+        String(this.draftKingsValue(row)),
+        String(this.fanDuelValue(row)),
         String(row.teams_generated),
         '0',
         String(row.failed_refunded),
@@ -186,12 +213,13 @@ export class UctActivityComponent implements OnInit {
 
   downloadLatestCsv(): void {
     const rows = [
-      ['UCT ID', 'User', 'Match', 'Country', 'Teams', 'Coins used', 'Time ago', 'Status', 'Created at'],
+      ['UCT ID', 'User', 'Match', 'Country', 'Game', 'Teams', 'Coins used', 'Time ago', 'Status', 'Created at'],
       ...this.recentGenerations.map(item => [
         item.uct_id,
         item.fullname,
         item.match,
         item.country,
+        this.gameLabel(item),
         String(item.teams),
         String(item.coins_used),
         this.timeAgo(item.time_ago_sec),
@@ -227,16 +255,16 @@ export class UctActivityComponent implements OnInit {
       ['Failed / refunded', String(this.overview?.kpis?.failed_refunded || 0)],
       [],
       ['Today Fixtures'],
-      ['Match', 'Series', 'Status', 'UCTs used', 'Teams generated', 'Share'],
-      ...this.matches.map(match => [match.match, match.series, match.status, String(match.ucts_used), String(match.teams_generated), `${match.share_pct}%`]),
+      ['Match', 'Series', 'Status', 'UCTs used', 'DraftKings', 'FanDuel', 'Teams generated', 'Share'],
+      ...this.matches.map(match => [match.match, match.series, match.status, String(match.ucts_used), String(this.draftKingsValue(match)), String(this.fanDuelValue(match)), String(match.teams_generated), `${match.share_pct}%`]),
       [],
       ['Activity Over Time'],
-      ['Date', 'UCTs', 'Teams generated', 'Failed / refunded', 'Success rate'],
-      ...this.dailyBreakdown.map(row => [this.dateOnly(row.date), String(row.ucts), String(row.teams_generated), String(row.failed_refunded), `${row.success_rate_pct}%`]),
+      ['Date', 'UCTs', 'DraftKings', 'FanDuel', 'Teams generated', 'Failed / refunded', 'Success rate'],
+      ...this.dailyBreakdown.map(row => [this.dateOnly(row.date), String(row.ucts), String(this.draftKingsValue(row)), String(this.fanDuelValue(row)), String(row.teams_generated), String(row.failed_refunded), `${row.success_rate_pct}%`]),
       [],
       ['Latest Generations'],
-      ['UCT ID', 'User', 'Match', 'Country', 'Teams', 'Coins used', 'Status', 'Created at'],
-      ...this.recentGenerations.map(item => [item.uct_id, item.fullname, item.match, item.country, String(item.teams), String(item.coins_used), item.status, item.created_at])
+      ['UCT ID', 'User', 'Match', 'Country', 'Game', 'Teams', 'Coins used', 'Status', 'Created at'],
+      ...this.recentGenerations.map(item => [item.uct_id, item.fullname, item.match, item.country, this.gameLabel(item), String(item.teams), String(item.coins_used), item.status, item.created_at])
     ];
     this.downloadText(this.toCsv(rows), `pick2win-uct-full-report-${this.todayStamp()}.csv`);
   }
@@ -300,6 +328,19 @@ export class UctActivityComponent implements OnInit {
 
   formatNumber(value?: number | string | null): string {
     return Number(value || 0).toLocaleString();
+  }
+
+  draftKingsValue(row: any): number {
+    return Number(row?.['draftkings'] ?? row?.['draft_kings'] ?? row?.['draftKings'] ?? 0);
+  }
+
+  fanDuelValue(row: any): number {
+    return Number(row?.['fanduel'] ?? row?.['fan_duel'] ?? row?.['fanDuel'] ?? 0);
+  }
+
+  gameLabel(row: any): string {
+    const value = row?.game ?? row?.game_type ?? row?.fantasy_game ?? row?.platform ?? '-';
+    return String(value || '-');
   }
 
   dateOnly(value: string): string {

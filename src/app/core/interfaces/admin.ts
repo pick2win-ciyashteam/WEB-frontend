@@ -383,6 +383,10 @@ export interface AdminUctTodayMatch {
   status: string;
   ucts_used: number;
   teams_generated: number;
+  draftkings?: number;
+  draft_kings?: number;
+  fanduel?: number;
+  fan_duel?: number;
   share_pct: number;
 }
 
@@ -399,6 +403,14 @@ export interface AdminUctCoinsReconciliation {
   };
 }
 
+export interface AdminUctGameBreakdown {
+  game: string;
+  total_ucts: number;
+  unique_users: number;
+  teams_generated: number;
+  share_pct: number;
+}
+
 export interface AdminUctOverviewReports {
   success: boolean;
   kpis: AdminUctOverviewKpis;
@@ -406,6 +418,7 @@ export interface AdminUctOverviewReports {
     total_ucts_today: number;
     matches: AdminUctTodayMatch[];
   };
+  game_breakdown?: AdminUctGameBreakdown[];
   coins_reconciliation: AdminUctCoinsReconciliation;
 }
 
@@ -442,6 +455,10 @@ export interface AdminUctActivityDaily {
   date: string;
   ucts: number;
   teams_generated: number;
+  draftkings?: number;
+  draft_kings?: number;
+  fanduel?: number;
+  fan_duel?: number;
   failed_refunded: number;
   success_rate_pct: number;
 }
@@ -451,6 +468,10 @@ export interface AdminUctGeneration {
   fullname: string;
   match: string;
   country: string;
+  game?: string;
+  game_type?: string;
+  fantasy_game?: string;
+  platform?: string;
   teams: number;
   coins_used: number;
   time_ago_sec: number;

@@ -49,6 +49,8 @@
             <th>League / Series</th>
             <th>Status</th>
             <th class="num">Users used UCT</th>
+            <th class="num">DraftKings</th>
+            <th class="num">FanDuel</th>
             <th class="num">Share</th>
           </tr>
         </thead>
@@ -58,6 +60,8 @@
             <td>{{ match.series }}</td>
             <td><span class="tag" [ngClass]="statusClass(match.status)"><span class="dotv"></span>{{ match.status }}</span></td>
             <td class="num purple">{{ formatNumber(match.ucts_used) }}</td>
+            <td class="num gold">{{ formatNumber(draftKingsValue(match)) }}</td>
+            <td class="num green">{{ formatNumber(fanDuelValue(match)) }}</td>
             <td class="num">{{ match.share_pct }}%</td>
           </tr>
           <tr class="total-row">
@@ -65,6 +69,8 @@
             <td></td>
             <td></td>
             <td class="num purple">{{ formatNumber(overview?.today_matches?.total_ucts_today) }}</td>
+            <td class="num gold">{{ formatNumber(totalFixtureDraftKings) }}</td>
+            <td class="num green">{{ formatNumber(totalFixtureFanDuel) }}</td>
             <td class="num">{{ totalFixtureShare || 100 }}%</td>
           </tr>
         </tbody>
@@ -171,6 +177,8 @@
           <tr>
             <th>Date</th>
             <th class="num">UCTs - coins consumed</th>
+            <th class="num">DraftKings</th>
+            <th class="num">FanDuel</th>
             <th class="num">Retries</th>
             <th class="num">Cancelled</th>
             <th class="num">Completion rate</th>
@@ -180,6 +188,8 @@
           <tr *ngFor="let row of dailyBreakdown">
             <td class="cell-main mono">{{ dateOnly(row.date) }}</td>
             <td class="num purple">{{ formatNumber(row.ucts) }}</td>
+            <td class="num gold">{{ formatNumber(draftKingsValue(row)) }}</td>
+            <td class="num green">{{ formatNumber(fanDuelValue(row)) }}</td>
             <td class="num gold">{{ formatNumber(row.failed_refunded) }}</td>
             <td class="num red">{{ formatNumber(row.failed_refunded) }}</td>
             <td class="num green">{{ row.success_rate_pct }}%</td>
@@ -187,6 +197,8 @@
           <tr class="total-row">
             <td>{{ selectedMonthLabel }} {{ selectedYear }} total</td>
             <td class="num purple">{{ formatNumber(activity?.summary?.total_ucts) }}</td>
+            <td class="num gold">{{ formatNumber(totalActivityDraftKings) }}</td>
+            <td class="num green">{{ formatNumber(totalActivityFanDuel) }}</td>
             <td class="num gold">{{ formatNumber(activity?.summary?.failed_refunded) }}</td>
             <td class="num red">{{ formatNumber(activity?.summary?.failed_refunded) }}</td>
             <td class="num green">{{ activity?.summary?.success_rate_pct || 0 }}%</td>
@@ -255,6 +267,14 @@
       <button class="lk" type="button" (click)="downloadLatestCsv()">CSV</button>
     </div>
 
+    <div class="game-breakdown" *ngIf="gameBreakdown.length">
+      <div class="game-chip" *ngFor="let game of gameBreakdown">
+        <span>{{ game.game }}</span>
+        <b>{{ formatNumber(game.total_ucts) }}</b>
+        <small>{{ formatNumber(game.teams_generated) }} teams - {{ game.share_pct }}%</small>
+      </div>
+    </div>
+
     <div class="table-wrap">
       <table class="admin-table latest-table">
         <thead>
@@ -264,6 +284,7 @@
             <th>Match</th>
             <th>Country</th>
             <th class="num">Coins</th>
+            <!-- <th>Game</th> -->
             <th class="num">Time</th>
             <th>Status</th>
           </tr>
@@ -275,11 +296,12 @@
             <td>{{ item.match }}</td>
             <td>{{ item.country }}</td>
             <td class="num gold">{{ formatNumber(item.coins_used) }}</td>
+            <!-- <td><span class="game-pill">{{ gameLabel(item) }}</span></td> -->
             <td class="num">{{ timeAgo(item.time_ago_sec) }}</td>
             <td><span class="tag ok">{{ item.status }} - {{ formatNumber(item.coins_used) }} coin</span></td>
           </tr>
           <tr *ngIf="!recentGenerations.length">
-            <td colspan="7" class="empty-row">No latest UCT generations found.</td>
+            <td colspan="8" class="empty-row">No latest UCT generations found.</td>
           </tr>
         </tbody>
       </table>
