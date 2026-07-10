@@ -160,9 +160,18 @@ export interface UserNotificationPagination {
 
 export interface UserNotificationsResponse {
   success: boolean;
-  unread_count: number;
-  pagination: UserNotificationPagination;
-  data: UserNotificationRaw[];
+  unread_count?: number;
+  unreadCount?: number;
+  count?: number;
+  pagination?: UserNotificationPagination;
+  data?: UserNotificationRaw[] | {
+    notifications?: UserNotificationRaw[];
+    data?: UserNotificationRaw[];
+    unread_count?: number;
+    unreadCount?: number;
+    pagination?: UserNotificationPagination;
+  };
+  notifications?: UserNotificationRaw[];
   message?: string;
 }
 

@@ -241,12 +241,12 @@
             </thead>
             <tbody>
               <tr *ngFor="let log of activityLogs">
-                <td class="col-date">{{ formatActivityDate(log.created_at) }}</td>
-                <td><span class="activity-category">{{ log.category }}</span></td>
-                <td class="activity-action">{{ log.action }}</td>
-                <td>{{ log.details }}</td>
-                <td class="col-id">{{ log.ip_address }}</td>
-                <td [attr.title]="log.user_agent">{{ activityDevice(log.user_agent) }}</td>
+                <td class="col-date" data-label="Date & Time">{{ formatActivityDate(log.created_at) }}</td>
+                <td data-label="Category"><span class="activity-category">{{ log.category }}</span></td>
+                <td class="activity-action" data-label="Action">{{ log.action }}</td>
+                <td data-label="Details">{{ log.details }}</td>
+                <td class="col-id" data-label="IP Address">{{ log.ip_address }}</td>
+                <td data-label="Device" [attr.title]="log.user_agent">{{ activityDevice(log.user_agent) }}</td>
               </tr>
               <tr *ngIf="!activityLogs.length">
                 <td colspan="6" class="activity-empty">No activity logs found for the selected filters.</td>

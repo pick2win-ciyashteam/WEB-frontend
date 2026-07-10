@@ -52,10 +52,20 @@
   transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
 }
 
-.notification-card:hover,
 .notification-card.unread {
-  border-color: rgba(244,180,0,0.34);
-  background: rgba(255,255,255,0.055);
+  border-color: rgba(244,180,0,0.46);
+  background: rgba(244,180,0,0.1);
+}
+
+.notification-card.read {
+  border-color: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.025);
+  opacity: 0.78;
+}
+
+.notification-card:hover {
+  border-color: rgba(91,176,230,0.42);
+  background: rgba(91,176,230,0.08);
 }
 
 .notification-card:hover {
@@ -67,13 +77,39 @@
   height: 10px;
   margin-top: 8px;
   border-radius: 50%;
-  background: var(--acid);
-  box-shadow: 0 0 0 4px rgba(215,38,56,0.12);
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(244,180,0,0.18);
 }
 
 .notification-dot.read {
-  background: var(--paper-3);
+  background: var(--green);
   box-shadow: none;
+}
+
+.notification-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.notification-read-pill {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border: 1px solid rgba(244,180,0,0.42);
+  border-radius: 999px;
+  color: var(--gold);
+  background: rgba(244,180,0,0.1);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.notification-read-pill.read {
+  border-color: rgba(11,204,142,0.36);
+  color: var(--green);
+  background: rgba(11,204,142,0.08);
 }
 
 .notification-card h2,

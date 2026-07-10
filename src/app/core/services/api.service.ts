@@ -125,8 +125,8 @@ export class ApiService {
 
   getUserNotifications(page = 1, limit = 20): Observable<UserNotificationsResponse> {
     const params = new HttpParams()
-      .set('page', page)
-      .set('limit', limit);
+      .set('page', String(page))
+      .set('limit', String(limit));
 
     return this.http.get<UserNotificationsResponse>(`${this.BASE}/user/user-auth/get-notification`, {
       ...this.userAuthOptions(),
@@ -135,7 +135,7 @@ export class ApiService {
   }
 
   markUserNotificationRead(id: number | string): Observable<any> {
-    return this.http.post(`${this.BASE}/user/user-auth/notification/read/${id}`, {}, this.userAuthOptions());
+    return this.http.patch(`${this.BASE}/user/user-auth/notification/read/${id}`, {}, this.userAuthOptions());
   }
 
   deleteUserNotification(id: number | string): Observable<any> {

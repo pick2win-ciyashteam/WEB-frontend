@@ -41,6 +41,8 @@ export class FirebaseNotificationService {
   notifications$ = this.notificationsSubject.asObservable();
 
   unreadCount$ = new BehaviorSubject<number>(0);
+  loading$ = new BehaviorSubject<boolean>(false);
+  error$ = new BehaviorSubject<string>('');
 
   constructor(
     private api: ApiService,
@@ -187,19 +189,26 @@ export class FirebaseNotificationService {
   }
 
   loadNotifications(page = 1, limit = 20): Observable<AppNotification[]> {
+    this.loading$.next(true);
+    this.error$.next('');
+
     return this.api.getUserNotifications(page, limit).pipe(
       tap(response => console.log('[Notifications API] get-notification response:', response)),
       map(response => {
-        const notifications = (response.data || [])
+        const rawNotifications = this.getNotificationItems(response);
+        const notifications = rawNotifications
           .map(item => this.normalizeNotification(item))
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         this.notificationsSubject.next(notifications);
-        this.unreadCount$.next(Number(response.unread_count || 0));
+        this.unreadCount$.next(this.getUnreadCount(response, notifications));
+        this.loading$.next(false);
         return notifications;
       }),
       catchError(error => {
         console.error('[Notifications API] get-notification failed:', error);
+        this.loading$.next(false);
+        this.error$.next(error?.error?.message || error?.error?.error || 'Unable to load notifications.');
         return of(this.notificationsSubject.value);
       })
     );
@@ -215,6 +224,7 @@ export class FirebaseNotificationService {
 
         this.notificationsSubject.next(notifications);
         this.updateUnreadCount(notifications);
+        this.loadNotifications(1, 20).subscribe();
       }),
       catchError(error => {
         console.error('[Notifications API] notification/read failed:', error);
@@ -230,6 +240,7 @@ export class FirebaseNotificationService {
         const notifications = this.notificationsSubject.value.filter(item => String(item.id) !== String(id));
         this.notificationsSubject.next(notifications);
         this.updateUnreadCount(notifications);
+        this.loadNotifications(1, 20).subscribe();
       }),
       catchError(error => {
         console.error('[Notifications API] notification delete failed:', error);
@@ -273,6 +284,27 @@ export class FirebaseNotificationService {
       read: this.toBoolean(readValue),
       raw: item
     };
+  }
+
+  private getNotificationItems(response: any): UserNotificationRaw[] {
+    if (Array.isArray(response?.data)) return response.data;
+    if (Array.isArray(response?.notifications)) return response.notifications;
+    if (Array.isArray(response?.data?.notifications)) return response.data.notifications;
+    if (Array.isArray(response?.data?.data)) return response.data.data;
+
+    return [];
+  }
+
+  private getUnreadCount(response: any, notifications: AppNotification[]): number {
+    const unreadCount = response?.unread_count
+      ?? response?.unreadCount
+      ?? response?.count
+      ?? response?.data?.unread_count
+      ?? response?.data?.unreadCount;
+
+    return unreadCount === undefined || unreadCount === null
+      ? notifications.filter(item => !item.read).length
+      : Number(unreadCount);
   }
 
   private toBoolean(value: unknown): boolean {

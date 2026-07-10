@@ -414,6 +414,10 @@ tr:last-child td {
   background: var(--gold);
 }
 
+.notify-all {
+  background: var(--info);
+}
+
 .modal {
   position: fixed;
   inset: 0;
@@ -484,6 +488,20 @@ tr:last-child td {
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+
+.form-grid.single {
+  grid-template-columns: 1fr;
+}
+
+.notification-compose .confirm-message b {
+  color: var(--gold);
+}
+
+.note-body {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.45;
 }
 
 .modal-actions {

@@ -15,11 +15,17 @@
         class="notification-card"
         *ngFor="let notification of notifications"
         [class.unread]="!notification.read"
+        [class.read]="notification.read"
         (click)="markRead(notification)"
       >
         <span class="notification-dot" [class.read]="notification.read"></span>
         <div>
-          <h2>{{ notification.title }}</h2>
+          <div class="notification-title-row">
+            <h2>{{ notification.title }}</h2>
+            <span class="notification-read-pill" [class.read]="notification.read">
+              {{ notification.read ? 'Read' : 'Unread' }}
+            </span>
+          </div>
           <p>{{ notification.body }}</p>
           <div class="notification-meta">
             <time>{{ notification.createdAt | date:'medium' }}</time>
@@ -35,15 +41,20 @@
         </div>
       </article>
 
-      <div class="empty-state" *ngIf="!notifications.length && !loading">
+      <div class="empty-state" *ngIf="!notifications.length && !(loading$ | async)">
         <span class="material-symbols-outlined" aria-hidden="true">notifications_off</span>
         <h2>No notifications yet</h2>
         <p>When admin sends all-user or user-wise notifications, they will show here.</p>
       </div>
 
-      <div class="empty-state" *ngIf="loading && !notifications.length">
+      <div class="empty-state" *ngIf="(loading$ | async) && !notifications.length">
         <span class="material-symbols-outlined" aria-hidden="true">hourglass_top</span>
         <h2>Loading notifications</h2>
+      </div>
+
+      <div class="empty-state" *ngIf="error$ | async as error">
+        <span class="material-symbols-outlined" aria-hidden="true">error</span>
+        <h2>{{ error }}</h2>
       </div>
     </div>
   </section>

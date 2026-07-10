@@ -5,6 +5,9 @@ import { AdminCoinExpiryReports, AdminCoinExpiryUser, AdminCoinExpiryWindow, Adm
 import { AdminService } from 'src/app/core/services/admin.service';
 
 type UserStatusFilter = '' | 'active' | 'idle' | 'deleted' | 'suspended';
+type NotificationTarget =
+  | { type: 'all'; label: string }
+  | { type: 'user'; id: number | string; label: string };
 
 @Component({
   selector: 'app-user-management',
@@ -22,6 +25,12 @@ export class UserManagementComponent implements OnInit {
   selectedUser: AdminUserReportItem | null = null;
   editingUser: AdminUserReportItem | null = null;
   confirmDialog: { title: string; message: string; confirmText: string; danger?: boolean; action: () => void } | null = null;
+  notificationDialog: NotificationTarget | null = null;
+  notificationForm = {
+    title: 'Test Notification',
+    body: 'Hello from Firebase'
+  };
+  notificationError = '';
   expiryLoading = false;
   countriesLoading = false;
   expiryWindow: AdminCoinExpiryWindow = '30d';
@@ -305,34 +314,68 @@ export class UserManagementComponent implements OnInit {
   }
 
   notifyExpiryUser(user: AdminCoinExpiryUser): void {
-    this.runAction(
-      this.adminService.sendNotificationToAll({
-        title: 'Test Notification',
-        body: 'Hello from Firebase',
-        data: {
-          screen: 'home'
-        }
-      }),
-      `Test notification sent from ${user.fullname} row.`
-    );
+    this.openUserNotification(user);
   }
 
   broadcastExpiry(): void {
-    this.requestConfirm({
-      title: 'Broadcast notification',
-      message: 'Send this test Firebase notification to all users?',
-      confirmText: 'Broadcast',
-      action: () => this.runAction(
-        this.adminService.sendNotificationToAll({
-          title: 'Test Notification',
-          body: 'Hello from Firebase',
-          data: {
-            screen: 'home'
-          }
-        }),
-        'Test notification broadcast sent to all users.'
-      )
+    this.openBroadcastNotification();
+  }
+
+  openBroadcastNotification(): void {
+    this.openNotificationDialog({ type: 'all', label: 'All users' });
+  }
+
+  openUserNotification(user: AdminUserReportItem | AdminCoinExpiryUser): void {
+    this.openNotificationDialog({
+      type: 'user',
+      id: user.id,
+      label: user.fullname || user.user_code || `User ${user.id}`
     });
+  }
+
+  openNotificationDialog(target: NotificationTarget): void {
+    this.notificationDialog = target;
+    this.notificationError = '';
+    this.notificationForm = {
+      title: 'Test Notification',
+      body: 'Hello from Firebase'
+    };
+  }
+
+  closeNotificationDialog(): void {
+    this.notificationDialog = null;
+    this.notificationError = '';
+  }
+
+  submitNotification(): void {
+    const title = this.notificationForm.title.trim();
+    const body = this.notificationForm.body.trim();
+
+    if (!title || !body) {
+      this.notificationError = 'Please enter both title and body.';
+      return;
+    }
+
+    const dialog = this.notificationDialog;
+    if (!dialog) {
+      return;
+    }
+
+    const payload = {
+      title,
+      body,
+      data: {
+        screen: 'home'
+      }
+    };
+    const request$ = dialog.type === 'all'
+      ? this.adminService.sendNotificationToAll(payload)
+      : this.adminService.sendNotificationToUser(dialog.id, payload);
+    const successMessage = dialog.type === 'all'
+      ? 'Notification broadcast sent to all users.'
+      : `Notification sent to ${dialog.label}.`;
+
+    this.runAction(request$, successMessage);
   }
 
   requestConfirm(dialog: { title: string; message: string; confirmText: string; danger?: boolean; action: () => void }): void {
@@ -415,6 +458,7 @@ export class UserManagementComponent implements OnInit {
       next: () => {
         this.actionLoading = false;
         this.actionMessage = successMessage;
+        this.closeNotificationDialog();
         this.closeModal();
         this.loadUsers();
         this.loadCoinExpiry();

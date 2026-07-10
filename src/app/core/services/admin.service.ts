@@ -228,6 +228,12 @@ export class AdminService {
     });
   }
 
+  sendNotificationToUser(userId: number | string, data: { title: string; body: string; data?: Record<string, string> }): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/notification/send-to-user`, { user_id: String(userId), ...data }, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
+  }
+
   updateAdminUser(id: number | string, data: Record<string, unknown>): Observable<any> {
     return this.http.patch(`${this.BASE}/admin/users/${id}`, data);
   }

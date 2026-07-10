@@ -8,7 +8,8 @@ import { AppNotification, FirebaseNotificationService } from 'src/app/core/servi
 })
 export class NotificationsComponent implements OnInit {
   notifications$ = this.notificationService.notifications$;
-  loading = false;
+  loading$ = this.notificationService.loading$;
+  error$ = this.notificationService.error$;
 
   constructor(private notificationService: FirebaseNotificationService) {}
 
@@ -17,11 +18,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   loadNotifications() {
-    this.loading = true;
-    this.notificationService.loadNotifications(1, 20).subscribe({
-      next: () => this.loading = false,
-      error: () => this.loading = false
-    });
+    this.notificationService.loadNotifications(1, 20).subscribe();
   }
 
   markRead(notification: AppNotification) {

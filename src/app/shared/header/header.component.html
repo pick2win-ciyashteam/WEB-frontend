@@ -113,16 +113,32 @@
       <button type="button" class="notification-close material-symbols-outlined" aria-label="Close" (click)="closeNotifications()">close</button>
     </header>
 
+    <div class="notification-empty" *ngIf="notificationLoading$ | async">
+      <span class="material-symbols-outlined" aria-hidden="true">hourglass_top</span>
+      <h3>Loading notifications</h3>
+    </div>
+
+    <div class="notification-empty" *ngIf="notificationError$ | async as notificationError">
+      <span class="material-symbols-outlined" aria-hidden="true">error</span>
+      <h3>{{ notificationError }}</h3>
+    </div>
+
     <div class="notification-modal-list" *ngIf="notifications$ | async as notifications">
       <article
         class="notification-modal-item"
         *ngFor="let notification of getHeaderNotifications(notifications)"
         [class.unread]="!notification.read"
+        [class.read]="notification.read"
         (click)="markRead(notification)"
       >
         <span class="notification-status" [class.read]="notification.read"></span>
         <div>
-          <h3>{{ notification.title }}</h3>
+          <div class="notification-title-row">
+            <h3>{{ notification.title }}</h3>
+            <span class="notification-read-pill" [class.read]="notification.read">
+              {{ notification.read ? 'Read' : 'Unread' }}
+            </span>
+          </div>
           <p>{{ notification.body }}</p>
           <time>{{ notification.createdAt | date:'short' }}</time>
         </div>

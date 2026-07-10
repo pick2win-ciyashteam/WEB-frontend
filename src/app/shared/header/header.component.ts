@@ -20,6 +20,8 @@ export class  HeaderComponent implements OnInit, OnDestroy {
   loggedIn$ = this.authService.loggedIn$;
   notifications$ = this.notificationService.notifications$;
   unreadCount$ = this.notificationService.unreadCount$;
+  notificationLoading$ = this.notificationService.loading$;
+  notificationError$ = this.notificationService.error$;
 
   constructor(
     private authModal: AuthModalService,
