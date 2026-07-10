@@ -23,14 +23,14 @@
       <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
     </div>
 
-    <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
 
     <form [formGroup]="form">
       <div [ngClass]="fieldClass('name')">
         <label>Full name <span>*</span></label>
-        <input type="text" formControlName="name" placeholder="Your full name">
+        <input type="text" formControlName="name" placeholder="Your full name" (input)="clearSignupFieldError('name')">
         <div class="field-msg" [ngClass]="nameValidation.state">{{ nameValidation.message }}</div>
+        <div class="field-alert error" *ngIf="signupFieldErrors.name" data-signup-error="name" tabindex="-1">{{ signupFieldErrors.name }}</div>
       </div>
 
       <div class="field-row">
@@ -44,16 +44,18 @@
           </optgroup> -->
         </select>
         <div class="hint">Sets your billing currency & dial code.</div>
+        <div class="field-alert error" *ngIf="signupFieldErrors.country" data-signup-error="country" tabindex="-1">{{ signupFieldErrors.country }}</div>
       </div>
 
       <div [ngClass]="fieldClass('dob')">
         <label>Date of birth <span>*</span></label>
         <div class="date-wrap" (click)="openDatePicker(dobInput)">
-          <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)">
+          <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)" (change)="clearSignupFieldError('dob')">
           <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
         </div>
         <div class="hint">Tap to open calendar - must be 18+.</div>
         <div class="field-msg" [ngClass]="dobValidation.state">{{ dobValidation.message }}</div>
+        <div class="field-alert error" *ngIf="signupFieldErrors.dob" data-signup-error="dob" tabindex="-1">{{ signupFieldErrors.dob }}</div>
       </div>
       </div>
 
@@ -78,6 +80,7 @@
         </div>
         <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - SMS verification required - VoIP / virtual numbers blocked.</div>
         <div class="field-msg" [ngClass]="mobileValidation.state">{{ mobileValidation.message }}</div>
+        <div class="field-alert error" *ngIf="signupFieldErrors.mobile" data-signup-error="mobile" tabindex="-1">{{ signupFieldErrors.mobile }}</div>
       </div>
 
       <div [ngClass]="fieldClass('email')">
@@ -90,6 +93,7 @@
           (keydown.space)="$event.preventDefault()">
         <div class="hint">No disposable, temporary, or aliased emails.</div>
         <div class="field-msg" [ngClass]="emailValidation.state">{{ emailValidation.message }}</div>
+        <div class="field-alert error" *ngIf="signupFieldErrors.email" data-signup-error="email" tabindex="-1">{{ signupFieldErrors.email }}</div>
       </div>
 
       <div [ngClass]="fieldClass('password')">
@@ -114,12 +118,13 @@
         <div class="strength">
           <div [style.width.%]="passwordStrength * 20"></div>
         </div>
-        <div class="hint">8+ chars - letters, numbers and one symbol.</div>
+        <div class="hint">8+ chars - uppercase letter (A-Z), number, and one symbol.</div>
         <div class="field-msg" [ngClass]="passwordValidation.state">{{ passwordValidation.message }}</div>
+        <div class="field-alert error" *ngIf="signupFieldErrors.password" data-signup-error="password" tabindex="-1">{{ signupFieldErrors.password }}</div>
       </div>
 
       <label class="terms">
-        <input type="checkbox" formControlName="terms">
+        <input type="checkbox" formControlName="terms" (change)="clearSignupFieldError('terms')">
         <span>I confirm I am 18 or older, this is my only PICK2WIN account, and I agree to
           <a routerLink="/terms" target="_blank">Terms & Conditions</a>,
           <a routerLink="/policy" target="_blank">Privacy Policy</a>,
@@ -128,6 +133,9 @@
            <a routerLink="/cookie-policy" target="_blank">Cookies Policy</a>.
         </span>
       </label>
+      <div class="field-alert error terms-alert" *ngIf="signupFieldErrors.terms" data-signup-error="terms" tabindex="-1">{{ signupFieldErrors.terms }}</div>
+
+      <div class="field-alert error form-alert" *ngIf="signupFieldErrors.form" tabindex="-1">{{ signupFieldErrors.form }}</div>
 
       <button
         type="button"

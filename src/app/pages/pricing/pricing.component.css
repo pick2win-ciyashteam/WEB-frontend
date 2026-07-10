@@ -1343,7 +1343,10 @@ button.credit-pack-cta {
 .payment-methods-eyebrow { display: inline-flex; align-items: center; gap: 6px; color: var(--gold); font-family: var(--f-mono); font-size: 10px; font-weight: 900; letter-spacing: .14em; }
 .payment-methods-copy h3 { margin: 7px 0; color: var(--paper); font-family: var(--f-display); font-size: 21px; line-height: 1.15; }
 .payment-methods-copy p { max-width: 62ch; margin: 0; color: var(--paper-2); font-size: 14px; line-height: 1.55; }
+.payment-policy-link { color: var(--gold); font-weight: 800; text-decoration: underline; text-decoration-color: rgba(244,180,0,.45); text-underline-offset: 3px; }
+.payment-policy-link:hover { color: var(--paper); text-decoration-color: var(--gold); }
 .payment-methods-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 1px solid rgba(244,180,0,.45); border-radius: 999px; color: var(--ink); background: var(--gold); font: 800 12px var(--f-body); cursor: pointer; white-space: nowrap; }
+.payment-methods-btn .material-symbols-outlined { font-size: 19px; }
 .payment-methods-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
 .payment-methods-overlay { position: fixed; inset: 0; z-index: 10001; display: grid; place-items: center; padding: 22px; overflow-y: auto; background: rgba(2,10,18,.84); backdrop-filter: blur(12px); }
@@ -1356,8 +1359,10 @@ button.credit-pack-cta {
 .payment-modal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .payment-modal-grid article, .supported-countries { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(2,10,18,.35); }
 .payment-modal-grid h3, .supported-countries h3 { margin: 0 0 11px; color: var(--paper); font-family: var(--f-display); font-size: 18px; }
+.payment-modal-grid li { position: relative; padding-left: 15px; }
+.payment-modal-grid li::before { content: ''; position: absolute; left: 0; top: .68em; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(244,180,0,.12); }
 .payment-modal-grid ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; color: var(--paper-2); font-size: 13px; line-height: 1.52; }
-.payment-modal-grid small { color: var(--soft); font-size: .92em; }
+.payment-modal-grid small { color: var(--paper-3); font-size: .92em; }
 .supported-countries { margin-top: 14px; }.supported-countries div { display: flex; flex-wrap: wrap; gap: 7px; }.supported-countries span { padding: 6px 9px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; color: var(--paper-2); font-size: 12px; }
 .payment-modal-warning { display: flex; gap: 9px; align-items: flex-start; margin: 14px 0 0; padding: 14px; border: 1px solid rgba(244,180,0,.32); border-radius: 12px; color: var(--paper); background: rgba(244,180,0,.08); font-size: 13px; line-height: 1.5; }.payment-modal-warning span { color: var(--gold); }
 

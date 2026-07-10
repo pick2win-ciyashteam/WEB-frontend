@@ -20,6 +20,7 @@ interface CountryRegionGroup {
 }
 
 type FieldState = '' | 'valid' | 'invalid' | 'warn';
+type SignupErrorField = 'name' | 'country' | 'dob' | 'mobile' | 'email' | 'password' | 'terms' | 'form';
 
 interface FieldValidation {
   state: FieldState;
@@ -167,10 +168,11 @@ function strictPasswordValidator(control: AbstractControl): ValidationErrors | n
   }
 
   const hasLetter = /[A-Za-z]/.test(value);
+  const hasUppercase = /[A-Z]/.test(value);
   const hasDigit = /\d/.test(value);
   const hasSymbol = /[!@#$%^&*(),.?":{}|<>_\-+=[\]/\\;'`~]/.test(value);
 
-  return value.length >= 8 && hasLetter && hasDigit && hasSymbol
+  return value.length >= 8 && hasLetter && hasUppercase && hasDigit && hasSymbol
     ? null
     : { passwordStrict: true };
 }
@@ -213,6 +215,7 @@ readonly resendCooldownSeconds = 60;
 resendCooldown: Record<'mobile' | 'email', number> = { mobile: 0, email: 0 };
 private resendCooldownTimers: Partial<Record<'mobile' | 'email', ReturnType<typeof setInterval>>> = {};
 private _errorMessage = '';
+signupFieldErrors: Partial<Record<SignupErrorField, string>> = {};
 successMessage = '';
 
 get errorMessage(): string {
@@ -224,7 +227,7 @@ set errorMessage(message: string) {
 
   if (message) {
     setTimeout(() => {
-      const error = document.querySelector<HTMLElement>('.signup-box .api-msg.error');
+      const error = document.querySelector<HTMLElement>('.signup-box .api-msg.error, .signup-box .field-alert.error');
       error?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       error?.focus({ preventScroll: true });
     });
@@ -267,6 +270,8 @@ private getMaxDob(): string {
 }
 
 onCountryChange() {
+  this.clearSignupFieldError('country');
+  this.clearSignupFieldError('mobile');
   const country = this.selectedCountry;
 
   if (country) {
@@ -287,15 +292,17 @@ continueStep1() {
   this.sanitizeSignupFields();
   this.form.markAllAsTouched();
   this.errorMessage = '';
+  this.signupFieldErrors = {};
   this.successMessage = '';
 
   if (this.form.invalid || !this.ageValid || !this.validateMobileByCountry()) {
+    this.collectSignupClientErrors();
     this.scrollToFirstSignupError();
     return;
   }
 
   if (!this.allClientGatesPassed) {
-    this.errorMessage = 'Please complete all signup validation checks.';
+    this.signupFieldErrors.form = 'Please complete all signup validation checks.';
     return;
   }
 
@@ -323,10 +330,11 @@ continueStep1() {
     },
     error: (err) => {
       this.loading = false;
-      this.errorMessage =
+      this.assignSignupApiError(
         err?.error?.message ||
         err?.error?.error ||
-        'Signup failed. Please try again.';
+        'Signup failed. Please try again.'
+      );
     }
   });
 }
@@ -382,6 +390,58 @@ trackByRegionLabel(_: number, group: CountryRegionGroup): string {
 
 trackByCountryCode(_: number, country: SignupCountry): string {
   return country.code || country.name;
+}
+
+clearSignupFieldError(field: SignupErrorField): void {
+  if (this.signupFieldErrors[field]) {
+    delete this.signupFieldErrors[field];
+  }
+
+  if (field !== 'form') {
+    delete this.signupFieldErrors.form;
+  }
+}
+
+private collectSignupClientErrors(): void {
+  this.signupFieldErrors = {};
+
+  if (this.nameError) this.signupFieldErrors.name = this.nameError;
+  if (this.form.get('country')?.invalid) this.signupFieldErrors.country = 'Please select your country of residence.';
+  if (this.dobError) this.signupFieldErrors.dob = this.dobError;
+  if (this.form.get('mobile')?.invalid || !this.validateMobileByCountry()) this.signupFieldErrors.mobile = this.mobileError;
+  if (this.emailError) this.signupFieldErrors.email = this.emailError;
+  if (this.passwordError) this.signupFieldErrors.password = this.passwordError;
+  if (this.form.get('terms')?.invalid) this.signupFieldErrors.terms = 'Please accept the terms and policies to continue.';
+}
+
+private assignSignupApiError(message: string): void {
+  const text = String(message || 'Signup failed. Please try again.').trim();
+  const normalized = text.toLowerCase();
+  const field = this.signupApiErrorField(normalized);
+
+  this.signupFieldErrors = {};
+  this.signupFieldErrors[field] = text;
+
+  setTimeout(() => {
+    const selector = field === 'form'
+      ? '.signup-box .form-alert'
+      : `.signup-box [data-signup-error="${field}"]`;
+    const target = document.querySelector<HTMLElement>(selector);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target?.focus({ preventScroll: true });
+  });
+}
+
+private signupApiErrorField(message: string): SignupErrorField {
+  if (message.includes('email') || message.includes('mail')) return 'email';
+  if (message.includes('mobile') || message.includes('phone') || message.includes('number') || message.includes('sms')) return 'mobile';
+  if (message.includes('password')) return 'password';
+  if (message.includes('country')) return 'country';
+  if (message.includes('birth') || message.includes('dob') || message.includes('age')) return 'dob';
+  if (message.includes('name') || message.includes('fullname') || message.includes('full name')) return 'name';
+  if (message.includes('term') || message.includes('policy')) return 'terms';
+
+  return 'form';
 }
 
 get nameError(): string {
@@ -458,7 +518,7 @@ get passwordError(): string {
   }
 
   if (control.hasError('passwordStrict')) {
-    return 'Need 8+ characters, a letter, a number, and a symbol.';
+    return 'Need 8+ characters, an uppercase letter, a number, and a symbol.';
   }
 
   return '';
@@ -610,6 +670,7 @@ get passwordValidation(): FieldValidation {
 
   if (value.length < 8) missing.push('8+ characters');
   if (!/[A-Za-z]/.test(value)) missing.push('a letter');
+  if (!/[A-Z]/.test(value)) missing.push('an uppercase letter (A-Z)');
   if (!/\d/.test(value)) missing.push('a number');
   if (!/[!@#$%^&*(),.?":{}|<>_\-+=[\]/\\;'`~]/.test(value)) missing.push('a symbol (!@#$...)');
 
@@ -909,7 +970,7 @@ private loadCountries(): void {
       this.countriesLoading = false;
       this.countries = [];
       this.countryRegionGroups = [];
-      this.errorMessage = 'Unable to load countries. Please try again later.';
+      this.signupFieldErrors.form = 'Unable to load countries. Please try again later.';
     }
   });
 }
@@ -1041,6 +1102,7 @@ validateMobileByCountry(): boolean {
 }
 
 onMobileInput(event: any) {
+  this.clearSignupFieldError('mobile');
   let value = this.onlyDigits(event.target.value);
 
   if (value.length > this.mobileLimit) {
@@ -1052,6 +1114,7 @@ onMobileInput(event: any) {
 }
 
 sanitizeSignupEmail(): void {
+  this.clearSignupFieldError('email');
   const emailCtrl = this.form.get('email');
   const cleanEmail = this.withoutSpaces(emailCtrl?.value || '');
 
@@ -1061,6 +1124,7 @@ sanitizeSignupEmail(): void {
 }
 
 sanitizeSignupPassword(): void {
+  this.clearSignupFieldError('password');
   const passwordCtrl = this.form.get('password');
   const cleanPassword = this.withoutSpaces(passwordCtrl?.value || '');
 

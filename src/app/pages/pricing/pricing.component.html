@@ -72,6 +72,24 @@
       </div>
     </div>
 
+    <section class="payment-methods-note reveal" aria-labelledby="paymentMethodsTitle">
+      <div class="payment-brand-icons" aria-hidden="true">
+        <span class="brand-visa">VISA</span>
+        <span class="brand-mastercard"><i></i><i></i></span>
+        <span class="brand-amex">AMEX</span>
+        <span class="brand-diners">DINERS<br>CLUB</span>
+      </div>
+      <div class="payment-methods-copy">
+        <span class="payment-methods-eyebrow">SECURE PAYMENTS</span>
+        <h3 id="paymentMethodsTitle">Payment methods</h3>
+        <p><a class="payment-policy-link" routerLink="/refund" fragment="refund-22">PICK2WIN supports secure international payments through Razorpay.</a> Major cards and bank-transfer options are available where supported.</p>
+      </div>
+      <button class="payment-methods-btn" type="button" (click)="openPaymentMethods()">
+        <span class="material-symbols-outlined" aria-hidden="true">credit_card</span>
+        View payment methods
+      </button>
+    </section>
+
     <div class="coin-usage reveal">
       <div class="coin-usage-head">
         <span class="coin-usage-eyebrow">⚽ COIN USAGE</span>
@@ -235,5 +253,114 @@
 <!-- ╭──────────── COVERAGE ────────────╮ -->
 
 <!-- ╭──────────── TRUST / COMPLIANCE ────────────╮ -->
+
+<div class="payment-methods-overlay" *ngIf="paymentMethodsOpen" (click)="closePaymentMethods()">
+  <section class="payment-methods-modal" role="dialog" aria-modal="true" aria-labelledby="paymentMethodsModalTitle" (click)="$event.stopPropagation()">
+    <div class="payment-methods-modal-head">
+      <div>
+        <span class="payment-methods-eyebrow">RAZORPAY CHECKOUT</span>
+        <h2 id="paymentMethodsModalTitle">Payment Methods</h2>
+      </div>
+      <button class="payment-modal-close" type="button" aria-label="Close payment methods" (click)="closePaymentMethods()">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <p class="payment-modal-lead">
+      <a class="payment-policy-link" routerLink="/refund" fragment="refund-22">PICK2WIN supports secure international payments through Razorpay.</a>
+    </p>
+
+    <div class="payment-modal-icons" aria-label="Accepted payment method icons">
+      <div>
+        <span>Accepted cards</span>
+        <div class="payment-brand-icons" aria-hidden="true">
+          <span class="brand-visa">VISA</span>
+          <span class="brand-mastercard"><i></i><i></i></span>
+          <span class="brand-amex">AMEX</span>
+          <span class="brand-diners">DINERS<br>CLUB</span>
+        </div>
+      </div>
+      <div>
+        <span>Bank transfers</span>
+        <div class="bank-brand-icons" aria-hidden="true">
+          <b>BANK<br><small>TRANSFER</small></b>
+          <span class="bacs">BACS</span>
+          <span class="swift">SWIFT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="payment-modal-grid">
+      <article>
+        <h3>Accepted Payment Methods</h3>
+        <ul>
+          <li>Visa</li>
+          <li>Mastercard</li>
+          <li>American Express <small>(where supported)</small></li>
+          <li>Diners Club International <small>(where supported)</small></li>
+          <li>International Bank Transfers <small>(where available)</small></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Card Requirements</h3>
+        <ul>
+          <li>Your card must be enabled for online payments.</li>
+          <li>Your card must be enabled for international transactions if required by your bank.</li>
+          <li>Additional authentication such as OTP, 3D Secure, or bank verification may be required.</li>
+          <li>Payment approval is subject to your bank and payment provider.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Security</h3>
+        <ul>
+          <li>Payments are processed securely through Razorpay.</li>
+          <li>PICK2WIN does not store your complete card details.</li>
+          <li>Additional verification may be performed to help prevent unauthorized transactions and fraud.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Important Information</h3>
+        <ul>
+          <li>Available payment methods may vary depending on your country, bank, card issuer, and payment provider.</li>
+          <li>Some prepaid, virtual, or restricted cards may not be supported.</li>
+          <li>Transaction approvals and declines are determined by the card issuer and payment provider.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="supported-countries">
+      <h3>Supported Countries</h3>
+      <div>
+        <!-- <span>United Kingdom</span>
+        <span>Ireland</span>
+        <span>Germany</span>
+        <span>France</span>
+        <span>Spain</span>
+        <span>Italy</span>
+        <span>Netherlands</span>
+        <span>Sweden</span>
+        <span>Norway</span>
+        <span>Denmark</span>
+        <span>Finland</span>
+        <span>Austria</span>
+        <span>Belgium</span>
+        <span>Portugal</span>
+        <span>Poland</span> -->
+        <span>United States</span>
+        <span>Canada</span>
+        <!-- <span>Australia</span>
+        <span>New Zealand</span> -->
+      </div>
+    </div>
+
+    <p class="payment-modal-warning">
+      <span class="material-symbols-outlined" aria-hidden="true">info</span>
+      Please ensure your payment method is authorized for international online transactions before attempting a purchase.
+    </p>
+  </section>
+</div>
 
 <app-footer></app-footer>

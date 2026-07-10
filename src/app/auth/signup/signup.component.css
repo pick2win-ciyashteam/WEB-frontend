@@ -350,6 +350,38 @@ small {
   color: var(--gold);
 }
 
+.field-alert {
+  display: grid;
+  gap: 3px;
+  margin-top: 6px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.42;
+}
+
+.field-alert.error {
+  color: #ffd8dc;
+  border: 1px solid rgba(215, 38, 56, 0.34);
+  background: rgba(215, 38, 56, 0.12);
+}
+
+.field-alert.error::before {
+  content: "Please fix this";
+  color: #ff8a96;
+  font-family: var(--f-mono);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.terms-alert,
+.form-alert {
+  margin-top: -6px;
+}
+
 .field.is-valid input,
 .field.is-valid select,
 .field.is-valid .dial-code-fixed {
