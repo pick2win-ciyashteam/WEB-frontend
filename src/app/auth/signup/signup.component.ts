@@ -320,13 +320,12 @@ continueStep1() {
   this.api.signup(payload).subscribe({
     next: (res: any) => {
       this.loading = false;
-      this.successMessage = 'OTP sent to your mobile';
+      this.successMessage = 'OTP sent to your email';
       this.step = 2;
-      this.mobileOtp = ['', '', '', '', '', ''];
       this.emailOtp = ['', '', '', '', '', ''];
-      this.startResendCooldown('mobile');
+      this.startResendCooldown('email');
 
-      setTimeout(() => this.focusOtp('mobile'), 100);
+      setTimeout(() => this.focusOtp('email'), 100);
     },
     error: (err) => {
       this.loading = false;
@@ -814,7 +813,7 @@ verifyEmail() {
     next: (res: any) => {
       this.loading = false;
       this.successMessage = res?.message || 'Email verified successfully';
-      this.step = 4;
+      this.step = 3;
     },
     error: (err) => {
       this.loading = false;

@@ -15,6 +15,8 @@ import { RefundComponent } from './refund/refund.component';
 import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 import { SharedModule } from '../shared/shared.module';
 import { LineoutsModule } from '../lineouts/lineouts.module';
+import { AuthModule } from '../auth/auth.module';
+import { UctguideinfoComponent } from './uctguideinfo/uctguideinfo.component';
 
 
 @NgModule({
@@ -29,13 +31,15 @@ import { LineoutsModule } from '../lineouts/lineouts.module';
     TermsComponent,
     PolicyComponent,
     RefundComponent,
-    CookiePolicyComponent
+    CookiePolicyComponent,
+    UctguideinfoComponent
   ],
   imports: [
     CommonModule,
     PagesRoutingModule,
     SharedModule,
-    LineoutsModule
+    LineoutsModule,
+    AuthModule
   ]
 })
 export class PagesModule { }

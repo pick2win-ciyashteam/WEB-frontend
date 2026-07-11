@@ -1,7 +1,7 @@
 <main class="auth-page signup-page">
   <aside class="auth-story" aria-label="Why Pick2Win">
     <a class="auth-brand" routerLink="/" aria-label="Pick2Win home">
-      <img src="assets/logo.png" alt="Pick2Win">
+      <img src="assets/logo1.png" alt="Pick2Win">
     </a>
     <!-- <p class="auth-tagline">WHERE <span>SKILL</span> MATTERS MORE..</p> -->
     <div class="auth-benefits">
@@ -12,10 +12,10 @@
     </div>
   </aside>
   <section class="auth-panel-wrap signup-panel-wrap">
-<div class="signup-box" [class.compact-auth]="step > 1" [class.success-auth]="step === 4">
+<div class="signup-box" [class.compact-auth]="step > 1" [class.success-auth]="step === 3">
 
   <div class="signup-logo modal-brand">
-    <img src="assets/logo.png" alt="Pick2Win">
+    <img src="assets/logo1.png" alt="Pick2Win">
   </div>
 
   <div *ngIf="step === 1">
@@ -25,16 +25,14 @@
       <span class="material-symbols-outlined" aria-hidden="true">lock</span>
       One account per user
     </div>
-    <p class="sub">Verify mobile + email</p>
+    <p class="sub">Verify your email</p>
 
     <div class="verify-progress">
       <div class="vp-step active"><span class="vp-num">1</span><span>Details</span></div>
       <div class="vp-line"></div>
-      <div class="vp-step"><span class="vp-num">2</span><span>Mobile</span></div>
+      <div class="vp-step"><span class="vp-num">2</span><span>Email</span></div>
       <div class="vp-line"></div>
-      <div class="vp-step"><span class="vp-num">3</span><span>Email</span></div>
-      <div class="vp-line"></div>
-      <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
+      <div class="vp-step"><span class="vp-num">3</span><span>Done</span></div>
     </div>
 
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
@@ -92,7 +90,7 @@
             (input)="onMobileInput($event)"
             (keydown.space)="$event.preventDefault()">
         </div>
-        <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - SMS verification required - VoIP / virtual numbers blocked.</div>
+        <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - VoIP / virtual numbers blocked.</div>
         <div class="field-msg" [ngClass]="mobileValidation.state">{{ mobileValidation.message }}</div>
         <div class="field-alert error" *ngIf="signupFieldErrors.mobile" data-signup-error="mobile" tabindex="-1">{{ signupFieldErrors.mobile }}</div>
       </div>
@@ -157,7 +155,7 @@
         class="btn-block"
         [disabled]="loading || !allClientGatesPassed"
         (click)="continueStep1()">
-        {{ loading ? 'Creating account...' : (allClientGatesPassed ? 'Continue -> Verify mobile' : 'Complete all fields to continue') }}
+        {{ loading ? 'Creating account...' : (allClientGatesPassed ? 'Continue -> Verify email' : 'Complete all fields to continue') }}
       </button>
 
       <p class="alt-action">
@@ -171,61 +169,9 @@
     <div class="verify-progress">
       <div class="vp-step done"><span class="vp-num">✓</span><span>Details</span></div>
       <div class="vp-line done"></div>
-      <div class="vp-step active"><span class="vp-num">2</span><span>Mobile</span></div>
+      <div class="vp-step active"><span class="vp-num">2</span><span>Email</span></div>
       <div class="vp-line"></div>
-      <div class="vp-step"><span class="vp-num">3</span><span>Email</span></div>
-      <div class="vp-line"></div>
-      <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
-    </div>
-    <div class="verify-icon">
-      <span class="material-symbols-outlined" aria-hidden="true">phone_iphone</span>
-    </div>
-    <h2>Verify <em>your</em> mobile.</h2>
-    <p class="sub">We sent a 6-digit SMS code to <b>{{ form.value.dial }} {{ form.value.mobile }}</b></p>
-
-    <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
-    <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
-
-    <div class="otp-row">
-      <input
-        *ngFor="let o of mobileOtp; let i = index; trackBy: trackByIndex"
-        [id]="'mobile-otp-' + i"
-        [class]="'otp-cell mobile-otp-' + i"
-        type="text"
-        maxlength="1"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        [value]="mobileOtp[i]"
-        (input)="otpInput($event, i, 'mobile')"
-        (keydown)="otpKeydown($event, i, 'mobile')"
-        (paste)="otpPaste($event, 'mobile')">
-    </div>
-
-    <p class="resend-line">
-      Didn't receive it?
-      <button type="button" [disabled]="resending === 'mobile' || resendCooldown.mobile > 0" (click)="resendOtp('mobile')">
-        {{ resendButtonLabel('mobile') }}
-      </button>
-      <span>- OTP expires in 10 min</span>
-    </p>
-
-    <button class="btn-block verify-btn" type="button" [disabled]="loading || !isOtpComplete('mobile')" (click)="verifyMobile()">
-      {{ loading ? 'Verifying...' : 'Verify mobile & continue' }}
-      <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-    </button>
-
-    <p class="alt-action step-change"><button type="button" (click)="step = 1">← Use a different number</button></p>
-  </div>
-
-  <div *ngIf="step === 3" class="center-step">
-    <div class="verify-progress">
-      <div class="vp-step done"><span class="vp-num">✓</span><span>Details</span></div>
-      <div class="vp-line done"></div>
-      <div class="vp-step done"><span class="vp-num">✓</span><span>Mobile</span></div>
-      <div class="vp-line done"></div>
-      <div class="vp-step active"><span class="vp-num">3</span><span>Email</span></div>
-      <div class="vp-line"></div>
-      <div class="vp-step"><span class="vp-num">4</span><span>Done</span></div>
+      <div class="vp-step"><span class="vp-num">3</span><span>Done</span></div>
     </div>
     <div class="verify-icon">
       <span class="material-symbols-outlined" aria-hidden="true">alternate_email</span>
@@ -266,11 +212,9 @@
     <p class="alt-action step-change"><button type="button" (click)="step = 1">← Use a different email</button></p>
   </div>
 
-  <div *ngIf="step === 4" class="center-step">
+  <div *ngIf="step === 3" class="center-step">
     <div class="verify-progress">
       <div class="vp-step done"><span class="vp-num">✓</span><span>Details</span></div>
-      <div class="vp-line done"></div>
-      <div class="vp-step done"><span class="vp-num">✓</span><span>Mobile</span></div>
       <div class="vp-line done"></div>
       <div class="vp-step done"><span class="vp-num">✓</span><span>Email</span></div>
       <div class="vp-line done"></div>
@@ -278,7 +222,7 @@
     </div>
     <!-- <div class="success-circle material-symbols-outlined" aria-hidden="true">check</div>
     <h2>You're <em>in.</em></h2> -->
-    <p class="sub">Mobile and email verified. Your PICK2WIN account is live.</p>
+    <p class="sub">Email verified. Your PICK2WIN account is live.</p>
 
     <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
@@ -286,7 +230,6 @@
     <div class="next-list">
       <div class="lbl">What's unlocked</div>
       <ul>
-        <li class="done"><span class="ind">✓</span><b>Mobile verified</b><span>- tied to this account</span></li>
         <li class="done"><span class="ind">✓</span><b>Email verified</b><span>- tied to this account</span></li>
         <li><span class="ind">→</span>All prices shown in USD ($)</li>
         <li><span class="ind">→</span>Browse upcoming match windows</li>

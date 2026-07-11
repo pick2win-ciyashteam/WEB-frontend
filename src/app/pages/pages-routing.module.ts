@@ -14,6 +14,7 @@ import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component';
 import { AllSeriesCoverComponent } from '../lineouts/all-series-cover/all-series-cover.component';
 import { createUctGuard, preventPendingUctGenerationGuard } from '../core/guards/create-uct.guard';
+import { UctguideinfoComponent } from './uctguideinfo/uctguideinfo.component';
 
 const seo = {
   home: {
@@ -79,6 +80,11 @@ const seo = {
 };
 
 const routes: Routes = [
+  {
+    path: 'uctguideinfo',
+    component: UctguideinfoComponent,
+    data: { seo: seo.uctGuide }
+  },
   {
     path: '',
     component: HomeComponent,

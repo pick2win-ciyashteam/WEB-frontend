@@ -16,6 +16,7 @@
   --f-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
 }
 
+
 .signup-box {
   position: relative;
   width: min(100%, 560px);
@@ -63,8 +64,8 @@
 
 .age-stamp {
   position: absolute;
-  top: 88px;
-  right: 42px;
+  top: 24px;
+  right: 24px;
   width: 58px;
   height: 58px;
   display: flex;
@@ -267,7 +268,34 @@ select option:hover {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: none;
+  color-scheme: dark;
+  color: var(--paper);
+  background-color: #061b2b;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--gold) 50%),
+    linear-gradient(135deg, var(--gold) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 19px,
+    calc(100% - 13px) 19px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+}
+
+.country-select option {
+  color: var(--paper);
+  background-color: #061b2b;
+  font-weight: 700;
+}
+
+.country-select option[value=""] {
+  color: var(--paper-3);
+}
+
+.country-select option:checked,
+.country-select option:hover {
+  color: #031421;
+  background-color: var(--gold);
 }
 
 .country-select::-ms-expand {
@@ -493,7 +521,7 @@ small {
   align-items: flex-start;
   gap: 10px;
   margin-top: 4px;
-  color: var(--paper-2);
+  color: #33475b;
   font-family: var(--f-body);
   font-size: 12.5px;
   line-height: 1.55;
@@ -510,15 +538,28 @@ small {
 }
 
 .terms span {
-  color: var(--paper-2);
+  color: #33475b;
+  font-weight: 600;
 }
 
-.terms a,
+.terms a {
+  color: var(--gold);
+  font-weight: 850;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(244, 180, 0, 0.6);
+}
+
 .alt-action button {
   color: var(--acid);
   font-weight: 850;
   text-decoration: none;
   border-bottom: 1px solid rgba(215, 38, 56, 0.55);
+}
+
+.terms a:hover,
+.terms a:focus-visible {
+  color: #ffd45a;
+  border-bottom-color: #ffd45a;
 }
 
 .btn-block {
@@ -889,8 +930,8 @@ small {
   }
 
   .age-stamp {
-    top: 26px;
-    right: 54px;
+    top: 18px;
+    right: 18px;
     width: 36px;
     height: 36px;
     border-width: 1.5px;

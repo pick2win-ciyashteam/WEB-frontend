@@ -1,7 +1,7 @@
 <main class="auth-page">
   <aside class="auth-story" aria-label="Why Pick2Win">
     <a class="auth-brand" routerLink="/" aria-label="Pick2Win home">
-      <img src="assets/logo.png" alt="Pick2Win">
+      <img src="assets/logo1.png" alt="Pick2Win">
     </a>
     <!-- <p class="auth-tagline">WHERE <span>SKILL</span> MATTERS MORE..</p> -->
     <div class="auth-benefits">
@@ -19,7 +19,7 @@
   </div>
 
   <div class="login-logo modal-brand">
-    <img src="assets/logo.png" alt="Pick2Win">
+    <img src="assets/logo1.png" alt="Pick2Win">
   </div>
 
   <h2>WELCOME <em>Back.</em></h2>
@@ -76,8 +76,11 @@
 
     <div class="login-options">
       <label class="remember">
-        <input type="checkbox">
-        Remember me
+        <input type="checkbox" aria-label="Remember me">
+        <span class="remember-box" aria-hidden="true">
+          <span class="material-symbols-outlined">check</span>
+        </span>
+        <span class="remember-text">Remember me</span>
       </label>
 
       <a href="#" (click)="openForgotPassword($event)">Forgot password?</a>
@@ -100,6 +103,10 @@
 
 <div class="forgot-overlay" *ngIf="forgotModal">
   <div class="forgot-modal">
+    <div class="login-toast" *ngIf="toast" [class.success]="toast.type === 'success'" [class.error]="toast.type === 'error'">
+      {{ toast.message }}
+    </div>
+
     <button class="forgot-close" type="button" aria-label="Close reset password" (click)="closeForgotPassword()">
       <span class="material-symbols-outlined">close</span>
     </button>

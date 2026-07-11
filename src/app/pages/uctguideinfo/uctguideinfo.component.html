@@ -1,0 +1,173 @@
+<div class="promo-page" id="home">
+  <header class="promo-header" [class.scrolled]="scrolled">
+    <a class="promo-brand" (click)="scrollTo('home')" aria-label="PICK2WIN promotion home">
+      <img src="assets/logo.png" alt="PICK2WIN - Where Skill Matters More">
+    </a>
+
+    <button class="nav-toggle" [class.active]="menuOpen" type="button" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav [class.open]="menuOpen" aria-label="Promotional page navigation">
+      <button type="button" (click)="scrollTo('home')">Home</button>
+      <button type="button" (click)="scrollTo('about')">About</button>
+      <button type="button" (click)="scrollTo('pricing')">Pricing</button>
+      <button type="button" (click)="scrollTo('uctinfo')">UCT Info</button>
+      <button type="button" class="nav-signup" (click)="scrollTo('signup')">Sign Up</button>
+      <!-- <button type="button" class="nav-login" (click)="openLogin()">Login</button> -->
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero-section promo-section">
+      <div class="hero-glow"></div>
+      <div class="section-shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow"><span></span> USER CONFIGURATION TEAMS</span>
+          <h1>Your strategy.<br><em>Up to 20 teams.</em><br>Ready in seconds.</h1>
+          <p class="hero-lead">Turn your own player selections into structured, rule-valid lineups for supported fantasy platforms—without building every team manually.</p>
+          <div class="hero-actions">
+            <button type="button" class="primary-cta" (click)="scrollTo('signup')">Create Free Account <span>→</span></button>
+            <button type="button" class="secondary-cta" (click)="scrollTo('uctinfo')"><span class="material-symbols-outlined">play_circle</span> See how it works</button>
+          </div>
+          <div class="hero-proof">
+            <div><b>1 coin</b><span>per successful UCT</span></div>
+            <div><b>20</b><span>lineups per run</span></div>
+            <div><b>100%</b><span>your configuration</span></div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="PICK2WIN UCT benefits">
+          <div class="visual-logo"><img src="assets/logo1.png" alt="PICK2WIN"></div>
+          <div class="benefit-grid">
+            <article><span class="material-symbols-outlined">emoji_objects</span><div><b>Use Skills</b><p>Your knowledge. Your decisions.</p></div></article>
+            <article><span class="material-symbols-outlined">schedule</span><div><b>Save Time</b><p>Quick lineup configuration.</p></div></article>
+            <article><span class="material-symbols-outlined">verified_user</span><div><b>Have Coverage</b><p>Multiple lineups. Better coverage.</p></div></article>
+            <article><span class="material-symbols-outlined">account_balance_wallet</span><div><b>Spend Less</b><p>Low entry. More value.</p></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Product principles">
+      <div class="section-shell">
+        <span><i class="material-symbols-outlined">check_circle</i>No subscriptions</span>
+        <span><i class="material-symbols-outlined">check_circle</i>No auto-renewal</span>
+        <span><i class="material-symbols-outlined">check_circle</i>Complete user control</span>
+        <span><i class="material-symbols-outlined">check_circle</i>Secure account</span>
+      </div>
+    </section>
+
+    <section class="promo-section about-section" id="about">
+      <div class="section-shell">
+        <div class="section-heading">
+          <span class="eyebrow dark"><span></span> BUILT FOR SMARTER PREPARATION</span>
+          <h2>Software that works at the speed of <em>your ideas.</em></h2>
+          <p>PICK2WIN Technologies Private Limited builds practical SaaS products that simplify complex work, reduce repetitive effort, and keep users in control.</p>
+        </div>
+        <div class="about-grid">
+          <article class="about-main">
+            <span class="card-label">OUR FLAGSHIP PRODUCT</span>
+            <h3>PICK2WIN UCT</h3>
+            <p>User Configuration Teams is an independent lineup-configuration tool. You choose the players, platform, and strategy. PICK2WIN transforms those choices into multiple structured lineups compatible with supported DraftKings Classic and FanDuel contests.</p>
+            <p>We do not host contests, accept entries, process prizes, recommend players, or predict outcomes. Every important decision remains yours.</p>
+          </article>
+          <div class="about-points">
+            <article><span class="material-symbols-outlined">tune</span><div><h4>Your configuration first</h4><p>Generated lineups come only from your selected pool and rules.</p></div></article>
+            <article><span class="material-symbols-outlined">speed</span><div><h4>Less repetitive work</h4><p>Move from strategy to multiple usable combinations in seconds.</p></div></article>
+            <article><span class="material-symbols-outlined">visibility</span><div><h4>Transparent workflow</h4><p>Review the setup before generation and inspect every result.</p></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-section uct-section" id="uctinfo">
+      <div class="section-shell">
+        <div class="section-heading light">
+          <span class="eyebrow"><span></span> HOW PICK2WIN UCT WORKS</span>
+          <h2>From signup to downloadable teams—<em>one guided flow.</em></h2>
+          <p>Choose a match after official lineups are available, configure your strategy for the supported fantasy platform, then generate up to 20 unique, rule-valid team combinations.</p>
+        </div>
+
+        <div class="process-grid">
+          <article *ngFor="let item of processSteps; let i = index">
+            <span class="process-number">{{ i + 1 | number:'2.0' }}</span>
+            <span class="process-icon material-symbols-outlined">{{ item.icon }}</span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.text }}</p>
+            <span class="process-arrow material-symbols-outlined" *ngIf="i < processSteps.length - 1">arrow_forward</span>
+          </article>
+        </div>
+
+        <div class="uct-value-grid">
+          <div class="uct-feature-card">
+            <div class="feature-kicker">ONE SUCCESSFUL RUN</div>
+            <strong>1 Coin = Up to 20 Teams</strong>
+            <p>A coin is deducted only when UCT generation completes successfully. Preview and download your lineups before match kickoff.</p>
+          </div>
+          <div class="platform-card">
+            <span>SUPPORTED PLATFORMS</span>
+            <div><b>DraftKings</b><b>FanDuel</b></div>
+            <small>Classic lineup configuration</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-section pricing-section" id="pricing">
+      <div class="section-shell pricing-grid">
+        <div class="offer-copy">
+          <span class="offer-pill">LIMITED LAUNCH OFFER</span>
+          <h2>Start small.<br><em>Build smarter.</em></h2>
+          <p>Try the first PICK2WIN coin pack and experience the complete UCT workflow. No subscription and no auto-renewal.</p>
+          <ul>
+            <li><span>✓</span> One coin for one successful generation</li>
+            <li><span>✓</span> Up to 20 structured lineups per coin</li>
+            <li><span>✓</span> Use across supported matches and platforms</li>
+            <li><span>✓</span> {{ offerPack.validityDays }}-day coin validity</li>
+          </ul>
+        </div>
+
+        <article class="offer-card">
+          <div class="offer-ribbon">WORLD CUP 2026 OFFER</div>
+          <span class="offer-name">{{ packLoading ? 'Loading offer...' : offerPack.name }}</span>
+          <div class="coin-total"><b>{{ offerPack.totalCoins }}</b><span>total<br>coins</span></div>
+          <div class="coin-breakdown">{{ offerPack.coins }} base <span *ngIf="offerPack.bonusCoins">+ {{ offerPack.bonusCoins }} bonus</span></div>
+          <div class="offer-price"><sup>$</sup>{{ offerPack.price | number:'1.2-2' }}</div>
+          <p>≈ ${{ offerPack.totalCoins ? (offerPack.price / offerPack.totalCoins | number:'1.2-2') : '0.00' }} per successful UCT</p>
+          <button type="button" (click)="scrollTo('signup')">Grab This Offer <span>→</span></button>
+          <small>Offer pricing may change. Account required before purchase.</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="promo-section signup-section" id="signup">
+      <div class="section-shell signup-layout">
+        <div class="signup-copy">
+          <span class="eyebrow"><span></span> START YOUR PICK2WIN JOURNEY</span>
+          <h2>Create your account.<br><em>Put your strategy to work.</em></h2>
+          <p>Join free, verify your email, and explore available match windows. Your information is encrypted and securely handled.</p>
+          <div class="signup-reasons">
+            <div><span class="material-symbols-outlined">shield_lock</span><b>Secure signup</b><small>Email OTP verification</small></div>
+            <div><span class="material-symbols-outlined">credit_card_off</span><b>No card required</b><small>Free to create an account</small></div>
+            <div><span class="material-symbols-outlined">manage_accounts</span><b>Stay in control</b><small>One user, one account</small></div>
+          </div>
+          <p class="existing-user">Already registered? <button type="button" (click)="openLogin()">Go directly to Login →</button></p>
+        </div>
+        <div class="signup-embed-card">
+          <app-signup></app-signup>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="section-shell">
+        <img src="assets/logo1.png" alt="PICK2WIN">
+        <div><h2>Where skill matters more.</h2><p>Your knowledge. Your configuration. Your teams.</p></div>
+        <button type="button" (click)="scrollTo('signup')">Get Started Free</button>
+      </div>
+    </section>
+  </main>
+
+  <app-footer></app-footer>
+</div>
