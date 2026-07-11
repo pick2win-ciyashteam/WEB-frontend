@@ -24,8 +24,15 @@
       <div class="section-shell hero-grid">
         <div class="hero-copy">
           <span class="eyebrow"><span></span> USER CONFIGURATION TEAMS</span>
-          <h1>Your strategy.<br><em>Up to 20 teams.</em><br>Ready in seconds.</h1>
-          <p class="hero-lead">Turn your own player selections into structured, rule-valid lineups for supported fantasy platforms—without building every team manually.</p>
+          <h1><span class="hero-sport">Football (Soccer)</span><span class="hero-product">Lineup<br>Configuration.</span></h1>
+          <p class="hero-tagline">Save Time. Create More. Stay in Control.</p>
+          <p class="hero-lead">Create up to 20 structured football (soccer) lineups from your own player selections in seconds—ready to replicate on your preferred fantasy platform.</p>
+          <div class="hero-checks" aria-label="PICK2WIN UCT highlights">
+            <span><i class="material-symbols-outlined">check_circle</i>User-controlled team configurations</span>
+            <span><i class="material-symbols-outlined">check_circle</i>Up to 20 lineups per generation</span>
+            <span><i class="material-symbols-outlined">check_circle</i>Built after official lineups are announced</span>
+            <span><i class="material-symbols-outlined">check_circle</i>Download as TXT for easy replication</span>
+          </div>
           <div class="hero-actions">
             <button type="button" class="primary-cta" (click)="scrollTo('signup')">Create Free Account <span>→</span></button>
             <button type="button" class="secondary-cta" (click)="scrollTo('uctinfo')"><span class="material-symbols-outlined">play_circle</span> See how it works</button>
@@ -69,7 +76,7 @@
           <article class="about-main">
             <span class="card-label">OUR FLAGSHIP PRODUCT</span>
             <h3>PICK2WIN UCT</h3>
-            <p>User Configuration Teams is an independent lineup-configuration tool. You choose the players, platform, and strategy. PICK2WIN transforms those choices into multiple structured lineups compatible with supported DraftKings Classic and FanDuel contests.</p>
+            <p>User Configuration Teams is an independent lineup-configuration tool. You choose the players, platform, and strategy. PICK2WIN transforms those choices into multiple structured lineups compatible with supported Fantasy Platform DraftKings Classic or FanDuel Classic</p>
             <p>We do not host contests, accept entries, process prizes, recommend players, or predict outcomes. Every important decision remains yours.</p>
           </article>
           <div class="about-points">
@@ -124,12 +131,12 @@
             <li><span>✓</span> One coin for one successful generation</li>
             <li><span>✓</span> Up to 20 structured lineups per coin</li>
             <li><span>✓</span> Use across supported matches and platforms</li>
-            <li><span>✓</span> {{ offerPack.validityDays }}-day coin validity</li>
+            <li><span>✓</span>Each Coin Pack validity {{ offerPack.validityDays }}-days </li>
           </ul>
         </div>
 
         <article class="offer-card">
-          <div class="offer-ribbon">WORLD CUP 2026 OFFER</div>
+          <div class="offer-ribbon">PICK2WIN LAUNCHING OFFER</div>
           <span class="offer-name">{{ packLoading ? 'Loading offer...' : offerPack.name }}</span>
           <div class="coin-total"><b>{{ offerPack.totalCoins }}</b><span>total<br>coins</span></div>
           <div class="coin-breakdown">{{ offerPack.coins }} base <span *ngIf="offerPack.bonusCoins">+ {{ offerPack.bonusCoins }} bonus</span></div>

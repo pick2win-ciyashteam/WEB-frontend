@@ -32,12 +32,15 @@ export class UctguideinfoComponent implements OnInit {
   readonly processSteps = [
     { icon: 'person_add', title: 'Sign Up', text: 'Create your secure PICK2WIN account.' },
     { icon: 'login', title: 'Login', text: 'Sign in and open your personal workspace.' },
-    { icon: 'format_list_numbered', title: 'Lineups', text: 'Choose an available match from Lineouts.' },
-    { icon: 'bolt', title: 'Run UCT', text: 'Start the guided configuration workflow.' },
+    { icon: 'database', title: 'Purchase Coins', text: 'Buy coins to unlock UCT and generate teams.' },
+    { icon: 'format_list_numbered', title: 'Lineups', text: 'Choose an available match from Lineups.' },
     { icon: 'sports_esports', title: 'Fantasy Platform', text: 'Select DraftKings or FanDuel.' },
-    { icon: 'style', title: 'Select Cards', text: 'Pick players and configure your strategy.' },
+    { icon: 'groups', title: 'My Squad', text: 'Pick players from both teams and build your squad.' },
+    { icon: 'settings', title: 'Configuration', text: 'Set your preferences, rules, and team generation settings.' },
+    { icon: 'assignment', title: 'Review', text: 'Review your selected players and configuration.' },
     { icon: 'auto_awesome', title: 'Generate Teams', text: 'Create up to 20 rule-valid lineups.' },
-    { icon: 'download', title: 'Download TXT', text: 'Review and download your generated teams.' }
+    { icon: 'fact_check', title: 'Review Teams', text: 'Review all generated teams and validate lineups.' },
+    { icon: 'download', title: 'Download TXT', text: 'Download your generated teams in TXT format.' }
   ];
 
   constructor(private api: ApiService, private router: Router) {}
