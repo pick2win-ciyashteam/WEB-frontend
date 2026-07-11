@@ -5,6 +5,7 @@ type CookieConsentChoice = 'accepted' | 'rejected';
 declare global {
   interface Window {
     dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -14,8 +15,6 @@ declare global {
 export class CookieConsentService {
   private readonly storageKey = 'pick2win_cookie_consent';
   private readonly cookieName = 'pick2win_cookie_consent';
-  private readonly gtmId = 'GTM-N3SSCT94';
-  private tagsLoaded = false;
 
   getPreference(): CookieConsentChoice | null {
     const stored = this.readLocalStorage();
@@ -31,44 +30,43 @@ export class CookieConsentService {
 
   accept(): void {
     this.savePreference('accepted');
-    this.enableMarketingTags();
+    this.updateGoogleConsent('granted');
   }
 
   reject(): void {
     this.savePreference('rejected');
+    this.updateGoogleConsent('denied');
   }
 
   enableSavedPreference(): void {
-    if (this.getPreference() === 'accepted') {
-      this.enableMarketingTags();
+    const preference = this.getPreference();
+    if (preference) {
+      this.updateGoogleConsent(preference === 'accepted' ? 'granted' : 'denied');
     }
   }
 
-  private enableMarketingTags(): void {
-    if (this.tagsLoaded || typeof document === 'undefined') {
-      return;
-    }
-
-    if (document.getElementById('pick2win-gtm-script')) {
-      this.tagsLoaded = true;
-      return;
-    }
-
+  trackPageView(path: string, title: string): void {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-      event: 'cookie_consent_accepted',
-      analytics_storage: 'granted',
-      ad_storage: 'granted'
+      event: 'virtual_page_view',
+      page_location: window.location.href,
+      page_path: path,
+      page_title: title
     });
+  }
 
-    const firstScript = document.getElementsByTagName('script')[0];
-    const script = document.createElement('script');
-    script.id = 'pick2win-gtm-script';
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtm.js?id=${this.gtmId}`;
-
-    firstScript?.parentNode?.insertBefore(script, firstScript);
-    this.tagsLoaded = true;
+  private updateGoogleConsent(state: 'granted' | 'denied'): void {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function (...args: unknown[]): void {
+      window.dataLayer!.push(args);
+    };
+    window.gtag('consent', 'update', {
+      ad_storage: state,
+      analytics_storage: state,
+      ad_user_data: state,
+      ad_personalization: state
+    });
+    window.dataLayer.push({ event: state === 'granted' ? 'cookie_consent_accepted' : 'cookie_consent_rejected' });
   }
 
   private savePreference(choice: CookieConsentChoice): void {

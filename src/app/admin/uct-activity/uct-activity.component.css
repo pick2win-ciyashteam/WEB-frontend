@@ -1027,3 +1027,5 @@ tr.selected td {
     min-width: 1020px;
   }
 }
+.pager{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:15px;color:var(--paper-3);font:11px var(--f-m)}
+.pager>div{display:flex;gap:8px}.pager .lk:disabled{opacity:.4;cursor:not-allowed}

@@ -378,10 +378,12 @@ export interface AdminUctOverviewKpis {
 
 export interface AdminUctTodayMatch {
   id: number;
+  match_id?: number;
   match: string;
   series: string;
   status: string;
   ucts_used: number;
+  users_used_uct?: number;
   teams_generated: number;
   draftkings?: number;
   draft_kings?: number;
@@ -405,10 +407,11 @@ export interface AdminUctCoinsReconciliation {
 
 export interface AdminUctGameBreakdown {
   game: string;
-  total_ucts: number;
-  unique_users: number;
+  total_ucts?: number;
+  ucts?: number;
+  unique_users?: number;
   teams_generated: number;
-  share_pct: number;
+  share_pct?: number;
 }
 
 export interface AdminUctOverviewReports {
@@ -493,6 +496,13 @@ export interface AdminUctActivityListReports {
     success_rate_pct: number;
     avg_per_day: number;
   };
+  fixtures_today?: {
+    total_fixtures: number;
+    total_users_used_uct: number;
+    total_coins_consumed: number;
+    matches: AdminUctTodayMatch[];
+  };
+  by_game?: AdminUctGameBreakdown[];
   daily_breakdown: AdminUctActivityDaily[];
   pagination: AdminUsersPagination;
   recent_generations: AdminUctGeneration[];

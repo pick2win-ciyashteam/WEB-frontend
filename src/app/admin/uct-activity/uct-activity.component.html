@@ -37,7 +37,7 @@
     <div class="panel-head">
       <div>
         <h3>Fixtures today - UCT usage</h3>
-        <p class="ph-sub">{{ matches.length }} fixtures today - <b>{{ formatNumber(overview?.today_matches?.total_ucts_today) }}</b> users used UCT - <b>{{ formatNumber(overview?.today_matches?.total_ucts_today) }}</b> coins consumed today (1 user = 1 UCT = 1 coin per match)</p>
+        <p class="ph-sub">{{ matches.length }} fixtures today - <b>{{ formatNumber(activity?.fixtures_today?.total_users_used_uct ?? overview?.today_matches?.total_ucts_today) }}</b> users used UCT - <b>{{ formatNumber(activity?.fixtures_today?.total_coins_consumed ?? overview?.today_matches?.total_ucts_today) }}</b> coins consumed today (1 user = 1 UCT = 1 coin per match)</p>
       </div>
       <button class="lk" type="button" (click)="downloadFixturesCsv()">CSV</button>
     </div>
@@ -68,7 +68,7 @@
             <td>{{ matches.length }} matches today</td>
             <td></td>
             <td></td>
-            <td class="num purple">{{ formatNumber(overview?.today_matches?.total_ucts_today) }}</td>
+            <td class="num purple">{{ formatNumber(activity?.fixtures_today?.total_users_used_uct ?? overview?.today_matches?.total_ucts_today) }}</td>
             <td class="num gold">{{ formatNumber(totalFixtureDraftKings) }}</td>
             <td class="num green">{{ formatNumber(totalFixtureFanDuel) }}</td>
             <td class="num">{{ totalFixtureShare || 100 }}%</td>
@@ -188,8 +188,8 @@
           <tr *ngFor="let row of dailyBreakdown">
             <td class="cell-main mono">{{ dateOnly(row.date) }}</td>
             <td class="num purple">{{ formatNumber(row.ucts) }}</td>
-            <td class="num gold">{{ formatNumber(draftKingsValue(row)) }}</td>
-            <td class="num green">{{ formatNumber(fanDuelValue(row)) }}</td>
+            <td class="num gold">{{ formatNumber(activityGameValue(row, 'draftkings')) }}</td>
+            <td class="num green">{{ formatNumber(activityGameValue(row, 'fanduel')) }}</td>
             <td class="num gold">{{ formatNumber(row.failed_refunded) }}</td>
             <td class="num red">{{ formatNumber(row.failed_refunded) }}</td>
             <td class="num green">{{ row.success_rate_pct }}%</td>
@@ -270,8 +270,8 @@
     <div class="game-breakdown" *ngIf="gameBreakdown.length">
       <div class="game-chip" *ngFor="let game of gameBreakdown">
         <span>{{ game.game }}</span>
-        <b>{{ formatNumber(game.total_ucts) }}</b>
-        <small>{{ formatNumber(game.teams_generated) }} teams - {{ game.share_pct }}%</small>
+        <b>{{ formatNumber(game.ucts ?? game.total_ucts) }}</b>
+        <small>{{ formatNumber(game.teams_generated) }} teams<span *ngIf="game.share_pct != null"> - {{ game.share_pct }}%</span></small>
       </div>
     </div>
 
@@ -305,6 +305,13 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="pager" *ngIf="totalPages > 1">
+      <span>Showing {{ recentGenerations.length }} of {{ formatNumber(totalGenerations) }} generations - Page {{ page }} of {{ totalPages }}</span>
+      <div>
+        <button class="lk" type="button" [disabled]="page <= 1" (click)="previousPage()">Previous</button>
+        <button class="lk" type="button" [disabled]="page >= totalPages" (click)="nextPage()">Next</button>
+      </div>
     </div>
   </article>
 </section>

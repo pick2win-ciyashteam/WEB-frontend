@@ -55,7 +55,16 @@ export class UctActivityComponent implements OnInit {
   }
 
   get matches(): AdminUctTodayMatch[] {
-    return Array.isArray(this.overview?.today_matches?.matches) ? this.overview!.today_matches.matches : [];
+    const matches = Array.isArray(this.activity?.fixtures_today?.matches)
+      ? this.activity!.fixtures_today!.matches
+      : (Array.isArray(this.overview?.today_matches?.matches) ? this.overview!.today_matches.matches : []);
+
+    return matches.map(match => ({
+      ...match,
+      id: Number(match.id ?? match.match_id),
+      ucts_used: Number(match.ucts_used ?? match.users_used_uct ?? 0),
+      teams_generated: Number(match.teams_generated || 0)
+    }));
   }
 
   get dailyBreakdown(): AdminUctActivityDaily[] {
@@ -67,7 +76,17 @@ export class UctActivityComponent implements OnInit {
   }
 
   get gameBreakdown(): AdminUctGameBreakdown[] {
-    return Array.isArray(this.overview?.game_breakdown) ? this.overview!.game_breakdown : [];
+    return Array.isArray(this.activity?.by_game)
+      ? this.activity!.by_game!
+      : (Array.isArray(this.overview?.game_breakdown) ? this.overview!.game_breakdown : []);
+  }
+
+  get totalPages(): number {
+    return Math.max(1, Number(this.activity?.pagination?.total_pages || 1));
+  }
+
+  get totalGenerations(): number {
+    return Number(this.activity?.pagination?.total || this.recentGenerations.length);
   }
 
   get buildPoints(): AdminUctBuildPoint[] {
@@ -87,12 +106,12 @@ export class UctActivityComponent implements OnInit {
   }
 
   get totalActivityDraftKings(): number {
-    const summaryValue = this.draftKingsValue(this.activity?.summary);
+    const summaryValue = this.gameUcts('draftkings');
     return summaryValue || this.dailyBreakdown.reduce((sum, row) => sum + this.draftKingsValue(row), 0);
   }
 
   get totalActivityFanDuel(): number {
-    const summaryValue = this.fanDuelValue(this.activity?.summary);
+    const summaryValue = this.gameUcts('fanduel');
     return summaryValue || this.dailyBreakdown.reduce((sum, row) => sum + this.fanDuelValue(row), 0);
   }
 
@@ -166,6 +185,7 @@ export class UctActivityComponent implements OnInit {
   }
 
   loadActivity(): void {
+    this.errorMessage = '';
     this.adminService.getAdminReportsUctActivityList(this.activityParams()).subscribe({
       next: (res) => {
         this.activity = res?.data || res || null;
@@ -175,6 +195,20 @@ export class UctActivityComponent implements OnInit {
         this.errorMessage = err?.error?.message || err?.error?.error || 'Unable to load UCT activity list.';
       }
     });
+  }
+
+  previousPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.loadActivity();
+    }
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.loadActivity();
+    }
   }
 
   downloadFixturesCsv(): void {
@@ -200,8 +234,8 @@ export class UctActivityComponent implements OnInit {
       ...this.dailyBreakdown.map(row => [
         this.dateOnly(row.date),
         String(row.ucts),
-        String(this.draftKingsValue(row)),
-        String(this.fanDuelValue(row)),
+        String(this.activityGameValue(row, 'draftkings')),
+        String(this.activityGameValue(row, 'fanduel')),
         String(row.teams_generated),
         '0',
         String(row.failed_refunded),
@@ -260,7 +294,7 @@ export class UctActivityComponent implements OnInit {
       [],
       ['Activity Over Time'],
       ['Date', 'UCTs', 'DraftKings', 'FanDuel', 'Teams generated', 'Failed / refunded', 'Success rate'],
-      ...this.dailyBreakdown.map(row => [this.dateOnly(row.date), String(row.ucts), String(this.draftKingsValue(row)), String(this.fanDuelValue(row)), String(row.teams_generated), String(row.failed_refunded), `${row.success_rate_pct}%`]),
+      ...this.dailyBreakdown.map(row => [this.dateOnly(row.date), String(row.ucts), String(this.activityGameValue(row, 'draftkings')), String(this.activityGameValue(row, 'fanduel')), String(row.teams_generated), String(row.failed_refunded), `${row.success_rate_pct}%`]),
       [],
       ['Latest Generations'],
       ['UCT ID', 'User', 'Match', 'Country', 'Game', 'Teams', 'Coins used', 'Status', 'Created at'],
@@ -336,6 +370,16 @@ export class UctActivityComponent implements OnInit {
 
   fanDuelValue(row: any): number {
     return Number(row?.['fanduel'] ?? row?.['fan_duel'] ?? row?.['fanDuel'] ?? 0);
+  }
+
+  gameUcts(game: string): number {
+    const row = this.gameBreakdown.find(item => String(item.game).toLowerCase() === game.toLowerCase());
+    return Number(row?.ucts ?? row?.total_ucts ?? 0);
+  }
+
+  activityGameValue(row: AdminUctActivityDaily, game: 'draftkings' | 'fanduel'): number {
+    const rowValue = game === 'draftkings' ? this.draftKingsValue(row) : this.fanDuelValue(row);
+    return rowValue || (this.dailyBreakdown.length === 1 ? this.gameUcts(game) : 0);
   }
 
   gameLabel(row: any): string {

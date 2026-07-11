@@ -5,6 +5,7 @@ import { AuthService } from './core/services/auth.service';
 import { FirebaseNotificationService } from './core/services/firebase-notification.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { CookieConsentService } from './core/services/cookie-consent.service';
 
 interface RouteSeoData {
   title: string;
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    private cookieConsent: CookieConsentService
   ) {}
 
   ngOnInit() {
@@ -53,7 +55,10 @@ export class AppComponent implements OnInit, OnDestroy {
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntil(this.destroy$)
       )
-      .subscribe(() => this.applyCurrentRouteSeo());
+      .subscribe(() => {
+        this.applyCurrentRouteSeo();
+        this.cookieConsent.trackPageView(this.router.url, this.titleService.getTitle());
+      });
 
     this.applyCurrentRouteSeo();
   }
