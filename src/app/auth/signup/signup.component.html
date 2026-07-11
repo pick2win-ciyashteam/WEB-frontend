@@ -1,3 +1,17 @@
+<main class="auth-page signup-page">
+  <aside class="auth-story" aria-label="Why Pick2Win">
+    <a class="auth-brand" routerLink="/" aria-label="Pick2Win home">
+      <img src="assets/logo.png" alt="Pick2Win">
+    </a>
+    <!-- <p class="auth-tagline">WHERE <span>SKILL</span> MATTERS MORE..</p> -->
+    <div class="auth-benefits">
+      <article><span class="material-symbols-outlined">emoji_objects</span><div><b>USE SKILLS</b><p>Your knowledge.<br>Your decisions.</p></div></article>
+      <article><span class="material-symbols-outlined">schedule</span><div><b>SAVE TIME</b><p>Quick lineup<br>configuration.</p></div></article>
+      <article><span class="material-symbols-outlined">verified_user</span><div><b>HAVE COVERAGE</b><p>Multiple lineups.<br>Better coverage.</p></div></article>
+      <article><span class="material-symbols-outlined">account_balance_wallet</span><div><b>SPEND LESS</b><p>Low entry.<br>More value.</p></div></article>
+    </div>
+  </aside>
+  <section class="auth-panel-wrap signup-panel-wrap">
 <div class="signup-box" [class.compact-auth]="step > 1" [class.success-auth]="step === 4">
 
   <div class="signup-logo modal-brand">
@@ -111,7 +125,8 @@
             [class.visible]="showPassword"
             (click)="showPassword = !showPassword"
             [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-            <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+            <svg *ngIf="showPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.1 12s3.6-6 9.9-6 9.9 6 9.9 6-3.6 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+            <svg *ngIf="!showPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.1A10.8 10.8 0 0 1 12 6c6.3 0 9.9 6 9.9 6a15.7 15.7 0 0 1-2.4 3.1M6.2 6.2C3.6 8 2.1 12 2.1 12s3.6 6 9.9 6a9.8 9.8 0 0 0 3.1-.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
           </button>
         </div>
 
@@ -285,3 +300,6 @@
   </div>
 
 </div>
+  <div class="auth-secure"><span class="material-symbols-outlined">lock</span>Your information is encrypted and secure</div>
+  </section>
+</main>

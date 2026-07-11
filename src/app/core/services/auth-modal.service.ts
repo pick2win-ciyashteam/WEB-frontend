@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 export type AuthModalType = 'login' | 'signup' | null;
 
@@ -9,8 +10,11 @@ export type AuthModalType = 'login' | 'signup' | null;
 export class AuthModalService {
   modal$ = new BehaviorSubject<AuthModalType>(null);
 
+  constructor(private router: Router) {}
+
   open(type: 'login' | 'signup') {
-    this.modal$.next(type);
+    this.modal$.next(null);
+    this.router.navigate(['/auth', type]);
   }
 
   close() {

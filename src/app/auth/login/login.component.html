@@ -1,3 +1,17 @@
+<main class="auth-page">
+  <aside class="auth-story" aria-label="Why Pick2Win">
+    <a class="auth-brand" routerLink="/" aria-label="Pick2Win home">
+      <img src="assets/logo.png" alt="Pick2Win">
+    </a>
+    <!-- <p class="auth-tagline">WHERE <span>SKILL</span> MATTERS MORE..</p> -->
+    <div class="auth-benefits">
+      <article><span class="material-symbols-outlined">emoji_objects</span><div><b>USE SKILLS</b><p>Your knowledge.<br>Your decisions.</p></div></article>
+      <article><span class="material-symbols-outlined">schedule</span><div><b>SAVE TIME</b><p>Quick lineup<br>configuration.</p></div></article>
+      <article><span class="material-symbols-outlined">verified_user</span><div><b>HAVE COVERAGE</b><p>Multiple lineups.<br>Better coverage.</p></div></article>
+      <article><span class="material-symbols-outlined">account_balance_wallet</span><div><b>SPEND LESS</b><p>Low entry.<br>More value.</p></div></article>
+    </div>
+  </aside>
+  <section class="auth-panel-wrap" [class.forgot-active]="forgotModal">
 <div class="login-box">
 
   <div class="login-toast" *ngIf="toast" [class.success]="toast.type === 'success'" [class.error]="toast.type === 'error'">
@@ -8,7 +22,7 @@
     <img src="assets/logo.png" alt="Pick2Win">
   </div>
 
-  <h2>WELCOME <em>back.</em></h2>
+  <h2>WELCOME <em>Back.</em></h2>
   <p>Sign in to your PICK2WIN account.</p>
   <!-- <div class="auth-trust-tag">
     <span class="material-symbols-outlined" aria-hidden="true">shield_lock</span>
@@ -51,7 +65,8 @@
           [class.visible]="showPassword"
           (click)="showPassword = !showPassword"
           [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-          <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+          <svg *ngIf="showPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.1 12s3.6-6 9.9-6 9.9 6 9.9 6-3.6 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+          <svg *ngIf="!showPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.1A10.8 10.8 0 0 1 12 6c6.3 0 9.9 6 9.9 6a15.7 15.7 0 0 1-2.4 3.1M6.2 6.2C3.6 8 2.1 12 2.1 12s3.6 6 9.9 6a9.8 9.8 0 0 0 3.1-.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
         </button>
       </div>
       <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
@@ -79,6 +94,8 @@
     <a (click)="openSignup()">Create an Account</a>
   </div>
 
+  <div class="auth-secure"><span class="material-symbols-outlined">lock</span>Your information is encrypted and secure</div>
+
 </div>
 
 <div class="forgot-overlay" *ngIf="forgotModal">
@@ -103,13 +120,12 @@
     <form [formGroup]="forgotForm">
       <ng-container *ngIf="forgotStep === 'email'">
         <label>Email <span>*</span></label>
-        <input
+        <div class="forgot-input-wrap"><span class="material-symbols-outlined">mail</span><input
           type="email"
           formControlName="email"
           placeholder="you@example.com"
-          readonly
           (input)="sanitizeForgotEmail()"
-          (keydown.space)="$event.preventDefault()">
+          (keydown.space)="$event.preventDefault()"></div>
 
         <small *ngIf="forgotForm.get('email')?.touched && forgotForm.get('email')?.invalid">
           Enter valid email
@@ -164,9 +180,8 @@
             class="password-toggle"
             [class.visible]="showResetPassword"
             (click)="showResetPassword = !showResetPassword">
-            <span class="material-symbols-outlined">
-              {{ showResetPassword ? 'visibility_off' : 'visibility' }}
-            </span>
+            <svg *ngIf="showResetPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.1 12s3.6-6 9.9-6 9.9 6 9.9 6-3.6 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+            <svg *ngIf="!showResetPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.1A10.8 10.8 0 0 1 12 6c6.3 0 9.9 6 9.9 6a15.7 15.7 0 0 1-2.4 3.1M6.2 6.2C3.6 8 2.1 12 2.1 12s3.6 6 9.9 6a9.8 9.8 0 0 0 3.1-.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
           </button>
         </div>
 
@@ -191,9 +206,8 @@
             class="password-toggle"
             [class.visible]="showConfirmResetPassword"
             (click)="showConfirmResetPassword = !showConfirmResetPassword">
-            <span class="material-symbols-outlined">
-              {{ showConfirmResetPassword ? 'visibility_off' : 'visibility' }}
-            </span>
+            <svg *ngIf="showConfirmResetPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.1 12s3.6-6 9.9-6 9.9 6 9.9 6-3.6 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+            <svg *ngIf="!showConfirmResetPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.1A10.8 10.8 0 0 1 12 6c6.3 0 9.9 6 9.9 6a15.7 15.7 0 0 1-2.4 3.1M6.2 6.2C3.6 8 2.1 12 2.1 12s3.6 6 9.9 6a9.8 9.8 0 0 0 3.1-.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
           </button>
         </div>
 
@@ -221,3 +235,5 @@
     </form>
   </div>
 </div>
+  </section>
+</main>

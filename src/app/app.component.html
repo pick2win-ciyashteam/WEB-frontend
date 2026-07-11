@@ -1,11 +1,2 @@
 <router-outlet></router-outlet>
 <app-cookie-consent></app-cookie-consent>
-
-<div class="auth-backdrop" *ngIf="authModal.modal$ | async as modal">
-  <div class="auth-modal animate-auth" (click)="$event.stopPropagation()">
-    <button class="auth-close material-symbols-outlined" type="button" aria-label="Close" (click)="closeAuthModal()">close</button>
-
-    <app-login *ngIf="modal === 'login'"></app-login>
-    <app-signup *ngIf="modal === 'signup'"></app-signup>
-  </div>
-</div>

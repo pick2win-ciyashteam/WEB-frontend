@@ -11,6 +11,11 @@ const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent
+  },
+  {
+    path: 'forgot-password',
+    component: LoginComponent,
+    data: { forgotPassword: true }
   }
 ];
 

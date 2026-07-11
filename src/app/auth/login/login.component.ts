@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -44,8 +44,18 @@ export class LoginComponent {
     private api: ApiService,
     private authModal: AuthModalService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
+
+  ngOnInit(): void {
+    if (this.route.snapshot.data['forgotPassword']) {
+      const email = this.withoutSpaces(this.route.snapshot.queryParamMap.get('email') || '');
+      this.forgotForm.patchValue({ email });
+      this.forgotStep = 'email';
+      this.forgotModal = true;
+    }
+  }
 
   openSignup() {
     this.authModal.open('signup');
@@ -81,6 +91,7 @@ export class LoginComponent {
   this.forgotModal = true;
   this.showResetPassword = false;
   this.showConfirmResetPassword = false;
+  this.router.navigate(['/auth/forgot-password'], { queryParams: { email } });
 }
 
   closeForgotPassword() {
@@ -88,6 +99,7 @@ export class LoginComponent {
     this.otpSent = false;
     this.forgotStep = 'email';
     this.forgotForm.reset();
+    this.router.navigate(['/auth/login']);
   }
 
   sendForgotOtp(isResend = false) {
@@ -191,8 +203,9 @@ export class LoginComponent {
 
   finishForgotPassword() {
     const email = this.withoutSpaces(this.forgotForm.value.email || '');
-    this.closeForgotPassword();
     this.loginForm.patchValue({ email, password: '' });
+    this.forgotModal = false;
+    this.router.navigate(['/auth/login'], { queryParams: { email } });
   }
 
   sanitizeLoginPassword(): void {
