@@ -46,6 +46,10 @@ export class CookieConsentService {
   }
 
   trackPageView(path: string, title: string): void {
+    if (this.isAdminPath(path)) {
+      return;
+    }
+
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: 'virtual_page_view',
@@ -53,6 +57,11 @@ export class CookieConsentService {
       page_path: path,
       page_title: title
     });
+  }
+
+  isAdminPath(path: string): boolean {
+    const pathname = path.split(/[?#]/, 1)[0];
+    return pathname === '/admin' || pathname.startsWith('/admin/');
   }
 
   private updateGoogleConsent(state: 'granted' | 'denied'): void {
