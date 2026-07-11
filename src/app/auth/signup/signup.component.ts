@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Country } from 'src/app/core/interfaces/content';
 import { AuthModalService } from '../../core/services/auth-modal.service';
@@ -25,6 +25,12 @@ type SignupErrorField = 'name' | 'country' | 'dob' | 'mobile' | 'email' | 'passw
 interface FieldValidation {
   state: FieldState;
   message: string;
+}
+
+declare global {
+  interface Window {
+    rdt?: (command: string, event: string, properties?: { conversionId: string }) => void;
+  }
 }
 
 const DEFAULT_MOBILE_LENGTH: MobileLengthRule = { min: 7, max: 14 };
@@ -183,6 +189,8 @@ function strictPasswordValidator(control: AbstractControl): ValidationErrors | n
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnDestroy {
+
+  @Input() trackRedditSignupConversion = false;
 
   step = 1;
   showPassword = false;
@@ -814,12 +822,25 @@ verifyEmail() {
       this.loading = false;
       this.successMessage = res?.message || 'Email verified successfully';
       this.step = 3;
+      this.trackRedditSignup();
     },
     error: (err) => {
       this.loading = false;
       this.handleOtpVerifyError(err, 'email');
     }
   });
+}
+
+private trackRedditSignup(): void {
+  if (!this.trackRedditSignupConversion || typeof window.rdt !== 'function') {
+    return;
+  }
+
+  const conversionId = typeof window.crypto?.randomUUID === 'function'
+    ? window.crypto.randomUUID()
+    : `signup-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  window.rdt('track', 'SignUp', { conversionId });
 }
 
 resendOtp(type: 'mobile' | 'email') {

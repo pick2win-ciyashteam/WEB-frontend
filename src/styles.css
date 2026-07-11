@@ -162,6 +162,13 @@ img, svg {
 .auth-panel-wrap .resend-line { color: #444 !important; }
 .auth-panel-wrap .verify-icon { color: #f15a19 !important; background: #fff1e9 !important; }
 .auth-panel-wrap .next-list { color: #222 !important; border-color: #eee !important; background: #fafafa !important; }
+.auth-panel-wrap .next-list .lbl { color: #526174 !important; }
+.auth-panel-wrap .next-list li { color: #364152 !important; }
+.auth-panel-wrap .next-list li.done,
+.auth-panel-wrap .next-list li.done b { color: #c51f3a !important; }
+.auth-panel-wrap .next-list li span:last-child { color: #64748b !important; }
+.auth-panel-wrap .next-list li:not(.done) .ind { color: #3f5f79 !important; }
+.auth-panel-wrap .next-list li.done .ind { color: #c51f3a !important; }
 
 @media (min-width: 901px) {
   .signup-panel-wrap { width: min(100%, 720px); padding: 34px 42px; }

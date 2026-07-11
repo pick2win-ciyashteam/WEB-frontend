@@ -160,11 +160,12 @@ paymentMethodsOpen = false;
   try {
     await this.loadRazorpayScript();
 
-    const amount = Math.round(Number(plan.price || 0) * 100);
+    const planAmount = Number(plan.price || 0);
+    const checkoutFallbackAmount = Math.round(planAmount * 100);
     const currency = this.displayCurrencyCodeForPlan();
     const res = await firstValueFrom(this.api.buyCoins({
       plan_id: plan.id,
-      amount,
+      amount: planAmount,
       coins: this.totalCoinsForPlan(plan)
     }));
 
@@ -181,7 +182,7 @@ paymentMethodsOpen = false;
     }
 
     const key = this.razorpayKeyFrom(res);
-    const order = this.razorpayOrderFrom(res, amount, currency);
+    const order = this.razorpayOrderFrom(res, checkoutFallbackAmount, currency);
 
     if (!key) {
       this.paymentError = res?.message || 'Payment started, but backend did not return Razorpay key.';

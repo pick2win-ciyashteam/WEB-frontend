@@ -48,7 +48,7 @@
     <article class="banner tone-uct" [class.active]="currentBanner === 0">
       <div>
         <div class="banner-eyebrow">WHAT IS PICK2WIN</div>
-        <h3 class="banner-h">Football virtual team <em>configuration tool.</em></h3>
+        <h3 class="banner-h">Football team <em>configuration tool.</em></h3>
         <p class="banner-body">A structured workflow tool that takes your configuration inputs and produces <b>20 structured football teams per match</b> in a few seconds, once official lineups release.</p>
         <a routerLink="/uctguide" class="banner-cta">What is UCT -&gt;</a>
       </div>
@@ -127,21 +127,7 @@
       </div>
     </article>
 
-    <!-- <article class="banner tone-free" [class.active]="currentBanner === 4">
-      <div>
-        <div class="banner-eyebrow">FIFA WC 2026 - LAUNCH OFFER</div>
-        <h3 class="banner-h">30% off every <em>coin pack.</em></h3>
-        <p class="banner-body">Limited-period launch pricing across Starter, Basic, Standard and Pro. <b>1 coin = 1 match</b>, any supported league or series.</p>
-        <a routerLink="/pricing" class="banner-cta">See offer -&gt;</a>
-      </div>
-      <div class="banner-visual">
-        <div class="p3d-icon p3d-gift" aria-hidden="true">
-          <span></span><i></i><b></b>
-        </div>
-      </div>
-    </article> -->
-
-    <article class="banner tone-skill" [class.active]="currentBanner === 5">
+    <article class="banner tone-skill" [class.active]="currentBanner === 4">
       <div>
         <div class="banner-eyebrow">TRUST - TRANSPARENT POSITIONING</div>
         <h3 class="banner-h">India-incorporated. <em>Transparently positioned.</em></h3>
@@ -161,8 +147,7 @@
     <button type="button" [class.active]="currentBanner === 1" aria-label="Four-step workflow" (click)="showBanner(1)"></button>
     <button type="button" [class.active]="currentBanner === 2" aria-label="Coverage" (click)="showBanner(2)"></button>
     <button type="button" [class.active]="currentBanner === 3" aria-label="Pricing" (click)="showBanner(3)"></button>
-    <!-- <button type="button" [class.active]="currentBanner === 4" aria-label="Launch offer" (click)="showBanner(4)"></button> -->
-    <button type="button" [class.active]="currentBanner === 5" aria-label="Trust" (click)="showBanner(5)"></button>
+    <button type="button" [class.active]="currentBanner === 4" aria-label="Trust" (click)="showBanner(4)"></button>
   </div>
 </section>
 
@@ -249,7 +234,7 @@
         <span>Get Started</span>
         <span class="home-hero-arrow">→</span>
       </a>
-      <div class="home-hero-mark" aria-hidden="true">⚙️</div>
+      <!-- <div class="home-hero-mark" aria-hidden="true">⚙️</div> -->
     </div>
 
     <!-- 5 supporting cards · stacked vertically as full-width banners -->
@@ -498,5 +483,4 @@
 </section>
 
 <app-footer></app-footer>
-
 

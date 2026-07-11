@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private launchSplashStorageKey = 'pick2win_launch_splash_seen';
   private launchingBannerStorageKey = 'pick2win_launching_banner_july_2026_seen';
   private launchingBannerEndsAt = new Date('2026-07-11T23:11:11+05:30').getTime();
-  private staticHomeBannerCount = 6;
+  private staticHomeBannerCount = 5;
 
   constructor(
     private authModal: AuthModalService,

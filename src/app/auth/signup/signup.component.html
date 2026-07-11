@@ -75,7 +75,7 @@
         <label>Mobile number <span>*</span></label>
         <div class="phone-row">
           <div class="dial-code-fixed">
-            <img *ngIf="selectedCountryFlagImage; else countryFlagEmoji" class="dial-flag-image" [src]="selectedCountryFlagImage" [alt]="selectedCountry?.name + ' flag'">
+            <!-- <img *ngIf="selectedCountryFlagImage; else countryFlagEmoji" class="dial-flag-image" [src]="selectedCountryFlagImage" [alt]="selectedCountry?.name + ' flag'"> -->
             <ng-template #countryFlagEmoji>
               <span *ngIf="selectedCountryFlag" class="dial-flag">{{ selectedCountryFlag }}</span>
             </ng-template>
