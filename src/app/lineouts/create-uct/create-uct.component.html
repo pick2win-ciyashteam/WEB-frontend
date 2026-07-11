@@ -589,7 +589,10 @@
                   </div>
                 </div>
 
-                <div class="preview-squad-pool-title substitutes"><b>Substitute Players</b></div>
+                <div class="preview-squad-pool-title substitutes">
+                  <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
+                  <b>Substitute Players</b>
+                </div>
                 <div class="preview-player-grid preview-team-player-grid preview-substitutes-grid">
                   <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of side.substitutes; trackBy: trackPlayer">
                     <span class="avatar image-avatar"><img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'"></span>

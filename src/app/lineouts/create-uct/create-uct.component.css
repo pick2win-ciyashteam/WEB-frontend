@@ -6973,8 +6973,28 @@ h1 em,
 
 .preview-squad-pool-title.substitutes {
   margin-top: 18px;
-  padding: 12px 0 0;
-  border-top: 1px solid rgba(148, 163, 184, .18);
+  padding: 10px 12px;
+  border: 1px solid rgba(56, 189, 248, .22);
+  border-radius: 9px;
+  background: linear-gradient(90deg, rgba(14, 116, 144, .18), rgba(14, 116, 144, .05));
+}
+
+.preview-squad-pool-title.substitutes .material-symbols-outlined {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  color: #7dd3fc;
+  background: rgba(56, 189, 248, .14);
+  font-size: 17px;
+}
+
+.preview-squad-pool-title.substitutes b {
+  color: #eef8ff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .025em;
 }
 
 @media (max-width: 720px) {
