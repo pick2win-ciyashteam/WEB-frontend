@@ -536,7 +536,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   }
 
   purchasedCoins(profile: UserProfile | null): number {
-    return Math.max(0, this.totalCoins(profile) - 1);
+    return Math.max(0, this.totalCoins(profile));
   }
 
   coinUsagePercent(profile: UserProfile | null): number {

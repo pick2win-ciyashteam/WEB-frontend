@@ -562,43 +562,45 @@
             <div class="salary-preview-total">
               <b>{{ availablePool.length }}/22</b>
             </div>
-            <div class="preview-player-grid">
-              <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of selectedStartingPlayers; trackBy: trackPlayer">
-                <span class="avatar image-avatar">
-                  <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
-                </span>
-                <span class="preview-player-info">
-                  <b>{{ player.player_name }}</b>
-                  <small class="preview-player-meta">
-                    <span>{{ player.teamShort }}</span>
-                    <i class="pos {{ positionClass(player) }}">{{ player.position }}</i>
-                  </small>
-                  <em class="preview-salary-inline" *ngIf="requiresSalary">{{ salaryValue(player) }}</em>
-                </span>
-                <em class="preview-salary-badge" *ngIf="requiresSalary; else xiBadge">{{ salaryValue(player) }}</em>
-                <ng-template #xiBadge><em>XI</em></ng-template>
-              </div>
-            </div>
-            <div class="preview-substitute-section" *ngIf="selectedSubstitutes.length">
-              <div class="preview-substitute-title">
-                <span class="material-symbols-outlined" aria-hidden="true">swap_horiz</span>
-                <b>Substitute Players</b>
-              </div>
-              <div class="preview-player-grid">
-                <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of selectedSubstitutes; trackBy: trackPlayer">
-                  <span class="avatar image-avatar">
-                    <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
-                  </span>
-                  <span class="preview-player-info">
-                    <b>{{ player.player_name }}</b>
-                    <small class="preview-player-meta">
-                      <span>{{ player.teamShort }}</span>
-                      <i class="pos {{ positionClass(player) }}">{{ player.position }}</i>
-                    </small>
-                    <em class="preview-salary-inline" *ngIf="requiresSalary">{{ salaryValue(player) }}</em>
-                  </span>
-                  <em class="preview-salary-badge" *ngIf="requiresSalary; else subBadge">{{ salaryValue(player) }}</em>
-                  <ng-template #subBadge><em>SUB</em></ng-template>
+            <div class="preview-squad-sides">
+              <div
+                class="preview-squad-team"
+                [class.away-side]="side.cls === 'away'"
+                *ngFor="let side of [
+                  { name: d.home_team.name, shortName: d.home_team.short_name, starters: selectedHomeStartingPlayers, substitutes: selectedHomeSubstitutes, cls: 'home' },
+                  { name: d.away_team.name, shortName: d.away_team.short_name, starters: selectedAwayStartingPlayers, substitutes: selectedAwaySubstitutes, cls: 'away' }
+                ]">
+                <div class="preview-squad-team-title" [class.away]="side.cls === 'away'">
+                  <span class="team-color" [ngClass]="side.cls"></span>
+                  <b>{{ side.name }}</b>
+                  <small>{{ side.shortName }}</small>
+                </div>
+
+                <div class="preview-player-grid preview-team-player-grid preview-starting-grid">
+                  <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of side.starters; trackBy: trackPlayer">
+                    <span class="avatar image-avatar"><img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'"></span>
+                    <span class="preview-player-info">
+                      <b>{{ player.player_name }}</b>
+                      <small class="preview-player-meta"><span>{{ player.teamShort }}</span><i class="pos {{ positionClass(player) }}">{{ player.position }}</i></small>
+                      <em class="preview-salary-inline" *ngIf="requiresSalary">{{ salaryValue(player) }}</em>
+                    </span>
+                    <em class="preview-salary-badge" *ngIf="requiresSalary; else xiBadge">{{ salaryValue(player) }}</em>
+                    <ng-template #xiBadge><em>XI</em></ng-template>
+                  </div>
+                </div>
+
+                <div class="preview-squad-pool-title substitutes"><b>Substitute Players</b></div>
+                <div class="preview-player-grid preview-team-player-grid preview-substitutes-grid">
+                  <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of side.substitutes; trackBy: trackPlayer">
+                    <span class="avatar image-avatar"><img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'"></span>
+                    <span class="preview-player-info">
+                      <b>{{ player.player_name }}</b>
+                      <small class="preview-player-meta"><span>{{ player.teamShort }}</span><i class="pos {{ positionClass(player) }}">{{ player.position }}</i></small>
+                      <em class="preview-salary-inline" *ngIf="requiresSalary">{{ salaryValue(player) }}</em>
+                    </span>
+                    <em class="preview-salary-badge" *ngIf="requiresSalary; else subBadge">{{ salaryValue(player) }}</em>
+                    <ng-template #subBadge><em>SUB</em></ng-template>
+                  </div>
                 </div>
               </div>
             </div>

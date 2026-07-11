@@ -235,6 +235,34 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return this.sortPlayersByPosition(this.startingPlayers.filter(player => this.selectedStartingIds.has(player.id)));
   }
 
+  get selectedHomeSquadPlayers(): UctPlayer[] {
+    return this.sortPlayersByPosition(this.availablePool.filter(player => player.teamSide === 'home'));
+  }
+
+  get selectedAwaySquadPlayers(): UctPlayer[] {
+    return this.sortPlayersByPosition(this.availablePool.filter(player => player.teamSide === 'away'));
+  }
+
+  get selectedHomeStartingPlayers(): UctPlayer[] {
+    return this.selectedStartingPlayers.filter(player => player.teamSide === 'home');
+  }
+
+  get selectedAwayStartingPlayers(): UctPlayer[] {
+    return this.selectedStartingPlayers.filter(player => player.teamSide === 'away');
+  }
+
+  get selectedHomeSubstitutes(): UctPlayer[] {
+    return this.selectedSubstitutes.filter(player => player.teamSide === 'home');
+  }
+
+  get selectedAwaySubstitutes(): UctPlayer[] {
+    return this.selectedSubstitutes.filter(player => player.teamSide === 'away');
+  }
+
+  isSquadSubstitute(player: UctPlayer): boolean {
+    return Number(player.is_substitute) === 1 && Number(player.is_playing) !== 1;
+  }
+
   get mandateSubstitutes(): UctPlayer[] {
     return this.selectedSubstitutes.filter(player => !this.isGoalkeeper(player));
   }

@@ -6896,6 +6896,102 @@ h1 em,
   gap: 8px 10px !important;
 }
 
+.preview-squad-sides {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto auto auto;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.preview-squad-team {
+  display: contents;
+}
+
+.preview-squad-team-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(56, 189, 248, .28);
+  border-radius: 10px;
+  color: #eaf6ff;
+  background: rgba(14, 116, 144, .12);
+}
+
+.preview-squad-team:not(.away-side) .preview-squad-team-title,
+.preview-squad-team:not(.away-side) .preview-starting-grid,
+.preview-squad-team:not(.away-side) .preview-squad-pool-title,
+.preview-squad-team:not(.away-side) .preview-substitutes-grid {
+  grid-column: 1;
+}
+
+.preview-squad-team.away-side .preview-squad-team-title,
+.preview-squad-team.away-side .preview-starting-grid,
+.preview-squad-team.away-side .preview-squad-pool-title,
+.preview-squad-team.away-side .preview-substitutes-grid {
+  grid-column: 2;
+}
+
+.preview-squad-team-title { grid-row: 1; }
+.preview-starting-grid { grid-row: 2; }
+.preview-squad-pool-title { grid-row: 3; }
+.preview-substitutes-grid { grid-row: 4; }
+
+.preview-squad-team-title.away {
+  border-color: rgba(251, 191, 36, .28);
+  background: rgba(180, 83, 9, .12);
+}
+
+.preview-squad-team-title b {
+  font-size: 13px;
+}
+
+.preview-squad-team-title small {
+  margin-left: auto;
+  color: #9fb4c8;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.preview-team-player-grid {
+  grid-template-columns: 1fr !important;
+  align-self: start;
+  align-content: start;
+  height: fit-content;
+}
+
+.preview-squad-pool-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 14px 8px;
+  color: #d9e8f5;
+  font-size: 11px;
+}
+
+.preview-squad-pool-title.substitutes {
+  margin-top: 18px;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(148, 163, 184, .18);
+}
+
+@media (max-width: 720px) {
+  .preview-squad-sides {
+    grid-template-columns: 1fr;
+    display: block;
+  }
+
+  .preview-squad-team {
+    display: block;
+  }
+
+  .preview-squad-team-title {
+    margin-bottom: 10px;
+  }
+}
+
 .preview-title-counts {
   display: inline-flex !important;
   align-items: center !important;
