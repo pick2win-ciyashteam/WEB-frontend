@@ -6974,9 +6974,14 @@ h1 em,
 .preview-squad-pool-title.substitutes {
   margin-top: 18px;
   padding: 10px 12px;
-  border: 1px solid rgba(56, 189, 248, .22);
+  border: 1px solid rgba(56, 189, 248, .72);
   border-radius: 9px;
-  background: linear-gradient(90deg, rgba(14, 116, 144, .18), rgba(14, 116, 144, .05));
+  background:
+    linear-gradient(90deg, rgba(2, 132, 199, .58), rgba(3, 105, 161, .30)),
+    #06263d;
+  box-shadow:
+    inset 0 1px 0 rgba(186, 230, 253, .16),
+    0 0 18px rgba(14, 165, 233, .16);
 }
 
 .preview-squad-pool-title.substitutes .material-symbols-outlined {
@@ -6985,16 +6990,18 @@ h1 em,
   width: 26px;
   height: 26px;
   border-radius: 7px;
-  color: #7dd3fc;
-  background: rgba(56, 189, 248, .14);
+  color: #ffffff;
+  background: #0284c7;
+  box-shadow: 0 0 12px rgba(56, 189, 248, .34);
   font-size: 17px;
 }
 
 .preview-squad-pool-title.substitutes b {
-  color: #eef8ff;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: .025em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .35);
 }
 
 @media (max-width: 720px) {
