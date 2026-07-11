@@ -329,13 +329,18 @@
 
         <label class="edit-field">
           <span>New mobile number</span>
-          <input
-            type="tel"
-            inputmode="numeric"
-            [value]="editMobile"
-            [disabled]="mobileChanging"
-            placeholder="9876543200"
-            (input)="editMobile = $any($event.target).value">
+          <div class="edit-phone-input">
+            <span class="edit-dial-code" aria-label="Country dial code">{{ editDialCode || '—' }} <small *ngIf="editCountryCode">{{ editCountryCode }}</small></span>
+            <input
+              type="tel"
+              inputmode="numeric"
+              maxlength="15"
+              [value]="editMobile"
+              [disabled]="mobileChanging"
+              placeholder="Mobile number"
+              (input)="editMobile = $any($event.target).value.slice(0, 15)">
+          </div>
+          <small class="edit-mobile-hint">Country code is fixed. Enter only your mobile number.</small>
         </label>
 
         <button class="edit-action-btn" type="button" [disabled]="mobileChanging" (click)="requestMobileChange()">
@@ -368,39 +373,69 @@
           <span class="material-symbols-outlined" aria-hidden="true">mail</span>
           <div>
             <h3>Change Email</h3>
-            <p>Enter new email, request OTP, then verify.</p>
+            <p>Verify your current email before adding a new email address.</p>
           </div>
         </div>
 
-        <label class="edit-field">
-          <span>New email address</span>
-          <input
-            type="email"
-            [value]="editEmail"
-            [disabled]="emailChanging"
-            placeholder="name@example.com"
-            (input)="editEmail = $any($event.target).value">
-        </label>
+        <div class="email-change-progress" aria-label="Email change progress">
+          <span [class.active]="emailChangeStep === 'current' || emailChangeStep === 'currentOtp'" [class.done]="emailChangeStep !== 'current' && emailChangeStep !== 'currentOtp'">1 <b>Current</b></span>
+          <i></i>
+          <span [class.active]="emailChangeStep === 'newEmail'" [class.done]="emailChangeStep === 'newOtp' || emailChangeStep === 'success'">2 <b>New email</b></span>
+          <i></i>
+          <span [class.active]="emailChangeStep === 'newOtp'" [class.done]="emailChangeStep === 'success'">3 <b>Verify</b></span>
+        </div>
 
-        <button class="edit-action-btn" type="button" [disabled]="emailChanging" (click)="requestEmailChange()">
-          {{ emailChanging && !emailOtpSent ? 'Sending OTP...' : 'Send Email OTP' }}
-        </button>
-
-        <div class="otp-box" *ngIf="emailOtpSent">
+        <ng-container *ngIf="emailChangeStep === 'current' || emailChangeStep === 'currentOtp'">
           <label class="edit-field">
-            <span>Email OTP</span>
+            <span>Current email address</span>
+            <input type="email" [value]="currentEmail" disabled>
+          </label>
+
+          <button *ngIf="emailChangeStep === 'current'" class="edit-action-btn" type="button" [disabled]="emailChanging" (click)="requestCurrentEmailOtp()">
+            {{ emailChanging ? 'Sending OTP...' : 'Send Email OTP' }}
+          </button>
+
+          <div class="otp-box" *ngIf="emailChangeStep === 'currentOtp'">
+            <label class="edit-field">
+              <span>OTP sent to current email</span>
+              <input type="text" inputmode="numeric" maxlength="6" [value]="currentEmailOtp" [disabled]="emailChanging" placeholder="Enter 6-digit OTP" (input)="currentEmailOtp = $any($event.target).value.slice(0, 6)">
+            </label>
+            <button class="edit-action-btn verify" type="button" [disabled]="emailChanging || currentEmailOtp.length !== 6" (click)="verifyCurrentEmailOtp()">
+              {{ emailChanging ? 'Verifying...' : 'Verify Current Email' }}
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="emailChangeStep === 'newEmail'">
+          <label class="edit-field">
+            <span>New email address</span>
+            <input type="email" [value]="editEmail" [disabled]="emailChanging" placeholder="name@example.com" (input)="editEmail = $any($event.target).value.trim()">
+          </label>
+          <button class="edit-action-btn" type="button" [disabled]="emailChanging || !editEmail" (click)="requestEmailChange()">
+            {{ emailChanging ? 'Sending OTP...' : 'Send OTP to New Email' }}
+          </button>
+        </ng-container>
+
+        <div class="otp-box" *ngIf="emailChangeStep === 'newOtp'">
+          <label class="edit-field">
+            <span>OTP sent to {{ editEmail }}</span>
             <input
               type="text"
               inputmode="numeric"
-              maxlength="8"
+              maxlength="6"
               [value]="emailOtp"
               [disabled]="emailChanging"
-              placeholder="Enter OTP"
-              (input)="emailOtp = $any($event.target).value">
+              placeholder="Enter 6-digit OTP"
+              (input)="emailOtp = $any($event.target).value.slice(0, 6)">
           </label>
-          <button class="edit-action-btn verify" type="button" [disabled]="emailChanging" (click)="verifyEmailOtp()">
-            {{ emailChanging ? 'Verifying...' : 'Verify Email' }}
+          <button class="edit-action-btn verify" type="button" [disabled]="emailChanging || emailOtp.length !== 6" (click)="verifyEmailOtp()">
+            {{ emailChanging ? 'Updating...' : 'Verify & Update Email' }}
           </button>
+        </div>
+
+        <div class="email-change-complete" *ngIf="emailChangeStep === 'success'">
+          <span class="material-symbols-outlined" aria-hidden="true">mark_email_read</span>
+          <div><b>Email updated successfully</b><p>{{ currentEmail }}</p></div>
         </div>
 
         <div class="edit-message success" *ngIf="emailMessage">{{ emailMessage }}</div>

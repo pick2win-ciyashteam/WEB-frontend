@@ -315,7 +315,7 @@ paymentMethodsOpen = false;
       perCoin: perCoin.toFixed(2),
       currencySymbol: this.currencySymbolForCode(currencyCode, '$'),
       currencyCode,
-      tone: this.packTone(index)
+      tone: this.isProPack(plan) ? 'pk-gold' : this.packTone(index)
     };
   }
 

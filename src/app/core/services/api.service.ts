@@ -84,6 +84,14 @@ export class ApiService {
     return this.http.post(`${this.BASE}/user/user-auth/change-email`, data);
   }
 
+  requestCurrentEmailChangeOtp(): Observable<any> {
+    return this.http.post(`${this.BASE}/user/user-auth/request-email-change-otp`, {});
+  }
+
+  verifyCurrentEmailChangeOtp(data: { otp: string }): Observable<any> {
+    return this.http.post(`${this.BASE}/user/user-auth/verify-current-email-otp`, data);
+  }
+
   verifyEmailChange(data: { type: 'email'; otp: string }): Observable<any> {
     return this.http.post(`${this.BASE}/user/user-auth/verify-email-change`, data);
   }

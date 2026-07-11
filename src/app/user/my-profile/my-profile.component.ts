@@ -18,11 +18,16 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   error$ = this.profileService.error$;
   editModalOpen = false;
   editMobile = '';
+  editDialCode = '';
+  editCountryCode = '';
   editEmail = '';
+  currentEmail = '';
+  currentEmailOtp = '';
   mobileOtp = '';
   emailOtp = '';
   mobileOtpSent = false;
   emailOtpSent = false;
+  emailChangeStep: 'current' | 'currentOtp' | 'newEmail' | 'newOtp' | 'success' = 'current';
   mobileChanging = false;
   emailChanging = false;
   mobileMessage = '';
@@ -243,12 +248,18 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
   openEditModal(profile: UserProfile): void {
     this.editModalOpen = true;
-    this.editMobile = profile.mobile || '';
-    this.editEmail = profile.email || '';
+    this.editMobile = String(profile.mobile || '').replace(/\D/g, '');
+    this.editDialCode = '';
+    this.editCountryCode = '';
+    this.loadEditMobileCountry(profile);
+    this.currentEmail = profile.email || '';
+    this.editEmail = '';
+    this.currentEmailOtp = '';
     this.mobileOtp = '';
     this.emailOtp = '';
     this.mobileOtpSent = false;
     this.emailOtpSent = false;
+    this.emailChangeStep = 'current';
     this.mobileMessage = '';
     this.emailMessage = '';
     this.mobileError = '';
@@ -264,11 +275,13 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   }
 
   requestMobileChange(): void {
-    const newMobile = this.editMobile.trim();
+    const localMobile = this.editMobile.replace(/\D/g, '');
+    const dialCode = this.editDialCode.replace(/\D/g, '');
+    const newMobile = `${dialCode}${localMobile}`;
     this.mobileMessage = '';
     this.mobileError = '';
 
-    if (!/^[0-9]{7,15}$/.test(newMobile)) {
+    if (!/^[0-9]{7,15}$/.test(localMobile)) {
       this.mobileError = 'Enter a valid mobile number.';
       return;
     }
@@ -290,6 +303,30 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         console.error('change mobile error:', err);
         this.mobileChanging = false;
         this.mobileError = err?.error?.message || err?.error?.error || 'Unable to send mobile OTP.';
+      }
+    });
+  }
+
+  private loadEditMobileCountry(profile: UserProfile): void {
+    if (!profile.country) {
+      return;
+    }
+
+    this.api.getCountryByName(profile.country).subscribe({
+      next: (res) => {
+        const country = res?.data;
+        this.editDialCode = String(country?.dial_code || '');
+        this.editCountryCode = String(country?.code || '').toUpperCase();
+
+        const dialDigits = this.editDialCode.replace(/\D/g, '');
+        const storedDigits = String(profile.mobile || '').replace(/\D/g, '');
+        if (dialDigits && storedDigits.startsWith(dialDigits)) {
+          this.editMobile = storedDigits.slice(dialDigits.length);
+        }
+      },
+      error: () => {
+        this.editDialCode = '';
+        this.editCountryCode = '';
       }
     });
   }
@@ -328,6 +365,56 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     });
   }
 
+  requestCurrentEmailOtp(): void {
+    this.emailMessage = '';
+    this.emailError = '';
+    this.emailChanging = true;
+
+    this.api.requestCurrentEmailChangeOtp().subscribe({
+      next: (res) => {
+        this.emailChanging = false;
+        if (res?.success === false) {
+          this.emailError = res?.message || 'Unable to send OTP to your current email.';
+          return;
+        }
+        this.emailChangeStep = 'currentOtp';
+        this.emailMessage = res?.message || `A 6-digit OTP was sent to ${this.currentEmail}.`;
+      },
+      error: (err) => {
+        this.emailChanging = false;
+        this.emailError = err?.error?.message || err?.error?.error || 'Unable to send OTP to your current email.';
+      }
+    });
+  }
+
+  verifyCurrentEmailOtp(): void {
+    const otp = this.currentEmailOtp.trim();
+    this.emailMessage = '';
+    this.emailError = '';
+
+    if (!/^[0-9]{6}$/.test(otp)) {
+      this.emailError = 'Enter the 6-digit OTP sent to your current email.';
+      return;
+    }
+
+    this.emailChanging = true;
+    this.api.verifyCurrentEmailChangeOtp({ otp }).subscribe({
+      next: (res) => {
+        this.emailChanging = false;
+        if (res?.success === false) {
+          this.emailError = res?.message || 'Current email OTP verification failed.';
+          return;
+        }
+        this.emailChangeStep = 'newEmail';
+        this.emailMessage = res?.message || 'Current email verified. Enter your new email address.';
+      },
+      error: (err) => {
+        this.emailChanging = false;
+        this.emailError = err?.error?.message || err?.error?.error || 'Current email OTP verification failed.';
+      }
+    });
+  }
+
   requestEmailChange(): void {
     const newEmail = this.editEmail.trim();
     this.emailMessage = '';
@@ -350,6 +437,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         }
 
         this.emailOtpSent = true;
+        this.emailChangeStep = 'newOtp';
         this.emailMessage = res?.message || 'OTP sent to the new email address.';
       },
       error: (err) => {
@@ -365,8 +453,8 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     this.emailMessage = '';
     this.emailError = '';
 
-    if (!/^[0-9]{4,8}$/.test(otp)) {
-      this.emailError = 'Enter the OTP sent to your email.';
+    if (!/^[0-9]{6}$/.test(otp)) {
+      this.emailError = 'Enter the 6-digit OTP sent to your new email.';
       return;
     }
 
@@ -382,8 +470,10 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         }
 
         this.emailMessage = res?.message || 'Email address updated successfully.';
+        this.currentEmail = this.editEmail;
         this.emailOtpSent = false;
         this.emailOtp = '';
+        this.emailChangeStep = 'success';
         this.profileService.loadProfile(true).subscribe();
       },
       error: (err) => {

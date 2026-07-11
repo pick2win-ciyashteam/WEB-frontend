@@ -1,187 +1,850 @@
 <app-header></app-header>
 
-<section class="panel faq-page" id="faq">
+<div class="topbar">
+  <!-- <div class="wrap topbar-inner">
+    <a class="brand" href="#top" (click)="scrollToSection($event, 'top')">
+      <svg class="coin" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><radialGradient id="cg" cx="38%" cy="30%" r="78%"><stop offset="0%" stop-color="#FFE9A8"/><stop offset="48%" stop-color="#F4B400"/><stop offset="100%" stop-color="#C8860A"/></radialGradient></defs><circle cx="12" cy="12" r="11" fill="url(#cg)" stroke="#8A5A06" stroke-width="1.2"/><text x="12" y="15.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="800" fill="#5A3A05">P2W</text></svg>
+      PICK2WIN <span class="tag">FAQ</span>
+    </a>
+    <a class="home-link" routerLink="/">← Back to site</a>
+  </div> -->
+</div>
+
+<div class="wrap" id="top">
+  <section class="hero">
+    <div class="hero-eyebrow">Help Center</div>
+    <h1>Frequently Asked <em>Questions</em></h1>
+    <p>Everything about PICK2WIN — the independent football lineup configuration platform that turns <b>your</b> selections into up to 20 structured teams for DraftKings and FanDuel Classic DFS.</p>
+    <div class="hero-strip"><span class="dot"></span>You make the football decisions. <b>&nbsp;PICK2WIN provides the structure.</b></div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="faqSearch" type="text" (input)="filterFaqs($event)" placeholder="Search 50 questions — coins, kickoff, Mandate YES…" aria-label="Search FAQs">
+    </div>
+    <div class="search-meta" id="searchMeta"></div>
+  </section>
+</div>
+
+<nav class="secnav" aria-label="FAQ sections">
+  <div class="wrap"><div class="secnav-scroll"><a class="secnav-link" href="#sec-1" data-sec="1" (click)="scrollToSection($event, 'sec-1')"><span class="secnav-num">01</span>About</a><a class="secnav-link" href="#sec-2" data-sec="2" (click)="scrollToSection($event, 'sec-2')"><span class="secnav-num">02</span>Who it's for</a><a class="secnav-link" href="#sec-3" data-sec="3" (click)="scrollToSection($event, 'sec-3')"><span class="secnav-num">03</span>How it works</a><a class="secnav-link" href="#sec-4" data-sec="4" (click)="scrollToSection($event, 'sec-4')"><span class="secnav-num">04</span>After generation</a><a class="secnav-link" href="#sec-5" data-sec="5" (click)="scrollToSection($event, 'sec-5')"><span class="secnav-num">05</span>Coins & pricing</a><a class="secnav-link" href="#sec-6" data-sec="6" (click)="scrollToSection($event, 'sec-6')"><span class="secnav-num">06</span>Policies</a><a class="secnav-link" href="#sec-7" data-sec="7" (click)="scrollToSection($event, 'sec-7')"><span class="secnav-num">07</span>Data & future</a></div></div>
+</nav>
+
+<main>
   <div class="wrap">
-    <div class="section-head reveal">
-      <h2 class="h-display h2 section-title">
-        <span class="head-ic" aria-hidden="true">?</span>
-        Frequently asked <span class="italic-accent">questions</span>
-      </h2>
-    </div>
+    
+    <section class="faq-section" id="sec-1">
+      <header class="sec-head">
+        <span class="sec-eyebrow"><span class="sec-eyebrow-num">Section 1</span></span>
+        <h2 class="sec-title">ABOUT PICK2WIN</h2>
+      </header>
+      <div class="faq-list">
+        <details class="faq-item" data-q="what is pick2win?">
+          <summary class="faq-q">
+            <span class="faq-qnum">01</span>
+            <span class="faq-qtext">What is PICK2WIN?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN is a <strong>football lineup configuration platform</strong> that helps users generate up to <strong>20 structured football teams</strong> from their own player selections for supported fantasy platforms.</p>
+            <p>Currently, PICK2WIN supports lineup configuration for:</p>
+            <ul><li><strong>DraftKings Classic DFS</strong></li><li><strong>FanDuel Classic DFS</strong></li></ul>
+            <p>Every generated team is built entirely from <strong>your own selections</strong>. You choose the players, eligible substitutes, and Mandate YES selections, while PICK2WIN organizes those inputs into structured football lineups within seconds.</p>
+            <p>PICK2WIN does <strong>not</strong>:</p>
+            <ul><li>Recommend players.</li><li>Predict player performance.</li><li>Predict match outcomes.</li><li>Guarantee winnings or success.</li><li>Automatically submit teams to any fantasy platform.</li></ul>
+            <p>Our objective is simple:</p>
+            <ul><li><strong>Save Time</strong></li><li><strong>Provide Good Coverage</strong></li><li><strong>Keep Costs Low</strong></li><li><strong>Support Skill-Oriented Decisions</strong></li></ul>
+            <p>PICK2WIN is designed to assist your lineup configuration workflow while ensuring that <strong>every important football decision always remains yours.</strong></p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="why should i use pick2win?">
+          <summary class="faq-q">
+            <span class="faq-qnum">02</span>
+            <span class="faq-qtext">Why should I use PICK2WIN?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Building multiple football lineups manually takes time and often becomes repetitive, especially when creating several teams for the same match.</p>
+            <p>PICK2WIN helps simplify that process by generating up to <strong>20 structured football teams</strong> from your own selections in just a few seconds.</p>
+            <p>PICK2WIN is built around four core principles:</p>
+            <p class="ans-check">✅ Save Time</p>
+            <p>Instead of manually creating team after team, generate up to 20 structured lineups quickly using your own player selections.</p>
+            <p class="ans-check">✅ Good Coverage</p>
+            <p>Generate multiple balanced lineup combinations from the same player pool, helping you achieve broader lineup coverage while following the selected platform's roster and salary cap rules.</p>
+            <p class="ans-check">✅ Low Cost</p>
+            <p>Our pricing is designed to remain simple, transparent, and affordable. One Coin generates one complete UCT, producing up to 20 structured teams.</p>
+            <p class="ans-check">✅ Skill-Oriented Decisions</p>
+            <p>PICK2WIN never replaces your football knowledge.</p>
+            <p>You decide:</p>
+            <ul><li>Which players to select.</li><li>Which eligible substitutes to include.</li><li>Which players receive Mandate YES.</li><li>Whether to use the generated teams as they are or make your own changes afterwards.</li></ul>
+            <p>Every important football decision belongs to you.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="how is pick2win different from other lineup tools or platforms?">
+          <summary class="faq-q">
+            <span class="faq-qnum">03</span>
+            <span class="faq-qtext">How is PICK2WIN different from other lineup tools or platforms?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN is designed to <strong>assist your lineup creation workflow</strong>, not replace your decision-making.</p>
+            <p>Unlike products that focus on projections, recommendations, or automated decision-making, PICK2WIN is entirely <strong>user-driven</strong>.</p>
+            <p>PICK2WIN helps you:</p>
+            <ul><li>Save significant lineup creation time.</li><li>Generate up to 20 structured football teams.</li><li>Achieve broader lineup coverage.</li><li>Follow DraftKings Classic DFS and FanDuel Classic DFS roster and salary cap requirements.</li><li>Keep complete control over every football decision.</li></ul>
+            <p>PICK2WIN does <strong>not</strong>:</p>
+            <ul><li>Recommend players.</li><li>Predict player performance.</li><li>Predict match results.</li><li>Choose lineups for you.</li><li>Automatically enter contests.</li><li>Guarantee winnings or better outcomes.</li></ul>
+            <p>PICK2WIN provides the structure—you provide the football knowledge.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="who makes the football decisions in pick2win?">
+          <summary class="faq-q">
+            <span class="faq-qnum">04</span>
+            <span class="faq-qtext">Who makes the football decisions in PICK2WIN?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">You do. Always.</p>
+            <p>Every football decision inside PICK2WIN is made by the user.</p>
+            <p>You decide:</p>
+            <ul><li>Which fantasy platform to configure for.</li><li>Which players to select.</li><li>Which eligible substitute players to include.</li><li>Which players receive Mandate YES.</li><li>Whether to use the generated teams exactly as produced.</li><li>Whether to modify the generated teams afterwards.</li></ul>
+            <p>PICK2WIN simply converts <strong>your own decisions</strong> into structured football lineups.</p>
+            <p>It never makes football decisions on your behalf.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="does pick2win make any football decisions for me?">
+          <summary class="faq-q">
+            <span class="faq-qnum">05</span>
+            <span class="faq-qtext">Does PICK2WIN make any football decisions for me?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">No.</p>
+            <p>PICK2WIN has been designed with one fundamental principle:</p>
+            <p class="ans-strong">Every football decision belongs to the user.</p>
+            <p>The platform does <strong>not</strong>:</p>
+            <ul><li>Pick players.</li><li>Recommend players.</li><li>Recommend strategies.</li><li>Predict player performance.</li><li>Predict match outcomes.</li><li>Decide which generated team you should use.</li><li>Decide which teams you should submit.</li></ul>
+            <p>Instead, PICK2WIN organizes your own selections into structured football lineups.</p>
+            <p>After generation, every decision continues to remain entirely yours.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="will pick2win provide more user-controlled configuration options in future versions?">
+          <summary class="faq-q">
+            <span class="faq-qnum">06</span>
+            <span class="faq-qtext">Will PICK2WIN provide more user-controlled configuration options in future versions?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">Yes.</p>
+            <p>PICK2WIN is continuously evolving to provide users with even more flexibility and control.</p>
+            <p>Future versions may introduce additional end-to-end configuration options, allowing users to customize the lineup generation process even further.</p>
+            <p>However, one principle will never change:</p>
+            <p class="ans-strong">Every important football decision will always remain with the user.</p>
+            <p>PICK2WIN's purpose is not to replace your football knowledge or make decisions for you.</p>
+            <p>Instead, we will continue building tools that help users:</p>
+            <ul><li>Save more time.</li><li>Achieve better lineup coverage.</li><li>Maintain low costs.</li><li>Enjoy greater flexibility through additional user-controlled configuration options.</li></ul>
+            <p>Our philosophy is simple:</p>
+            <p class="ans-strong">Users make the decisions. PICK2WIN provides the structure.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+    <section class="faq-section" id="sec-2">
+      <header class="sec-head">
+        <span class="sec-eyebrow"><span class="sec-eyebrow-num">Section 2</span></span>
+        <h2 class="sec-title">WHO SHOULD USE PICK2WIN?</h2>
+      </header>
+      <div class="faq-list">
+        <details class="faq-item" data-q="who is pick2win designed for?">
+          <summary class="faq-q">
+            <span class="faq-qnum">07</span>
+            <span class="faq-qtext">Who is PICK2WIN designed for?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN is designed for football enthusiasts who already create multiple lineups on supported fantasy platforms and want a faster, more organized way to build them.</p>
+            <p>It is especially useful for users who:</p>
+            <ul><li>Create multiple football lineups for the same match.</li><li>Want to save significant lineup creation time.</li><li>Want broader lineup coverage from their own player selections.</li><li>Prefer making every football decision themselves.</li><li>Want an affordable lineup configuration solution.</li></ul>
+            <p>PICK2WIN currently supports lineup configuration for:</p>
+            <ul><li><strong>DraftKings Classic DFS</strong></li><li><strong>FanDuel Classic DFS</strong></li></ul>
+            <p>Rather than manually building team after team, PICK2WIN helps generate up to <strong>20 structured football teams</strong> from your own selections within seconds while keeping every important decision under your control.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="can anyone sign up for pick2win?">
+          <summary class="faq-q">
+            <span class="faq-qnum">08</span>
+            <span class="faq-qtext">Can anyone sign up for PICK2WIN?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Yes.</p>
+            <p>PICK2WIN can be accessed from anywhere.</p>
+            <p>However, the platform is specifically designed for users who intend to use the generated football lineups on supported fantasy platforms.</p>
+            <p>If you do not use <strong>DraftKings Classic DFS</strong> or <strong>FanDuel Classic DFS</strong>, or have no intention of using the generated teams, then signing up for PICK2WIN is unlikely to provide meaningful value.</p>
+            <p>Our goal is not simply to increase registrations. We want users who can genuinely benefit from the platform.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="is pick2win trying to encourage new users to join draftkings or fanduel?">
+          <summary class="faq-q">
+            <span class="faq-qnum">09</span>
+            <span class="faq-qtext">Is PICK2WIN trying to encourage new users to join DraftKings or FanDuel?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">No.</p>
+            <p>PICK2WIN is <strong>not</strong> intended to encourage people to join, register with, or start using any fantasy platform.</p>
+            <p>Our focus is on helping <strong>existing users</strong> of supported fantasy platforms improve their lineup creation workflow.</p>
+            <p>PICK2WIN was built to help existing users:</p>
+            <ul><li>Save Time</li><li>Achieve Good Coverage</li><li>Keep Costs Low</li><li>Continue making Skill-Oriented Decisions</li></ul>
+            <p>We are not interested in increasing fantasy platform participation. Instead, we aim to provide an efficient lineup configuration tool for people who already use supported fantasy platforms.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="which fantasy platforms are currently supported?">
+          <summary class="faq-q">
+            <span class="faq-qnum">10</span>
+            <span class="faq-qtext">Which fantasy platforms are currently supported?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN currently supports football lineup configuration for:</p>
+            <ul><li><strong>DraftKings Classic DFS</strong></li><li><strong>FanDuel Classic DFS</strong></li></ul>
+            <p>Generated teams are structured according to the selected platform's roster requirements and salary cap rules.</p>
+            <p>Support for additional fantasy platforms may be introduced in future versions based on user demand and product evolution.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="which countries are currently supported?">
+          <summary class="faq-q">
+            <span class="faq-qnum">11</span>
+            <span class="faq-qtext">Which countries are currently supported?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN currently supports users from:</p>
+            <ul><li><strong>United States (USA)</strong></li><li><strong>Canada</strong></li></ul>
+            <p>All Coin Pack purchases are processed in <strong>USD</strong>.</p>
+            <p>Support for additional countries may be introduced in future releases based on operational, compliance, and payment-processing requirements.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="do i need to use draftkings or fanduel to benefit from pick2win?">
+          <summary class="faq-q">
+            <span class="faq-qnum">12</span>
+            <span class="faq-qtext">Do I need to use DraftKings or FanDuel to benefit from PICK2WIN?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Yes.</p>
+            <p>PICK2WIN is purpose-built as a football lineup configuration platform for supported fantasy platforms.</p>
+            <p>If you already use <strong>DraftKings Classic DFS</strong> or <strong>FanDuel Classic DFS</strong>, PICK2WIN can help you create multiple structured football lineups quickly and efficiently.</p>
+            <p>If you do not use either supported platform or do not intend to use the generated lineups, then PICK2WIN is unlikely to provide practical value.</p>
+            <p>We believe in being transparent. Our objective is to build a product that genuinely helps its intended users—not to encourage unnecessary registrations or promote participation in fantasy platforms.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+    <section class="faq-section" id="sec-3">
+      <header class="sec-head">
+        <span class="sec-eyebrow"><span class="sec-eyebrow-num">Section 3</span></span>
+        <h2 class="sec-title">LINEUP CONFIGURATION &amp; TEAM GENERATION</h2>
+      </header>
+      <div class="faq-list">
+        <details class="faq-item" data-q="how does pick2win work?">
+          <summary class="faq-q">
+            <span class="faq-qnum">13</span>
+            <span class="faq-qtext">How does PICK2WIN work?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN simplifies the process of creating multiple football lineups while ensuring that every important football decision remains under your control.</p>
+            <p>The workflow is straightforward:</p>
+            <p class="ans-step">Step 1 – Select Fantasy Platform</p>
+            <p>Choose your preferred platform:</p>
+            <ul><li>DraftKings Classic DFS</li><li>FanDuel Classic DFS</li></ul>
+            <p class="ans-step">Step 2 – Select Players</p>
+            <p>Choose your own player pool from the official match lineup.</p>
+            <p class="ans-step">Step 3 – Select Eligible Substitutes (Optional)</p>
+            <p>Optionally choose eligible substitute players to be considered during team generation.</p>
+            <p class="ans-step">Step 4 – Apply Mandate YES (Optional)</p>
+            <p>Mark eligible outfield players that you want included in every generated team.</p>
+            <p class="ans-step">Step 5 – Generate Teams</p>
+            <p>PICK2WIN processes your selections and generates up to <strong>20 structured football teams</strong> in just a few seconds.</p>
+            <p class="ans-step">Step 6 – Preview &amp; Download</p>
+            <p>Review your generated teams and download the TXT file containing your complete configuration and all generated teams.</p>
+            <p>Throughout the entire workflow, <strong>every football decision comes from you</strong>. PICK2WIN simply organizes your selections into structured lineups.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="when can i generate teams?">
+          <summary class="faq-q">
+            <span class="faq-qnum">14</span>
+            <span class="faq-qtext">When can I generate teams?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Team generation becomes available only after the <strong>official starting lineups</strong> for a match have been released.</p>
+            <p>Once the official lineups are available, you can complete the lineup configuration process and generate your teams until the match officially starts.</p>
+            <p>This ensures your generated teams are based on the latest confirmed player availability.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="can i generate teams more than once for the same match?">
+          <summary class="faq-q">
+            <span class="faq-qnum">15</span>
+            <span class="faq-qtext">Can I generate teams more than once for the same match?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>No.</p>
+            <p>Each successful generation consumes <strong>one Coin</strong> and allows <strong>one successful generation per user for that match</strong>.</p>
+            <p>Once your teams have been generated:</p>
+            <ul><li>The associated Coin is consumed.</li><li>Your teams become available in <strong>Preview Teams</strong>.</li><li>You can review and download your TXT file until the match starts.</li></ul>
+            <p>This approach keeps the generation process simple and fair for all users.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="how does substitute selection work?">
+          <summary class="faq-q">
+            <span class="faq-qnum">16</span>
+            <span class="faq-qtext">How does substitute selection work?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Substitute selection is <strong>completely optional</strong>.</p>
+            <p>You may select <strong>up to three (3)</strong> substitute players to be included in the lineup generation process.</p>
+            <p>Important rules:</p>
+            <ul><li>Only <strong>DEF</strong>, <strong>MID</strong>, and <strong>FWD</strong> substitute players can be selected.</li><li><strong>Goalkeepers cannot be selected as substitutes.</strong></li><li>You may also choose not to select any substitutes.</li></ul>
+            <p>Substitute selection gives you additional flexibility while keeping every selection entirely under your control.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what is mandate yes?">
+          <summary class="faq-q">
+            <span class="faq-qnum">17</span>
+            <span class="faq-qtext">What is Mandate YES?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p><strong>Mandate YES</strong> is an optional feature that allows you to ensure selected eligible outfield players appear in every generated team.</p>
+            <p>If a player is marked as <strong>Mandate YES</strong>, PICK2WIN includes that player in all generated teams.</p>
+            <p>Players that are <strong>not</strong> marked as Mandate YES remain as <strong>N/A</strong>, allowing the generation engine to naturally create balanced team combinations from your selected player pool.</p>
+            <p>Important rules:</p>
+            <ul><li>Mandate YES is optional.</li><li>It applies only to eligible outfield players.</li><li><strong>Goalkeepers cannot be assigned Mandate YES.</strong></li></ul>
+            <p>You remain fully responsible for deciding which players, if any, receive Mandate YES.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="why does pick2win always generate 20 teams?">
+          <summary class="faq-q">
+            <span class="faq-qnum">18</span>
+            <span class="faq-qtext">Why does PICK2WIN always generate 20 teams?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN currently generates <strong>up to 20 structured football teams</strong> for every successful UCT generation.</p>
+            <p>The 20-team structure has been designed to:</p>
+            <ul><li>Save lineup creation time.</li><li>Provide broader lineup coverage.</li><li>Produce balanced combinations from your own player selections.</li><li>Give users multiple structured lineup options from a single configuration process.</li></ul>
+            <p>Future versions may introduce additional user-controlled generation options, but the focus will always remain on helping users create multiple high-quality structured lineups efficiently.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="does pick2win follow draftkings and fanduel lineup rules?">
+          <summary class="faq-q">
+            <span class="faq-qnum">19</span>
+            <span class="faq-qtext">Does PICK2WIN follow DraftKings and FanDuel lineup rules?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Yes.</p>
+            <p>PICK2WIN generates teams according to the lineup requirements of the fantasy platform you select.</p>
+            <p>Current supported salary caps are:</p>
+            <p class="ans-strong">DraftKings Classic DFS</p>
+            <ul><li>Salary Cap: <strong>$50,000</strong></li></ul>
+            <p class="ans-strong">FanDuel Classic DFS</p>
+            <ul><li>Salary Cap: <strong>$100</strong></li></ul>
+            <p>Roster construction is generated according to the selected platform's applicable lineup requirements, helping ensure compatibility with the chosen fantasy platform.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="does pick2win select players for me?">
+          <summary class="faq-q">
+            <span class="faq-qnum">20</span>
+            <span class="faq-qtext">Does PICK2WIN select players for me?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">No. Never.</p>
+            <p>Every player included in the generation process is selected by <strong>you</strong>.</p>
+            <p>PICK2WIN does not:</p>
+            <ul><li>Recommend players.</li><li>Automatically add players.</li><li>Remove players.</li><li>Predict player performance.</li><li>Suggest "better" players.</li></ul>
+            <p>Your football knowledge and decisions determine the player pool.</p>
+            <p>PICK2WIN simply converts <strong>your selected players</strong> into structured football team combinations.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+    <section class="faq-section" id="sec-4">
+      <header class="sec-head">
+        <span class="sec-eyebrow"><span class="sec-eyebrow-num">Section 4</span></span>
+        <h2 class="sec-title">AFTER TEAM GENERATION</h2>
+      </header>
+      <div class="faq-list">
+        <details class="faq-item" data-q="what happens after i generate my teams?">
+          <summary class="faq-q">
+            <span class="faq-qnum">21</span>
+            <span class="faq-qtext">What happens after I generate my teams?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Once UCT successfully generates your teams, you'll be taken to the <strong>Preview Teams</strong> page.</p>
+            <p>From there, you can:</p>
+            <ul><li>View all generated football teams.</li><li>Review your complete lineup configuration.</li><li>Verify the generated team combinations.</li><li>Download your complete generation as a TXT file.</li></ul>
+            <p>Generation typically completes within a few seconds, allowing you to review everything before deciding how you want to use the generated output.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what information is included in the txt file?">
+          <summary class="faq-q">
+            <span class="faq-qnum">22</span>
+            <span class="faq-qtext">What information is included in the TXT file?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>The downloaded TXT file is your complete record of the generation for that match.</p>
+            <p>It includes:</p>
+            <ul><li>Match details</li><li>Competition details</li><li>Fantasy platform (DraftKings Classic DFS or FanDuel Classic DFS)</li><li>Date and generation time</li><li>Selected players</li><li>Selected substitute players</li><li>Mandate YES selections</li><li>Formation and configuration details</li><li>All generated football teams</li></ul>
+            <p>The TXT file is designed to help you review your generation and use it as your personal reference.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="how long does pick2win play a role?">
+          <summary class="faq-q">
+            <span class="faq-qnum">23</span>
+            <span class="faq-qtext">How long does PICK2WIN play a role?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN's role begins when you start configuring your lineup and <strong>ends immediately after your teams have been successfully generated.</strong></p>
+            <p>Once generation is complete:</p>
+            <ul><li>PICK2WIN has completed its job.</li><li>The generated output becomes available for your review.</li><li>Every decision after that belongs entirely to you.</li></ul>
+            <p>From that point onward, you decide:</p>
+            <ul><li>Whether to use the generated teams exactly as they are.</li><li>Whether to make your own changes or corrections.</li><li>Which generated teams to use.</li><li>Which generated teams not to use.</li><li>Whether to use any of the generated teams at all.</li></ul>
+            <p>PICK2WIN does not influence these decisions.</p>
+            <p>Our responsibility is limited to generating structured football teams from <strong>your own inputs</strong>. Everything that happens after generation is entirely under your control and responsibility.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="can i modify my generated teams after generation?">
+          <summary class="faq-q">
+            <span class="faq-qnum">24</span>
+            <span class="faq-qtext">Can I modify my generated teams after generation?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">Absolutely.</p>
+            <p>The generated teams are <strong>your output</strong>.</p>
+            <p>After reviewing them, you are free to:</p>
+            <ul><li>Use them exactly as generated.</li><li>Make your own edits.</li><li>Replace players.</li><li>Adjust the lineups.</li><li>Use only selected teams.</li><li>Ignore some or all of the generated teams.</li></ul>
+            <p>PICK2WIN never requires you to use the generated teams exactly as they were created.</p>
+            <p>The final decision is always yours.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what happens after the match starts?">
+          <summary class="faq-q">
+            <span class="faq-qnum">25</span>
+            <span class="faq-qtext">What happens after the match starts?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>This is very important.</p>
+            <p>Your generated teams and configuration remain available <strong>only until the official match starts</strong>.</p>
+            <p>Once the match officially begins:</p>
+            <ul><li>Team Preview is permanently removed.</li><li>Generated teams can no longer be viewed.</li><li>The TXT file can no longer be downloaded.</li><li>Configuration details are no longer available.</li><li>No generated data for that match is retained or can be recovered.</li></ul>
+            <p>This storage policy helps keep PICK2WIN efficient by avoiding the long-term storage of millions of generated teams.</p>
+            <p><strong>Important:</strong> Before the match starts, download and save your TXT file. It becomes <strong>your only permanent copy</strong> of the generated teams and configuration after kickoff.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="why should i download the txt file before kickoff?">
+          <summary class="faq-q">
+            <span class="faq-qnum">26</span>
+            <span class="faq-qtext">Why should I download the TXT file before kickoff?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>The TXT file is the complete record of your generation.</p>
+            <p>Once the match starts, PICK2WIN permanently removes the generated data for that match.</p>
+            <p>By downloading the TXT file before kickoff, you'll always have access to:</p>
+            <ul><li>Your complete lineup configuration.</li><li>Selected players.</li><li>Substitute selections.</li><li>Mandate YES selections.</li><li>All generated teams.</li><li>Match information.</li></ul>
+            <p>If you do not download the TXT file before kickoff, it <strong>cannot be downloaded later</strong>, as the associated generation data is permanently removed when the match begins.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="does pick2win automatically submit my teams to draftkings or fanduel?">
+          <summary class="faq-q">
+            <span class="faq-qnum">27</span>
+            <span class="faq-qtext">Does PICK2WIN automatically submit my teams to DraftKings or FanDuel?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">No.</p>
+            <p>PICK2WIN is a <strong>lineup configuration platform</strong>, not a team submission service.</p>
+            <p>After generation, you are responsible for deciding how to use your generated teams.</p>
+            <p>PICK2WIN does not:</p>
+            <ul><li>Connect to DraftKings or FanDuel accounts.</li><li>Automatically upload teams.</li><li>Automatically submit entries.</li><li>Modify teams after generation.</li></ul>
+            <p>The generated teams are provided for your review and use. Whether you use them exactly as generated, modify them, or choose not to use them at all is entirely your own decision.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+    <section class="faq-section" id="sec-5">
+      <header class="sec-head">
+        <span class="sec-eyebrow"><span class="sec-eyebrow-num">Section 5</span></span>
+        <h2 class="sec-title">COIN PACKS &amp; PRICING</h2>
+      </header>
+      <div class="faq-list">
+        <details class="faq-item" data-q="how do coin packs work?">
+          <summary class="faq-q">
+            <span class="faq-qnum">28</span>
+            <span class="faq-qtext">How do Coin Packs work?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN uses a simple Coin system for team generation.</p>
+            <p class="ans-strong">One Coin = One successful UCT generation.</p>
+            <p>Each successful UCT generation produces <strong>up to 20 structured football teams</strong> based on your own selections and configuration.</p>
+            <p>You can choose from four Coin Packs:</p>
+            <div class="tbl-wrap"><table class="coin-tbl"><thead><tr><th>Coin Pack</th><th>Price</th><th>Base</th><th>Bonus</th><th>Total</th></tr></thead><tbody><tr><td>Starter</td><td>$25</td><td>25</td><td class="pos">+5</td><td class="tot">30</td></tr><tr><td>Basic</td><td>$50</td><td>50</td><td class="pos">+15</td><td class="tot">65</td></tr><tr><td>Pro</td><td>$100</td><td>100</td><td class="pos">+40</td><td class="tot">140</td></tr><tr><td>Elite</td><td>$200</td><td>200</td><td class="pos">+100</td><td class="tot">300</td></tr></tbody></table></div>
+          </div>
+        </details>
+        <details class="faq-item" data-q="how long are my coins valid?">
+          <summary class="faq-q">
+            <span class="faq-qnum">29</span>
+            <span class="faq-qtext">How long are my Coins valid?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>All active Coins remain valid for <strong>365 days</strong> from your most recent Coin Pack purchase.</p>
+            <p>If you purchase another Coin Pack before your active Coins expire, your remaining active Coins automatically merge with the new purchase and receive a <strong>fresh 365-day validity period</strong>.</p>
+            <p>Only active (non-expired) Coins are merged.</p>
+            <p>Expired Coins cannot be restored.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="can i buy multiple coin packs?">
+          <summary class="faq-q">
+            <span class="faq-qnum">30</span>
+            <span class="faq-qtext">Can I buy multiple Coin Packs?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Yes.</p>
+            <p>You can purchase any Coin Pack as many times as you like.</p>
+            <p>Whenever you buy a new Coin Pack while you still have active Coins:</p>
+            <ul><li>Your remaining active Coins merge into a single balance.</li><li>The combined balance receives a new <strong>365-day validity</strong> from the latest purchase date.</li><li>You continue using one unified Coin balance.</li></ul>
+            <p>There is no limit on how many Coin Packs you can purchase.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="can i use my coins for any supported competition?">
+          <summary class="faq-q">
+            <span class="faq-qnum">31</span>
+            <span class="faq-qtext">Can I use my Coins for any supported competition?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Yes.</p>
+            <p>Your Coins are <strong>not restricted to a specific league, tournament, or competition</strong>.</p>
+            <p>The same Coin balance can be used across all football competitions supported by PICK2WIN, including future supported competitions.</p>
+            <p>You are free to use your active Coins whenever you choose during their validity period.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="will pick2win increase its prices as the user base grows?">
+          <summary class="faq-q">
+            <span class="faq-qnum">32</span>
+            <span class="faq-qtext">Will PICK2WIN increase its prices as the user base grows?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Our goal is to keep PICK2WIN <strong>affordable, transparent, and valuable</strong> for the long term.</p>
+            <p>PICK2WIN was created to help existing fantasy users:</p>
+            <ul><li><strong>Save Time</strong></li><li><strong>Achieve Good Coverage</strong></li><li><strong>Keep Costs Low</strong></li><li><strong>Continue making Skill-Oriented Decisions</strong></li></ul>
+            <p>We are <strong>not</strong> building PICK2WIN to maximize how much users spend. Our objective is to build a high-quality lineup configuration platform that genuinely helps users.</p>
+            <p>Our current Coin Packs provide an effective cost of <strong>$1 USD or less per UCT generation (Coin)</strong>.</p>
+            <p>Every Coin Pack also includes:</p>
+            <ul><li>Use across all supported football competitions.</li><li>Compatibility with both <strong>DraftKings Classic DFS</strong> and <strong>FanDuel Classic DFS</strong>.</li><li><strong>365-day validity</strong> for active Coins.</li><li>Active Coin Merge with each new purchase.</li><li>No subscriptions.</li><li>No automatic renewals.</li><li>No league-specific restrictions.</li></ul>
+            <p>As PICK2WIN evolves, we intend to continue offering fair pricing while adding more user-controlled features and improving the overall product experience.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="will i be charged automatically?">
+          <summary class="faq-q">
+            <span class="faq-qnum">33</span>
+            <span class="faq-qtext">Will I be charged automatically?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>No.</p>
+            <p>PICK2WIN does <strong>not</strong> use subscriptions or automatic renewals.</p>
+            <p>Every Coin Pack purchase is a <strong>one-time transaction</strong>.</p>
+            <p>You decide if and when you want to purchase another Coin Pack.</p>
+            <p>There are:</p>
+            <ul><li>No recurring charges.</li><li>No hidden fees.</li><li>No automatic renewals.</li></ul>
+          </div>
+        </details>
+        <details class="faq-item" data-q="who processes payments?">
+          <summary class="faq-q">
+            <span class="faq-qnum">34</span>
+            <span class="faq-qtext">Who processes payments?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>All Coin Pack purchases are securely processed through <strong>Razorpay</strong>.</p>
+            <p>Razorpay provides secure payment processing using industry-standard security measures.</p>
+            <p>PICK2WIN does <strong>not</strong> store:</p>
+            <ul><li>Card numbers.</li><li>CVV numbers.</li><li>Banking passwords.</li><li>Payment credentials.</li></ul>
+            <p>Your payment information is handled securely through Razorpay's payment infrastructure.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="why is pick2win priced this way?">
+          <summary class="faq-q">
+            <span class="faq-qnum">35</span>
+            <span class="faq-qtext">Why is PICK2WIN priced this way?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN was built with a simple philosophy:</p>
+            <p class="ans-strong">A good product should help users—not encourage unnecessary spending.</p>
+            <p>We believe a lineup configuration platform should be:</p>
+            <ul><li>Affordable.</li><li>Transparent.</li><li>Easy to understand.</li><li>Accessible to regular football enthusiasts.</li></ul>
+            <p>Rather than charging high fees or limiting usage to specific competitions, we provide Coin Packs that:</p>
+            <ul><li>Can be used across all supported football competitions.</li><li>Remain active for <strong>365 days</strong>.</li><li>Support Active Coin Merge.</li><li>Deliver up to <strong>20 structured football teams</strong> per successful UCT generation.</li></ul>
+            <p>Our focus is on creating long-term value by helping existing fantasy users save time, achieve broader lineup coverage, and continue relying on their own football knowledge—not on increasing user spending.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+    <section class="faq-section" id="sec-6">
+      <header class="sec-head">
+        <span class="sec-eyebrow"><span class="sec-eyebrow-num">Section 6</span></span>
+        <h2 class="sec-title">POLICIES &amp; RESPONSIBILITIES</h2>
+      </header>
+      <div class="faq-list">
+        <details class="faq-item" data-q="what happens if a match is postponed, cancelled, or abandoned?">
+          <summary class="faq-q">
+            <span class="faq-qnum">36</span>
+            <span class="faq-qtext">What happens if a match is postponed, cancelled, or abandoned?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Once UCT generation has been completed successfully, <strong>one Coin is consumed</strong> and the generation process is considered complete.</p>
+            <p>Because PICK2WIN's responsibility ends after successfully generating your teams, Coins are <strong>not refunded</strong> for events outside the platform's control, including:</p>
+            <ul><li>Match postponements</li><li>Match cancellations</li><li>Match abandonment</li><li>Match rescheduling</li><li>Changes to official lineups after generation</li><li>Decisions made by third-party fantasy platforms</li></ul>
+            <p>The only exception is a verified technical issue where payment is successful but PICK2WIN fails to generate your teams due to a platform-side problem.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what happens if i delete my pick2win account?">
+          <summary class="faq-q">
+            <span class="faq-qnum">37</span>
+            <span class="faq-qtext">What happens if I delete my PICK2WIN account?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Account deletion is permanent.</p>
+            <p>Once your account has been deleted:</p>
+            <ul><li>Your account cannot be recovered.</li><li>Remaining Coins are permanently forfeited.</li><li>Purchase history and generated team history are removed according to our data retention policy.</li><li>Unused Coins are not refundable or transferable.</li></ul>
+            <p>Before deleting your account, we recommend using your remaining active Coins, as they cannot be restored afterwards.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="does pick2win predict player performance or match results?">
+          <summary class="faq-q">
+            <span class="faq-qnum">38</span>
+            <span class="faq-qtext">Does PICK2WIN predict player performance or match results?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">No.</p>
+            <p>PICK2WIN does not:</p>
+            <ul><li>Predict player performance.</li><li>Predict fantasy points.</li><li>Predict match outcomes.</li><li>Recommend players.</li><li>Recommend strategies.</li></ul>
+            <p>Every generated lineup is based entirely on <strong>your own player selections and configuration choices</strong>.</p>
+            <p>PICK2WIN simply organizes your inputs into structured football team combinations.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="does pick2win guarantee winnings or better results?">
+          <summary class="faq-q">
+            <span class="faq-qnum">39</span>
+            <span class="faq-qtext">Does PICK2WIN guarantee winnings or better results?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">No.</p>
+            <p>PICK2WIN cannot and does not guarantee:</p>
+            <ul><li>Winnings.</li><li>Better rankings.</li><li>Better scores.</li><li>Better fantasy performance.</li><li>Better contest outcomes.</li></ul>
+            <p>Football matches are influenced by many factors that cannot be predicted or controlled.</p>
+            <p>PICK2WIN is a lineup configuration platform designed to help users save time by organizing their own selections into structured football teams.</p>
+            <p>Your football knowledge, decisions, and any changes you make after generation remain entirely your responsibility.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what happens if the generated teams don't match my configuration?">
+          <summary class="faq-q">
+            <span class="faq-qnum">40</span>
+            <span class="faq-qtext">What happens if the generated teams don't match my configuration?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN is designed to generate teams according to the configuration you selected.</p>
+            <p>If you believe the generated output does not correctly reflect your selected configuration—for example, a player marked as <strong>Mandate YES</strong> does not appear in every generated team—please contact our support team.</p>
+            <p>To help us investigate, include:</p>
+            <ul><li>Your downloaded TXT file.</li><li>Match details.</li><li>A description of the issue you observed.</li></ul>
+            <p>The TXT file contains the configuration details required to verify whether the generation process correctly followed your selected inputs.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what responsibility does pick2win take?">
+          <summary class="faq-q">
+            <span class="faq-qnum">41</span>
+            <span class="faq-qtext">What responsibility does PICK2WIN take?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN is responsible for:</p>
+            <ul><li>Providing a reliable football lineup configuration workflow.</li><li>Generating structured football teams based on your selected inputs.</li><li>Delivering your generated teams for review and download.</li><li>Processing successful Coin usage only after successful generation.</li><li>Providing transparent pricing and platform information.</li></ul>
+            <p>PICK2WIN is <strong>not</strong> responsible for:</p>
+            <ul><li>Your player selections.</li><li>Your football strategy.</li><li>Changes you make after generation.</li><li>Contest entries.</li><li>Results on third-party fantasy platforms.</li><li>Match outcomes or player performances.</li></ul>
+            <p>Our responsibility ends once your teams have been successfully generated and made available for preview and download.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what is the user's responsibility?">
+          <summary class="faq-q">
+            <span class="faq-qnum">42</span>
+            <span class="faq-qtext">What is the user's responsibility?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>As a PICK2WIN user, you are responsible for:</p>
+            <ul><li>Selecting your players.</li><li>Selecting eligible substitutes.</li><li>Choosing Mandate YES players.</li><li>Reviewing the generated teams.</li><li>Downloading your TXT file before kickoff.</li><li>Deciding whether to use or modify the generated teams.</li><li>Entering teams on your preferred fantasy platform.</li><li>Complying with the terms and rules of any third-party fantasy platform you choose to use.</li></ul>
+            <p>PICK2WIN provides the lineup configuration workflow. Every football decision before and after generation remains entirely under your control.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what is pick2win's philosophy?">
+          <summary class="faq-q">
+            <span class="faq-qnum">43</span>
+            <span class="faq-qtext">What is PICK2WIN's philosophy?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN was created with a simple philosophy:</p>
+            <p class="ans-strong">Users make the football decisions. PICK2WIN provides the structure.</p>
+            <p>Our mission is to help existing fantasy users:</p>
+            <ul><li><strong>Save Time</strong> by reducing repetitive lineup creation.</li><li><strong>Achieve Good Coverage</strong> through structured team combinations built from their own selections.</li><li><strong>Keep Costs Low</strong> with transparent, affordable Coin Packs.</li><li><strong>Support Skill-Oriented Decisions</strong> by ensuring every important football decision remains with the user.</li></ul>
+            <p>We are not here to encourage new fantasy participation or replace your football knowledge.</p>
+            <p>Instead, we aim to provide a fair, transparent, and user-focused lineup configuration platform that continues to evolve with more user-controlled configuration options while keeping the user in complete control from start to finish.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+    <section class="faq-section" id="sec-7">
+      <header class="sec-head">
+        <span class="sec-eyebrow"><span class="sec-eyebrow-num">Section 7</span></span>
+        <h2 class="sec-title">FOOTBALL DATA &amp; FUTURE</h2>
+      </header>
+      <div class="faq-list">
+        <details class="faq-item" data-q="where does pick2win get its football data?">
+          <summary class="faq-q">
+            <span class="faq-qnum">44</span>
+            <span class="faq-qtext">Where does PICK2WIN get its football data?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>PICK2WIN uses trusted third-party football data providers for match information, including:</p>
+            <ul><li>Fixtures</li><li>Competitions</li><li>Match schedules</li><li>Official starting lineups</li><li>Eligible substitute players</li><li>Player information</li><li>Match status</li></ul>
+            <p>Official lineup releases from these providers determine when UCT becomes available for team generation.</p>
+            <p>PICK2WIN does <strong>not</strong> maintain or manually update its own football database.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what happens if the official lineup changes after i've already generated my teams?">
+          <summary class="faq-q">
+            <span class="faq-qnum">45</span>
+            <span class="faq-qtext">What happens if the official lineup changes after I've already generated my teams?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Your teams are generated using the official lineup available <strong>at the time you generate them</strong>.</p>
+            <p>In rare situations, a third-party football data provider may update the lineup after generation due to late changes or corrections.</p>
+            <p>If this happens:</p>
+            <ul><li>Your previously generated teams are <strong>not</strong> automatically regenerated.</li><li>No additional Coin is deducted.</li><li>No automatic changes are made to your generated teams.</li></ul>
+            <p>After generation, it is entirely your decision whether to use the generated teams as they are or make your own adjustments before using them.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what should i do if i notice incorrect football data?">
+          <summary class="faq-q">
+            <span class="faq-qnum">46</span>
+            <span class="faq-qtext">What should I do if I notice incorrect football data?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Although our football data providers are highly reliable, occasional errors or late corrections can happen.</p>
+            <p>If you notice incorrect information such as:</p>
+            <ul><li>Player availability</li><li>Official lineup</li><li>Substitute list</li><li>Match information</li></ul>
+            <p>please contact our support team with the relevant match details.</p>
+            <p>We continuously work with our data providers to improve accuracy whenever issues are identified.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="does pick2win use artificial intelligence (ai) to select players?">
+          <summary class="faq-q">
+            <span class="faq-qnum">47</span>
+            <span class="faq-qtext">Does PICK2WIN use Artificial Intelligence (AI) to select players?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p class="ans-strong">No.</p>
+            <p>PICK2WIN does not use AI to:</p>
+            <ul><li>Select players.</li><li>Recommend players.</li><li>Predict player performance.</li><li>Build lineups automatically.</li><li>Make football decisions.</li></ul>
+            <p>The platform generates structured football teams <strong>only from the players and configuration choices that you provide</strong>.</p>
+            <p>Every football decision remains yours.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="will pick2win support more fantasy platforms in the future?">
+          <summary class="faq-q">
+            <span class="faq-qnum">48</span>
+            <span class="faq-qtext">Will PICK2WIN support more fantasy platforms in the future?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Possibly.</p>
+            <p>We continuously evaluate additional fantasy platforms based on:</p>
+            <ul><li>User demand</li><li>Technical compatibility</li><li>Operational feasibility</li><li>Compliance requirements</li></ul>
+            <p>If additional platforms are supported in future versions, they will become available as optional lineup configuration choices.</p>
+            <p>Our core philosophy will remain unchanged:</p>
+            <p class="ans-strong">Every football decision belongs to the user.</p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="will pick2win introduce more configuration features in future versions?">
+          <summary class="faq-q">
+            <span class="faq-qnum">49</span>
+            <span class="faq-qtext">Will PICK2WIN introduce more configuration features in future versions?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Yes.</p>
+            <p>PICK2WIN is designed as a continuously evolving lineup configuration platform.</p>
+            <p>Future releases may include additional end-to-end configuration options, giving users even greater flexibility to customize how their teams are generated.</p>
+            <p>As new features are introduced, our commitment will remain the same:</p>
+            <ul><li>More user control.</li><li>More flexibility.</li><li>More customization.</li><li>Faster workflow.</li><li>Better lineup coverage.</li></ul>
+            <p>Every new feature will be designed to <strong>support the user's decisions—not replace them.</strong></p>
+          </div>
+        </details>
+        <details class="faq-item" data-q="what is pick2win's long-term vision?">
+          <summary class="faq-q">
+            <span class="faq-qnum">50</span>
+            <span class="faq-qtext">What is PICK2WIN's long-term vision?</span>
+            <span class="faq-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a">
+            <p>Our vision is to build one of the most trusted and user-focused football lineup configuration platforms.</p>
+            <p>Everything we develop is guided by four principles:</p>
+            <ul><li><strong>Save Time</strong> by reducing repetitive lineup creation.</li><li><strong>Provide Good Coverage</strong> through structured lineup generation from your own selections.</li><li><strong>Keep Costs Low</strong> with transparent and affordable pricing.</li><li><strong>Support Skill-Oriented Decisions</strong> by ensuring every important football decision remains with the user.</li></ul>
+            <p>We are <strong>not</strong> trying to replace football knowledge, encourage unnecessary fantasy participation, or make decisions on behalf of users.</p>
+            <p>Instead, we want to continuously improve PICK2WIN by introducing more user-controlled features while remaining transparent, affordable, and focused on helping existing fantasy users manage their lineup creation more efficiently.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+    <div class="no-results" id="noResults"><b>No matching questions.</b><br>Try a different keyword, or email support below.</div>
+  </div>
+</main>
 
-    <div class="faq-legend reveal" aria-label="FAQ category legend">
-      <span *ngFor="let legend of legends"><i [class]="legend.className" aria-hidden="true"></i> {{ legend.label }}</span>
-    </div>
-
-    <div class="faq-list reveal">
-      
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 01</span><span class="q">Why do you ask for both my mobile number and my email?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN uses <strong>dual verification</strong> - 6-digit OTPs are sent to both your mobile and your email. One mobile = one email = one account. Dual verification prevents multi-account abuse, helps recover access if you lose one channel, and lets us deliver important notifications (lineup updates, payment receipts, account security alerts) reliably. <strong>Disposable email and VoIP numbers are blocked.</strong></div>
-      </details>
-
-      <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 02</span><span class="q">Can I create multiple accounts?</span><span class="plus"></span></summary>
-        <div class="a">No. PICK2WIN enforces <strong>one mobile = one email = one account</strong> with device fingerprint deduplication, VoIP blocking, and disposable-email blocking. Multi-account abuse - including using fake mobile numbers or temporary emails to evade this rule - results in <strong>permanent suspension</strong> of all linked accounts. This protects honest users and keeps the platform fair.</div>
-      </details>
-
-      <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 03</span><span class="q">Is there a minimum age to use PICK2WIN?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Yes. PICK2WIN services are strictly intended only for users aged 18 years or older.</strong> By creating an account, users confirm they are 18+ and legally permitted to use the platform within their jurisdiction. PICK2WIN is not intended for minors.</div>
-      </details>
-
-      <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 04</span><span class="q">If I delete my account, will I get my unused coins back?</span><span class="plus"></span></summary>
-        <div class="a"><strong>No.</strong> If you voluntarily delete your PICK2WIN account, unused coins are <strong>permanently forfeited</strong> and balances are non-refundable. This is explicit in the Refund Policy and Terms. Before requesting account deletion, fully utilise your purchased coins and complete intended UCT usage. Once deletion is processed, remaining balances are permanently removed and recovery is not possible.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 05</span><span class="q">How do coin packs work - will I be charged again automatically?</span><span class="plus"></span></summary>
-        <div class="a">Coin packs are <strong>one-time purchases - no subscriptions, no auto-renewal</strong>. You buy a pack, coins credit immediately, you spend them when generating UCTs. When you run out, you choose whether to buy another pack. Nothing is ever charged automatically. Razorpay processes each transaction individually with 3D Secure verification.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 06</span><span class="q">How long are my coins valid for?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Your coins are valid for 365 days, counted from your most recent purchase.</strong><br><br><strong>Active Pack Merge.</strong> Whenever you buy a new pack while you still have active coins, your remaining coins merge into the new pack and the whole combined balance is revalidated for a fresh 365 days from that purchase date. <em>Example:</em> buy a 50-coin pack today (valid for 365 days). 100 days later you still have coins left and buy a 100-coin pack - your leftover coins merge with the new 100, and the entire balance is now valid for 365 days from that second purchase.<br><br><strong>Expired coins.</strong> Coins that already passed their 365-day window <em>before</em> the new purchase stay permanently forfeited - only active (non-expired) coins are merged and revalidated. You can always see your combined balance and its expiry in <strong>My Space &rarr; Active Coin Lots</strong>.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 07</span><span class="q">Can I buy more than one coin pack and combine them?</span><span class="plus"></span></summary>
-        <div class="a">Yes - you can buy any of the four packs (Starter 5 / Basic 10 / Standard 25 / Pro 50) as many times as you like, and your coins always live as a <strong>single combined balance</strong>. Buying a new pack while you still have active coins triggers the <strong>Active Pack Merge</strong>: your remaining coins merge into the new pack and the whole balance is revalidated for a fresh 365 days from that purchase date. So topping up doesn't just add coins - it also extends the validity of the coins you already had. Track your combined balance and its expiry in <strong>My Space &rarr; Active Coin Lots</strong>.</div>
-      </details>
-
-      <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 08</span><span class="q">Will I get a refund if a match is cancelled or postponed?</span><span class="plus"></span></summary>
-        <div class="a"><strong>No.</strong> Once UCT generation completes successfully, the coin is consumed and the workflow is considered complete - PICK2WIN's operational responsibility for that match ends at delivery. Refunds are not provided for cancelled, postponed, abandoned, or rescheduled matches, lineup changes, reduced football schedules, or any third-party platform actions. The only exception is <strong>verified technical failure</strong>: if payment was successful but UCT completely failed to generate due to a technical issue on our side, contact support for review.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 09</span><span class="q">How are my payments processed?</span><span class="plus"></span></summary>
-        <div class="a">All payments are processed by <strong>Razorpay</strong>, the industry-standard payment processor used by Amazon, Google, and Shopify. Every transaction runs through Razorpay Checkout with <strong>3D Secure authentication</strong>, fraud detection, and card fingerprint deduplication. PICK2WIN never stores card numbers, CVV codes, or banking passwords. Razorpay holds PCI compliance, the dispute resolution flow, and the chargeback process.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 10</span><span class="q">Who handles payments on PICK2WIN?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Razorpay.</strong> PICK2WIN partners with Razorpay for all coin-pack payments. Razorpay handles card processing, 3D Secure authentication, fraud monitoring, receipts, and chargebacks. <strong>PICK2WIN does not maintain its own wallet or hold user funds</strong> - there are no deposits, no withdrawals, no on-platform balance. Coins credit to your account when Razorpay confirms the payment.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 11</span><span class="q">When can I actually run UCT for a match?</span><span class="plus"></span></summary>
-        <div class="a"><strong>UCT activates only after official lineups are released by the clubs</strong> - typically around <strong>60 minutes before kickoff</strong> for most major leagues. Before lineup release, the match appears in Lineouts with status <em>WAITING FOR LINEUP - UCT Locked</em>. Once the official starting XI and substitutes are published, the <em>Run UCT</em> button becomes active and the 4-step workflow opens. UCT closes at kickoff.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 12</span><span class="q">Can I run UCT more than once for the same match?</span><span class="plus"></span></summary>
-        <div class="a"><strong>No.</strong> Each match supports exactly one successful UCT generation per user. Once UCT generates your 20 teams:<br>• the associated coin is permanently consumed<br>• regeneration for that match is blocked<br>• <em>Run UCT</em> becomes disabled<br>• you're redirected to <em>My Teams</em><br><br>This rule keeps the platform fair and the coin economy honest. Plan your captaincy and mandate selections before clicking Generate.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 13</span><span class="q">How does substitute player selection work?</span><span class="plus"></span></summary>
-        <div class="a">Substitute selection is <strong>optional and user-controlled</strong>. In UI Screen 1, you can view the Playing XI and the substitute players, and optionally select <strong>0-3 substitutes</strong> to include in the generation pool.<br><br>Substitute selection rules:<br>• <strong>Mandate YES (M-YES)</strong> - selected substitute appears in all generated teams<br>• <strong>NA (No Mandate)</strong> - no forced inclusion<br><br>Substitutes <strong>cannot be marked Mandate NO (M-NO)</strong>. If you don't want a substitute considered, simply don't select them - leave them in the bench pool.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 14</span><span class="q">What's the difference between "Mandate YES" and "Mandate NO"?</span><span class="plus"></span></summary>
-        <div class="a">Both are optional, user-controlled overrides on UI Screen 2:<br><br>• <strong>M-YES</strong> (select 1-2 players) - these players appear in <strong>every</strong> generated team. Use for nailed-on starters you absolutely want exposure to.<br>• <strong>M-NO</strong> (select 1-2 players) - these players <strong>won't appear in any of the 20 teams</strong>. M-NO players also cannot appear in Captain or Vice-Captain roles. Use for players you want to fully avoid.<br>• <strong>No Mandate (NA)</strong> - neither include nor exclude; the player's participation depends on combination logic and category balancing.<br><br>You can use M-YES only, M-NO only, M-YES + M-NO together, or NA only. You <strong>cannot</strong> mix NA with M-YES or M-NO.<p class="faq-note"><strong>Goalkeeper note:</strong> If My Squad has one Goalkeeper, that Goalkeeper is automatically included in all generated teams and cannot be selected as M-YES. If My Squad has two Goalkeepers, you may optionally select one Goalkeeper as M-YES. Two Goalkeepers as M-YES is not allowed.</p></div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 15</span><span class="q">Can I use Mandate YES or Mandate NO on goalkeepers?</span><span class="plus"></span></summary>
-        <div class="a"><p><strong>Yes, but only when My Squad contains two Goalkeepers.</strong> If My Squad contains one Goalkeeper, that Goalkeeper is automatically included in all 20 generated teams because every Sorare team requires exactly one Goalkeeper. Selecting that player as M-YES is rejected because it has no effect.</p><p><strong>Goalkeeper mandate rules:</strong></p><ul><li><strong>1 Goalkeeper in My Squad:</strong> automatically included in all 20 teams; M-YES is not allowed.</li><li><strong>2 Goalkeepers in My Squad:</strong> you may leave both unselected, or select one Goalkeeper as M-YES.</li><li><strong>2 Goalkeepers selected as M-YES:</strong> not allowed.</li></ul><p>This keeps the one-GK case automatic and lets users decide only when there are two Goalkeepers available.</p></div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 16</span><span class="q">Is choosing the Captain &amp; Vice-Captain mandatory?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Yes.</strong> Captain &amp; Vice-Captain configuration is mandatory - without a valid selection, the workflow cannot proceed. You choose between two modes:<br><br>• <strong>CVC mode</strong> - select 2-4 players who rotate as Captain and Vice-Captain across the 20 teams<br>• <strong>C &amp; VC mode</strong> - explicitly choose Captains (1-4) and Vice-Captains (2-5) from a fixed matrix</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 17</span><span class="q">What's the difference between CVC mode and C &amp; VC mode?</span><span class="plus"></span></summary>
-        <div class="a">Both control how captaincy is distributed across the 20 generated teams:<br><br>• <strong>CVC mode</strong> - pick 2-4 players. They rotate freely as both Captain and Vice-Captain across the 20 teams. Simpler, broader rotation.<br>• <strong>C &amp; VC mode</strong> - explicitly separate Captain candidates from Vice-Captain candidates using a fixed matrix:<br>&nbsp;&nbsp;- 1 C x 2-5 VC<br>&nbsp;&nbsp;- 2 C x 2-4 VC<br>&nbsp;&nbsp;- 3 C x 2-3 VC<br>&nbsp;&nbsp;- 4 C x 2 VC<br><br>Use CVC when you want broad captaincy coverage, C &amp; VC when you want tight control.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 18</span><span class="q">What happens if 3 or 4 matches release lineups at the same time?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN handles concurrent lineup releases naturally. Each match is independent - you can start UCT for one match, finish it, then start another. The Lineouts tab shows all matches with live lineup-release status. The most time-sensitive matches will rise to the top with <em>Run UCT</em> active. Generation itself completes in seconds, so even three back-to-back matches can be fully configured well before kickoff.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 19</span><span class="q">Why does PICK2WIN always generate exactly 20 teams?</span><span class="plus"></span></summary>
-        <div class="a"><strong>PICK2WIN currently generates exactly 20 structured football virtual teams as a fixed minimum.</strong> The 20-team structure is intentionally designed to support broader configuration coverage, structured combinations across <strong>4-7 / 5-6 / 6-5 / 7-4</strong> formation splits, Captain &amp; Vice-Captain distribution workflows, and balanced exposure structures. Future versions may optionally support 40, 60, 80, or 100 teams - but <strong>20 teams will always remain the minimum fixed generation structure.</strong></div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 20</span><span class="q">Can I use PICK2WIN's teams directly elsewhere?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN produces <strong>reference structures</strong>, not direct submissions. The 20 generated teams use football-real position rules (1 GK, 2-6 DEF, 2-5 MID, 1-3 FWD) and formation splits (4-7 / 5-6 / 6-5 / 7-4). Once they're generated, what you do with that output is entirely your own choice - PICK2WIN's scope is the configuration workflow, and it ends at delivery of your 20 teams.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 21</span><span class="q">Does PICK2WIN submit or enter the teams for me?</span><span class="plus"></span></summary>
-        <div class="a"><strong>No.</strong> PICK2WIN is a configuration workflow tool - it does not connect to, integrate with, or auto-submit anywhere outside itself. After generation, you download a TXT with all 20 teams; from there, what you do with them is entirely your own choice. The TXT is the durable artifact - keep it safe.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 22</span><span class="q">What happens to my teams after the match kicks off?</span><span class="plus"></span></summary>
-        <div class="a">Your 20 teams stay fully viewable in <strong>My Teams</strong> - with team preview and TXT download - right up until the match kicks off. <strong>At kickoff the 20 teams are cleared to save storage</strong>: only a lightweight match-details record (teams, league, date) remains in My Teams, and the preview and TXT download are no longer available. This keeps the platform lean rather than holding millions of teams forever. Because of this, <strong>your downloaded TXT becomes your only lasting copy</strong> - download it before kickoff.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 23</span><span class="q">How long does PICK2WIN store my generated teams?</span><span class="plus"></span></summary>
-        <div class="a">Your 20 teams are stored and fully accessible in <em>My Teams</em> from the moment they are generated until the match's kickoff. At kickoff the team data is dropped (only the match-details record is kept), so generated teams are not retained beyond kickoff. <strong>The TXT download is the durable copy</strong> - download it as soon as generation completes and keep it safe.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 24</span><span class="q">So what exactly is PICK2WIN?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN is a <strong>structured virtual team configuration and workflow assistance platform</strong> designed to help users generate organized team combinations quickly after official lineups are released. The platform provides structured team generation workflows, balanced configuration structures, Captain &amp; Vice-Captain configuration support, and multi-team configuration assistance. <strong>Generated outputs are reference structures created from user-selected inputs.</strong> Users independently decide player selections, substitutes, mandates, captaincy, and how outputs are used. <a routerLink="/trust">Read the full PICK2WIN Positioning Statement -&gt;</a></div>
-      </details>
-
-      <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 25</span><span class="q">Does UCT predict match outcomes or guarantee any results?</span><span class="plus"></span></summary>
-        <div class="a"><strong>No. UCT does not predict match outcomes, player performance, or fantasy points, and PICK2WIN does not guarantee favourable outcomes, ranking positions, or any form of success.</strong> The 20 teams UCT produces are <strong>structured combinations</strong> built strictly from your configuration inputs (Substitute - Mandate - Captaincy - Generate) - not predicted winners. Final participation decisions, how you choose to use the teams, and any outcome that follows always remain fully your responsibility.</div>
-      </details>
-
-      <details class="faq faq-critical" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 26</span><span class="q">What does PICK2WIN actually take responsibility for?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Transparency and workflow assistance - within a clearly limited scope.</strong> PICK2WIN's operational responsibility is limited to football virtual team configuration workflows, structured multi-team generation assistance, and football lineup workflow support. We're transparent about who our partners are (Razorpay for payments, a third-party football API provider for football data), how UCT works, what we charge (one simple USD price per pack), which 19 markets we operate in, and what we don't allow (multi-accounting). If we miss something or get something wrong, we acknowledge it rather than spin it. Email <a href="mailto:support@pick2win.io">support@pick2win.io</a> any time.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 27</span><span class="q">Where does PICK2WIN's football data come from?</span><span class="plus"></span></summary>
-        <div class="a">Football data is sourced from a <strong>third-party football API provider</strong> - covering exactly the leagues PICK2WIN operates across. All starting XIs, substitute lists, player metadata, fixture timings, and live match status come from this provider. When the provider publishes a starting XI, our UCT window opens. When the provider updates a substitute list, our engine reflects that change. <strong>PICK2WIN does not maintain its own lineup database</strong> - the provider is the single source of truth for football data.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 28</span><span class="q">What happens if a lineup is updated after I've already generated my teams?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN relies on third-party football data providers, and in rare cases a lineup may be updated <em>after</em> users have already generated their UCT teams - a player removed from or added to the Playing XI, or a lineup correction from the data provider.<br><br><strong>Our approach:</strong> users who haven't yet generated will automatically see the latest available lineup. Users who have already generated can still follow the lineup info shown on their target platform.<br><br><strong>Important:</strong> UCT generation completed using the lineup information available at the time of generation. Lineup updates received later do <strong>NOT</strong> automatically trigger UCT regeneration, additional UCT runs, or additional coin deductions. <a routerLink="/trust">Read the full Transparency Notice -&gt;</a></div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 29</span><span class="q">What if a player shows on PICK2WIN but not where I use the teams?</span><span class="plus"></span></summary>
-        <div class="a"><strong>Always follow the player list shown wherever you actually use the teams - not PICK2WIN's.</strong> If you've generated 20 UCTs on PICK2WIN and find one or more players don't appear in the playing XI when you go to replicate the teams, that list is the source of truth - adjust to match it.<br><br>This mismatch is <strong>rare</strong> - in the vast majority of matches PICK2WIN's playing XI matches exactly. Mismatches happen only when our third-party football API provider publishes incorrect or delayed lineup data (late injury, surprise rotation), which is outside our direct control. If you spot a persistent mismatch, email <a href="mailto:support@pick2win.io">support@pick2win.io</a> with the match details.</div>
-      </details>
-
-      <details class="faq faq-important" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 30</span><span class="q">What if the 20 teams don't match what I configured?</span><span class="plus"></span></summary>
-        <div class="a">UCT is built to honour your configuration <strong>exactly</strong> - your Substitute, Mandate and Captaincy choices all carry through to the 20 teams. If you ever see a genuine mismatch between what you set and what you received - for example, you marked a player as <strong>Captain (C)</strong> but they appear as captain in <strong>none</strong> of your 20 teams - that's a fault, not expected behaviour.<br><br>Email <a href="mailto:support@pick2win.io?subject=UCT%20Configuration%20Mismatch">support@pick2win.io</a> straight away and attach your <strong>downloaded TXT file</strong> - it carries the match and configuration details, so we can investigate quickly. (This is different from a lineup-data mismatch above: it's specifically about UCT honouring <em>your</em> inputs.)</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 31</span><span class="q">Which countries can use PICK2WIN?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN currently supports users from <strong>19 markets worldwide</strong>:<br>• <strong>UK &amp; Ireland</strong> - United Kingdom, Ireland<br>• <strong>Western Europe</strong> - Germany, France, Spain, Italy, Netherlands, Belgium, Austria, Portugal<br>• <strong>Nordic</strong> - Sweden, Norway, Denmark, Finland<br>• <strong>Central Europe</strong> - Poland<br>• <strong>North America</strong> - United States, Canada<br>• <strong>Oceania</strong> - Australia, New Zealand<br><br>All billing is in <strong>USD</strong>. Supported countries may be modified based on operational, compliance, and payment-provider requirements.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 32</span><span class="q">Which leagues and competitions does PICK2WIN cover (including FIFA World Cup 2026)?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN covers <strong>football competitions across three tiers</strong> - including the Premier League, UEFA Champions League, La Liga, Serie A, Bundesliga, Ligue 1, MLS, Eredivisie, Liga Portugal, Brasileirao, and major international tournaments. <strong>Yes - the FIFA World Cup 2026 is included</strong> in coin-pack coverage. One coin = one UCT generation for any covered match across any covered competition, including World Cup fixtures. Full league list is in the Lineouts tab.</div>
-      </details>
-
-      <details class="faq" (toggle)="closeOtherFaqs($event)">
-        <summary><span class="idx">/ 33</span><span class="q">Who is PICK2WIN built for, and why doesn't it use salary caps?</span><span class="plus"></span></summary>
-        <div class="a">PICK2WIN is built for <strong>users who manually create 20+ teams per match</strong> - the ones who rotate captains, hedge formations across 4-7 / 5-6 / 6-5 / 7-4 splits, and vary their selections across both real teams in the fixture. It compresses that manual per-match workflow into a 4-step process (Substitute -> Mandate -> Captaincy -> Generate) that completes in a few seconds.<br><br>PICK2WIN deliberately <strong>does not use salary caps, budgets, or scoring rules</strong> because those mechanics sit outside PICK2WIN and are not part of its scope. PICK2WIN focuses purely on the football-side configuration workflow; once your 20 teams are generated, what you do with them is entirely your own choice.</div>
-      </details>
+<footer>
+  <div class="wrap">
+    <div class="foot-card">
+      <h3>Still have a question?</h3>
+      <p>Every coin purchase and every UCT generation is recorded in your account. For billing questions, include your Razorpay Payment ID.</p>
+      <a class="foot-mail" href="mailto:support@pick2win.io">✉ support@pick2win.io</a>
+      <div class="foot-legal">
+        <span class="p2w">PICK2WIN Technologies Private Limited</span> · CIN U62013KA2026PTC222079 · Bengaluru, India<br>
+        PICK2WIN is an independent lineup preparation platform and is not affiliated with, endorsed by, or operated by any fantasy platform. All trademarks belong to their respective owners.
+      </div>
     </div>
   </div>
-</section>
+</footer>
 
 <app-footer></app-footer>
