@@ -4,11 +4,11 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
 
 interface UserFeedbackItem {
-  id: number;
+  id: number | string;
   title: string;
   message: string;
   created_at: string;
-  status:string;
+  status: string;
 }
 
 @Component({
@@ -17,6 +17,25 @@ interface UserFeedbackItem {
   styleUrls: ['./feedback.component.css']
 })
 export class FeedbackComponent implements OnInit {
+  readonly newSurveyQuestions = [
+    { n: 1, name: 'uct_sentiment', text: 'Overall, how do you feel about PICK2WIN UCT today?', options: [['love','Love it'],['like','Like it'],['neutral','Neutral'],['dislike','Dislike'],['strong-dislike','Strongly dislike']] },
+    { n: 2, name: 'uct_likes', text: 'What do you like most?', multiple: true, optional: true, options: [['fast','Fast team generation'],['time','Saves preparation time'],['variety','Team variety'],['captain','Captain / Vice-Captain options'],['strategy','Strategy controls'],['rules','Platform-specific lineup rules'],['txt','TXT download'],['combos','Multiple team combinations']] },
+    { n: 3, name: 'uct_changes', text: 'What should we improve first?', multiple: true, hint: 'Choose up to 3 - at least one required', options: [['gen','Team generation quality'],['diversity','Team diversity'],['cvc','Captain / Vice-Captain logic'],['ui','User interface'],['perf','Performance'],['exports','Downloads & exports'],['comps','More football competitions'],['platforms','More fantasy platforms'],['exposure','Player Exposure %'],['mobile','Mobile experience']] },
+    { n: 4, name: 'uct_platform_use', text: 'Which fantasy platform do you currently use most?', options: [['dk','DraftKings'],['fd','FanDuel'],['both','Both equally'],['neither','Neither currently']] },
+    { n: 5, name: 'uct_platform_p2w', text: 'Which supported fantasy platform do you use with PICK2WIN most often?', options: [['dk','DraftKings'],['fd','FanDuel'],['both','Both equally']] },
+    { n: 6, name: 'uct_platform_benefit', text: 'Which platform benefits the most from PICK2WIN?', options: [['dk','DraftKings'],['fd','FanDuel'],['both','Both equally'],['unsure','Not sure yet']] },
+    { n: 7, name: 'uct_app_value', text: "How valuable is PICK2WIN's platform-specific lineup approach?", options: [['extreme','Extremely valuable'],['valuable','Valuable'],['neutral','Neutral'],['slight','Slightly valuable'],['none','Not valuable']] },
+    { n: 8, name: 'uct_control', text: 'How much control do you prefer during team generation?', options: [['auto','Fully automatic'],['mostly-auto','Mostly automatic'],['balanced','Balanced'],['mostly-manual','Mostly manual'],['full','Full control']] },
+    { n: 9, name: 'uct_exposure', text: 'Would you use Player Exposure % controls?', options: [['yes','Definitely'],['maybe','Maybe'],['no','Not interested']] },
+    { n: 10, name: 'uct_strategy', text: 'Do generated teams match your strategy and provide enough variety?', options: [['always','Always'],['most','Most of the time'],['sometimes','Sometimes'],['rarely','Rarely'],['never','Never']] },
+    { n: 11, name: 'uct_pricing', text: 'Which pricing model do you prefer?', options: [['coins','Coin packs'],['per-uct','Pay per UCT'],['monthly','Monthly subscription'],['annual','Annual subscription'],['pass','Competition or Series Pass']] },
+    { n: 12, name: 'uct_recommend', text: 'How likely are you to recommend PICK2WIN?', options: [['very','Very likely'],['likely','Likely'],['maybe','Maybe'],['unlikely','Unlikely'],['very-unlikely','Very unlikely']] },
+    { n: 13, name: 'uct_next_sport', text: 'Which sport should PICK2WIN support next?', divider: 'Future Roadmap', options: [['nfl','American Football (NFL)'],['nba','Basketball'],['mlb','Baseball'],['cricket','Cricket']] },
+    { n: 14, name: 'uct_current_sports', text: 'Which sports do you currently play in Daily Fantasy Sports?', multiple: true, hint: 'Select all that apply - at least one required', options: [['soccer','Football (Soccer)'],['nfl','NFL'],['nba','Basketball'],['mlb','Baseball'],['cricket','Cricket']] },
+    { n: 15, name: 'uct_coin_multisport', text: 'Would you use your coin balance across multiple sports?', options: [['yes','Definitely'],['probably','Probably'],['maybe','Maybe'],['probably-not','Probably not'],['no','No']] },
+    { n: 16, name: 'uct_more_sports', text: 'Would additional sports encourage you to use PICK2WIN more often?', options: [['yes','Definitely'],['probably','Probably'],['maybe','Maybe'],['probably-not','Probably not'],['no','No']] },
+    { n: 17, name: 'uct_comp_soccer', text: 'Which Football competitions should PICK2WIN prioritise?', multiple: true, optional: true, options: [['premier-league','Premier League'],['uefa-champions-league','UEFA Champions League'],['uefa-europa-league','UEFA Europa League'],['fifa-world-cup','FIFA World Cup'],['uefa-euro','UEFA Euro'],['mls','MLS'],['la-liga','La Liga'],['serie-a','Serie A'],['bundesliga','Bundesliga'],['ligue-1','Ligue 1'],['fa-cup','FA Cup'],['other','Other']] }
+  ];
   feedbackTab: 'vote' | 'suggest' = 'vote';
   surveySubmitted = false;
   feedbackSubmitted = false;
@@ -63,21 +82,26 @@ export class FeedbackComponent implements OnInit {
       return;
     }
 
-    const rating = Number(formData.get('uct_rating') || 0);
-
     const payload = {
       answers: {
         q1: String(formData.get('uct_sentiment') || ''),
-        q2: formData.getAll('uct_changes').map(String),
-        q3: String(formData.get('uct_frequency') || ''),
-        q4: String(formData.get('uct_recommend') || ''),
-        q5: String(formData.get('uct_team_need') || ''),
-        q6: String(formData.get('uct_competitions') || '').trim(),
-        q7: String(formData.get('uct_next_sport') || ''),
-        q8: String(formData.get('uct_pricing') || ''),
-        q9: String(formData.get('uct_device') || ''),
-        q10: String(formData.get('survey_comment') || '').trim(),
-        q11: rating
+        q2: formData.getAll('uct_likes').map(String),
+        q3: formData.getAll('uct_changes').map(String),
+        q4: String(formData.get('uct_platform_use') || ''),
+        q5: String(formData.get('uct_platform_p2w') || ''),
+        q6: String(formData.get('uct_platform_benefit') || ''),
+        q7: String(formData.get('uct_app_value') || ''),
+        q8: String(formData.get('uct_control') || ''),
+        q9: String(formData.get('uct_exposure') || ''),
+        q10: String(formData.get('uct_strategy') || ''),
+        q11: String(formData.get('uct_pricing') || ''),
+        q12: String(formData.get('uct_recommend') || ''),
+        q13: String(formData.get('uct_next_sport') || ''),
+        q14: formData.getAll('uct_current_sports').map(String),
+        q15: String(formData.get('uct_coin_multisport') || ''),
+        q16: String(formData.get('uct_more_sports') || ''),
+        q17: formData.getAll('uct_comp_soccer').map(String),
+        q18: Number(formData.get('uct_rating') || 0)
       }
     };
 
@@ -174,17 +198,27 @@ export class FeedbackComponent implements OnInit {
       return '-';
     }
 
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
     return new Intl.DateTimeFormat('en-GB', {
       month: 'short',
       year: 'numeric'
-    }).format(new Date(value));
+    }).format(date);
   }
 
   feedbackTitle(title: string): string {
     return (title || 'Feedback').replace(/_/g, ' ');
   }
 
-  trackFeedback(_: number, item: UserFeedbackItem): number {
+  feedbackStatusClass(status: string): string {
+    const value = String(status || '').trim().toLowerCase();
+    return value === 'planned' || value === 'reviewing' ? 'tag-planned' : 'tag-shipped';
+  }
+
+  trackFeedback(_: number, item: UserFeedbackItem): number | string {
     return item.id;
   }
 
@@ -201,16 +235,23 @@ export class FeedbackComponent implements OnInit {
   }
 
   private isSurveyFormComplete(formData: FormData): boolean {
+    const changes = formData.getAll('uct_changes');
     return !!String(formData.get('uct_sentiment') || '')
-      && formData.getAll('uct_changes').length > 0
-      && !!String(formData.get('uct_frequency') || '')
-      && !!String(formData.get('uct_recommend') || '')
-      && !!String(formData.get('uct_team_need') || '')
-      && !!String(formData.get('uct_competitions') || '').trim()
-      && !!String(formData.get('uct_next_sport') || '')
+      && changes.length > 0
+      && changes.length <= 3
+      && !!String(formData.get('uct_platform_use') || '')
+      && !!String(formData.get('uct_platform_p2w') || '')
+      && !!String(formData.get('uct_platform_benefit') || '')
+      && !!String(formData.get('uct_app_value') || '')
+      && !!String(formData.get('uct_control') || '')
+      && !!String(formData.get('uct_exposure') || '')
+      && !!String(formData.get('uct_strategy') || '')
       && !!String(formData.get('uct_pricing') || '')
-      && !!String(formData.get('uct_device') || '')
-      && !!String(formData.get('survey_comment') || '').trim()
+      && !!String(formData.get('uct_recommend') || '')
+      && !!String(formData.get('uct_next_sport') || '')
+      && formData.getAll('uct_current_sports').length > 0
+      && !!String(formData.get('uct_coin_multisport') || '')
+      && !!String(formData.get('uct_more_sports') || '')
       && Number(formData.get('uct_rating') || 0) > 0;
   }
 
@@ -240,7 +281,22 @@ export class FeedbackComponent implements OnInit {
 
     this.api.getFeedback().subscribe({
       next: (res) => {
-        this.feedbackItems = res?.success && Array.isArray(res.data) ? res.data : [];
+        const data = res?.data;
+        const rows = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.feedback)
+            ? data.feedback
+            : Array.isArray(data?.items)
+              ? data.items
+              : [];
+
+        this.feedbackItems = res?.success === false ? [] : rows.map((item: any, index: number) => ({
+          id: item?.id ?? `feedback-${index}`,
+          title: String(item?.title || item?.subject || item?.category || 'User feedback'),
+          message: String(item?.message || item?.suggestion || item?.description || ''),
+          created_at: String(item?.created_at || item?.date || item?.updated_at || ''),
+          status: String(item?.status || 'Shipped')
+        }));
         this.loadingFeedback = false;
       },
       error: (err) => {

@@ -1,5 +1,28 @@
 <app-header></app-header>
 
+<div class="payment-status-overlay" *ngIf="paymentStatus !== 'idle'" role="dialog" aria-modal="true" aria-labelledby="payment-status-title">
+  <div class="payment-status-card" [class.is-success]="paymentStatus === 'success'" [class.is-error]="paymentStatus === 'error'" aria-live="assertive">
+    <div class="payment-status-spinner" *ngIf="paymentStatus === 'verifying'" aria-hidden="true"></div>
+    <span class="material-symbols-outlined payment-status-icon" *ngIf="paymentStatus === 'success'" aria-hidden="true">check_circle</span>
+    <span class="material-symbols-outlined payment-status-icon" *ngIf="paymentStatus === 'error'" aria-hidden="true">error</span>
+
+    <p class="payment-status-eyebrow">Razorpay payment</p>
+    <h2 id="payment-status-title">
+      {{ paymentStatus === 'verifying' ? 'Confirming your payment...' : paymentStatus === 'success' ? 'Payment successful!' : 'Payment failed' }}
+    </h2>
+    <p class="payment-status-copy" *ngIf="paymentStatus === 'verifying'">Please wait while we verify the payment and add your coins. Do not refresh or close this page.</p>
+    <p class="payment-status-copy" *ngIf="paymentStatus === 'success'">{{ paymentMessage }} Redirecting you to your profile...</p>
+    <p class="payment-status-copy" *ngIf="paymentStatus === 'error'">{{ paymentError }}</p>
+
+    <div class="payment-status-pack" *ngIf="selectedPlan">
+      <span>{{ selectedPlan.name }}</span>
+      <strong>{{ totalCoinsForPlan(selectedPlan) }} coins</strong>
+    </div>
+
+    <button type="button" class="payment-status-close" *ngIf="paymentStatus === 'error'" (click)="closePaymentStatus()">Back to pricing</button>
+  </div>
+</div>
+
 <section class="pricing-page panel" id="pricing">
   <div class="wrap">
     <!-- ⚽ COIN USAGE -->

@@ -380,7 +380,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   get salaryPlaceholder(): string {
-    return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Units';
+    return this.selectedPlatform === 'draftkings' ? 'Salary' : 'Salary';
   }
 
   get salaryInputMode(): string {

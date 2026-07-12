@@ -30,7 +30,16 @@ export class AdminService {
   updateAdminProfile(data: { name?: string; mobile?: string; currency?: number }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-profile`, data); }
   updateAdminCredentials(data: { currentPassword: string; newPassword: string; confirmPassword: string; new2FACode: string }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-credentials`, data); }
 
-  toggleAdmin2Fa(enabled: boolean): Observable<any> { return this.http.post(`${this.BASE}/admin/admin-auth/toggle-2fa`, { enabled }); }
+  setupAdmin2Fa(adminId: number): Observable<{ success: boolean; secret: string; otpauthUrl: string; message?: string }> {
+    return this.http.post<{ success: boolean; secret: string; otpauthUrl: string; message?: string }>(
+      `${this.BASE}/admin/admin-auth/setup-2fa`,
+      { admin_id: adminId }
+    );
+  }
+
+  toggleAdmin2Fa(adminId: number, enabled: boolean): Observable<any> {
+    return this.http.post(`${this.BASE}/admin/admin-auth/toggle-2fa`, { admin_id: adminId, enabled });
+  }
   
   removeAdmin(id: number | string): Observable<any> { return this.http.delete(`${this.BASE}/admin/admin-auth/remove-admin/${id}`); }
 

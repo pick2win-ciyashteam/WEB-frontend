@@ -35,6 +35,31 @@
       </div>
 
       <form #surveyForm class="fb-survey-form" *ngIf="!surveySubmitted; else surveyThanks" (input)="updateSurveyCompletion(surveyForm)" (change)="updateSurveyCompletion(surveyForm)" (submit)="submitSurvey($event)">
+        <ng-container *ngFor="let question of newSurveyQuestions">
+          <div class="fb-section-divider" *ngIf="question.divider">{{ question.divider }}</div>
+          <div class="fb-q">
+            <div class="fb-q-num">Q{{ question.n }} - {{ question.optional ? 'Optional' : (question.multiple ? 'Choose at least one' : 'Required') }}</div>
+            <div class="fb-q-text">{{ question.text }}</div>
+            <div class="fb-pills">
+              <label class="fb-pill" *ngFor="let option of question.options">
+                <input [type]="question.multiple ? 'checkbox' : 'radio'" [name]="question.name" [value]="option[0]" [required]="!question.optional && !question.multiple"><span>{{ option[1] }}</span>
+              </label>
+            </div>
+            <div class="fb-stars-hint" *ngIf="question.hint">{{ question.hint }}</div>
+          </div>
+        </ng-container>
+
+        <div class="fb-q">
+          <div class="fb-q-num">Q18 - Final - Required</div><div class="fb-q-text">Overall, how would you rate PICK2WIN UCT?</div>
+          <div class="fb-stars"><input type="radio" id="new-r5" name="uct_rating" value="5" required><label for="new-r5">★</label><input type="radio" id="new-r4" name="uct_rating" value="4"><label for="new-r4">★</label><input type="radio" id="new-r3" name="uct_rating" value="3"><label for="new-r3">★</label><input type="radio" id="new-r2" name="uct_rating" value="2"><label for="new-r2">★</label><input type="radio" id="new-r1" name="uct_rating" value="1"><label for="new-r1">★</label></div>
+          <div class="fb-stars-hint">Tap a star - 1 = poor, 5 = excellent - required</div>
+        </div>
+
+        <div class="fb-shipped-state error" *ngIf="surveySubmitError">{{ surveySubmitError }}</div><div class="fb-submit-loader" *ngIf="submittingSurvey"><span></span><b>Submitting your votes...</b></div>
+        <div class="fb-submit-row"><button type="submit" class="btn-pri-large" [disabled]="submittingSurvey || !surveyComplete"><span class="material-symbols-outlined">task_alt</span>{{ submittingSurvey ? 'Submitting...' : (surveyComplete ? 'Submit My Votes' : 'Answer all required questions') }}</button><span class="fb-sla">Required questions must be completed - one submission per user</span></div>
+      </form>
+
+      <form class="fb-survey-form" *ngIf="false">
         <div class="fb-q">
           <div class="fb-q-num">Q1 - Required</div>
           <div class="fb-q-text">{{ questionText(1, 'Overall, how do you feel about UCT - the engine that builds your 20 teams?') }}</div>
@@ -294,56 +319,16 @@
     <p>Proof we listen - every item below started as a user suggestion in this form.</p>
   </div>
   <div class="fb-shipped-list">
-    <div class="fb-shipped-item">
-      <div class="fb-shipped-date">May 2026</div>
-      <div class="fb-shipped-body">
-        <div class="fb-shipped-title">Team downloads now use .txt format with structured player rows</div>
-        <p>Requested by 47 users - gave better paste-compatibility with several external entry forms.</p>
-      </div>
-      <div class="fb-shipped-tag tag-shipped">Shipped</div>
-    </div>
-    <div class="fb-shipped-item">
-      <div class="fb-shipped-date">May 2026</div>
-      <div class="fb-shipped-body">
-        <div class="fb-shipped-title">Mobile menu now opens a proper drawer (not the signup modal)</div>
-        <p>Reported by 12 users - originally a critical UX bug.</p>
-      </div>
-      <div class="fb-shipped-tag tag-shipped">Shipped</div>
-    </div>
-    <div class="fb-shipped-item">
-      <div class="fb-shipped-date">Apr 2026</div>
-      <div class="fb-shipped-body">
-        <div class="fb-shipped-title">Added 4 more leagues (J1 League, Eredivisie, MLS Cup, Super Lig)</div>
-        <p>Requested across Japan, Netherlands, Turkey, and the US.</p>
-      </div>
-      <div class="fb-shipped-tag tag-shipped">Shipped</div>
-    </div>
-    <div class="fb-shipped-item">
-      <div class="fb-shipped-date">Apr 2026</div>
-      <div class="fb-shipped-body">
-        <div class="fb-shipped-title">UCT engine now varies formation across all 4 splits</div>
-        <p>One of the most-asked tuning requests from early users.</p>
-      </div>
-      <div class="fb-shipped-tag tag-shipped">Shipped</div>
-    </div>
-    <div class="fb-shipped-item upcoming">
-      <div class="fb-shipped-date">Jun 2026</div>
-      <div class="fb-shipped-body">
-        <div class="fb-shipped-title">Custom team count (10 / 15 / 20 / 25 / 30)</div>
-        <p>Currently #1 in the suggestion backlog - planned for the v2.4 engine release.</p>
-      </div>
-      <div class="fb-shipped-tag tag-planned">Planned</div>
-    </div>
-
     <div class="fb-shipped-state" *ngIf="loadingFeedback">Loading recent feedback...</div>
     <div class="fb-shipped-state error" *ngIf="!loadingFeedback && feedbackLoadError">{{ feedbackLoadError }}</div>
-    <div class="fb-shipped-item" *ngFor="let item of feedbackItems; trackBy: trackFeedback">
+    <div class="fb-shipped-state" *ngIf="!loadingFeedback && !feedbackLoadError && !feedbackItems.length">No recent feedback improvements are available yet.</div>
+    <div class="fb-shipped-item" [class.upcoming]="feedbackStatusClass(item.status) === 'tag-planned'" *ngFor="let item of feedbackItems; trackBy: trackFeedback">
       <div class="fb-shipped-date">{{ formatFeedbackDate(item.created_at) }}</div>
       <div class="fb-shipped-body">
         <div class="fb-shipped-title">{{ feedbackTitle(item.title) }}</div>
         <p>{{ item.message }}</p>
       </div>
-      <div class="fb-shipped-tag tag-shipped">{{ item.status }}</div>
+      <div class="fb-shipped-tag" [ngClass]="feedbackStatusClass(item.status)">{{ item.status }}</div>
     </div>
   </div>
 </div>

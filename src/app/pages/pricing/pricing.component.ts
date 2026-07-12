@@ -22,7 +22,13 @@ interface PricingPack {
   tone: string;
 }
 
-type RazorpayConstructor = new (options: Record<string, unknown>) => { open: () => void };
+interface RazorpayCheckout {
+  open: () => void;
+  on: (event: string, handler: (response: any) => void) => void;
+}
+
+type RazorpayConstructor = new (options: Record<string, unknown>) => RazorpayCheckout;
+type PaymentStatus = 'idle' | 'verifying' | 'success' | 'error';
 
 declare global {
   interface Window {
@@ -52,6 +58,7 @@ export class PricingComponent implements OnInit, OnDestroy {
 selectedPlan: SubscriptionPlan | null = null;
 paymentProcessing = false;
 paymentSucceeded = false;
+paymentStatus: PaymentStatus = 'idle';
 paymentMethodsOpen = false;
 
   constructor(
@@ -104,6 +111,16 @@ paymentMethodsOpen = false;
     this.paymentMethodsOpen = false;
   }
 
+  closePaymentStatus(): void {
+    if (this.paymentStatus !== 'error') {
+      return;
+    }
+
+    this.paymentStatus = 'idle';
+    this.selectedPlan = null;
+    this.paymentError = '';
+  }
+
   claimFreeMatch(): void {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/lineouts']);
@@ -148,6 +165,7 @@ paymentMethodsOpen = false;
   async buyPlan(plan: SubscriptionPlan): Promise<void> {
   this.paymentError = '';
   this.paymentMessage = '';
+  this.paymentStatus = 'idle';
 
   if (!this.authService.isLoggedIn()) {
     this.authModal.open('login');
@@ -406,8 +424,11 @@ paymentMethodsOpen = false;
       handler: (response: Record<string, unknown>) => this.handleRazorpaySuccess(plan, order, response),
       modal: {
         ondismiss: () => {
-          this.paymentProcessing = false;
-          this.purchasingPlanId = null;
+          if (this.paymentStatus === 'idle') {
+            this.paymentProcessing = false;
+            this.purchasingPlanId = null;
+            this.selectedPlan = null;
+          }
         }
       }
     };
@@ -418,7 +439,9 @@ paymentMethodsOpen = false;
 
     this.paymentProcessing = true;
     this.paymentError = '';
-    new window.Razorpay(options).open();
+    const checkout = new window.Razorpay(options);
+    checkout.on('payment.failed', (response: any) => this.handleRazorpayFailure(response));
+    checkout.open();
   }
 
   private handleRazorpaySuccess(
@@ -426,6 +449,8 @@ paymentMethodsOpen = false;
     order: { orderId: string; amount: number; currency: string },
     response: Record<string, unknown>
   ): void {
+    this.paymentStatus = 'verifying';
+    this.paymentProcessing = true;
     this.paymentMessage = 'Payment successful. Verifying and adding coins...';
     this.paymentError = '';
 
@@ -441,18 +466,21 @@ paymentMethodsOpen = false;
         this.paymentProcessing = false;
 
         if (res?.success === false) {
+          this.paymentStatus = 'error';
           this.paymentMessage = '';
           this.paymentError = res?.message || 'Payment verified by Razorpay, but coins could not be added. Please contact support.';
           return;
         }
 
         this.paymentSucceeded = true;
+        this.paymentStatus = 'success';
         this.paymentMessage = res?.message || 'Payment successful. Coins added successfully.';
         this.profileService.loadProfile(true).subscribe();
 
         setTimeout(() => {
           this.selectedPlan = null;
           this.paymentSucceeded = false;
+          this.paymentStatus = 'idle';
           this.router.navigate(['/user/profile'], {
             queryParams: { refresh: Date.now() }
           });
@@ -460,6 +488,7 @@ paymentMethodsOpen = false;
       },
       error: (err) => {
         this.paymentProcessing = false;
+        this.paymentStatus = 'error';
         this.paymentMessage = '';
         this.paymentError =
           err?.error?.message ||
@@ -467,6 +496,15 @@ paymentMethodsOpen = false;
           'Payment completed, but verification failed. Please contact support with your Razorpay payment ID.';
       }
     });
+  }
+
+  private handleRazorpayFailure(response: any): void {
+    const error = response?.error || {};
+    this.paymentProcessing = false;
+    this.paymentSucceeded = false;
+    this.paymentStatus = 'error';
+    this.paymentMessage = '';
+    this.paymentError = error?.description || error?.reason || 'Payment failed. No coins were added. Please try again.';
   }
 
   private razorpayKeyFrom(res: any): string {

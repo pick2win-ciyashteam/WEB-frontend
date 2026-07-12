@@ -373,48 +373,43 @@
           <span class="material-symbols-outlined" aria-hidden="true">mail</span>
           <div>
             <h3>Change Email</h3>
-            <p>Verify your current email before adding a new email address.</p>
+            <p>Enter a new email, then securely verify the OTPs sent to both addresses.</p>
           </div>
         </div>
 
         <div class="email-change-progress" aria-label="Email change progress">
-          <span [class.active]="emailChangeStep === 'current' || emailChangeStep === 'currentOtp'" [class.done]="emailChangeStep !== 'current' && emailChangeStep !== 'currentOtp'">1 <b>Current</b></span>
+          <span [class.active]="emailChangeStep === 'details'" [class.done]="emailChangeStep !== 'details'">1 <b>Email</b></span>
           <i></i>
-          <span [class.active]="emailChangeStep === 'newEmail'" [class.done]="emailChangeStep === 'newOtp' || emailChangeStep === 'success'">2 <b>New email</b></span>
+          <span [class.active]="emailChangeStep === 'oldOtp'" [class.done]="emailChangeStep === 'newOtp' || emailChangeStep === 'success'">2 <b>Old OTP</b></span>
           <i></i>
-          <span [class.active]="emailChangeStep === 'newOtp'" [class.done]="emailChangeStep === 'success'">3 <b>Verify</b></span>
+          <span [class.active]="emailChangeStep === 'newOtp'" [class.done]="emailChangeStep === 'success'">3 <b>New OTP</b></span>
         </div>
 
-        <ng-container *ngIf="emailChangeStep === 'current' || emailChangeStep === 'currentOtp'">
+        <ng-container *ngIf="emailChangeStep === 'details'">
           <label class="edit-field">
-            <span>Current email address</span>
+            <span>Old email address</span>
             <input type="email" [value]="currentEmail" disabled>
           </label>
 
-          <button *ngIf="emailChangeStep === 'current'" class="edit-action-btn" type="button" [disabled]="emailChanging" (click)="requestCurrentEmailOtp()">
-            {{ emailChanging ? 'Sending OTP...' : 'Send Email OTP' }}
-          </button>
-
-          <div class="otp-box" *ngIf="emailChangeStep === 'currentOtp'">
-            <label class="edit-field">
-              <span>OTP sent to current email</span>
-              <input type="text" inputmode="numeric" maxlength="6" [value]="currentEmailOtp" [disabled]="emailChanging" placeholder="Enter 6-digit OTP" (input)="currentEmailOtp = $any($event.target).value.slice(0, 6)">
-            </label>
-            <button class="edit-action-btn verify" type="button" [disabled]="emailChanging || currentEmailOtp.length !== 6" (click)="verifyCurrentEmailOtp()">
-              {{ emailChanging ? 'Verifying...' : 'Verify Current Email' }}
-            </button>
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="emailChangeStep === 'newEmail'">
           <label class="edit-field">
-            <span>New email address</span>
-            <input type="email" [value]="editEmail" [disabled]="emailChanging" placeholder="name@example.com" (input)="editEmail = $any($event.target).value.trim()">
+            <span>Enter new email address</span>
+            <input type="email" autocomplete="email" [value]="editEmail" [disabled]="emailChanging" placeholder="name@example.com" (input)="editEmail = $any($event.target).value.trim()">
           </label>
           <button class="edit-action-btn" type="button" [disabled]="emailChanging || !editEmail" (click)="requestEmailChange()">
-            {{ emailChanging ? 'Sending OTP...' : 'Send OTP to New Email' }}
+            {{ emailChanging ? 'Sending OTPs...' : 'Send OTPs to Both Emails' }}
           </button>
         </ng-container>
+
+        <div class="otp-box" *ngIf="emailChangeStep === 'oldOtp'">
+          <label class="edit-field">
+            <span>OTP sent to old email</span>
+            <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" [value]="currentEmailOtp" [disabled]="emailChanging" placeholder="Enter 6-digit OTP" (input)="currentEmailOtp = $any($event.target).value.slice(0, 6)">
+          </label>
+          <small class="edit-mobile-hint">Check {{ currentEmail }} and enter its OTP first.</small>
+          <button class="edit-action-btn verify" type="button" [disabled]="emailChanging || currentEmailOtp.length !== 6" (click)="verifyCurrentEmailOtp()">
+            {{ emailChanging ? 'Verifying...' : 'Verify Old Email OTP' }}
+          </button>
+        </div>
 
         <div class="otp-box" *ngIf="emailChangeStep === 'newOtp'">
           <label class="edit-field">
@@ -426,6 +421,7 @@
               [value]="emailOtp"
               [disabled]="emailChanging"
               placeholder="Enter 6-digit OTP"
+              autocomplete="one-time-code"
               (input)="emailOtp = $any($event.target).value.slice(0, 6)">
           </label>
           <button class="edit-action-btn verify" type="button" [disabled]="emailChanging || emailOtp.length !== 6" (click)="verifyEmailOtp()">

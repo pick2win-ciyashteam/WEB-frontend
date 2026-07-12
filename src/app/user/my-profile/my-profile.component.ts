@@ -27,7 +27,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   emailOtp = '';
   mobileOtpSent = false;
   emailOtpSent = false;
-  emailChangeStep: 'current' | 'currentOtp' | 'newEmail' | 'newOtp' | 'success' = 'current';
+  emailChangeStep: 'details' | 'oldOtp' | 'newOtp' | 'success' = 'details';
   mobileChanging = false;
   emailChanging = false;
   mobileMessage = '';
@@ -259,7 +259,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     this.emailOtp = '';
     this.mobileOtpSent = false;
     this.emailOtpSent = false;
-    this.emailChangeStep = 'current';
+    this.emailChangeStep = 'details';
     this.mobileMessage = '';
     this.emailMessage = '';
     this.mobileError = '';
@@ -365,28 +365,6 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  requestCurrentEmailOtp(): void {
-    this.emailMessage = '';
-    this.emailError = '';
-    this.emailChanging = true;
-
-    this.api.requestCurrentEmailChangeOtp().subscribe({
-      next: (res) => {
-        this.emailChanging = false;
-        if (res?.success === false) {
-          this.emailError = res?.message || 'Unable to send OTP to your current email.';
-          return;
-        }
-        this.emailChangeStep = 'currentOtp';
-        this.emailMessage = res?.message || `A 6-digit OTP was sent to ${this.currentEmail}.`;
-      },
-      error: (err) => {
-        this.emailChanging = false;
-        this.emailError = err?.error?.message || err?.error?.error || 'Unable to send OTP to your current email.';
-      }
-    });
-  }
-
   verifyCurrentEmailOtp(): void {
     const otp = this.currentEmailOtp.trim();
     this.emailMessage = '';
@@ -398,15 +376,15 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     }
 
     this.emailChanging = true;
-    this.api.verifyCurrentEmailChangeOtp({ otp }).subscribe({
+    this.api.verifyOldEmailOtp({ otp }).subscribe({
       next: (res) => {
         this.emailChanging = false;
         if (res?.success === false) {
           this.emailError = res?.message || 'Current email OTP verification failed.';
           return;
         }
-        this.emailChangeStep = 'newEmail';
-        this.emailMessage = res?.message || 'Current email verified. Enter your new email address.';
+        this.emailChangeStep = 'newOtp';
+        this.emailMessage = res?.message || `Current email verified. Now enter the OTP sent to ${this.editEmail}.`;
       },
       error: (err) => {
         this.emailChanging = false;
@@ -425,6 +403,11 @@ export class MyProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (newEmail.toLowerCase() === this.currentEmail.trim().toLowerCase()) {
+      this.emailError = 'New email must be different from your current email address.';
+      return;
+    }
+
     this.emailChanging = true;
     this.api.changeEmail({ new_email: newEmail }).subscribe({
       next: (res) => {
@@ -437,8 +420,8 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         }
 
         this.emailOtpSent = true;
-        this.emailChangeStep = 'newOtp';
-        this.emailMessage = res?.message || 'OTP sent to the new email address.';
+        this.emailChangeStep = 'oldOtp';
+        this.emailMessage = res?.message || `OTPs sent to ${this.currentEmail} and ${this.editEmail}. Verify your current email first.`;
       },
       error: (err) => {
         console.error('change email error:', err);
@@ -459,7 +442,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     }
 
     this.emailChanging = true;
-    this.api.verifyEmailChange({ type: 'email', otp }).subscribe({
+    this.api.verifyEmailChange({ otp }).subscribe({
       next: (res) => {
         
         this.emailChanging = false;
@@ -469,7 +452,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.emailMessage = res?.message || 'Email address updated successfully.';
+        this.emailMessage = res?.message || 'Your new email was updated successfully.';
         this.currentEmail = this.editEmail;
         this.emailOtpSent = false;
         this.emailOtp = '';
