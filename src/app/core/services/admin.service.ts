@@ -28,7 +28,7 @@ export class AdminService {
   updateAdmin(id: number | string, data: Record<string, unknown>): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-admin/${id}`, data); }
 
   updateAdminProfile(data: { name?: string; mobile?: string; currency?: number }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-profile`, data); }
-  updateAdminCredentials(data: { currentPassword: string; newPassword: string; confirmPassword: string; new2FACode: string }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-credentials`, data); }
+  updateAdminCredentials(data: { currentPassword: string; newPassword: string; confirmPassword: string }): Observable<any> { return this.http.patch(`${this.BASE}/admin/admin-auth/update-credentials`, data); }
 
   setupAdmin2Fa(adminId: number): Observable<{ success: boolean; secret: string; otpauthUrl: string; message?: string }> {
     return this.http.post<{ success: boolean; secret: string; otpauthUrl: string; message?: string }>(

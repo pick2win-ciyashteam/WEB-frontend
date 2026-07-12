@@ -492,3 +492,140 @@ td input[type="checkbox"] {
     grid-template-columns: 1fr;
   }
 }
+
+/* Series manager readability and responsive interaction pass. */
+.report-card .table-wrap {
+  position: relative;
+  overflow: auto;
+  border: 1px solid rgba(91, 176, 230, 0.28);
+  border-radius: 13px;
+  background: #061a2a;
+  scrollbar-color: #5e7387 #061522;
+  scrollbar-width: thin;
+}
+
+.report-card table {
+  min-width: 1120px;
+  table-layout: auto;
+}
+
+.report-card thead {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.report-card th {
+  height: 48px;
+  padding: 12px 14px;
+  border-bottom: 2px solid rgba(244, 180, 0, 0.42);
+  color: #e6f2fa;
+  background: #0b304a;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+}
+
+.report-card td {
+  padding: 14px;
+  color: #c8d6e0;
+  background: #071d2e;
+}
+
+.report-card tbody tr:nth-child(even) td { background: #092237; }
+.report-card tbody tr:hover td { background: #0d3048; }
+.report-card tbody tr.fixture-selected td {
+  background: rgba(11, 204, 142, 0.11);
+  border-bottom-color: rgba(11, 204, 142, 0.3);
+}
+.report-card tbody tr.fixture-selected td:first-child { box-shadow: inset 4px 0 0 #0bcc8e; }
+
+.report-card th:nth-child(1), .report-card td:nth-child(1) { width: 78px; text-align: center; }
+.report-card th:nth-child(2), .report-card td:nth-child(2) { min-width: 130px; }
+.report-card th:nth-child(3), .report-card td:nth-child(3) { min-width: 112px; }
+.report-card th:nth-child(4), .report-card td:nth-child(4) { min-width: 210px; }
+.report-card th:nth-child(5), .report-card td:nth-child(5) { min-width: 190px; }
+.report-card th:nth-child(6), .report-card td:nth-child(6) { min-width: 220px; }
+.report-card th:nth-child(7), .report-card td:nth-child(7) { min-width: 135px; }
+.report-card th:nth-child(8), .report-card td:nth-child(8) { min-width: 230px; }
+
+.report-card td input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0;
+  border-radius: 6px;
+  accent-color: #0bcc8e;
+  cursor: pointer;
+}
+
+.selected-head {
+  align-items: center;
+  padding: 22px 18px 0;
+  border-top-color: rgba(91, 176, 230, 0.25);
+}
+
+.selected-head .status-pill {
+  padding: 8px 14px;
+  border: 1px solid rgba(11, 204, 142, 0.42);
+  color: #5fffc5;
+  background: rgba(11, 204, 142, 0.15);
+  box-shadow: 0 0 24px rgba(11, 204, 142, 0.1);
+}
+
+.selected-action-row { padding: 0 18px; }
+.confirm-selected-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 22px;
+  border: 1px solid #ffd45e;
+  border-radius: 999px;
+  color: #071522;
+  background: linear-gradient(135deg, #f4b400, #ffd45e);
+  box-shadow: 0 12px 28px rgba(244, 180, 0, 0.24);
+  font-weight: 900;
+}
+.confirm-selected-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.07); }
+.confirm-selected-btn .material-symbols-outlined { font-size: 20px; }
+.admin-confirm-actions button:last-child {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid #5fffc5;
+  color: #032318;
+  background: linear-gradient(135deg, #0bcc8e, #5fffc5);
+  box-shadow: 0 10px 24px rgba(11, 204, 142, 0.2);
+  font-weight: 900;
+}
+
+.fixture-card-grid { padding: 0 18px 18px; }
+.fixture-card { border-color: rgba(91, 176, 230, 0.24); background: #071d2e; }
+
+.date-form button[type="submit"] {
+  min-height: 46px;
+  border-radius: 12px;
+  color: #071522;
+  background: linear-gradient(135deg, #5bb0e6, #9bdcff);
+  box-shadow: 0 10px 24px rgba(91, 176, 230, 0.18);
+}
+
+@media (max-width: 780px) {
+  .report-card { padding: 14px; }
+  .report-card .table-wrap { margin-right: -4px; margin-left: -4px; border-radius: 10px; }
+  .report-card table { min-width: 1040px; }
+  .report-card th, .report-card td { padding: 12px; }
+  .selected-head { padding: 20px 4px 0; }
+  .selected-action-row { padding: 0 4px; }
+  .confirm-selected-btn { width: 100%; }
+  .fixture-card-grid { padding: 0 4px 4px; }
+}
+
+@media (max-width: 480px) {
+  .selected-head h2 { font-size: 19px; }
+  .selected-head .status-pill { width: auto; justify-self: start; }
+  .fixture-card-grid { grid-template-columns: minmax(0, 1fr); }
+  .fixture-card .team-row { grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 8px; }
+  .fixture-card .fixture-meta { grid-template-columns: minmax(0,1fr); }
+}

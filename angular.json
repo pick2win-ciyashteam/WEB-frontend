@@ -30,7 +30,8 @@
                 }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/admin-responsive.css"
             ],
             "scripts": []
           },
@@ -94,7 +95,8 @@
               "src/firebase-messaging-sw.js"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/admin-responsive.css"
             ],
             "scripts": []
           }

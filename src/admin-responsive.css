@@ -1,0 +1,104 @@
+/* Shared responsive UX for every admin screen. Data, bindings and component content remain untouched. */
+.admin-layout, app-admin-login { box-sizing: border-box; }
+.admin-layout *, app-admin-login * { box-sizing: border-box; }
+.admin-layout .content > * { display: block; min-width: 0; max-width: 100%; }
+.admin-layout .content section, .admin-layout .content article, .admin-layout .content div { min-width: 0; }
+
+/* Forms and controls */
+.admin-layout .content input:not([type="checkbox"]):not([type="radio"]),
+.admin-layout .content select,
+.admin-layout .content textarea,
+app-admin-login input { max-width: 100%; min-height: 42px; font-size: 14px; }
+.admin-layout .content textarea { min-height: 100px; resize: vertical; }
+.admin-layout .content label { min-width: 0; }
+.admin-layout .content button, .admin-layout .content a { touch-action: manipulation; }
+.admin-layout .content button:disabled { cursor: not-allowed; opacity: .55; }
+.admin-layout .content input:focus-visible,
+.admin-layout .content select:focus-visible,
+.admin-layout .content textarea:focus-visible,
+.admin-layout .content button:focus-visible,
+.admin-layout .content a:focus-visible { outline: 2px solid var(--info, #5bb0e6); outline-offset: 2px; }
+
+/* Cards and headers */
+.admin-layout .content .panel,
+.admin-layout .content .admin-form-card { max-width: 100%; overflow: hidden; }
+.admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) { min-width: 0; }
+.admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) > div { min-width: 0; }
+.admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) h1,
+.admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) h2,
+.admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) h3 { overflow-wrap: anywhere; }
+
+/* Tables always stay inside the viewport and retain readable columns. */
+.admin-layout .content .table-wrap { width: 100%; max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-gutter: stable; -webkit-overflow-scrolling: touch; }
+.admin-layout .content table { width: 100%; }
+.admin-layout .content .table-wrap table { min-width: 680px; }
+.admin-layout .content th, .admin-layout .content td { vertical-align: middle; }
+.admin-layout .content td { overflow-wrap: anywhere; }
+
+/* Filter bars scroll on narrow devices instead of crushing controls. */
+.admin-layout .content :is(.filters,.tabs,.month-chips,.filter-tabs,.chip-row) { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+.admin-layout .content :is(.filters,.tabs,.month-chips,.filter-tabs,.chip-row) > button { flex: 0 0 auto; white-space: nowrap; }
+
+/* Unified API feedback presentation. */
+.admin-layout .content :is(.state,.state-message,.alert,.error-message,.success-message,.buyer-state),
+.admin-layout .content [class*="-error"],
+.admin-layout .content [class*="-success"] { max-width: 100%; border-radius: 10px; overflow-wrap: anywhere; }
+.admin-layout .content :is(.state.error,.state-message.error,.alert.error,.error-message),
+.admin-layout .content [class*="-error"] { border-color: rgba(255,107,91,.36); background-color: rgba(215,38,56,.09); }
+.admin-layout .content :is(.state.ok,.state-message.ok,.alert.success,.success-message),
+.admin-layout .content [class*="-success"] { border-color: rgba(11,204,142,.34); background-color: rgba(11,204,142,.08); }
+.admin-layout .content .toast { position: fixed; z-index: 10020; right: 20px; bottom: 20px; max-width: min(420px, calc(100vw - 32px)); overflow-wrap: anywhere; box-shadow: 0 18px 50px rgba(0,0,0,.4); }
+
+/* Every admin modal gets safe viewport sizing and mobile scrolling. */
+.admin-layout .content .modal,
+.admin-layout .content [class$="-modal"]:not(.edit-admin-modal) { max-width: 100vw; max-height: 100dvh; }
+.admin-layout .content .modal { padding: 18px; overflow-y: auto; overscroll-behavior: contain; }
+.admin-layout .content .modal > div,
+.admin-layout .content .modal-box,
+.admin-layout .content .edit-admin-modal { width: min(680px, 100%); max-width: 100%; max-height: calc(100dvh - 36px); overflow-y: auto; }
+.admin-layout .content :is(.modal-actions,.actions,.form-actions) { flex-wrap: wrap; }
+
+/* Common dashboards scale without changing their component data. */
+.admin-layout .content :is(.kpi-grid,.kpis,.summary-grid,.stats-grid) { max-width: 100%; }
+
+@media (max-width: 1100px) {
+  .admin-layout .content :is(.kpi-grid,.kpis,.summary-grid,.stats-grid) { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .admin-layout .content :is(.grid,.form-grid,.detail-grid,.credentials) { column-gap: 14px; }
+}
+
+@media (max-width: 760px) {
+  .admin-layout .content { overflow-x: clip; }
+  .admin-layout .content .panel,
+  .admin-layout .content .admin-form-card { padding: 16px; border-radius: 13px; }
+  .admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) { flex-direction: column; align-items: stretch; gap: 12px; }
+  .admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) > button,
+  .admin-layout .content :is(.head,.panel-head,.form-head,.list-head,.support-head) > .actions { align-self: stretch; }
+  .admin-layout .content :is(.grid,.form-grid,.detail-grid,.credentials,.add-row,.search-row,.period-controls) { grid-template-columns: minmax(0,1fr); }
+  .admin-layout .content :is(.grid,.form-grid,.detail-grid,.credentials) > * { grid-column: 1 !important; }
+  .admin-layout .content :is(.kpi-grid,.kpis,.summary-grid,.stats-grid) { grid-template-columns: minmax(0,1fr); gap: 10px; }
+  .admin-layout .content :is(.filters,.tabs,.month-chips,.filter-tabs,.chip-row) { flex-wrap: nowrap; padding-bottom: 5px; }
+  .admin-layout .content :is(.pager,.pages,.pagination) { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .admin-layout .content :is(.pager,.pages,.pagination) button { min-height: 40px; }
+  .admin-layout .content .modal { align-items: flex-start; padding: 10px; }
+  .admin-layout .content .modal > div,
+  .admin-layout .content .modal-box,
+  .admin-layout .content .edit-admin-modal { max-height: calc(100dvh - 20px); border-radius: 14px; }
+  .admin-layout .content :is(.modal-actions,.actions,.form-actions) { display: grid; grid-template-columns: 1fr; }
+  .admin-layout .content :is(.modal-actions,.actions,.form-actions) > button { width: 100%; min-height: 42px; }
+  .admin-layout .content .toast { right: 12px; bottom: 12px; left: 12px; width: auto; max-width: none; }
+}
+
+@media (max-width: 480px) {
+  .admin-layout .content .panel,
+  .admin-layout .content .admin-form-card { padding: 13px; }
+  .admin-layout .content h1 { font-size: clamp(22px,8vw,28px); }
+  .admin-layout .content h2 { font-size: clamp(18px,6vw,23px); }
+  .admin-layout .content input:not([type="checkbox"]):not([type="radio"]),
+  .admin-layout .content select,
+  .admin-layout .content textarea { width: 100%; font-size: 16px; }
+  .admin-layout .content button { min-height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-layout *, app-admin-login * { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

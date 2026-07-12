@@ -54,9 +54,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of fixtures">
+        <tr *ngFor="let item of fixtures" [class.fixture-selected]="isSelected(item)">
           <td>
-            <input type="checkbox" [checked]="isSelected(item)" [disabled]="!getMatchId(item)" (change)="toggleFixtureSelection(item, $any($event.target).checked)">
+            <input type="checkbox" [checked]="isSelected(item)" [disabled]="!getMatchId(item)" [attr.aria-label]="'Select ' + getMatchName(item)" (change)="toggleFixtureSelection(item, $any($event.target).checked)">
           </td>
           <td>{{ getLeagueName(item) }}</td>
           <td>{{ getMatchId(item) || '-' }}</td>
@@ -80,7 +80,8 @@
     </div>
 
     <div class="selected-action-row">
-      <button type="button" [disabled]="toggleLoading" (click)="openToggleConfirm()">
+      <button class="confirm-selected-btn" type="button" [disabled]="toggleLoading" (click)="openToggleConfirm()">
+        <span class="material-symbols-outlined" aria-hidden="true">task_alt</span>
         {{ toggleLoading ? 'Saving...' : 'Confirm & Activate Selected' }}
       </button>
     </div>
