@@ -191,6 +191,10 @@ export class AuthService {
     });
   }
 
+  clearSessionAfterAllDevicesLogout(): void {
+    this.clearSession();
+  }
+
   private clearSession() {
     this.tokenService.clear();
     localStorage.removeItem('user');

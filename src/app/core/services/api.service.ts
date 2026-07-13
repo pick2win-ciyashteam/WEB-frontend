@@ -64,6 +64,27 @@ export class ApiService {
     return this.http.get<ApiDataResponse<UserProfile>>(`${this.BASE}/user/user-auth/profile`);
   }
 
+  logoutAllDevices(): Observable<any> {
+    const token = this.tokenService.getToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    });
+
+    console.log('[Logout All Devices API] Sending request', {
+      method: 'POST',
+      endpoint: `${this.BASE}/user/user-auth/logout-all-devices`,
+      hasToken: !!token,
+      tokenPreview: token ? `${token.slice(0, 8)}...${token.slice(-4)}` : 'No token found'
+    });
+
+    return this.http.post(
+      `${this.BASE}/user/user-auth/logout-all-devices`,
+      {},
+      { headers }
+    );
+  }
+
   deleteAccount(): Observable<any> {
     return this.http.post(`${this.BASE}/user/user-auth/delete-account`, {});
   }

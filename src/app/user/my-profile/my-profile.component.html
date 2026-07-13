@@ -263,6 +263,75 @@
         <p class="activity-range-note">Activity history can be filtered and downloaded for a maximum range of one year.</p>
       </section>
 
+      <section class="security-devices-card" *ngIf="security$ | async as security">
+        <div class="security-devices-head">
+          <div class="security-devices-heading">
+            <span class="security-devices-icon material-symbols-outlined" aria-hidden="true">devices</span>
+            <div>
+              <h4>Account Devices &amp; Sessions</h4>
+              <p>Review the devices that recently accessed your PICK2WIN account.</p>
+            </div>
+          </div>
+          <button
+            class="logout-all-devices-btn"
+            type="button"
+            [disabled]="logoutAllDevicesLoading || !security.device_count"
+            (click)="logoutAllDevices()">
+            <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+            {{ logoutAllDevicesLoading ? 'Logging out...' : 'Logout All Devices' }}
+          </button>
+        </div>
+
+        <div class="security-device-stats">
+          <!-- <div>
+            <span class="material-symbols-outlined" aria-hidden="true">devices_other</span>
+            <strong>{{ security.device_count || 0 }}</strong>
+            <small>Total devices</small>
+          </div> -->
+          <div class="active">
+            <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+            <strong>{{ security.active_device_count || 0 }}</strong>
+            <small>Active devices</small>
+          </div>
+        </div>
+
+        <div class="logout-all-devices-error" *ngIf="logoutAllDevicesError">
+          <span class="material-symbols-outlined" aria-hidden="true">error</span>
+          {{ logoutAllDevicesError }}
+        </div>
+
+        <div class="recent-devices-list" *ngIf="(activeDevices$ | async)?.length; else noRecentDevices">
+          <article class="recent-device" *ngFor="let device of activeDevices$ | async">
+            <span class="recent-device-icon material-symbols-outlined" aria-hidden="true">{{ securityDeviceIcon(device.user_agent) }}</span>
+            <div class="recent-device-main">
+              <div class="recent-device-title-row">
+                <h5>{{ securityDevice(device) }}</h5>
+                <span class="device-session-status active">
+                  <i aria-hidden="true"></i>Active
+                </span>
+              </div>
+              <div class="recent-device-meta">
+                <span><b>IP</b> {{ device.ip_address || '-' }}</span>
+                <span><b>Last seen</b> {{ formatActivityDate(device.last_seen) }}</span>
+              </div>
+              <!-- <p class="recent-device-agent" [attr.title]="device.user_agent">{{ device.user_agent || 'User agent unavailable' }}</p> -->
+            </div>
+          </article>
+        </div>
+
+        <ng-template #noRecentDevices>
+          <div class="no-recent-devices">
+            <span class="material-symbols-outlined" aria-hidden="true">devices_off</span>
+            No active devices found.
+          </div>
+        </ng-template>
+
+        <p class="security-devices-note">
+          <span class="material-symbols-outlined" aria-hidden="true">info</span>
+          Logout All Devices ends every active session, including this device. You will need to sign in again.
+        </p>
+      </section>
+
       <!-- <div class="profile-transparency">
         <div class="profile-transparency-icon" aria-hidden="true">DOC</div>
         <div class="profile-transparency-body">

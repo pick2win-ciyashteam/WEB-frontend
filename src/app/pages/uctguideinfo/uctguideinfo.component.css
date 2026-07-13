@@ -267,3 +267,622 @@ button { cursor: pointer; }
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
+
+/* Detailed sports and product workflow below the "Where skill matters more" CTA. */
+.landing-details-section {
+  padding: 72px 0 82px;
+  color: #eef8ff;
+  background:
+    radial-gradient(circle at 90% 4%, rgba(255,90,18,.12), transparent 28%),
+    linear-gradient(160deg, #061b31 0%, #082a47 58%, #061827 100%);
+}
+
+.landing-uct-card {
+  padding: 38px 42px;
+  border: 1px solid rgba(115,190,235,.2);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(91,176,230,.09), transparent 34%),
+    rgba(4,25,42,.88);
+  box-shadow: 0 28px 70px rgba(0,10,25,.28);
+}
+
+.landing-card-kicker,
+.landing-data-title,
+.landing-coin-note h3,
+.landing-boundary h3,
+.landing-roadmap-note h3 {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1.35;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.landing-card-kicker {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 13px;
+  color: var(--gold);
+}
+
+.landing-card-kicker span,
+.landing-coin-note h3 span {
+  font-size: 8px;
+}
+
+.landing-uct-card > h2 {
+  margin: 0 0 14px;
+  color: #fff;
+  font-size: clamp(27px, 3.1vw, 38px);
+  font-weight: 900;
+  line-height: 1.14;
+  letter-spacing: -.035em;
+}
+
+.landing-uct-card > h2 em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.landing-card-lead {
+  max-width: 78ch;
+  margin: 0;
+  color: #bfd0de;
+  font-size: 14px;
+  line-height: 1.68;
+}
+
+.landing-card-lead b,
+.landing-generated-teams b,
+.landing-why-choose b,
+.landing-roadmap-note b {
+  color: #fff;
+}
+
+.landing-data-group {
+  margin-top: 32px;
+}
+
+.landing-data-title {
+  margin: 0 0 11px;
+  color: var(--gold);
+}
+
+.landing-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 13px;
+  background: rgba(7,34,54,.9);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,123,34,.55) transparent;
+}
+
+.landing-table-scroll::-webkit-scrollbar { height: 7px; }
+.landing-table-scroll::-webkit-scrollbar-thumb { border-radius: 99px; background: rgba(255,123,34,.55); }
+
+.landing-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #c5d5e1;
+  font-size: 12.5px;
+  line-height: 1.48;
+}
+
+.landing-data-table thead {
+  background: rgba(255,255,255,.045);
+}
+
+.landing-data-table th,
+.landing-data-table td {
+  padding: 11px 14px;
+  border-right: 1px solid rgba(255,255,255,.1);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.landing-data-table th:last-child,
+.landing-data-table td:last-child { border-right: 0; }
+.landing-data-table tbody tr:last-child > * { border-bottom: 0; }
+
+.landing-data-table thead th {
+  color: #8da5b8;
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.landing-data-table tbody th {
+  color: #f5fbff;
+  font-weight: 800;
+}
+
+.landing-sports-table { min-width: 660px; }
+.landing-sports-table thead th:nth-child(1) { width: 28%; }
+.landing-sports-table thead th:nth-child(2) { width: 27%; }
+.landing-sports-table tbody th { vertical-align: top; }
+.landing-modes-table { min-width: 720px; }
+.landing-modes-table thead th:nth-child(1) { width: 15%; }
+.landing-modes-table thead th:nth-child(2) { width: 24%; }
+.landing-roadmap-table { min-width: 520px; }
+.landing-roadmap-table thead th:first-child { width: 26%; }
+
+.landing-sport,
+.landing-status {
+  display: block;
+}
+
+.landing-sport {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.landing-sport-emoji {
+  width: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 18px;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.landing-roadmap-table .landing-sport-emoji {
+  margin-right: 7px;
+}
+
+.landing-status {
+  width: max-content;
+  margin-top: 7px;
+  padding: 3px 7px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.landing-status.now,
+.landing-roadmap-status.now { color: #27e3a6; }
+.landing-status.now { background: rgba(39,227,166,.12); }
+.landing-status.soon,
+.landing-roadmap-status.soon { color: var(--gold); }
+.landing-status.soon { background: rgba(255,176,0,.11); }
+.landing-status.planned,
+.landing-roadmap-status.planned { color: #70c5f5; }
+.landing-status.planned { background: rgba(112,197,245,.11); }
+.landing-roadmap-status { margin-right: 6px; }
+
+.landing-coin-note {
+  margin-top: 30px;
+  padding: 21px 23px;
+  border: 1px solid rgba(39,227,166,.4);
+  border-radius: 13px;
+  background: rgba(11,204,142,.065);
+}
+
+.landing-coin-note h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 13px;
+  color: #27e3a6;
+}
+
+.landing-coin-note ul,
+.landing-boundary ul,
+.landing-why-choose ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.landing-coin-note li,
+.landing-boundary li,
+.landing-why-choose li {
+  position: relative;
+  padding-left: 22px;
+  color: #c5d5e1;
+  font-size: 12.5px;
+  line-height: 1.48;
+}
+
+.landing-coin-note li::before,
+.landing-boundary.does li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  color: #27e3a6;
+  font-weight: 950;
+}
+
+.landing-workflow-table { min-width: 730px; }
+.landing-workflow-table thead th:first-child { width: 44px; }
+.landing-workflow-table thead th:nth-child(2) { width: 39%; }
+.landing-workflow-table tbody td:first-child {
+  color: var(--gold);
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 950;
+  text-align: center;
+}
+.landing-workflow-table tbody th span {
+  color: #8da5b8;
+  font-size: 11px;
+  font-weight: 500;
+}
+.landing-workflow-table tbody td b { color: #fff; }
+
+.landing-boundary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px;
+  margin-top: 30px;
+}
+
+.landing-boundary {
+  padding: 21px 23px;
+  border: 1px solid;
+  border-radius: 13px;
+}
+
+.landing-boundary.does {
+  border-color: rgba(39,227,166,.38);
+  background: rgba(39,227,166,.055);
+}
+
+.landing-boundary.does-not {
+  border-color: rgba(255,104,104,.36);
+  background: rgba(255,104,104,.05);
+}
+
+.landing-boundary h3 { margin: 0 0 13px; }
+.landing-boundary.does h3 { color: #27e3a6; }
+.landing-boundary.does-not h3 { color: #ff7777; }
+.landing-boundary li b { color: #fff; }
+
+.landing-boundary.does-not li::before {
+  content: '\00D7';
+  position: absolute;
+  left: 0;
+  color: #ff7777;
+  font-size: 17px;
+  font-weight: 950;
+  line-height: 1.1;
+}
+
+.landing-generated-teams,
+.landing-why-choose {
+  margin-top: 30px;
+  padding: 21px 23px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 13px;
+  background: rgba(255,255,255,.025);
+}
+
+.landing-generated-teams ol {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding-left: 22px;
+  color: #c5d5e1;
+  font-size: 12.5px;
+}
+
+.landing-generated-teams li::marker {
+  color: var(--gold);
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 950;
+}
+
+.landing-generated-teams p {
+  margin: 17px 0 0;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  color: #c5d5e1;
+  font-size: 12px;
+  line-height: 1.58;
+}
+
+.landing-why-choose {
+  border-color: rgba(255,176,0,.3);
+}
+
+.landing-why-choose li::before {
+  content: '\2022';
+  position: absolute;
+  left: 4px;
+  color: var(--gold);
+  font-weight: 950;
+}
+
+.landing-roadmap-note {
+  margin-top: 25px;
+  padding: 19px 21px;
+  border: 1px solid rgba(112,197,245,.45);
+  border-left: 4px solid #70c5f5;
+  border-radius: 11px;
+  background: rgba(112,197,245,.075);
+}
+
+.landing-roadmap-note h3 {
+  margin: 0 0 10px;
+  color: #70c5f5;
+}
+
+.landing-roadmap-note p {
+  margin: 0;
+  color: #c5d5e1;
+  font-size: 12.5px;
+  line-height: 1.58;
+}
+
+@media (max-width: 820px) {
+  .landing-details-section { padding: 56px 0 64px; }
+  .landing-uct-card { padding: 28px 22px; border-radius: 17px; }
+  .landing-boundary-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .landing-details-section {
+    padding: 34px 0 calc(42px + env(safe-area-inset-bottom));
+  }
+
+  .landing-details-section .section-shell {
+    width: min(100% - 20px, 1180px);
+  }
+
+  .landing-uct-card {
+    padding: 22px 12px;
+    border-radius: 14px;
+  }
+
+  .landing-uct-card > h2 {
+    font-size: clamp(24px, 8vw, 30px);
+    line-height: 1.16;
+  }
+
+  .landing-card-lead { font-size: 12.5px; }
+
+  .landing-data-group,
+  .landing-boundary-grid,
+  .landing-generated-teams,
+  .landing-why-choose { margin-top: 23px; }
+
+  .landing-coin-note,
+  .landing-boundary,
+  .landing-generated-teams,
+  .landing-why-choose,
+  .landing-roadmap-note { padding: 16px 14px; }
+
+  .landing-table-scroll {
+    border-radius: 10px;
+    box-shadow: inset -18px 0 22px -24px rgba(255,255,255,.8);
+  }
+}
+
+/* Light presentation requested for the long landing-page details panel. */
+.landing-details-section {
+  background:
+    radial-gradient(circle at 90% 4%, rgba(255,90,18,.08), transparent 30%),
+    linear-gradient(180deg, #f7fafc 0%, #edf4f8 100%);
+}
+
+.landing-uct-card {
+  color: var(--navy);
+  border-color: #d5e2ea;
+  background:
+    radial-gradient(circle at 100% 0, rgba(91,176,230,.08), transparent 34%),
+    rgba(255,255,255,.98);
+  box-shadow: 0 24px 60px rgba(7,35,64,.11);
+}
+
+.landing-uct-card > h2,
+.landing-data-table tbody th,
+.landing-card-lead b,
+.landing-generated-teams b,
+.landing-why-choose b,
+.landing-roadmap-note b,
+.landing-workflow-table tbody td b,
+.landing-boundary li b {
+  color: var(--navy);
+}
+
+.landing-card-lead,
+.landing-data-table,
+.landing-coin-note li,
+.landing-boundary li,
+.landing-generated-teams ol,
+.landing-generated-teams p,
+.landing-why-choose li,
+.landing-roadmap-note p {
+  color: #4f6476;
+}
+
+.landing-table-scroll {
+  border-color: #d7e3ea;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(7,35,64,.045);
+}
+
+.landing-data-table thead {
+  background: #edf4f8;
+}
+
+.landing-data-table th,
+.landing-data-table td {
+  border-right-color: #dbe6ed;
+  border-bottom-color: #dbe6ed;
+}
+
+.landing-data-table thead th {
+  color: #657b8e;
+}
+
+.landing-workflow-table tbody th span {
+  color: #74899a;
+}
+
+.landing-coin-note {
+  border-color: rgba(5,158,111,.3);
+  background: #effbf6;
+}
+
+.landing-coin-note h3,
+.landing-boundary.does h3,
+.landing-status.now,
+.landing-roadmap-status.now,
+.landing-coin-note li::before,
+.landing-boundary.does li::before {
+  color: #07875f;
+}
+
+.landing-boundary.does {
+  border-color: rgba(5,158,111,.28);
+  background: #f0fbf7;
+}
+
+.landing-boundary.does-not {
+  border-color: rgba(215,38,56,.25);
+  background: #fff5f6;
+}
+
+.landing-boundary.does-not h3,
+.landing-boundary.does-not li::before {
+  color: #cf3445;
+}
+
+.landing-generated-teams,
+.landing-why-choose {
+  border-color: #d7e3ea;
+  background: #f9fbfc;
+  box-shadow: 0 6px 18px rgba(7,35,64,.04);
+}
+
+.landing-generated-teams p {
+  border-top-color: #dbe5eb;
+}
+
+.landing-why-choose {
+  border-color: rgba(224,151,0,.35);
+  background: #fffbf2;
+}
+
+.landing-roadmap-note {
+  border-color: rgba(49,143,197,.34);
+  border-left-color: #3190c7;
+  background: #f0f8fd;
+}
+
+.landing-roadmap-note h3,
+.landing-status.planned,
+.landing-roadmap-status.planned {
+  color: #257eaf;
+}
+
+.landing-status.now { background: #e7f8f1; }
+.landing-status.soon { color: #9b6a00; background: #fff6dc; }
+.landing-status.planned { background: #eaf6fd; }
+
+@media (max-width: 520px) {
+  .landing-table-scroll {
+    box-shadow: 0 5px 16px rgba(7,35,64,.06);
+  }
+}
+
+/* Stronger text contrast on the light landing details section. */
+.landing-card-kicker,
+.landing-data-title,
+.landing-generated-teams .landing-data-title,
+.landing-why-choose .landing-data-title {
+  color: #b76f00;
+}
+
+.landing-uct-card > h2 {
+  color: #061b31;
+}
+
+.landing-uct-card > h2 em {
+  color: #e78700;
+}
+
+.landing-card-lead {
+  color: #344d61;
+  font-weight: 550;
+}
+
+.landing-card-lead b,
+.landing-generated-teams b,
+.landing-why-choose b,
+.landing-roadmap-note b,
+.landing-workflow-table tbody td b,
+.landing-boundary li b {
+  color: #071b31;
+  font-weight: 850;
+}
+
+.landing-data-table {
+  color: #344c5f;
+}
+
+.landing-data-table tbody td {
+  color: #3b5366;
+  font-weight: 600;
+}
+
+.landing-data-table tbody th {
+  color: #071b31;
+  font-weight: 900;
+}
+
+.landing-data-table thead th {
+  color: #4c6477;
+  font-weight: 950;
+}
+
+.landing-coin-note li,
+.landing-boundary li,
+.landing-generated-teams ol,
+.landing-generated-teams p,
+.landing-why-choose li,
+.landing-roadmap-note p {
+  color: #30495c;
+  font-weight: 550;
+}
+
+.landing-workflow-table tbody th span {
+  color: #536a7d;
+  font-weight: 650;
+}
+
+.landing-status.soon,
+.landing-roadmap-status.soon {
+  color: #875b00;
+}
+
+.landing-generated-teams li::marker,
+.landing-why-choose li::before,
+.landing-workflow-table tbody td:first-child {
+  color: #c47a00;
+}
+
+.landing-roadmap-note h3 {
+  color: #176f9f;
+}

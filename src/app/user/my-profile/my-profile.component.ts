@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { UserProfile } from 'src/app/core/interfaces/content';
+import { forkJoin, map } from 'rxjs';
+import { UserProfile, UserSecurityDevice } from 'src/app/core/interfaces/content';
 import { ActivityLog, ApiService } from 'src/app/core/services/api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
@@ -14,6 +14,10 @@ import { ProfileService } from 'src/app/core/services/profile.service';
 export class MyProfileComponent implements OnInit, OnDestroy {
   activeTab: 'profile' | 'teams' | 'feedback' = 'profile';
   profile$ = this.profileService.profile$;
+  security$ = this.profile$.pipe(map(profile => profile?.security ?? null));
+  activeDevices$ = this.security$.pipe(
+    map(security => security?.recent_devices.filter(device => device.is_active) ?? [])
+  );
   loading$ = this.profileService.loading$;
   error$ = this.profileService.error$;
   editModalOpen = false;
@@ -54,6 +58,8 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   activityPage = 1;
   activityTotalPages = 1;
   activityTotal = 0;
+  logoutAllDevicesLoading = false;
+  logoutAllDevicesError = '';
   readonly activityMaxDate = this.dateInputValue(new Date());
   readonly activityMinDate = this.dateInputValue(this.oneYearAgo());
   private todayLineupsTimer: any;
@@ -172,6 +178,62 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     if (/firefox\//i.test(userAgent)) return 'Firefox';
     if (/safari\//i.test(userAgent)) return 'Safari';
     return 'Browser';
+  }
+
+  securityDevice(device: UserSecurityDevice): string {
+    const userAgent = device.user_agent || '';
+    const browser = this.activityDevice(userAgent);
+
+    if (/android/i.test(userAgent)) return `Android - ${browser}`;
+    if (/iphone|ipad|ipod/i.test(userAgent)) return `iOS - ${browser}`;
+    if (/windows/i.test(userAgent)) return `Windows - ${browser}`;
+    if (/macintosh|mac os/i.test(userAgent)) return `macOS - ${browser}`;
+    if (/linux/i.test(userAgent)) return `Linux - ${browser}`;
+    return browser;
+  }
+
+  securityDeviceIcon(userAgent: string): string {
+    if (/android|iphone|ipad|ipod|mobile/i.test(userAgent || '')) return 'smartphone';
+    if (/postman/i.test(userAgent || '')) return 'api';
+    return 'computer';
+  }
+
+  logoutAllDevices(): void {
+    console.log('[Logout All Devices] Button clicked', {
+      requestInProgress: this.logoutAllDevicesLoading
+    });
+
+    if (this.logoutAllDevicesLoading) {
+      console.warn('[Logout All Devices] Request ignored because another request is in progress.');
+      return;
+    }
+
+    this.logoutAllDevicesLoading = true;
+    this.logoutAllDevicesError = '';
+
+    this.api.logoutAllDevices().subscribe({
+      next: response => {
+        console.log('[Logout All Devices] API response:', response);
+        this.logoutAllDevicesLoading = false;
+        if (response?.success === false) {
+          this.logoutAllDevicesError = response?.message || 'Unable to log out all devices.';
+          console.warn('[Logout All Devices] API returned success=false:', response);
+          return;
+        }
+        console.log('[Logout All Devices] Success. Clearing the current local session.');
+        this.authService.clearSessionAfterAllDevicesLogout();
+      },
+      error: error => {
+        console.error('[Logout All Devices] API failed:', {
+          status: error?.status,
+          statusText: error?.statusText,
+          message: error?.message,
+          response: error?.error
+        });
+        this.logoutAllDevicesLoading = false;
+        this.logoutAllDevicesError = error?.error?.message || 'Unable to log out all devices.';
+      }
+    });
   }
 
   private activityLogFilters(page: number, limit: number) {

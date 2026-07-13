@@ -935,6 +935,385 @@ tbody tr:hover {
   }
 }
 
+/* Profile security devices and active sessions. */
+.profile-page .security-devices-card {
+  width: 100%;
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(91,176,230,.22);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(91,176,230,.08), transparent 36%),
+    rgba(7,30,47,.9);
+  box-shadow: 0 16px 38px rgba(0,10,24,.22);
+}
+
+.profile-page .security-devices-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-page .security-devices-heading {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.profile-page .security-devices-icon {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(91,176,230,.3);
+  border-radius: 12px;
+  color: #78c7f4;
+  background: rgba(91,176,230,.1);
+}
+
+.profile-page .security-devices-heading h4 {
+  margin: 0;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.profile-page .security-devices-heading p {
+  margin: 4px 0 0;
+  color: var(--paper-3);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.profile-page .logout-all-devices-btn {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 0 16px;
+  border: 1px solid rgba(215,38,56,.5);
+  border-radius: 10px;
+  color: #ff9aa5;
+  background: rgba(215,38,56,.11);
+  font-size: 12px;
+  font-weight: 850;
+  transition: color .16s ease, background .16s ease, border-color .16s ease, opacity .16s ease;
+}
+
+.profile-page .logout-all-devices-btn:hover:not(:disabled) {
+  border-color: #e33e50;
+  color: #fff;
+  background: #d72638;
+}
+
+.profile-page .logout-all-devices-btn:disabled {
+  cursor: wait;
+  opacity: .55;
+}
+
+.profile-page .logout-all-devices-btn .material-symbols-outlined {
+  font-size: 19px;
+}
+
+.profile-page .security-device-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px 22px 4px;
+}
+
+.profile-page .security-device-stats > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 34px auto 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  border: 1px solid rgba(91,176,230,.18);
+  border-radius: 11px;
+  background: rgba(91,176,230,.055);
+}
+
+.profile-page .security-device-stats > div.active {
+  border-color: rgba(11,204,142,.22);
+  background: rgba(11,204,142,.055);
+}
+
+.profile-page .security-device-stats .material-symbols-outlined {
+  color: #78c7f4;
+  font-size: 25px;
+}
+
+.profile-page .security-device-stats .active .material-symbols-outlined {
+  color: var(--pitch-2);
+}
+
+.profile-page .security-device-stats strong {
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 23px;
+  line-height: 1;
+}
+
+.profile-page .security-device-stats small {
+  color: var(--paper-3);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.profile-page .logout-all-devices-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 22px 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(215,38,56,.35);
+  border-radius: 9px;
+  color: #ff9aa5;
+  background: rgba(215,38,56,.08);
+  font-size: 12px;
+}
+
+.profile-page .logout-all-devices-error .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.profile-page .recent-devices-list {
+  display: grid;
+  gap: 10px;
+  padding: 16px 22px;
+}
+
+.profile-page .recent-device {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 13px;
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+}
+
+.profile-page .recent-device-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--gold);
+  background: rgba(244,180,0,.1);
+}
+
+.profile-page .recent-device-main {
+  min-width: 0;
+}
+
+.profile-page .recent-device-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.profile-page .recent-device-title-row h5 {
+  min-width: 0;
+  margin: 0;
+  color: var(--paper);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.profile-page .device-session-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  color: var(--paper-3);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.profile-page .device-session-status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--paper-3);
+}
+
+.profile-page .device-session-status.active {
+  border-color: rgba(11,204,142,.34);
+  color: var(--pitch-2);
+  background: rgba(11,204,142,.07);
+}
+
+.profile-page .device-session-status.active i {
+  background: var(--pitch-2);
+  box-shadow: 0 0 0 3px rgba(11,204,142,.12);
+}
+
+.profile-page .recent-device-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 18px;
+  margin-top: 7px;
+  color: var(--paper-2);
+  font-size: 11px;
+}
+
+.profile-page .recent-device-meta b {
+  margin-right: 4px;
+  color: var(--paper-3);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.profile-page .recent-device-agent {
+  margin: 9px 0 0;
+  overflow: hidden;
+  color: var(--paper-3);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.profile-page .no-recent-devices {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 16px 22px;
+  padding: 28px;
+  border: 1px dashed var(--line-2);
+  border-radius: 12px;
+  color: var(--paper-3);
+  font-size: 12px;
+}
+
+.profile-page .security-devices-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 13px 22px;
+  border-top: 1px solid var(--line);
+  color: var(--paper-3);
+  background: rgba(255,255,255,.02);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.profile-page .security-devices-note .material-symbols-outlined {
+  color: #78c7f4;
+  font-size: 17px;
+}
+
+@media (max-width: 700px) {
+  .profile-page .security-devices-card {
+    margin-top: 18px;
+    border-radius: 13px;
+  }
+
+  .profile-page .security-devices-head {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .profile-page .security-devices-heading {
+    align-items: flex-start;
+  }
+
+  .profile-page .security-devices-icon {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .profile-page .security-devices-heading h4 {
+    font-size: 16px;
+  }
+
+  .profile-page .logout-all-devices-btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .profile-page .security-device-stats {
+    gap: 8px;
+    padding: 13px 15px 3px;
+  }
+
+  .profile-page .security-device-stats > div {
+    grid-template-columns: 28px 1fr;
+    gap: 5px 8px;
+    padding: 11px;
+  }
+
+  .profile-page .security-device-stats strong {
+    font-size: 20px;
+  }
+
+  .profile-page .security-device-stats small {
+    grid-column: 1 / -1;
+  }
+
+  .profile-page .recent-devices-list {
+    padding: 13px 15px;
+  }
+
+  .profile-page .recent-device {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .profile-page .recent-device-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .profile-page .recent-device-title-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .profile-page .recent-device-meta {
+    display: grid;
+    gap: 5px;
+  }
+
+  .profile-page .logout-all-devices-error,
+  .profile-page .no-recent-devices {
+    margin-inline: 15px;
+  }
+
+  .profile-page .security-devices-note {
+    padding: 12px 15px;
+  }
+}
+
 .transaction-note {
   display: grid;
   grid-template-columns: auto 1fr;

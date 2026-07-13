@@ -365,6 +365,19 @@ export interface UserSubscription {
   status: string;
 }
 
+export interface UserSecurityDevice {
+  ip_address: string;
+  user_agent: string;
+  last_seen: string;
+  is_active: boolean;
+}
+
+export interface UserSecurity {
+  device_count: number;
+  active_device_count: number;
+  recent_devices: UserSecurityDevice[];
+}
+
 export interface UserProfile {
   id: number;
   fullname: string;
@@ -380,4 +393,5 @@ export interface UserProfile {
   free_trial_status?: string;
   coins?: UserCoins;
   subscription?: UserSubscription | null;
+  security?: UserSecurity;
 }
