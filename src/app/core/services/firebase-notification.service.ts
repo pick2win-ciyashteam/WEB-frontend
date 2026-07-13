@@ -249,6 +249,21 @@ export class FirebaseNotificationService {
     );
   }
 
+  deleteAllNotifications(): Observable<any> {
+    return this.api.deleteAllUserNotifications().pipe(
+      tap(response => console.log('[Notifications API] notification/delete-all response:', response)),
+      tap(() => {
+        this.notificationsSubject.next([]);
+        this.unreadCount$.next(0);
+      }),
+      catchError(error => {
+        console.error('[Notifications API] notification/delete-all failed:', error);
+        this.error$.next(error?.error?.message || error?.error?.error || 'Unable to delete notifications.');
+        return of(null);
+      })
+    );
+  }
+
   markAllRead(): void {
     const unreadNotifications = this.notificationsSubject.value.filter(item => !item.read);
 

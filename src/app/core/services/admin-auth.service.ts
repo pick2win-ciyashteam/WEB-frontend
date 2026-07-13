@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
+import { ADMIN_LOGIN_URL } from '../constants/admin-route.constants';
 import { AdminService } from './admin.service';
 import { TokenService } from './token.service';
 
@@ -77,7 +78,7 @@ export class AdminAuthService {
     sessionStorage.clear();
     this.loggedInSubject.next(false);
     if (redirect) {
-      this.router.navigate(['/admin/login'], { replaceUrl: true });
+      this.router.navigate([ADMIN_LOGIN_URL], { replaceUrl: true });
     }
   }
 }

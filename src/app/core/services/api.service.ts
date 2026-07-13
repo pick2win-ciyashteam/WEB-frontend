@@ -146,6 +146,10 @@ export class ApiService {
     return this.http.delete(`${this.BASE}/user/user-auth/notification/${id}`, this.userAuthOptions());
   }
 
+  deleteAllUserNotifications(): Observable<any> {
+    return this.http.delete(`${this.BASE}/user/user-auth/notification/delete-all`, this.userAuthOptions());
+  }
+
   getFeedback(): Observable<any> {
     return this.http.get(`${this.BASE}/admin/feedback/feedback-get`, this.userAuthOptions());
   }

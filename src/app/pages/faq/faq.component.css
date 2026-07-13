@@ -7,11 +7,12 @@
     --f-display:'Sora',system-ui,sans-serif;
     --f-body:'Inter',system-ui,sans-serif;
     --f-mono:'JetBrains Mono',ui-monospace,monospace;
-    --wrap:940px;
+    --wrap:1120px;
   }
   * { box-sizing:border-box; }
   html { scroll-behavior:smooth; scroll-padding-top:140px; }
 :host {
+    display:block;
     margin:0; background:var(--ink); color:var(--paper);
     font-family:var(--f-body); font-size:16px; line-height:1.6;
     -webkit-font-smoothing:antialiased;
@@ -37,7 +38,7 @@
   .home-link:hover { color:var(--gold); }
 
   /* ===== Hero ===== */
-  .hero { padding:74px 0 34px; text-align:center; }
+  .hero { padding:20px 0 4px; text-align:center; }
   .hero-eyebrow { font-family:var(--f-mono); font-size:12px; letter-spacing:0.24em; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:20px; }
   .hero h1 { font-family:var(--f-display); font-weight:800; font-size:clamp(34px,6vw,58px); line-height:1.04; letter-spacing:-0.03em; margin:0 0 18px; }
   .hero h1 em { font-style:normal; color:var(--gold); }
@@ -68,7 +69,7 @@
   .secnav-link.active { border-color:rgba(244,180,0,0.5); background:var(--gold-soft); color:var(--paper); }
 
   /* ===== Sections ===== */
-  main { padding:36px 0 20px; }
+  main { padding:3px 0 20px; }
   .faq-section { padding:34px 0 8px; }
   .sec-head { margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--line); }
   .sec-eyebrow { display:inline-flex; align-items:center; gap:10px; margin-bottom:11px; }

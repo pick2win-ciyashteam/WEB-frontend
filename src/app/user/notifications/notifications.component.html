@@ -11,6 +11,18 @@
     </div>
 
     <div class="notifications-list" *ngIf="notifications$ | async as notifications">
+      <div class="notifications-actions" *ngIf="notifications.length">
+        <button
+          type="button"
+          class="delete-all-button"
+          [disabled]="deletingAll"
+          (click)="deleteAllNotifications()"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>
+          {{ deletingAll ? 'Deleting...' : 'Delete All' }}
+        </button>
+      </div>
+
       <article
         class="notification-card"
         *ngFor="let notification of notifications"

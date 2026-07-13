@@ -8,7 +8,7 @@ export const adminAuthGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!adminAuthService.isLoggedIn()) {
-    return router.createUrlTree(['/admin/login']);
+    return router.createUrlTree(['/']);
   }
 
   return adminAuthService.validateSession().pipe(
@@ -18,7 +18,7 @@ export const adminAuthGuard: CanActivateFn = () => {
       }
 
       adminAuthService.clearAdminSession(false);
-      return router.createUrlTree(['/admin/login']);
+      return router.createUrlTree(['/']);
     })
   );
 };

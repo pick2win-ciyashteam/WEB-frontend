@@ -20,15 +20,16 @@ import { ExpensesComponent } from './expenses/expenses.component';
 import { ProfitComponent } from './profit/profit.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { AdminSupportComponent } from './admin-support/admin-support.component';
+import { ADMIN_LOGIN_SEGMENT } from '../core/constants/admin-route.constants';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: '/',
     pathMatch: 'full'
   },
   {
-    path: 'login',
+    path: ADMIN_LOGIN_SEGMENT,
     component: AdminLoginComponent
   },
   {
@@ -108,6 +109,10 @@ const routes: Routes = [
         component: PaymentsComponent
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: '/'
   }
 ];
 

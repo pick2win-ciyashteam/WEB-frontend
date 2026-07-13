@@ -40,6 +40,43 @@
   gap: 12px;
 }
 
+.notifications-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.delete-all-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 1px solid rgba(215,38,56,0.45);
+  border-radius: 8px;
+  color: #fff;
+  background: rgba(215,38,56,0.14);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: border-color 0.16s ease, background 0.16s ease, opacity 0.16s ease;
+}
+
+.delete-all-button:hover:not(:disabled) {
+  border-color: var(--acid);
+  background: var(--acid);
+}
+
+.delete-all-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.delete-all-button .material-symbols-outlined {
+  font-size: 18px;
+}
+
 .notification-card {
   display: grid;
   grid-template-columns: 10px 1fr;
