@@ -150,6 +150,7 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
   selectedDate = this.toDateInputValue(new Date());
   filteredMatches: GeneratedMatch[] = [];
   private expiryTimer: any;
+  private availabilityHydrationTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private api: ApiService,
@@ -165,6 +166,9 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.expiryTimer);
+    if (this.availabilityHydrationTimer) {
+      clearTimeout(this.availabilityHydrationTimer);
+    }
   }
 
   loadMatches(): void {
@@ -249,21 +253,9 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
       });
 
       this.matches = Array.from(matchMap.values());
-      this.hydrateGeneratedGameAvailability(() => {
-        this.selectInitialAvailableGame();
-        this.ensureActiveSport();
-        this.applyDateFilter();
-        this.openMatchFromQueryParam();
-
-        if (!this.selectedMatch) {
-          const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
-          if (firstViewableMatch) {
-            this.openMatchTeams(firstViewableMatch);
-          }
-        }
-
-        this.loadingMatches = false;
-      });
+      this.prepareMatchesView();
+      this.loadingMatches = false;
+      this.deferGeneratedGameAvailabilityHydration();
     },
     error: () => {
       this.matches = [];
@@ -271,6 +263,42 @@ export class MyTeamsComponent implements OnInit, OnDestroy {
       this.loadingMatches = false;
     }
   });
+}
+
+private prepareMatchesView(): void {
+  this.selectInitialAvailableGame();
+  this.ensureActiveSport();
+  this.applyDateFilter();
+  this.openMatchFromQueryParam();
+
+  if (!this.selectedMatch) {
+    const firstViewableMatch = this.filteredMatches.find(match => this.canAccessTeams(match));
+    if (firstViewableMatch) {
+      this.openMatchTeams(firstViewableMatch);
+    }
+  }
+}
+
+private deferGeneratedGameAvailabilityHydration(): void {
+  if (this.availabilityHydrationTimer) {
+    clearTimeout(this.availabilityHydrationTimer);
+  }
+
+  // The list response and requested match can render immediately. Platform
+  // probes still run for compatibility, but no longer block the My Teams view.
+  this.availabilityHydrationTimer = setTimeout(() => {
+    this.availabilityHydrationTimer = null;
+    this.hydrateGeneratedGameAvailability(() => {
+      const hadSelection = !!this.selectedMatch;
+      this.selectInitialAvailableGame();
+      this.ensureActiveSport();
+      this.applyDateFilter(false);
+
+      if (!hadSelection) {
+        this.prepareMatchesView();
+      }
+    });
+  }, 1200);
 }
 
 applyDateFilter(resetSelection = true) {
@@ -631,13 +659,15 @@ private objectRowsToCsvRows(rows: Record<string, unknown>[]): string[][] {
 
   private hydrateGeneratedGameAvailability(done: () => void): void {
     const probes = this.matches.flatMap(match =>
-      this.visibleGames.map(game => ({
+      this.visibleGames
+        .filter(game => !(this.selectedMatch?.id === match.id && this.activeGame === game))
+        .map(game => ({
         match,
         game,
         request: this.authService
           .getUserMyTeams(match.id, this.sportKey(match.sport), game)
           .pipe(catchError(() => of(null)))
-      }))
+        }))
     );
 
     if (!probes.length) {

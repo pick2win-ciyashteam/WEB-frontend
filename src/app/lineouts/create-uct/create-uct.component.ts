@@ -42,6 +42,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private generatingStatusTimer: ReturnType<typeof setInterval> | null = null;
   private matchStatusTimer: ReturnType<typeof setInterval> | null = null;
+  private supplementaryLoadTimer: ReturnType<typeof setTimeout> | null = null;
 
   matchId = '';
   loading = true;
@@ -189,12 +190,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           this.detail = res?.success ? res.data : null;
           this.loading = false;
           this.errorMessage = this.detail ? '' : 'Unable to load UCT match data.';
-          this.loadUserGeneratedGames(this.matchId);
-          this.loadGeneratedGamesByPlatform(this.matchId);
           this.resetUctSelections();
           this.printPlayerPools();
           this.handleMatchAvailability(this.detail);
           this.startMatchStatusPolling();
+          this.deferSupplementaryGeneratedGameChecks();
         },
         error: (err) => {
           this.detail = null;
@@ -205,6 +205,9 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.supplementaryLoadTimer) {
+      clearTimeout(this.supplementaryLoadTimer);
+    }
     this.stopGeneratingStatus();
     this.stopMatchStatusPolling();
     this.destroy$.next();
@@ -1619,6 +1622,20 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           this.userGeneratedGames.clear();
         }
       });
+  }
+
+  private deferSupplementaryGeneratedGameChecks(): void {
+    if (this.supplementaryLoadTimer) {
+      clearTimeout(this.supplementaryLoadTimer);
+    }
+
+    // Let Angular paint the match and player workflow before starting the
+    // non-blocking generated-platform availability requests.
+    this.supplementaryLoadTimer = setTimeout(() => {
+      this.supplementaryLoadTimer = null;
+      this.loadUserGeneratedGames(this.matchId);
+      this.loadGeneratedGamesByPlatform(this.matchId);
+    }, 250);
   }
 
   private loadGeneratedGamesByPlatform(matchId: string): void {
