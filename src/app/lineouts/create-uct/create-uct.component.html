@@ -77,15 +77,15 @@
                   UCT Generated
                   <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
                 </button>
-                <button class="primary-btn platform-start view-teams" type="button" (click)="goToGeneratedTeams(platform.id)">
-                  See in My Teams
-                  <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+                <button class="primary-btn platform-start view-teams" type="button" [disabled]="navigatingToTeams" (click)="goToGeneratedTeams(platform.id)">
+                  {{ navigatingToTeams ? 'Opening My Teams...' : 'See in My Teams' }}
+                  <span class="material-symbols-outlined" aria-hidden="true">{{ navigatingToTeams ? 'progress_activity' : 'visibility' }}</span>
                 </button>
               </div>
               <ng-template #startPlatform>
-                <button class="primary-btn platform-start" type="button" (click)="handlePlatformAction(platform.id)">
-                  Start
-                  <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+                <button class="primary-btn platform-start" type="button" [disabled]="matchDataLoading || isPlatformGenerationStatusLoading(platform.id)" (click)="handlePlatformAction(platform.id)">
+                  {{ isPlatformGenerationStatusLoading(platform.id) ? 'Checking generation status...' : (matchDataLoading ? 'Loading lineup...' : 'Start') }}
+                  <span class="material-symbols-outlined" aria-hidden="true">{{ (matchDataLoading || isPlatformGenerationStatusLoading(platform.id)) ? 'progress_activity' : 'chevron_right' }}</span>
                 </button>
               </ng-template>
             </div>
@@ -826,6 +826,30 @@
   <button type="button" aria-label="Close message" (click)="closeAlert()">
     <span class="material-symbols-outlined" aria-hidden="true">close</span>
   </button>
+</div>
+
+<div class="generation-lock" *ngIf="submitting || navigatingToTeams" role="status" aria-live="assertive" aria-busy="true">
+  <div class="generation-lock-card">
+    <div class="gen-spinner"></div>
+    <span class="generation-lock-kicker">{{ submitting ? 'UCT REQUEST IN PROGRESS' : 'MY TEAMS' }}</span>
+    <h2>{{ submitting ? 'Please wait while we generate your teams' : 'Opening your generated teams...' }}</h2>
+    <p class="generation-lock-status">{{ submitting ? generationStatus : 'Loading the selected match and platform.' }}</p>
+    <div class="generation-lock-notice" *ngIf="submitting">
+      <span class="material-symbols-outlined" aria-hidden="true">wifi</span>
+      <div>
+        <b>On a slower connection this can take a little longer.</b>
+        <p>Your request may already be processing on our server. Do not refresh, close this tab, press Back, or submit again.</p>
+      </div>
+    </div>
+    <div class="generation-lock-safe" *ngIf="submitting">
+      <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+      All page actions are temporarily locked to prevent duplicate generation.
+    </div>
+    <div class="generation-lock-safe" *ngIf="navigatingToTeams">
+      <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+      Please wait. Do not click the button again.
+    </div>
+  </div>
 </div>
 
 <app-footer></app-footer>

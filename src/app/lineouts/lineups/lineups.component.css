@@ -3311,3 +3311,9 @@
     line-height: 1 !important;
   }
 }
+.secondary-team-action {
+  margin-right: 8px;
+  border-color: rgba(49, 184, 255, .5) !important;
+  color: #8ddcff !important;
+  background: rgba(49, 184, 255, .08) !important;
+}

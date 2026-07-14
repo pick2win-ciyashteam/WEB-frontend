@@ -63,7 +63,9 @@ function canCreateUct(match: any): boolean {
     || ['available', 'released', 'confirmed', 'ready'].includes(
       String(match.lineup_status || '').toLowerCase()
     );
-  const alreadyGenerated = generatedGames(match).length >= 3 || generatedGameCount(match) >= 3;
+  const visibleGeneratedGames = generatedGames(match)
+    .filter(game => game === 'draftkings' || game === 'fanduel');
+  const alreadyGenerated = visibleGeneratedGames.length >= 2 || generatedGameCount(match) >= 2;
   const startTime = new Date(match.kickoffISO || match.start_time || match.matchdate).getTime();
   const matchStarted = Number.isFinite(startTime) && Date.now() >= startTime;
   const blockedStatus = ['LIVE', 'FINISHED', 'FT', 'ENDED', 'CANCELLED', 'POSTPONED'].includes(status);

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { EMPTY, Subject, catchError, forkJoin, interval, of, switchMap, takeUntil } from 'rxjs';
+import { EMPTY, Subject, catchError, forkJoin, interval, of, switchMap, takeUntil, tap } from 'rxjs';
 import { Match, Series } from '../../core/interfaces/content';
 import { ApiService } from '../../core/services/api.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
@@ -60,6 +60,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   totalCoinBalance: number | null = null;
   showBalanceRequired = false;
   showSeriesCoverage = false;
+  openingTeamsMatchId: string | null = null;
   readonly showUctButtonForTesting = false;
 
   constructor(
@@ -158,6 +159,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
     return match.teamsGenerated
       || (['draftkings', 'fanduel'] as FantasyGame[])
         .every(game => match.generatedGames.includes(game));
+  }
+
+  hasGeneratedPlatform(match: LineoutMatch): boolean {
+    return match.generatedGames.some(game => game === 'draftkings' || game === 'fanduel');
   }
 
   statusLabel(match: LineoutMatch): string {
@@ -285,11 +290,16 @@ canRunUct(match: LineoutMatch): boolean {
   }
 
   openViewTeams(match: LineoutMatch): void {
+    if (this.openingTeamsMatchId) {
+      return;
+    }
+
     const sport = String(match.sport || 'football').trim().toLowerCase() === 'soccer'
       ? 'football'
       : String(match.sport || 'football').trim().toLowerCase();
     const game = this.generatedGames(match as unknown as Match)[0] || 'draftkings';
 
+    this.openingTeamsMatchId = match.id;
     this.router.navigate(['/user/profile'], {
       queryParams: {
         tab: 'teams',
@@ -297,7 +307,17 @@ canRunUct(match: LineoutMatch): boolean {
         sport,
         game
       }
+    }).then(navigated => {
+      if (!navigated) {
+        this.openingTeamsMatchId = null;
+      }
+    }).catch(() => {
+      this.openingTeamsMatchId = null;
     });
+  }
+
+  isOpeningTeams(match: LineoutMatch): boolean {
+    return this.openingTeamsMatchId === match.id;
   }
 
   private openMatchDestination(match: LineoutMatch): void {
@@ -532,26 +552,17 @@ canRunUct(match: LineoutMatch): boolean {
         game,
         request: this.authService
           .getUserMyTeams(match.id, this.normalizedSport(match.sport), game)
-          .pipe(catchError(() => of(null)))
+          .pipe(
+            tap(response => this.applyGeneratedGameResponse(match, game, response)),
+            catchError(() => of(null))
+          )
       }))
     );
 
     forkJoin(probes.map(probe => probe.request))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: responses => {
-          responses.forEach((response, index) => {
-            if (!this.hasGeneratedTeamsResponse(response)) {
-              return;
-            }
-
-            const probe = probes[index];
-
-            if (!probe.match.generatedGames.includes(probe.game)) {
-              probe.match.generatedGames = [...probe.match.generatedGames, probe.game];
-            }
-          });
-
+        next: () => {
           matches.forEach(match => {
             match.teamsGenerated = games.every(game => match.generatedGames.includes(game));
           });
@@ -560,6 +571,20 @@ canRunUct(match: LineoutMatch): boolean {
         },
         error: () => done()
       });
+  }
+
+  private applyGeneratedGameResponse(match: LineoutMatch, game: FantasyGame, response: any): void {
+    if (!this.hasGeneratedTeamsResponse(response) || match.generatedGames.includes(game)) {
+      return;
+    }
+
+    match.generatedGames = [...match.generatedGames, game];
+    match.teamsGenerated = (['draftkings', 'fanduel'] as FantasyGame[])
+      .every(platform => match.generatedGames.includes(platform));
+
+    // Publish the individual result immediately instead of waiting for every
+    // match/platform probe in the forkJoin to finish.
+    this.matches = [...this.matches];
   }
 
   private hasGeneratedTeamsResponse(response: any): boolean {

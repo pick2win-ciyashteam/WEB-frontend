@@ -78,48 +78,15 @@ export class AuthService {
     const [path, ...fallbackPaths] = paths;
     const url = `${API}/user/teams/user-my-teams/${matchId}/${sport}/${path}`;
 
-    console.log('[My Teams API] Request:', {
-      matchId,
-      sport,
-      platform: path,
-      endpoint: url
-    });
-
     return this.http.get<any>(url).pipe(
       switchMap(res => {
-        console.log('[My Teams API] Response:', {
-          matchId,
-          sport,
-          platform: path,
-          endpoint: url,
-          response: res
-        });
-
         if (fallbackPaths.length && this.isEmptyTeamsResponse(res)) {
-          console.warn('[My Teams API] Empty response; trying fallback endpoint:', {
-            matchId,
-            sport,
-            platform: path,
-            endpoint: url,
-            nextPlatformPath: fallbackPaths[0]
-          });
           return this.getUserMyTeamsByPaths(matchId, sport, fallbackPaths);
         }
 
         return of(res);
       }),
       catchError(error => {
-        console.error('[My Teams API] Error:', {
-          matchId,
-          sport,
-          platform: path,
-          endpoint: url,
-          status: error?.status,
-          statusText: error?.statusText,
-          message: error?.message,
-          error: error?.error
-        });
-
         return fallbackPaths.length
           ? this.getUserMyTeamsByPaths(matchId, sport, fallbackPaths)
           : throwError(() => error);

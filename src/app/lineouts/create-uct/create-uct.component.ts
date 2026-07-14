@@ -26,6 +26,13 @@ interface GeneratedTeam {
 interface CreateUctContext {
   id?: string;
   sport?: string;
+  homeName?: string;
+  awayName?: string;
+  homeCode?: string;
+  awayCode?: string;
+  series?: string;
+  kickoffISO?: string;
+  status?: string;
   venue?: string;
   venue_name?: string;
   venue_city?: string;
@@ -42,10 +49,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private generatingStatusTimer: ReturnType<typeof setInterval> | null = null;
   private matchStatusTimer: ReturnType<typeof setInterval> | null = null;
-  private supplementaryLoadTimer: ReturnType<typeof setTimeout> | null = null;
 
   matchId = '';
   loading = true;
+  matchDataLoading = true;
   errorMessage = '';
   detail: MatchDetail | null = null;
   private createUctContext: CreateUctContext | null = null;
@@ -53,6 +60,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   selectedPlatform: FantasyPlatform | null = null;
   confirmed = false;
   submitting = false;
+  navigatingToTeams = false;
   submitError = '';
   showGenerateConfirm = false;
   showPlayingXi = true;
@@ -101,6 +109,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   generatedTeams: GeneratedTeam[] = [];
   salaries = new Map<number, string>();
   private userGeneratedGames = new Set<FantasyPlatform>();
+  private checkedGeneratedPlatforms = new Set<FantasyPlatform>();
 
   readonly maxSubs = 3;
   readonly maxMandateYes = 1;
@@ -180,8 +189,16 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         switchMap(params => {
           this.matchId = params.get('id') || '';
           this.createUctContext = this.getCreateUctContext(this.matchId);
-          this.loading = true;
+          this.detail = this.createUctContext
+            ? this.provisionalDetail(this.createUctContext)
+            : null;
+          this.loading = !this.detail;
+          this.matchDataLoading = true;
           this.errorMessage = '';
+          this.userGeneratedGames.clear();
+          this.checkedGeneratedPlatforms.clear();
+          this.loadUserGeneratedGames(this.matchId);
+          this.loadGeneratedGamesByPlatform(this.matchId);
           return this.api.getMatchDetails(this.matchId);
         })
       )
@@ -189,25 +206,23 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         next: (res) => {
           this.detail = res?.success ? res.data : null;
           this.loading = false;
+          this.matchDataLoading = false;
           this.errorMessage = this.detail ? '' : 'Unable to load UCT match data.';
           this.resetUctSelections();
           this.printPlayerPools();
           this.handleMatchAvailability(this.detail);
           this.startMatchStatusPolling();
-          this.deferSupplementaryGeneratedGameChecks();
         },
         error: (err) => {
           this.detail = null;
           this.loading = false;
+          this.matchDataLoading = false;
           this.errorMessage = err?.error?.message || 'Unable to load UCT match data.';
         }
       });
   }
 
   ngOnDestroy(): void {
-    if (this.supplementaryLoadTimer) {
-      clearTimeout(this.supplementaryLoadTimer);
-    }
     this.stopGeneratingStatus();
     this.stopMatchStatusPolling();
     this.destroy$.next();
@@ -380,6 +395,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
   isPlatformGenerated(platform: FantasyPlatform): boolean {
     return this.generatedGames().includes(platform);
+  }
+
+  isPlatformGenerationStatusLoading(platform: FantasyPlatform): boolean {
+    return !this.isPlatformGenerated(platform) && !this.checkedGeneratedPlatforms.has(platform);
   }
 
   get salaryPlaceholder(): string {
@@ -579,6 +598,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   goToGeneratedTeams(game?: FantasyPlatform): void {
+    if (this.navigatingToTeams || this.submitting) {
+      return;
+    }
+
+    this.navigatingToTeams = true;
     this.router.navigate(['/user/profile'], {
       queryParams: {
         tab: 'teams',
@@ -586,6 +610,13 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         sport: this.currentSport(),
         game: game || this.selectedGame()
       }
+    }).then(navigated => {
+      if (!navigated) {
+        this.navigatingToTeams = false;
+      }
+    }).catch(() => {
+      this.navigatingToTeams = false;
+      this.showAlert('Unable to open My Teams', 'Please check your connection and try again.', 'error');
     });
   }
 
@@ -691,6 +722,11 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   handlePlatformAction(platform: FantasyPlatform): void {
     if (this.isPlatformGenerated(platform)) {
       this.goToGeneratedTeams(platform);
+      return;
+    }
+
+    if (this.matchDataLoading) {
+      this.showAlert('Lineup is loading', 'Confirmed players are still loading. Please wait a moment.', 'info');
       return;
     }
 
@@ -1394,15 +1430,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
             const game = this.selectedGame();
 
             this.userGeneratedGames.add(game);
-            this.router.navigate(['/user/profile'], {
-              queryParams: {
-                tab: 'teams',
-                match: this.matchId,
-                sport: this.currentSport(),
-                game,
-                generated: 'success'
-              }
-            });
+            this.goToGeneratedTeams(game);
             return;
           }
 
@@ -1602,8 +1630,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   private loadUserGeneratedGames(matchId: string): void {
-    this.userGeneratedGames.clear();
-
     if (!matchId) {
       return;
     }
@@ -1617,25 +1643,59 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           rows
             .filter((row: any) => this.rowMatchesCurrentMatch(row, matchId))
             .forEach((row: any) => this.addGeneratedGamesFromRow(this.userGeneratedGames, row));
+
+          this.userGeneratedGames.forEach(game => {
+            this.checkedGeneratedPlatforms.add(game);
+          });
+          // The aggregate list is authoritative for the current user. Games
+          // absent from it are available to start; exact probes can still
+          // upgrade either platform to Generated if they return later.
+          (['draftkings', 'fanduel'] as FantasyPlatform[])
+            .forEach(game => this.checkedGeneratedPlatforms.add(game));
         },
         error: () => {
-          this.userGeneratedGames.clear();
         }
       });
   }
 
-  private deferSupplementaryGeneratedGameChecks(): void {
-    if (this.supplementaryLoadTimer) {
-      clearTimeout(this.supplementaryLoadTimer);
-    }
+  private provisionalDetail(context: CreateUctContext): MatchDetail {
+    const team = (name: string, code: string) => ({
+      id: 0,
+      name: name || code || 'TBD',
+      short_name: code || this.shortCodeFromName(name),
+      logo: '',
+      playing_xi: [],
+      substitutes: []
+    });
 
-    // Let Angular paint the match and player workflow before starting the
-    // non-blocking generated-platform availability requests.
-    this.supplementaryLoadTimer = setTimeout(() => {
-      this.supplementaryLoadTimer = null;
-      this.loadUserGeneratedGames(this.matchId);
-      this.loadGeneratedGamesByPlatform(this.matchId);
-    }, 250);
+    return {
+      match: {
+        id: Number(context.id || 0),
+        provider_match_id: String(context.id || ''),
+        series_id: '',
+        seriesname: context.series || 'Football',
+        matchdate: context.kickoffISO || '',
+        start_time: context.kickoffISO || '',
+        status: context.status || 'Scheduled',
+        is_active: 1,
+        lineupavailable: 1,
+        lineup_status: 'available',
+        venue_name: context.venue || '',
+        hometeamname: context.homeName || '',
+        awayteamname: context.awayName || '',
+        home_team_name: context.homeCode || '',
+        away_team_name: context.awayCode || ''
+      },
+      home_team: team(context.homeName || '', context.homeCode || ''),
+      away_team: team(context.awayName || '', context.awayCode || ''),
+      counts: {
+        total_players: 0,
+        home_playing_xi: 0,
+        away_playing_xi: 0,
+        home_substitutes: 0,
+        away_substitutes: 0
+      }
+    };
   }
 
   private loadGeneratedGamesByPlatform(matchId: string): void {
@@ -1654,8 +1714,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
             if (res?.success !== false && totalTeams > 0) {
               this.userGeneratedGames.add(game);
             }
+            this.checkedGeneratedPlatforms.add(game);
           },
           error: () => {
+            // Do not leave the UI in an endless checking state. The generation
+            // endpoint still enforces the server-side duplicate rule.
+            this.checkedGeneratedPlatforms.add(game);
           }
         });
     });
@@ -1672,6 +1736,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
     return [];
   }
+
 
   private rowMatchesCurrentMatch(row: any, matchId: string): boolean {
     const ids = this.currentMatchIds(matchId);
