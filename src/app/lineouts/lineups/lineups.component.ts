@@ -466,14 +466,20 @@ canRunUct(match: LineoutMatch): boolean {
             ? this.mapSeriesMatches(res.data)
             : [];
 
+          // Render the series response immediately. Generated-team lookups are
+          // supplementary and can fan out into several requests per match, so
+          // they must not keep the whole page behind the loading state.
+          this.matches = mappedMatches;
+
+          if (!this.matches.length) {
+            this.matchesError = 'No upcoming matches in our coverage right now.';
+          }
+
+          this.loadingMatches = false;
           this.hydrateGeneratedGames(mappedMatches, () => {
-            this.matches = mappedMatches;
-
-            if (!this.matches.length) {
-              this.matchesError = 'No upcoming matches in our coverage right now.';
-            }
-
-            this.loadingMatches = false;
+            // Assign a new array after the background hydration so Angular also
+            // refreshes generated-team status with OnPush parents/templates.
+            this.matches = [...mappedMatches];
           });
         },
         error: () => {
@@ -493,7 +499,10 @@ canRunUct(match: LineoutMatch): boolean {
       .subscribe(res => {
         if (res?.success && Array.isArray(res.data)) {
           const freshMatches = this.mapSeriesMatches(res.data);
-          this.hydrateGeneratedGames(freshMatches, () => this.refreshTodayMatches(freshMatches));
+          this.refreshTodayMatches(freshMatches);
+
+          const freshTodayMatches = freshMatches.filter(match => this.isTodayMatch(match));
+          this.hydrateGeneratedGames(freshTodayMatches, () => this.refreshTodayMatches(freshMatches));
         }
       });
   }
