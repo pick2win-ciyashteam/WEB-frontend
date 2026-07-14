@@ -15,6 +15,7 @@ import { CreateUctComponent } from '../lineouts/create-uct/create-uct.component'
 import { AllSeriesCoverComponent } from '../lineouts/all-series-cover/all-series-cover.component';
 import { createUctGuard, preventPendingUctGenerationGuard } from '../core/guards/create-uct.guard';
 import { UctguideinfoComponent } from './uctguideinfo/uctguideinfo.component';
+import { authGuard } from '../core/guards/auth.guard';
 
 const seo = {
   home: {
@@ -98,6 +99,7 @@ const routes: Routes = [
     {
     path: 'lineouts',
     component: LineupsComponent,
+    canActivate: [authGuard],
     data: { seo: seo.lineouts }
   },
   {
@@ -108,12 +110,13 @@ const routes: Routes = [
 {
   path: 'lineouts/create-uct/:id',
   component: CreateUctComponent,
-  canActivate: [createUctGuard],
+  canActivate: [authGuard, createUctGuard],
   canDeactivate: [preventPendingUctGenerationGuard]
 },
   {
     path: 'lineouts/all-series-cover',
-    component: AllSeriesCoverComponent
+    component: AllSeriesCoverComponent,
+    canActivate: [authGuard]
   },
     {
     path: 'pricing',

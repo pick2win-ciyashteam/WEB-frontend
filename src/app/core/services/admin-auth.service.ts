@@ -38,6 +38,9 @@ export class AdminAuthService {
 
         if (token && res?.success !== false) {
           this.tokenService.saveAdminToken(token);
+          if (!this.isLoggedIn()) {
+            throw new Error('The server returned an invalid admin authentication token.');
+          }
           this.loggedInSubject.next(true);
         } else {
           console.log('Admin login response missing token:', res);
@@ -54,7 +57,14 @@ export class AdminAuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.tokenService.getAdminToken();
+    const loggedIn = this.tokenService.hasValidAdminToken();
+
+    if (!loggedIn && this.tokenService.getAdminToken()) {
+      this.tokenService.clearAdmin();
+      this.loggedInSubject.next(false);
+    }
+
+    return loggedIn;
   }
 
   /** Confirms a locally stored token is still a valid admin session on the server. */

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { AuthModalService } from 'src/app/core/services/auth-modal.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -31,6 +31,13 @@ export class  HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => this.authService.refreshSessionState());
+
     this.loggedIn$
       .pipe(
         filter(Boolean),

@@ -21,6 +21,13 @@ export class AuthService {
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   loggedIn$ = this.loggedInSubject.asObservable();
 
+  private readonly storageListener = (event: StorageEvent) => {
+    if (event.key === 'token' || event.key === null) {
+      this.refreshSessionState();
+    }
+  };
+  private readonly sessionCheckListener = () => this.refreshSessionState();
+
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
@@ -28,7 +35,10 @@ export class AuthService {
     private profileService: ProfileService,
     private notificationService: FirebaseNotificationService
   ) {
-    this.loggedInSubject.next(this.isLoggedIn());
+    this.refreshSessionState();
+    window.addEventListener('storage', this.storageListener);
+    window.addEventListener('focus', this.sessionCheckListener);
+    document.addEventListener('visibilitychange', this.sessionCheckListener);
   }
 
   login(email: string, password: string): Observable<any> {
@@ -47,7 +57,9 @@ export class AuthService {
 
         if (token && res?.success !== false) {
           this.tokenService.saveToken(token);
-          this.loggedInSubject.next(true);
+          if (!this.refreshSessionState()) {
+            throw new Error('The server returned an invalid authentication token.');
+          }
         }
       })
     );
@@ -195,7 +207,11 @@ export class AuthService {
     this.clearSession();
   }
 
-  private clearSession() {
+  handleInvalidSession(): void {
+    this.clearSession('/auth/login');
+  }
+
+  private clearSession(destination = '/') {
     this.tokenService.clear();
     localStorage.removeItem('user');
     localStorage.removeItem('currentUser');
@@ -204,11 +220,22 @@ export class AuthService {
     this.profileService.clearProfile();
     this.notificationService.clearSession();
     this.loggedInSubject.next(false);
-    this.router.navigate(['/'], { replaceUrl: true });
+    this.router.navigate([destination], { replaceUrl: true });
   }
 
   isLoggedIn(): boolean {
-    return !!this.tokenService.getToken();
+    return this.tokenService.hasValidToken();
+  }
+
+  refreshSessionState(): boolean {
+    const loggedIn = this.isLoggedIn();
+
+    if (!loggedIn && this.tokenService.getToken()) {
+      this.tokenService.clear();
+    }
+
+    this.loggedInSubject.next(loggedIn);
+    return loggedIn;
   }
 
   private authOptions() {
