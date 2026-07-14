@@ -27,6 +27,10 @@ export class AuthService {
     }
   };
   private readonly sessionCheckListener = () => this.refreshSessionState();
+  private readonly sessionCheckInterval = window.setInterval(
+    () => this.refreshSessionState(),
+    15000
+  );
 
   constructor(
     private http: HttpClient,
@@ -229,13 +233,33 @@ export class AuthService {
 
   refreshSessionState(): boolean {
     const loggedIn = this.isLoggedIn();
+    const hadSession = this.loggedInSubject.value || !!this.tokenService.getToken();
 
-    if (!loggedIn && this.tokenService.getToken()) {
+    if (!loggedIn && hadSession) {
       this.tokenService.clear();
+      localStorage.removeItem('user');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('pick2win_user');
+      sessionStorage.clear();
+      this.profileService.clearProfile();
+      this.notificationService.clearSession();
     }
 
     this.loggedInSubject.next(loggedIn);
+
+    if (!loggedIn && hadSession && this.isProtectedUserUrl(this.router.url)) {
+      this.router.navigate(['/auth/login'], { replaceUrl: true });
+    }
+
     return loggedIn;
+  }
+
+  private isProtectedUserUrl(url: string): boolean {
+    const path = String(url || '').split(/[?#]/)[0];
+    return path === '/lineouts'
+      || path.startsWith('/lineouts/')
+      || path === '/user'
+      || path.startsWith('/user/');
   }
 
   private authOptions() {

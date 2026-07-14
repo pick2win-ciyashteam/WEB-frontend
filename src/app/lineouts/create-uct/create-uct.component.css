@@ -1378,8 +1378,29 @@ h1 em,
 }
 
 .image-avatar {
+  position: relative;
   border: 1px solid rgba(255, 255, 255, .12);
   background: rgba(255, 255, 255, .08);
+}
+
+.image-avatar::before {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  content: '';
+  border: 2px solid rgba(255, 255, 255, .18);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: playerImageSpin .75s linear infinite;
+}
+
+.image-avatar img {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes playerImageSpin {
+  to { transform: rotate(360deg); }
 }
 
 .player-main b,
@@ -6359,6 +6380,41 @@ h1 em,
     padding: 6px 12px !important;
     font-size: 10px !important;
   }
+}
+
+.player-load-skeleton {
+  display: grid;
+  gap: 10px;
+  max-width: 390px;
+  margin: 28px auto 0;
+}
+
+.player-load-skeleton div {
+  display: grid;
+  grid-template-columns: 38px 1fr 54px;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .035);
+}
+
+.player-load-skeleton i,
+.player-load-skeleton span,
+.player-load-skeleton b {
+  display: block;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.15), rgba(255,255,255,.06));
+  background-size: 220% 100%;
+  animation: playerSkeleton 1.15s ease-in-out infinite;
+}
+
+.player-load-skeleton i { width: 38px; height: 38px; border-radius: 50%; }
+.player-load-skeleton b { width: 54px; }
+
+@keyframes playerSkeleton {
+  to { background-position: -220% 0; }
 }
 
 @media (max-width: 700px) {

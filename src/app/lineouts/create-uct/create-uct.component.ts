@@ -38,6 +38,7 @@ interface CreateUctContext {
   styleUrls: ['./create-uct.component.css']
 })
 export class CreateUctComponent implements OnInit, OnDestroy {
+  private readonly playerImageFallback = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2232%22 fill=%22%2315263a%22/%3E%3Ccircle cx=%2232%22 cy=%2224%22 r=%2211%22 fill=%22%2394a3b8%22/%3E%3Cpath d=%22M13 57c2-12 9-18 19-18s17 6 19 18%22 fill=%22%2394a3b8%22/%3E%3C/svg%3E';
   private readonly destroy$ = new Subject<void>();
   private generatingStatusTimer: ReturnType<typeof setInterval> | null = null;
   private matchStatusTimer: ReturnType<typeof setInterval> | null = null;
@@ -178,7 +179,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
         switchMap(params => {
           this.matchId = params.get('id') || '';
           this.createUctContext = this.getCreateUctContext(this.matchId);
-          this.loadUserGeneratedGames(this.matchId);
           this.loading = true;
           this.errorMessage = '';
           return this.api.getMatchDetails(this.matchId);
@@ -1489,7 +1489,15 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   playerImage(player: UctPlayer): string {
-    return player.logo || 'assets/logo.png';
+    return player.logo || this.playerImageFallback;
+  }
+
+  usePlayerImageFallback(event: Event): void {
+    const image = event.target as HTMLImageElement | null;
+
+    if (image && image.src !== this.playerImageFallback) {
+      image.src = this.playerImageFallback;
+    }
   }
 
   trackPlayer(_: number, player: UctPlayer): number {
@@ -1868,7 +1876,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.matchStatusTimer = setInterval(() => {
-      this.api.getMatchDetails(this.matchId)
+      this.api.getMatchDetails(this.matchId, true)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res) => {

@@ -27,6 +27,11 @@
       <span class="material-symbols-outlined" aria-hidden="true">progress_activity</span>
       <h3>Loading UCT workflow</h3>
       <p>Fetching confirmed lineups and substitutes.</p>
+      <div class="player-load-skeleton" aria-hidden="true">
+        <div *ngFor="let item of [1, 2, 3, 4]">
+          <i></i><span></span><b></b>
+        </div>
+      </div>
     </div>
 
     <div class="state-card error" *ngIf="!loading && errorMessage">
@@ -229,7 +234,7 @@
             </div>
             <button class="player-row locked-row pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of homeStartingPlayers; trackBy: trackPlayer" [class.selected]="selectedStartingIds.has(player.id)" [class.gk-highlight]="isGoalkeeperPlayer(player)" [disabled]="isStartingDisabled(player)" (click)="toggleStartingPlayer(player)">
               <span class="avatar image-avatar">
-                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
@@ -247,7 +252,7 @@
             </div>
             <button class="player-row locked-row pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of awayStartingPlayers; trackBy: trackPlayer" [class.selected]="selectedStartingIds.has(player.id)" [class.gk-highlight]="isGoalkeeperPlayer(player)" [disabled]="isStartingDisabled(player)" (click)="toggleStartingPlayer(player)">
               <span class="avatar image-avatar">
-                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedStartingIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
@@ -282,7 +287,7 @@
             </div>
             <button class="player-row pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of homeSubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
               <span class="avatar image-avatar">
-                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
@@ -301,7 +306,7 @@
             </div>
             <button class="player-row away pos-row-{{ positionClass(player) }}" type="button" *ngFor="let player of awaySubstitutes; trackBy: trackPlayer" [class.selected]="selectedSubIds.has(player.id)" [disabled]="isSubstituteDisabled(player)" (click)="toggleSubstitute(player)">
               <span class="avatar image-avatar">
-                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
               </span>
               <input class="row-check" type="checkbox" [checked]="selectedSubIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
@@ -384,7 +389,7 @@
               [disabled]="isMandatePlayerDisabled(player)"
               (click)="applyMandate(player)">
               <span class="avatar image-avatar">
-                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
               </span>
               <input class="row-check" type="checkbox" [checked]="mandateOf(player) === 'YES'" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
@@ -410,7 +415,7 @@
               [disabled]="isMandatePlayerDisabled(player)"
               (click)="setMandate(player, 'YES')">
               <span class="avatar image-avatar">
-                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
               </span>
               <input class="row-check" type="checkbox" [checked]="mandateOf(player) === 'YES'" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
@@ -448,7 +453,7 @@
             </div>
           <button class="player-row" type="button" *ngFor="let player of side.players; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id)" [disabled]="!canSelectCaptain(player)" (click)="toggleCaptain(player)">
             <span class="avatar image-avatar">
-              <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
             </span>
             <input class="row-check" type="checkbox" [checked]="captainIds.has(player.id)" tabindex="-1">
             <span class="player-main"><b>{{ player.player_name }}</b></span>
@@ -469,7 +474,7 @@
           <div class="sub-player-grid">
             <button class="player-row" type="button" *ngFor="let player of captaincySubstitutes; trackBy: trackPlayer" [class.selected]="captainIds.has(player.id)" [disabled]="!canSelectCaptain(player)" (click)="toggleCaptain(player)">
               <span class="avatar image-avatar">
-                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
               </span>
               <input class="row-check" type="checkbox" [checked]="captainIds.has(player.id)" tabindex="-1">
               <span class="player-main"><b>{{ player.player_name }}</b></span>
@@ -534,7 +539,7 @@
             <div>
               <div class="preview-player" *ngFor="let player of mandateYesPlayers; trackBy: trackPlayer">
                 <span class="avatar image-avatar">
-                  <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
                 </span>
                 <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                 <em class="yes">YES</em>
@@ -578,7 +583,7 @@
 
                 <div class="preview-player-grid preview-team-player-grid preview-starting-grid">
                   <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of side.starters; trackBy: trackPlayer">
-                    <span class="avatar image-avatar"><img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'"></span>
+                    <span class="avatar image-avatar"><img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)"></span>
                     <span class="preview-player-info">
                       <b>{{ player.player_name }}</b>
                       <small class="preview-player-meta"><span>{{ player.teamShort }}</span><i class="pos {{ positionClass(player) }}">{{ player.position }}</i></small>
@@ -595,7 +600,7 @@
                 </div>
                 <div class="preview-player-grid preview-team-player-grid preview-substitutes-grid">
                   <div class="preview-player pos-row-{{ positionClass(player) }}" *ngFor="let player of side.substitutes; trackBy: trackPlayer">
-                    <span class="avatar image-avatar"><img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'"></span>
+                    <span class="avatar image-avatar"><img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)"></span>
                     <span class="preview-player-info">
                       <b>{{ player.player_name }}</b>
                       <small class="preview-player-meta"><span>{{ player.teamShort }}</span><i class="pos {{ positionClass(player) }}">{{ player.position }}</i></small>
@@ -620,7 +625,7 @@
             <div class="preview-player-grid">
               <div class="preview-player" *ngFor="let player of captainPlayers; trackBy: trackPlayer">
                 <span class="avatar image-avatar">
-                  <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="$any($event.target).src='assets/logo.png'">
+                <img [src]="playerImage(player)" [alt]="player.player_name" loading="lazy" (error)="usePlayerImageFallback($event)">
                 </span>
                 <span><b>{{ player.player_name }}</b><small>{{ player.teamShort }} - {{ player.position }}</small></span>
                 <em>C</em>

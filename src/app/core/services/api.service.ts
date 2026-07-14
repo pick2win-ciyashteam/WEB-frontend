@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, shareReplay, throwError } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
 import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, RazorpayConfigResponse, RazorpayVerifyPaymentPayload, Series, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserNotificationsResponse, UserProfile } from '../interfaces/content';
 import { TokenService } from './token.service';
@@ -36,6 +36,8 @@ export class ApiService {
   // private BASE = 'https://pick2win-backend-website.onrender.com/api'
 
   private BASE = 'https://pick2win.io/backend/api'
+  private readonly matchDetailsCache = new Map<string, { createdAt: number; request: Observable<ApiDataResponse<MatchDetail>> }>();
+  private readonly matchDetailsCacheMs = 15000;
 
 
   constructor(
@@ -247,8 +249,24 @@ getRazorpayConfig(): Observable<RazorpayConfigResponse> {
     return this.http.get<TodayLineupsResponse>(`${this.BASE}/user/lineup/today-lineups`);
   }
 
-  getMatchDetails(matchId: number | string): Observable<ApiDataResponse<MatchDetail>> {
-    return this.http.get<ApiDataResponse<MatchDetail>>(`${this.BASE}/user/matches/${matchId}`);
+  getMatchDetails(matchId: number | string, forceRefresh = false): Observable<ApiDataResponse<MatchDetail>> {
+    const key = String(matchId);
+    const cached = this.matchDetailsCache.get(key);
+
+    if (!forceRefresh && cached && Date.now() - cached.createdAt < this.matchDetailsCacheMs) {
+      return cached.request;
+    }
+
+    const request = this.http.get<ApiDataResponse<MatchDetail>>(`${this.BASE}/user/matches/${matchId}`).pipe(
+      catchError(error => {
+        this.matchDetailsCache.delete(key);
+        return throwError(() => error);
+      }),
+      shareReplay({ bufferSize: 1, refCount: false })
+    );
+
+    this.matchDetailsCache.set(key, { createdAt: Date.now(), request });
+    return request;
   }
 
   createUctTeams(data: UctGeneratePayload): Observable<UctGenerateResponse> {

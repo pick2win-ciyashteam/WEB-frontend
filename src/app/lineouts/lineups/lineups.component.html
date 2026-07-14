@@ -67,6 +67,9 @@
                 [class.generated]="isGenerated(match)"
                 [attr.role]="canOpenMatch(match) ? 'button' : null"
                 [attr.tabindex]="canOpenMatch(match) ? 0 : null"
+                (pointerenter)="prefetchCreateUct(match)"
+                (focusin)="prefetchCreateUct(match)"
+                (touchstart)="prefetchCreateUct(match)"
                 (click)="openMatch(match)"
                 (keydown.enter)="openMatch(match)"
                 (keydown.space)="openMatch(match)">
@@ -118,6 +121,9 @@
                     class="tc-uct"
                     type="button"
                     [disabled]="!canRunUct(match) && !isGenerated(match)"
+                    (pointerenter)="prefetchCreateUct(match)"
+                    (focus)="prefetchCreateUct(match)"
+                    (touchstart)="prefetchCreateUct(match)"
                     (click)="$event.stopPropagation(); handleMatchAction(match)">
                     {{ isGenerated(match) ? 'See in My Teams ->' : (canRunUct(match) ? '⚡ Run UCT ->' : 'UCT Locked') }}
                   </button>
@@ -143,6 +149,9 @@
                   [class.generated]="isGenerated(match)"
                   [attr.role]="canOpenMatch(match) ? 'button' : null"
                   [attr.tabindex]="canOpenMatch(match) ? 0 : null"
+                  (pointerenter)="prefetchCreateUct(match)"
+                  (focusin)="prefetchCreateUct(match)"
+                  (touchstart)="prefetchCreateUct(match)"
                   (click)="openMatch(match)"
                   (keydown.enter)="openMatch(match)"
                   (keydown.space)="openMatch(match)">
@@ -184,6 +193,9 @@
                       class="uc-uct"
                       type="button"
                       [disabled]="!canRunUct(match) && !isGenerated(match)"
+                      (pointerenter)="prefetchCreateUct(match)"
+                      (focus)="prefetchCreateUct(match)"
+                      (touchstart)="prefetchCreateUct(match)"
                       (click)="$event.stopPropagation(); handleMatchAction(match)">
                       {{ isGenerated(match) ? 'See in My Teams ->' : (canRunUct(match) ? '⚡ Run UCT' : 'UCT Locked') }}
                     </button>

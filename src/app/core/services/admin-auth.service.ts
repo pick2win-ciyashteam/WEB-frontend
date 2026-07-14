@@ -12,13 +12,26 @@ export class AdminAuthService {
 
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   loggedIn$ = this.loggedInSubject.asObservable();
+  private readonly adminSessionCheck = () => this.refreshAdminSession();
+  private readonly adminStorageListener = (event: StorageEvent) => {
+    if (event.key === 'admin_token' || event.key === null) {
+      this.refreshAdminSession();
+    }
+  };
+  private readonly adminSessionCheckInterval = window.setInterval(
+    () => this.refreshAdminSession(),
+    15000
+  );
 
   constructor(
     private adminService: AdminService,
     private tokenService: TokenService,
     private router: Router
   ) {
-    this.loggedInSubject.next(this.isLoggedIn());
+    this.refreshAdminSession();
+    window.addEventListener('storage', this.adminStorageListener);
+    window.addEventListener('focus', this.adminSessionCheck);
+    document.addEventListener('visibilitychange', this.adminSessionCheck);
   }
 
   login(email: string, password: string, twoFaCode: string): Observable<any> {
@@ -57,11 +70,21 @@ export class AdminAuthService {
   }
 
   isLoggedIn(): boolean {
-    const loggedIn = this.tokenService.hasValidAdminToken();
+    return this.tokenService.hasValidAdminToken();
+  }
 
-    if (!loggedIn && this.tokenService.getAdminToken()) {
+  refreshAdminSession(): boolean {
+    const loggedIn = this.isLoggedIn();
+    const hadSession = this.loggedInSubject.value || !!this.tokenService.getAdminToken();
+
+    if (!loggedIn && hadSession) {
       this.tokenService.clearAdmin();
-      this.loggedInSubject.next(false);
+    }
+
+    this.loggedInSubject.next(loggedIn);
+
+    if (!loggedIn && hadSession && this.router.url.startsWith('/admin/')) {
+      this.router.navigate([ADMIN_LOGIN_URL], { replaceUrl: true });
     }
 
     return loggedIn;
@@ -81,11 +104,6 @@ export class AdminAuthService {
 
   clearAdminSession(redirect = true): void {
     this.tokenService.clearAdmin();
-    this.tokenService.clear();
-    localStorage.removeItem('user');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('pick2win_user');
-    sessionStorage.clear();
     this.loggedInSubject.next(false);
     if (redirect) {
       this.router.navigate([ADMIN_LOGIN_URL], { replaceUrl: true });

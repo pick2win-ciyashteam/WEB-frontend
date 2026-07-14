@@ -19,6 +19,16 @@ export const createUctGuard: CanActivateFn = (route) => {
     });
   }
 
+  // Lineups has already loaded and validated this match. Reuse that context so
+  // navigation is not held up by fetching the complete series list again.
+  const navigationMatch = router.getCurrentNavigation()?.extras.state?.['lineoutMatch'];
+
+  if (isMatchingNavigationContext(navigationMatch, matchId)) {
+    return canCreateUct(navigationMatch)
+      ? true
+      : teamsUrl(router, matchId);
+  }
+
   return api.getSeriesMatches().pipe(
     map((res: any) => {
       const match = (res?.data || [])
@@ -26,50 +36,46 @@ export const createUctGuard: CanActivateFn = (route) => {
         .find((m: any) => String(m.id || m.provider_match_id) === String(matchId));
 
       if (!match) {
-        return router.createUrlTree(['/user/profile'], {
-          queryParams: { tab: 'teams', match: matchId }
-        });
+        return teamsUrl(router, matchId);
       }
 
-      const status = String(match.status || '').toUpperCase();
-
-      const lineupReady = isTruthy(match.lineupavailable)
-        || isTruthy(match.lineup_available)
-        || isTruthy(match.lineups_available)
-        || isTruthy(match.is_lineup_available)
-        || ['available', 'released', 'confirmed', 'ready'].includes(
-          String(match.lineup_status || '').toLowerCase()
-        );
-
-      const alreadyGenerated = generatedGames(match).length >= 3 || generatedGameCount(match) >= 3;
-
-      const startTime = new Date(match.start_time || match.matchdate).getTime();
-      const matchStarted = Number.isFinite(startTime) && Date.now() >= startTime;
-
-      const blockedStatus = ['LIVE', 'FINISHED', 'FT', 'ENDED', 'CANCELLED', 'POSTPONED'].includes(status);
-
-      if (!lineupReady || alreadyGenerated || matchStarted || blockedStatus) {
-        return router.createUrlTree(['/user/profile'], {
-          queryParams: {
-            tab: 'teams',
-            match: matchId
-          }
-        });
-      }
-
-      return true;
+      return canCreateUct(match) ? true : teamsUrl(router, matchId);
     }),
-    catchError(() =>
-      of(router.createUrlTree(['/user/profile'], {
-        queryParams: { tab: 'teams', match: matchId }
-      }))
-    )
+    catchError(() => of(teamsUrl(router, matchId)))
   );
 };
 
 export const preventPendingUctGenerationGuard: CanDeactivateFn<PendingGenerationComponent> = (component) => {
   return component.canDeactivate();
 };
+
+function isMatchingNavigationContext(match: any, matchId: string): boolean {
+  return !!match && String(match.id ?? match.provider_match_id ?? '') === String(matchId);
+}
+
+function canCreateUct(match: any): boolean {
+  const status = String(match.status || '').toUpperCase();
+  const lineupReady = isTruthy(match.lineupReady)
+    || isTruthy(match.lineupavailable)
+    || isTruthy(match.lineup_available)
+    || isTruthy(match.lineups_available)
+    || isTruthy(match.is_lineup_available)
+    || ['available', 'released', 'confirmed', 'ready'].includes(
+      String(match.lineup_status || '').toLowerCase()
+    );
+  const alreadyGenerated = generatedGames(match).length >= 3 || generatedGameCount(match) >= 3;
+  const startTime = new Date(match.kickoffISO || match.start_time || match.matchdate).getTime();
+  const matchStarted = Number.isFinite(startTime) && Date.now() >= startTime;
+  const blockedStatus = ['LIVE', 'FINISHED', 'FT', 'ENDED', 'CANCELLED', 'POSTPONED'].includes(status);
+
+  return lineupReady && !alreadyGenerated && !matchStarted && !blockedStatus;
+}
+
+function teamsUrl(router: Router, matchId: string) {
+  return router.createUrlTree(['/user/profile'], {
+    queryParams: { tab: 'teams', match: matchId }
+  });
+}
 
 function isTruthy(value: any): boolean {
   if (value === true || value === 1) return true;

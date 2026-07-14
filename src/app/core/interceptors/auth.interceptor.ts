@@ -19,6 +19,10 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    if (!this.isPick2WinApiRequest(request)) {
+      return next.handle(request);
+    }
+
     const usesAdminToken = this.isAdminApiRequest(request) && !this.isUserFeedbackRequest(request);
     const token = usesAdminToken
       ? this.tokenService.getAdminToken()
@@ -34,7 +38,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError(error => {
-        if ((error?.status === 401 || error?.status === 403) && token) {
+        if (this.isInvalidSessionResponse(error) && token) {
           if (usesAdminToken) {
             this.injector.get(AdminAuthService).clearAdminSession();
           } else {
@@ -49,6 +53,32 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private isAdminApiRequest(request: HttpRequest<unknown>): boolean {
     return request.url.includes('/api/admin/');
+  }
+
+  private isPick2WinApiRequest(request: HttpRequest<unknown>): boolean {
+    try {
+      const url = new URL(request.url, window.location.origin);
+      return url.origin === 'https://pick2win.io' && url.pathname.startsWith('/backend/api/');
+    } catch {
+      return request.url.startsWith('/backend/api/');
+    }
+  }
+
+  private isInvalidSessionResponse(error: any): boolean {
+    if (error?.status === 401) {
+      return true;
+    }
+
+    if (error?.status !== 403) {
+      return false;
+    }
+
+    const message = String(
+      error?.error?.message || error?.error?.error || error?.message || ''
+    ).toLowerCase();
+
+    return ['token', 'jwt', 'unauthenticated', 'authentication', 'session', 'expired']
+      .some(term => message.includes(term));
   }
 
   private isUserFeedbackRequest(request: HttpRequest<unknown>): boolean {

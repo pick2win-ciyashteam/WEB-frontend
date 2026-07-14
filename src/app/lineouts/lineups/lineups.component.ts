@@ -265,6 +265,16 @@ canRunUct(match: LineoutMatch): boolean {
     this.openMatchDestination(match);
   }
 
+  prefetchCreateUct(match: LineoutMatch): void {
+    if (!this.isLoggedIn || !this.canRunUct(match) || !this.hasCoinsForUct()) {
+      return;
+    }
+
+    this.api.getMatchDetails(match.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({ error: () => undefined });
+  }
+
   openCreateUct(match: LineoutMatch): void {
     this.storeCreateUctContext(match);
     this.router.navigate(['/lineouts/create-uct', match.id], {
@@ -347,6 +357,8 @@ canRunUct(match: LineoutMatch): boolean {
       venue: match.venue,
       series: match.league,
       kickoffISO: match.kickoffISO,
+      lineupReady: match.lineupReady,
+      status: match.status,
       generatedGames: match.generatedGames
     };
   }
