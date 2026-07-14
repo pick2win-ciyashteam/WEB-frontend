@@ -1430,6 +1430,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
             const game = this.selectedGame();
 
             this.userGeneratedGames.add(game);
+            this.api.rememberGeneratedGame(this.matchId, game);
             this.goToGeneratedTeams(game);
             return;
           }
@@ -1646,6 +1647,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
           this.userGeneratedGames.forEach(game => {
             this.checkedGeneratedPlatforms.add(game);
+            this.api.rememberGeneratedGame(matchId, game);
           });
         },
         error: () => {
@@ -1708,6 +1710,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
 
             if (res?.success !== false && totalTeams > 0) {
               this.userGeneratedGames.add(game);
+              this.api.rememberGeneratedGame(matchId, game);
             }
             this.checkedGeneratedPlatforms.add(game);
           },
@@ -1833,6 +1836,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     }
 
     this.userGeneratedGames.add(game);
+    this.api.rememberGeneratedGame(this.matchId, game);
     this.submitError = '';
     this.generatedTeams = [];
     this.showAlert('UCT already generated', `${this.platformLabel(game)} teams are already generated for this match. You can view them in My Teams.`, 'info');

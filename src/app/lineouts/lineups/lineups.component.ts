@@ -559,6 +559,7 @@ canRunUct(match: LineoutMatch): boolean {
                 if (!match.generatedGames.includes(game)) {
                   match.generatedGames = [...match.generatedGames, game];
                 }
+                this.api.rememberGeneratedGame(match.id, game);
               });
           });
 
@@ -654,8 +655,15 @@ canRunUct(match: LineoutMatch): boolean {
     const homeName = this.teamDisplayName(match, 'home');
     const awayName = this.teamDisplayName(match, 'away');
 
+    const matchId = String(match.id || match.provider_match_id);
+    const generatedGames = new Set<FantasyGame>(this.generatedGames(match));
+    this.api.getKnownGeneratedGames(matchId)
+      .map(game => this.normalizeGame(game))
+      .filter((game): game is FantasyGame => !!game)
+      .forEach(game => generatedGames.add(game));
+
     return {
-      id: String(match.id || match.provider_match_id),
+      id: matchId,
       league: match.seriesname || series.name,
       sport: String(this.firstMatchValue(match, ['sport', 'sport_name', 'sportName']) || 'Football'),
       country: series.season || series.status || 'Football',
@@ -672,8 +680,9 @@ canRunUct(match: LineoutMatch): boolean {
       kickoffISO,
       lineupReady: this.isLineupAvailable(match),
       lineupJustReleased: this.isLineupAvailable(match),
-      teamsGenerated: this.hasGeneratedTeams(match),
-      generatedGames: this.generatedGames(match),
+      teamsGenerated: (['draftkings', 'fanduel'] as FantasyGame[])
+        .every(game => generatedGames.has(game)),
+      generatedGames: Array.from(generatedGames),
       generatedTeamsCount: Number(match.generated_teams_count ?? 0),
       generatedAt: match.generated_at ?? null,
       venue: this.formatVenue(match),

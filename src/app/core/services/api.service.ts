@@ -40,6 +40,7 @@ export class ApiService {
   private readonly matchDetailsCacheMs = 15000;
   private myTeamsCache: { createdAt: number; request: Observable<ApiListResponse<Country>> } | null = null;
   private readonly myTeamsCacheMs = 10000;
+  private readonly knownGeneratedGames = new Map<string, Set<string>>();
 
 
   constructor(
@@ -279,6 +280,47 @@ getRazorpayConfig(): Observable<RazorpayConfigResponse> {
       data,
       { headers: { 'Content-Type': 'application/json', 'x-api-key': '12345678' } }
     ).pipe(tap(() => this.myTeamsCache = null));
+  }
+
+  rememberGeneratedGame(matchId: number | string, game: string): void {
+    const key = String(matchId);
+    const games = this.knownGeneratedGames.get(key) || new Set<string>();
+    games.add(String(game).trim().toLowerCase());
+    this.knownGeneratedGames.set(key, games);
+
+    try {
+      sessionStorage.setItem(this.generatedGamesStorageKey(key), JSON.stringify(Array.from(games)));
+    } catch {
+      // In-memory status still works when browser storage is unavailable.
+    }
+  }
+
+  getKnownGeneratedGames(matchId: number | string): string[] {
+    const key = String(matchId);
+    const games = this.knownGeneratedGames.get(key) || new Set<string>();
+
+    try {
+      const stored = JSON.parse(sessionStorage.getItem(this.generatedGamesStorageKey(key)) || '[]');
+      if (Array.isArray(stored)) {
+        stored.map(String).forEach(game => games.add(game.trim().toLowerCase()));
+      }
+    } catch {
+      // Ignore invalid/disabled storage and continue with in-memory status.
+    }
+
+    this.knownGeneratedGames.set(key, games);
+    return Array.from(games);
+  }
+
+  private generatedGamesStorageKey(matchId: string): string {
+    const token = this.tokenService.getToken() || 'guest';
+    let hash = 0;
+
+    for (let index = 0; index < token.length; index++) {
+      hash = ((hash << 5) - hash + token.charCodeAt(index)) | 0;
+    }
+
+    return `p2w-generated-games-${Math.abs(hash)}-${matchId}`;
   }
 
    GetMyTeams(forceRefresh = false): Observable<ApiListResponse<Country>> {
