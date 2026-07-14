@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { EMPTY, Subject, catchError, forkJoin, interval, of, switchMap, takeUntil, tap } from 'rxjs';
+import { EMPTY, Subject, catchError, interval, switchMap, takeUntil } from 'rxjs';
 import { Match, Series } from '../../core/interfaces/content';
 import { ApiService } from '../../core/services/api.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
@@ -545,68 +545,52 @@ canRunUct(match: LineoutMatch): boolean {
       return;
     }
 
-    const games: FantasyGame[] = ['draftkings', 'fanduel'];
-    const probes = matches.flatMap(match =>
-      games.map(game => ({
-        match,
-        game,
-        request: this.authService
-          .getUserMyTeams(match.id, this.normalizedSport(match.sport), game)
-          .pipe(
-            tap(response => this.applyGeneratedGameResponse(match, game, response)),
-            catchError(() => of(null))
-          )
-      }))
-    );
-
-    forkJoin(probes.map(probe => probe.request))
+    this.api.GetMyTeams()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (res: any) => {
+          const rows = this.flattenGeneratedMatchRows(res?.data);
+
+          matches.forEach(match => {
+            rows
+              .filter(row => this.generatedRowMatches(row, match.id))
+              .flatMap(row => this.generatedGames(row as Match))
+              .forEach(game => {
+                if (!match.generatedGames.includes(game)) {
+                  match.generatedGames = [...match.generatedGames, game];
+                }
+              });
+          });
+
+          const games: FantasyGame[] = ['draftkings', 'fanduel'];
           matches.forEach(match => {
             match.teamsGenerated = games.every(game => match.generatedGames.includes(game));
           });
 
+          this.matches = [...this.matches];
           done();
         },
         error: () => done()
       });
   }
 
-  private applyGeneratedGameResponse(match: LineoutMatch, game: FantasyGame, response: any): void {
-    if (!this.hasGeneratedTeamsResponse(response) || match.generatedGames.includes(game)) {
-      return;
+  private flattenGeneratedMatchRows(value: unknown): any[] {
+    if (!Array.isArray(value)) {
+      return [];
     }
 
-    match.generatedGames = [...match.generatedGames, game];
-    match.teamsGenerated = (['draftkings', 'fanduel'] as FantasyGame[])
-      .every(platform => match.generatedGames.includes(platform));
-
-    // Publish the individual result immediately instead of waiting for every
-    // match/platform probe in the forkJoin to finish.
-    this.matches = [...this.matches];
+    return value.flatMap((row: any) => {
+      const nested = [row?.matches, row?.games, row?.platforms, row?.generations, row?.generated_games]
+        .filter(Array.isArray);
+      return nested.length ? [row, ...nested.flat()] : [row];
+    });
   }
 
-  private hasGeneratedTeamsResponse(response: any): boolean {
-    if (!response || response?.success === false) {
-      return false;
-    }
-
-    const collections = [
-      response?.teams,
-      response?.generated_teams,
-      response?.generatedTeams,
-      response?.lineups,
-      response?.data?.teams,
-      response?.data?.generated_teams,
-      response?.data?.generatedTeams,
-      response?.data?.lineups,
-      Array.isArray(response?.data) ? response.data : null,
-      Array.isArray(response) ? response : null
-    ];
-
-    return Number(response?.total_teams || response?.data?.total_teams || 0) > 0
-      || collections.some(collection => Array.isArray(collection) && collection.length > 0);
+  private generatedRowMatches(row: any, matchId: string): boolean {
+    return [
+      row?.match_id, row?.matchId, row?.id, row?.provider_match_id,
+      row?.fixture_id, row?.match?.id, row?.match?.provider_match_id
+    ].some(value => String(value ?? '') === String(matchId));
   }
 
   private normalizedSport(sport?: string): string {
@@ -814,6 +798,10 @@ canRunUct(match: LineoutMatch): boolean {
       'platforms_generated',
       'platformsGenerated'
     ]));
+    this.addGeneratedGames(games, source['teams_generated_by_game']);
+    this.addGeneratedGames(games, source['teamsGeneratedByGame']);
+    this.addGeneratedGames(games, source['platform_counts']);
+    this.addGeneratedGames(games, source['platformCounts']);
 
     const directGame = this.normalizeGame(this.firstMatchValue(match, [
       'game',
@@ -875,6 +863,19 @@ canRunUct(match: LineoutMatch): boolean {
       if (game && (generated === undefined || generated === null || this.isTruthyFlag(generated) || Number(generated) > 0)) {
         games.add(game);
       }
+
+      Object.entries(value).forEach(([key, nestedValue]) => {
+        const keyedGame = this.normalizeGame(key);
+
+        if (keyedGame && (this.isTruthyFlag(nestedValue) || Number(nestedValue) > 0)) {
+          games.add(keyedGame);
+          return;
+        }
+
+        if (nestedValue && typeof nestedValue === 'object') {
+          this.addGeneratedGames(games, nestedValue);
+        }
+      });
       return;
     }
 

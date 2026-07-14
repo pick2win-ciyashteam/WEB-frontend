@@ -1647,11 +1647,6 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           this.userGeneratedGames.forEach(game => {
             this.checkedGeneratedPlatforms.add(game);
           });
-          // The aggregate list is authoritative for the current user. Games
-          // absent from it are available to start; exact probes can still
-          // upgrade either platform to Generated if they return later.
-          (['draftkings', 'fanduel'] as FantasyPlatform[])
-            .forEach(game => this.checkedGeneratedPlatforms.add(game));
         },
         error: () => {
         }
@@ -1726,15 +1721,22 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   private generatedTeamsFromResponse(res: any): unknown[] {
-    if (Array.isArray(res?.teams)) {
-      return res.teams;
-    }
+    const collections = [
+      res?.teams,
+      res?.generated_teams,
+      res?.generatedTeams,
+      res?.lineups,
+      res?.data?.teams,
+      res?.data?.generated_teams,
+      res?.data?.generatedTeams,
+      res?.data?.lineups,
+      Array.isArray(res?.data) ? res.data : null,
+      Array.isArray(res) ? res : null,
+      res?.team_a,
+      res?.team_b
+    ];
 
-    if (Array.isArray(res?.data?.teams)) {
-      return res.data.teams;
-    }
-
-    return [];
+    return collections.find(collection => Array.isArray(collection) && collection.length > 0) || [];
   }
 
 
@@ -1786,6 +1788,7 @@ export class CreateUctComponent implements OnInit, OnDestroy {
   }
 
   private addGeneratedGamesFromRow(games: Set<FantasyPlatform>, row: any): void {
+    this.addGeneratedGames(games, row);
     const directGame = this.normalizeGame(row?.game || row?.fantasy_platform || row?.platform || row?.name);
 
     if (directGame) {
@@ -1800,6 +1803,12 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     this.addGeneratedGames(games, row?.generatedPlatforms);
     this.addGeneratedGames(games, row?.platforms_generated);
     this.addGeneratedGames(games, row?.platformsGenerated);
+    this.addGeneratedGames(games, row?.teams_generated_by_game);
+    this.addGeneratedGames(games, row?.teamsGeneratedByGame);
+    this.addGeneratedGames(games, row?.platform_counts);
+    this.addGeneratedGames(games, row?.platformCounts);
+    this.addGeneratedGames(games, row?.game_counts);
+    this.addGeneratedGames(games, row?.gameCounts);
 
     (['sorare', 'draftkings', 'fanduel'] as FantasyPlatform[]).forEach(game => {
       const values = [
@@ -1846,6 +1855,19 @@ export class CreateUctComponent implements OnInit, OnDestroy {
       if (game && (generated === undefined || generated === null || this.isTruthy(generated) || Number(generated) > 0)) {
         games.add(game);
       }
+
+      Object.entries(source).forEach(([key, nestedValue]) => {
+        const keyedGame = this.normalizeGame(key);
+
+        if (keyedGame && (this.isTruthy(nestedValue) || Number(nestedValue) > 0)) {
+          games.add(keyedGame);
+          return;
+        }
+
+        if (nestedValue && typeof nestedValue === 'object') {
+          this.addGeneratedGames(games, nestedValue);
+        }
+      });
       return;
     }
 

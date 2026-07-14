@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, shareReplay, throwError } from 'rxjs';
+import { Observable, catchError, shareReplay, tap, throwError } from 'rxjs';
 import { ResendOtpPayload, SignupPayload, VerifyEmailPayload, VerifySignupPayload } from '../interfaces/auth';
 import { ApiDataResponse, ApiListResponse, Banner, BuyCoinsPayload, BuyCoinsResponse, Country, FeedbackAnswerPayload, FeedbackPostPayload, FeedbackQuestion, MatchDetail, RazorpayConfigResponse, RazorpayVerifyPaymentPayload, Series, SubscriptionPlan, SupportPayload, SupportResponse, SupportTicketResponse, SupportTicketsResponse, TodayLineupsResponse, UctGeneratePayload, UctGenerateResponse, UserNotificationsResponse, UserProfile } from '../interfaces/content';
 import { TokenService } from './token.service';
@@ -38,6 +38,8 @@ export class ApiService {
   private BASE = 'https://pick2win.io/backend/api'
   private readonly matchDetailsCache = new Map<string, { createdAt: number; request: Observable<ApiDataResponse<MatchDetail>> }>();
   private readonly matchDetailsCacheMs = 15000;
+  private myTeamsCache: { createdAt: number; request: Observable<ApiListResponse<Country>> } | null = null;
+  private readonly myTeamsCacheMs = 10000;
 
 
   constructor(
@@ -276,11 +278,24 @@ getRazorpayConfig(): Observable<RazorpayConfigResponse> {
       url,
       data,
       { headers: { 'Content-Type': 'application/json', 'x-api-key': '12345678' } }
-    );
+    ).pipe(tap(() => this.myTeamsCache = null));
   }
 
-   GetMyTeams(): Observable<ApiListResponse<Country>> {
-    return this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/teams/generate-matches`);
+   GetMyTeams(forceRefresh = false): Observable<ApiListResponse<Country>> {
+    if (!forceRefresh && this.myTeamsCache && Date.now() - this.myTeamsCache.createdAt < this.myTeamsCacheMs) {
+      return this.myTeamsCache.request;
+    }
+
+    const request = this.http.get<ApiListResponse<Country>>(`${this.BASE}/user/teams/generate-matches`).pipe(
+      catchError(error => {
+        this.myTeamsCache = null;
+        return throwError(() => error);
+      }),
+      shareReplay({ bufferSize: 1, refCount: false })
+    );
+
+    this.myTeamsCache = { createdAt: Date.now(), request };
+    return request;
   }
 
   MatchByTeams(id: number, sport: string, game: 'sorare' | 'draftkings' | 'fanduel'): Observable<any> {
