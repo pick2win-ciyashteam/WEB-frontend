@@ -3167,6 +3167,48 @@
   }
 }
 
+/* High-contrast labels for the upcoming fixtures section. */
+.upcoming-section .us-head h3 {
+  color: #f7fbff;
+  text-shadow: 0 1px 12px rgba(255, 255, 255, 0.12);
+}
+
+.upcoming-section .us-count {
+  padding: 5px 10px;
+  border: 1px solid rgba(244, 180, 0, 0.48);
+  border-radius: 999px;
+  background: rgba(244, 180, 0, 0.12);
+  color: #ffd24a;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(244, 180, 0, 0.2);
+}
+
+.upcoming-section .day-label {
+  padding: 8px 12px 10px;
+  border-left: 3px solid #38c8ff;
+  border-bottom-color: rgba(56, 200, 255, 0.72);
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(90deg, rgba(56, 200, 255, 0.14), rgba(56, 200, 255, 0.02) 55%, transparent);
+  color: #a5e7ff;
+  text-shadow: 0 0 14px rgba(56, 200, 255, 0.38);
+}
+
+@media (max-width: 720px) {
+  .upcoming-section .us-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .upcoming-section .us-count {
+    margin-left: 0;
+  }
+
+  .upcoming-section .day-label {
+    font-size: 10.5px;
+    line-height: 1.5;
+  }
+}
+
 /* Stable status rendering: avoid mobile emoji/mojibake glyph issues. */
 .tc-status,
 .uc-status,
