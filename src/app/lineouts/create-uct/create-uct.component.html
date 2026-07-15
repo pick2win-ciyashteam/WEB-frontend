@@ -84,7 +84,7 @@
               </div>
               <ng-template #startPlatform>
                 <button class="primary-btn platform-start" type="button" [disabled]="matchDataLoading" (click)="handlePlatformAction(platform.id)">
-                  {{ matchDataLoading ? 'Loading lineup...' : 'RUN UCT' }}
+                  {{ matchDataLoading ? 'Loading lineup...' : 'START' }}
                   <span class="material-symbols-outlined" aria-hidden="true">{{ matchDataLoading ? 'progress_activity' : 'chevron_right' }}</span>
                 </button>
               </ng-template>

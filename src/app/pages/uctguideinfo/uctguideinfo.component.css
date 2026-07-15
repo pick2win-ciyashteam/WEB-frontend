@@ -104,16 +104,21 @@
 @media (max-width: 900px) {
   .signup-section .signup-grid {
     width: min(760px, calc(100% - 36px));
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 34px;
   }
 
   .signup-copy {
     position: relative;
+    flex: 0 0 auto;
+    height: auto !important;
     min-height: 0;
-    display: block;
+    display: flex;
+    flex-direction: column;
     padding: 34px;
     text-align: center;
+    overflow: hidden;
   }
 
   .signup-copy h2,
@@ -125,6 +130,19 @@
   .signup-copy .eyebrow,
   .signup-copy .no-list {
     justify-content: center;
+  }
+
+  .signup-copy .existing {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 22px 0 0;
+    padding: 18px 0 0;
+  }
+
+  .signup-card {
+    flex: 0 0 auto;
+    width: 100%;
   }
 }
 
@@ -145,6 +163,12 @@
   .signup-copy {
     padding: 28px 20px;
     border-radius: 18px;
+  }
+
+  .signup-card {
+    position: relative;
+    z-index: 2;
+    margin-top: 0;
   }
 
   .signup-copy > p {
@@ -326,6 +350,76 @@
     padding-top: 52px;
   }
 
+  .hero-panel {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .hero-panel-head {
+    gap: 12px;
+  }
+
+  .hero-panel-head img {
+    width: 122px;
+    flex: 0 0 auto;
+  }
+
+  .hero-panel-head span {
+    min-width: 0;
+    font-size: 7px;
+    line-height: 1.35;
+    text-align: right;
+  }
+
+  .lineup-preview {
+    height: 250px;
+    margin: 18px 0;
+  }
+
+  .lineup-preview .p2 {
+    left: 15%;
+    bottom: 64px;
+  }
+
+  .lineup-preview .p3 {
+    right: 15%;
+    bottom: 64px;
+  }
+
+  .lineup-preview .p4 {
+    left: 31%;
+    top: 82px;
+  }
+
+  .lineup-preview .p5 {
+    right: 31%;
+    top: 82px;
+  }
+
+  .preview-result {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-result b {
+    white-space: nowrap;
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .preview-result span {
+    max-width: 145px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .preview-tags {
+    margin-top: 16px;
+  }
+
   .section-action {
     margin-top: 28px;
   }
@@ -340,5 +434,38 @@
 
   .compare-row > * {
     overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-panel {
+    padding: 13px;
+  }
+
+  .hero-panel-head img {
+    width: 108px;
+  }
+
+  .lineup-preview {
+    height: 235px;
+  }
+
+  .player {
+    width: 42px;
+    height: 42px;
+    font-size: 9px;
+  }
+
+  .p1,
+  .p6 {
+    left: calc(50% - 21px);
+  }
+
+  .preview-result {
+    gap: 10px;
+  }
+
+  .preview-result b {
+    font-size: 24px;
   }
 }
