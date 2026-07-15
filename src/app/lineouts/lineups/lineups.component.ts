@@ -50,6 +50,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly todayRefreshMs = 60000;
   private balanceFocusTimer: ReturnType<typeof setTimeout> | null = null;
+  private matchActionNoticeTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly loggedIn$ = this.authService.loggedIn$;
   isLoggedIn = this.authService.isLoggedIn();
@@ -61,6 +62,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   showBalanceRequired = false;
   showSeriesCoverage = false;
   openingTeamsMatchId: string | null = null;
+  matchActionNotice = '';
   readonly showUctButtonForTesting = false;
 
   constructor(
@@ -99,6 +101,10 @@ export class LineupsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.balanceFocusTimer) {
       clearTimeout(this.balanceFocusTimer);
+    }
+
+    if (this.matchActionNoticeTimer) {
+      clearTimeout(this.matchActionNoticeTimer);
     }
 
     this.destroy$.next();
@@ -258,16 +264,50 @@ canRunUct(match: LineoutMatch): boolean {
 }
 
   handleMatchAction(match: LineoutMatch): void {
-    if (!this.canOpenMatch(match)) {
-      return;
-    }
-
     if (!this.isLoggedIn) {
       this.authModal.open('login');
       return;
     }
 
-    this.openMatchDestination(match);
+    if (this.isGenerated(match)) {
+      this.openViewTeams(match);
+      return;
+    }
+
+    if (this.isLive(match) || this.hasMatchStarted(match)) {
+      this.showMatchNotice('This match has already started. UCT is locked.');
+      return;
+    }
+
+    if (!match.lineupReady && !this.showUctButtonForTesting) {
+      this.showMatchNotice('Waiting for the official lineup. Run UCT unlocks once it is released.');
+      return;
+    }
+
+    if (!this.hasCoinsForUct()) {
+      this.focusBalanceCard();
+      return;
+    }
+
+    this.openCreateUct(match);
+  }
+
+  private hasMatchStarted(match: LineoutMatch): boolean {
+    const kickoffTime = new Date(match.kickoffISO).getTime();
+    return Number.isFinite(kickoffTime) && Date.now() >= kickoffTime;
+  }
+
+  private showMatchNotice(message: string): void {
+    this.matchActionNotice = message;
+
+    if (this.matchActionNoticeTimer) {
+      clearTimeout(this.matchActionNoticeTimer);
+    }
+
+    this.matchActionNoticeTimer = setTimeout(() => {
+      this.matchActionNotice = '';
+      this.matchActionNoticeTimer = null;
+    }, 4000);
   }
 
   prefetchCreateUct(match: LineoutMatch): void {
@@ -771,6 +811,8 @@ canRunUct(match: LineoutMatch): boolean {
       'lineup_available',
       'lineups_available',
       'is_lineup_available',
+      'is_lineup_released',
+      'xi_announced',
       'lineupReady',
       'lineup_ready'
     ]);
@@ -781,7 +823,7 @@ canRunUct(match: LineoutMatch): boolean {
     ]));
 
     return this.isAvailableFlag(flag)
-      || ['available', 'released', 'confirmed', 'ready', 'lineupavailable', 'lineupsavailable', 'lineupreleased', 'lineupsreleased', 'lineupconfirmed', 'lineupsconfirmed'].includes(status)
+      || ['available', 'released', 'confirmed', 'ready', 'announced', 'out', 'lineupavailable', 'lineupsavailable', 'lineupreleased', 'lineupsreleased', 'lineupconfirmed', 'lineupsconfirmed'].includes(status)
       || this.hasStartingLineupCounts(match);
   }
 

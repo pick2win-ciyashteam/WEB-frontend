@@ -17,7 +17,7 @@ const routes: Routes = [
       component: MyTeamsComponent
     },
     {
-      path: 'teamsinfo:/id',
+      path: 'teamsinfo/:id',
       component: TeamsInfoComponent
     },
     {

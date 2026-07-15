@@ -74,6 +74,18 @@ describe('LineupsComponent', () => {
     expect(component.readyAndNotGeneratedCount).toBe(1);
   });
 
+  it('accepts released-lineup aliases returned by the backend', () => {
+    setMatches([seriesMatch({ is_lineup_released: 1 })]);
+
+    expect(component.readyAndNotGeneratedCount).toBe(1);
+  });
+
+  it('accepts announced lineup status returned by the backend', () => {
+    setMatches([seriesMatch({ lineup_status: 'announced' })]);
+
+    expect(component.readyAndNotGeneratedCount).toBe(1);
+  });
+
   it('counts a today match with starting lineup counts as ready for UCT', () => {
     setMatches([seriesMatch({
       lineupavailable: 0,

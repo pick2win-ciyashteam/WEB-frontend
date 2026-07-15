@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, switchMap, takeUntil } from 'rxjs';
+import { Subject, switchMap, takeUntil, timeout, TimeoutError } from 'rxjs';
 import { MatchDetail, MatchPlayer, UctGeneratePayload, UctGeneratePlayer } from 'src/app/core/interfaces/content';
 import { ApiService } from 'src/app/core/services/api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -45,6 +45,7 @@ interface CreateUctContext {
   styleUrls: ['./create-uct.component.css']
 })
 export class CreateUctComponent implements OnInit, OnDestroy {
+  private static readonly GENERATE_TIMEOUT_MS = 45000;
   private readonly playerImageFallback = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2232%22 fill=%22%2315263a%22/%3E%3Ccircle cx=%2232%22 cy=%2224%22 r=%2211%22 fill=%22%2394a3b8%22/%3E%3Cpath d=%22M13 57c2-12 9-18 19-18s17 6 19 18%22 fill=%22%2394a3b8%22/%3E%3C/svg%3E';
   private readonly destroy$ = new Subject<void>();
   private generatingStatusTimer: ReturnType<typeof setInterval> | null = null;
@@ -1419,7 +1420,10 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     const payload = this.buildSubmitPayload();
 
     this.api.createUctTeams(payload)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        timeout(CreateUctComponent.GENERATE_TIMEOUT_MS),
+        takeUntil(this.destroy$)
+      )
       .subscribe({
         next: (res) => {
         
@@ -1445,6 +1449,20 @@ export class CreateUctComponent implements OnInit, OnDestroy {
           console.error('Generate UCT backend error:', err);
           this.stopGeneratingStatus();
           this.submitting = false;
+
+          if (err instanceof TimeoutError) {
+            this.router.navigate(['/user/profile'], {
+              queryParams: {
+                tab: 'teams',
+                match: this.matchId,
+                sport: this.currentSport(),
+                game: this.selectedGame(),
+                generated: 'pending'
+              }
+            });
+            return;
+          }
+
           const message = err?.error?.message || err?.error?.error || '';
 
           if (this.markPlatformGeneratedFromMessage(message)) {
