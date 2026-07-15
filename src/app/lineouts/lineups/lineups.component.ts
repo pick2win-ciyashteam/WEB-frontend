@@ -28,6 +28,8 @@ interface LineoutMatch {
   generatedGames: FantasyGame[];
   generatedTeamsCount?: number;
   generatedAt?: string | null;
+  teamsGeneratedFanduel: boolean;
+  teamsGeneratedDraftkings: boolean;
   venue: string;
   status: string;
   active: boolean;
@@ -50,7 +52,6 @@ export class LineupsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly todayRefreshMs = 60000;
   private balanceFocusTimer: ReturnType<typeof setTimeout> | null = null;
-  private matchActionNoticeTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly loggedIn$ = this.authService.loggedIn$;
   isLoggedIn = this.authService.isLoggedIn();
@@ -62,7 +63,6 @@ export class LineupsComponent implements OnInit, OnDestroy {
   showBalanceRequired = false;
   showSeriesCoverage = false;
   openingTeamsMatchId: string | null = null;
-  matchActionNotice = '';
   readonly showUctButtonForTesting = false;
 
   constructor(
@@ -101,10 +101,6 @@ export class LineupsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.balanceFocusTimer) {
       clearTimeout(this.balanceFocusTimer);
-    }
-
-    if (this.matchActionNoticeTimer) {
-      clearTimeout(this.matchActionNoticeTimer);
     }
 
     this.destroy$.next();
@@ -162,13 +158,7 @@ export class LineupsComponent implements OnInit, OnDestroy {
   }
 
   isGenerated(match: LineoutMatch): boolean {
-    return match.teamsGenerated
-      || (['draftkings', 'fanduel'] as FantasyGame[])
-        .every(game => match.generatedGames.includes(game));
-  }
-
-  hasGeneratedPlatform(match: LineoutMatch): boolean {
-    return match.generatedGames.some(game => game === 'draftkings' || game === 'fanduel');
+    return match.teamsGenerated;
   }
 
   statusLabel(match: LineoutMatch): string {
@@ -264,6 +254,10 @@ canRunUct(match: LineoutMatch): boolean {
 }
 
   handleMatchAction(match: LineoutMatch): void {
+    if (!this.canOpenMatch(match)) {
+      return;
+    }
+
     if (!this.isLoggedIn) {
       this.authModal.open('login');
       return;
@@ -274,40 +268,12 @@ canRunUct(match: LineoutMatch): boolean {
       return;
     }
 
-    if (this.isLive(match) || this.hasMatchStarted(match)) {
-      this.showMatchNotice('This match has already started. UCT is locked.');
-      return;
-    }
-
-    if (!match.lineupReady && !this.showUctButtonForTesting) {
-      this.showMatchNotice('Waiting for the official lineup. Run UCT unlocks once it is released.');
-      return;
-    }
-
     if (!this.hasCoinsForUct()) {
       this.focusBalanceCard();
       return;
     }
 
     this.openCreateUct(match);
-  }
-
-  private hasMatchStarted(match: LineoutMatch): boolean {
-    const kickoffTime = new Date(match.kickoffISO).getTime();
-    return Number.isFinite(kickoffTime) && Date.now() >= kickoffTime;
-  }
-
-  private showMatchNotice(message: string): void {
-    this.matchActionNotice = message;
-
-    if (this.matchActionNoticeTimer) {
-      clearTimeout(this.matchActionNoticeTimer);
-    }
-
-    this.matchActionNoticeTimer = setTimeout(() => {
-      this.matchActionNotice = '';
-      this.matchActionNoticeTimer = null;
-    }, 4000);
   }
 
   prefetchCreateUct(match: LineoutMatch): void {
@@ -337,7 +303,7 @@ canRunUct(match: LineoutMatch): boolean {
     const sport = String(match.sport || 'football').trim().toLowerCase() === 'soccer'
       ? 'football'
       : String(match.sport || 'football').trim().toLowerCase();
-    const game = this.generatedGames(match as unknown as Match)[0] || 'draftkings';
+    const game = match.generatedGames[0] || 'draftkings';
 
     this.openingTeamsMatchId = match.id;
     this.router.navigate(['/user/profile'], {
@@ -419,7 +385,10 @@ canRunUct(match: LineoutMatch): boolean {
       kickoffISO: match.kickoffISO,
       lineupReady: match.lineupReady,
       status: match.status,
-      generatedGames: match.generatedGames
+      generatedGames: match.generatedGames,
+      teamsGenerated: match.teamsGenerated,
+      teamsGeneratedFanduel: match.teamsGeneratedFanduel,
+      teamsGeneratedDraftkings: match.teamsGeneratedDraftkings
     };
   }
 
@@ -537,10 +506,6 @@ canRunUct(match: LineoutMatch): boolean {
           const mappedMatches = res?.success && Array.isArray(res.data)
             ? this.mapSeriesMatches(res.data)
             : [];
-
-          // Render the series response immediately. Generated-team lookups are
-          // supplementary and can fan out into several requests per match, so
-          // they must not keep the whole page behind the loading state.
           this.matches = mappedMatches;
 
           if (!this.matches.length) {
@@ -548,11 +513,6 @@ canRunUct(match: LineoutMatch): boolean {
           }
 
           this.loadingMatches = false;
-          this.hydrateGeneratedGames(mappedMatches, () => {
-            // Assign a new array after the background hydration so Angular also
-            // refreshes generated-team status with OnPush parents/templates.
-            this.matches = [...mappedMatches];
-          });
         },
         error: () => {
           this.matches = [];
@@ -573,65 +533,8 @@ canRunUct(match: LineoutMatch): boolean {
           const freshMatches = this.mapSeriesMatches(res.data);
           this.refreshTodayMatches(freshMatches);
 
-          const freshTodayMatches = freshMatches.filter(match => this.isTodayMatch(match));
-          this.hydrateGeneratedGames(freshTodayMatches, () => this.refreshTodayMatches(freshMatches));
         }
       });
-  }
-
-  private hydrateGeneratedGames(matches: LineoutMatch[], done: () => void): void {
-    if (!this.isLoggedIn || !matches.length) {
-      done();
-      return;
-    }
-
-    this.api.GetMyTeams()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: any) => {
-          const rows = this.flattenGeneratedMatchRows(res?.data);
-
-          matches.forEach(match => {
-            rows
-              .filter(row => this.generatedRowMatches(row, match.id))
-              .flatMap(row => this.generatedGames(row as Match))
-              .forEach(game => {
-                if (!match.generatedGames.includes(game)) {
-                  match.generatedGames = [...match.generatedGames, game];
-                }
-                this.api.rememberGeneratedGame(match.id, game);
-              });
-          });
-
-          const games: FantasyGame[] = ['draftkings', 'fanduel'];
-          matches.forEach(match => {
-            match.teamsGenerated = games.every(game => match.generatedGames.includes(game));
-          });
-
-          this.matches = [...this.matches];
-          done();
-        },
-        error: () => done()
-      });
-  }
-
-  private flattenGeneratedMatchRows(value: unknown): any[] {
-    if (!Array.isArray(value)) {
-      return [];
-    }
-
-    return value.flatMap((row: any) => {
-      const nested = [row?.matches, row?.games, row?.platforms, row?.generations, row?.generated_games]
-        .filter(Array.isArray);
-      return nested.length ? [row, ...nested.flat()] : [row];
-    });
-  }
-
-  private generatedRowMatches(row: any, matchId: string): boolean {
-    return [
-      row?.match_id, row?.matchId, row?.id, row?.provider_match_id,
-      row?.fixture_id, row?.match?.id, row?.match?.provider_match_id
-    ].some(value => String(value ?? '') === String(matchId));
   }
 
   private normalizedSport(sport?: string): string {
@@ -696,11 +599,12 @@ canRunUct(match: LineoutMatch): boolean {
     const awayName = this.teamDisplayName(match, 'away');
 
     const matchId = String(match.id || match.provider_match_id);
-    const generatedGames = new Set<FantasyGame>(this.generatedGames(match));
-    this.api.getKnownGeneratedGames(matchId)
-      .map(game => this.normalizeGame(game))
-      .filter((game): game is FantasyGame => !!game)
-      .forEach(game => generatedGames.add(game));
+    const teamsGeneratedFanduel = this.isTruthyFlag(match.teams_generated_fanduel);
+    const teamsGeneratedDraftkings = this.isTruthyFlag(match.teams_generated_draftkings);
+    const generatedGames: FantasyGame[] = [
+      ...(teamsGeneratedDraftkings ? ['draftkings' as FantasyGame] : []),
+      ...(teamsGeneratedFanduel ? ['fanduel' as FantasyGame] : [])
+    ];
 
     return {
       id: matchId,
@@ -720,9 +624,10 @@ canRunUct(match: LineoutMatch): boolean {
       kickoffISO,
       lineupReady: this.isLineupAvailable(match),
       lineupJustReleased: this.isLineupAvailable(match),
-      teamsGenerated: (['draftkings', 'fanduel'] as FantasyGame[])
-        .every(game => generatedGames.has(game)),
-      generatedGames: Array.from(generatedGames),
+      teamsGenerated: this.isTruthyFlag(match.teams_generated),
+      teamsGeneratedFanduel,
+      teamsGeneratedDraftkings,
+      generatedGames,
       generatedTeamsCount: Number(match.generated_teams_count ?? 0),
       generatedAt: match.generated_at ?? null,
       venue: this.formatVenue(match),

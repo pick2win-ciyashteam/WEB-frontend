@@ -83,9 +83,9 @@
                 </button>
               </div>
               <ng-template #startPlatform>
-                <button class="primary-btn platform-start" type="button" [disabled]="matchDataLoading || isPlatformGenerationStatusLoading(platform.id)" (click)="handlePlatformAction(platform.id)">
-                  {{ isPlatformGenerationStatusLoading(platform.id) ? 'Checking generation status...' : (matchDataLoading ? 'Loading lineup...' : 'Start') }}
-                  <span class="material-symbols-outlined" aria-hidden="true">{{ (matchDataLoading || isPlatformGenerationStatusLoading(platform.id)) ? 'progress_activity' : 'chevron_right' }}</span>
+                <button class="primary-btn platform-start" type="button" [disabled]="matchDataLoading" (click)="handlePlatformAction(platform.id)">
+                  {{ matchDataLoading ? 'Loading lineup...' : 'RUN UCT' }}
+                  <span class="material-symbols-outlined" aria-hidden="true">{{ matchDataLoading ? 'progress_activity' : 'chevron_right' }}</span>
                 </button>
               </ng-template>
             </div>

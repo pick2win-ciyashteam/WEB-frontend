@@ -1,327 +1,181 @@
 <div class="promo-page" id="home">
   <header class="promo-header" [class.scrolled]="scrolled">
-    <a class="promo-brand" (click)="scrollTo('home')" aria-label="PICK2WIN promotion home">
+    <button class="promo-brand" type="button" (click)="scrollTo('home')" aria-label="PICK2WIN home">
       <img src="assets/logo.png" alt="PICK2WIN - Where Skill Matters More">
-    </a>
-
-    <button class="nav-toggle" [class.active]="menuOpen" type="button" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
     </button>
-
-    <nav [class.open]="menuOpen" aria-label="Promotional page navigation">
-      <button type="button" (click)="scrollTo('home')">Home</button>
-      <button type="button" (click)="scrollTo('about')">About</button>
+    <button class="nav-toggle" type="button" [class.active]="menuOpen" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <nav [class.open]="menuOpen" aria-label="Landing page navigation">
+      <button type="button" (click)="scrollTo('why')">Why PICK2WIN</button>
+      <button type="button" (click)="scrollTo('how')">How it works</button>
       <button type="button" (click)="scrollTo('pricing')">Pricing</button>
-      <button type="button" (click)="scrollTo('uctinfo')">UCT Info</button>
-      <button type="button" (click)="scrollTo('platforms')">Platforms</button>
-      <button type="button" class="nav-signup" (click)="scrollTo('signup')">Sign Up</button>
-      <!-- <button type="button" class="nav-login" (click)="openLogin()">Login</button> -->
+      <button type="button" (click)="scrollTo('sports')">Sports</button>
+      <button type="button" class="nav-login" (click)="openLogin()">Login</button>
+      <button type="button" class="nav-signup" (click)="scrollTo('signup')">Start free</button>
     </nav>
   </header>
 
   <main>
-    <section class="hero-section promo-section">
-      <div class="hero-glow"></div>
+    <section class="hero promo-section">
+      <div class="hero-orb orb-one"></div><div class="hero-orb orb-two"></div>
       <div class="section-shell hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow"><span></span> USER CONFIGURATION TEAMS</span>
-          <h1><span class="hero-sport">Football (Soccer)</span><span class="hero-product">Lineup<br>Configuration.</span></h1>
-          <p class="hero-tagline">Save Time. Have Coverage. Stay in Control.</p>
-          <p class="hero-lead">Create up to 20 structured football (soccer) lineups from your own player selections in seconds—ready to replicate on your preferred fantasy platform.</p>
-          <div class="hero-checks" aria-label="PICK2WIN UCT highlights">
-            <span><i class="material-symbols-outlined">check_circle</i>User-controlled team configurations</span>
-            <span><i class="material-symbols-outlined">check_circle</i>Up to 20 lineups per generation</span>
-            <span><i class="material-symbols-outlined">check_circle</i>Built after official lineups are announced</span>
-            <span><i class="material-symbols-outlined">check_circle</i>Download as TXT for easy replication</span>
-          </div>
+          <span class="eyebrow"><i></i> USER CONFIGURATION TEAMS</span>
+          <h1>Build smarter football lineups. <em>Stay in complete control.</em></h1>
+          <p class="hero-tagline">Your strategy. Your players. Your decisions.</p>
+          <p class="hero-lead">Transform your own football knowledge into multiple rule-valid lineup combinations in seconds. Reduce repetitive work while every important decision remains yours.</p>
+          <div class="hero-promise"><span class="material-symbols-outlined">verified_user</span><p><b>No AI-generated picks. No player recommendations. No performance projections.</b><br>Just your strategy, organized faster.</p></div>
           <div class="hero-actions">
-            <button type="button" class="primary-cta" (click)="scrollTo('signup')">Create Free Account <span>→</span></button>
-            <button type="button" class="secondary-cta" (click)="scrollTo('uctinfo')"><span class="material-symbols-outlined">play_circle</span> See how it works</button>
+            <button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free today <span>→</span></button>
+            <button class="secondary-cta" type="button" (click)="scrollTo('how')"><span class="material-symbols-outlined">play_circle</span> See how it works</button>
           </div>
-          <div class="hero-proof">
-            <div><b>1 coin</b><span>per successful UCT</span></div>
-            <div><b>20</b><span>lineups per run</span></div>
-            <div><b>100%</b><span>your configuration</span></div>
-          </div>
+          <p class="micro-copy">Free account • No card required • No subscription</p>
         </div>
-
-        <div class="hero-visual" aria-label="PICK2WIN UCT benefits">
-          <div class="visual-logo"><img src="assets/logo1.png" alt="PICK2WIN"></div>
-          <div class="benefit-grid">
-            <article><span class="material-symbols-outlined">emoji_objects</span><div><b>Use Skills</b><p>Your knowledge. Your decisions.</p></div></article>
-            <article><span class="material-symbols-outlined">schedule</span><div><b>Save Time</b><p>Quick lineup configuration.</p></div></article>
-            <article><span class="material-symbols-outlined">verified_user</span><div><b>Have Coverage</b><p>Multiple lineups. Better coverage.</p></div></article>
-            <article><span class="material-symbols-outlined">account_balance_wallet</span><div><b>Spend Less</b><p>Low entry. More value.</p></div></article>
+        <div class="hero-panel">
+          <div class="hero-panel-head"><img src="assets/logo1.png" alt="PICK2WIN" loading="lazy" decoding="async"><span>CONFIGURATION SUMMARY</span></div>
+          <div class="lineup-preview">
+            <div class="pitch-line"></div>
+            <span class="player p1">FWD</span><span class="player p2">DEF</span><span class="player p3">DEF</span><span class="player p4">MID</span><span class="player p5">MID</span><span class="player p6">GK</span>
           </div>
+          <div class="preview-result"><b>Up to 20</b><span>rule-valid lineup combinations</span></div>
+          <div class="preview-tags"><span>Roster rules ✓</span><span>Salary cap ✓</span><span>Your pool ✓</span></div>
         </div>
       </div>
     </section>
 
-    <section class="trust-strip" aria-label="Product principles">
-      <div class="section-shell">
-        <span><i class="material-symbols-outlined">check_circle</i>No subscriptions</span>
-        <span><i class="material-symbols-outlined">check_circle</i>No auto-renewal</span>
-        <span><i class="material-symbols-outlined">check_circle</i>Complete user control</span>
-        <span><i class="material-symbols-outlined">check_circle</i>Secure account</span>
+    <section class="proof-strip" aria-label="PICK2WIN quick facts">
+      <div class="section-shell proof-grid">
+        <div><b>20</b><span>lineups per successful generation</span></div>
+        <div><b>1 coin</b><span>deducted only after success</span></div>
+        <div><b>365 days</b><span>validity on purchased coins</span></div>
+        <div><b>0</b><span>subscriptions or auto-renewals</span></div>
       </div>
     </section>
 
-    <section class="promo-section about-section" id="about">
+    <section class="promo-section audience-section" id="why">
       <div class="section-shell">
         <div class="section-heading">
-          <span class="eyebrow dark"><span></span> BUILT FOR SMARTER PREPARATION</span>
-          <h2>Software that works at the speed of <em>your ideas.</em></h2>
-          <p>PICK2WIN Technologies Private Limited builds practical SaaS products that simplify complex work, reduce repetitive effort, and keep users in control.</p>
+          <span class="eyebrow dark"><i></i> BUILT FOR PLAYERS WHO TRUST THEIR JUDGMENT</span>
+          <h2>Spend less time building. <em>More time preparing.</em></h2>
+          <p>You already know how you want to play. PICK2WIN removes repetitive work—not your decision-making.</p>
         </div>
-        <div class="about-grid">
-          <article class="about-main">
-            <span class="card-label">OUR FLAGSHIP PRODUCT</span>
-            <h3>PICK2WIN UCT</h3>
-            <p>User Configuration Teams is an independent lineup-configuration tool. You choose the players, platform, and strategy. PICK2WIN transforms those choices into multiple structured lineups compatible with supported Fantasy Platform DraftKings Classic or FanDuel Classic</p>
-            <p>We do not host contests, accept entries, process prizes, recommend players, or predict outcomes. Every important decision remains yours.</p>
-          </article>
-          <div class="about-points">
-            <article><span class="material-symbols-outlined">tune</span><div><h4>Your configuration first</h4><p>Generated lineups come only from your selected pool and rules.</p></div></article>
-            <article><span class="material-symbols-outlined">speed</span><div><h4>Less repetitive work</h4><p>Move from strategy to multiple usable combinations in seconds.</p></div></article>
-            <article><span class="material-symbols-outlined">visibility</span><div><h4>Transparent workflow</h4><p>Review the setup before generation and inspect every result.</p></div></article>
-          </div>
+        <div class="benefit-grid">
+          <article *ngFor="let benefit of benefits"><span class="material-symbols-outlined">{{ benefit.icon }}</span><h3>{{ benefit.title }}</h3><p>{{ benefit.text }}</p></article>
         </div>
+        <div class="section-action"><button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free <span>→</span></button></div>
       </div>
     </section>
 
-    <section class="promo-section uct-section" id="uctinfo">
-      <div class="section-shell">
-        <div class="section-heading light">
-          <span class="eyebrow"><span></span> HOW PICK2WIN UCT WORKS</span>
-          <h2>From signup to downloadable teams—<em>one guided flow.</em></h2>
-          <p>Choose a match after official lineups are available, configure your strategy for the supported fantasy platform, then generate up to 20 unique, rule-valid team combinations.</p>
-        </div>
-
-        <div class="process-grid">
-          <article *ngFor="let item of processSteps; let i = index">
-            <span class="process-number">{{ i + 1 | number:'2.0' }}</span>
-            <span class="process-icon material-symbols-outlined">{{ item.icon }}</span>
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.text }}</p>
-            <span class="process-arrow material-symbols-outlined" *ngIf="i < processSteps.length - 1">arrow_forward</span>
-          </article>
-        </div>
-
-        <div class="uct-value-grid">
-          <div class="uct-feature-card">
-            <div class="feature-kicker">ONE SUCCESSFUL RUN</div>
-            <strong>1 Coin = Up to 20 Teams</strong>
-            <p>A coin is deducted only when UCT generation completes successfully. Preview and download your lineups before match kickoff.</p>
-          </div>
-          <div class="platform-card">
-            <span>SUPPORTED PLATFORMS</span>
-            <div><b>DraftKings</b><b>FanDuel</b></div>
-            <small>Classic lineup configuration</small>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="promo-section pricing-section" id="pricing">
-      <div class="section-shell pricing-grid">
-        <div class="offer-copy">
-          <span class="offer-pill">LIMITED LAUNCH OFFER</span>
-          <h2>Start small.<br><em>Build smarter.</em></h2>
-          <p>Try the first PICK2WIN coin pack and experience the complete UCT workflow. No subscription and no auto-renewal.</p>
-          <ul>
-            <li><span>✓</span> One coin for one successful generation</li>
-            <li><span>✓</span> Up to 20 structured lineups per coin</li>
-            <li><span>✓</span> Use across supported matches and platforms</li>
-            <li><span>✓</span>Each Coin Pack validity {{ offerPack.validityDays }}-days </li>
-          </ul>
-        </div>
-
-        <article class="offer-card">
-          <div class="offer-ribbon">PICK2WIN LAUNCHING OFFER</div>
-          <span class="offer-name">{{ packLoading ? 'Loading offer...' : offerPack.name }}</span>
-          <div class="coin-total"><b>{{ offerPack.totalCoins }}</b><span>total<br>coins</span></div>
-          <div class="coin-breakdown">{{ offerPack.coins }} base <span *ngIf="offerPack.bonusCoins">+ {{ offerPack.bonusCoins }} bonus</span></div>
-          <div class="offer-price"><sup>$</sup>{{ offerPack.price | number:'1.2-2' }}</div>
-          <p>≈ ${{ offerPack.totalCoins ? (offerPack.price / offerPack.totalCoins | number:'1.2-2') : '0.00' }} per successful UCT</p>
-          <button type="button" (click)="scrollTo('signup')">Grab This Offer <span>→</span></button>
-          <small>Offer pricing may change. Account required before purchase.</small>
+    <section class="promo-section problem-section">
+      <div class="section-shell problem-grid">
+        <article class="problem-card">
+          <span class="card-kicker">THE PROBLEM</span><h2>Manual lineup building takes time.</h2>
+          <p>Selecting the same players, checking roster rules, validating salary caps, creating combinations—and repeating everything again.</p>
+          <div class="repeat-list"><span>Player selection</span><span>Roster validation</span><span>Salary checks</span><span>Repeat</span></div>
+        </article>
+        <article class="solution-card">
+          <span class="card-kicker">THE PICK2WIN SOLUTION</span><h2>Your strategy in. <em>Multiple combinations out.</em></h2>
+          <p>You choose the players, fantasy platform, lineup strategy, and configuration. PICK2WIN applies contest rules and transforms your selections into combinations ready for your review.</p>
+          <strong>The software never makes football decisions for you.</strong>
         </article>
       </div>
     </section>
 
+    <section class="promo-section control-section">
+      <div class="section-shell">
+        <div class="section-heading light"><span class="eyebrow"><i></i> WHY PICK2WIN IS DIFFERENT</span><h2>You decide. <em>PICK2WIN organizes.</em></h2><p>Your football knowledge remains the competitive advantage. Our software simply reduces repetitive work.</p></div>
+        <div class="do-grid">
+          <article class="do-card yes"><h3><span class="material-symbols-outlined">check_circle</span> What PICK2WIN does</h3><ul><li>Uses only your selected player pool</li><li>Applies contest roster rules</li><li>Validates salary-cap requirements</li><li>Builds multiple valid combinations</li><li>Lets you review every lineup</li><li>Uses one coin balance across supported products</li></ul></article>
+          <article class="do-card no"><h3><span class="material-symbols-outlined">cancel</span> What PICK2WIN never does</h3><ul><li>Recommend players</li><li>Predict player performance</li><li>Create lineups without your selections</li><li>Use AI to optimize your strategy</li><li>Submit entries to fantasy platforms</li><li>Access your fantasy account</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-section how-section" id="how">
+      <div class="section-shell">
+        <div class="section-heading"><span class="eyebrow dark"><i></i> HOW PICK2WIN WORKS</span><h2>Simple. Transparent. <em>Completely under your control.</em></h2><p>A guided workflow from free signup to reviewed, downloadable lineup combinations.</p></div>
+        <div class="process-grid"><article *ngFor="let step of processSteps; let i = index"><span class="step-no">{{ i + 1 | number:'2.0' }}</span><span class="material-symbols-outlined">{{ step.icon }}</span><h3>{{ step.title }}</h3><p>{{ step.text }}</p></article></div>
+        <div class="section-action"><button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free <span>→</span></button></div>
+      </div>
+    </section>
+
+    <section class="promo-section compare-section">
+      <div class="section-shell">
+        <div class="section-heading light"><span class="eyebrow"><i></i> A BETTER WORKFLOW</span><h2>Keep the strategy. <em>Lose the repetition.</em></h2></div>
+        <div class="compare-table" role="table" aria-label="Manual lineup building compared with PICK2WIN">
+          <div class="compare-row compare-head" role="row"><b>Manual lineup building</b><b>PICK2WIN</b></div>
+          <div class="compare-row" role="row"><span>Build every lineup individually</span><span>Generate multiple combinations from one configuration</span></div>
+          <div class="compare-row" role="row"><span>Repeated player selection</span><span>Select your player pool once</span></div>
+          <div class="compare-row" role="row"><span>Manual roster and salary checks</span><span>Contest rules and salary-cap validation included</span></div>
+          <div class="compare-row" role="row"><span>Time-consuming repetition</span><span>Complete the mechanical work in seconds</span></div>
+        </div>
+        <p class="strategy-note"><span class="material-symbols-outlined">lock</span><b>Your strategy never changes.</b> PICK2WIN never decides who to select, which captain to choose, or which strategy is better.</p>
+      </div>
+    </section>
+
+    <section class="promo-section pricing-section" id="pricing">
+      <div class="section-shell">
+        <div class="launch-offer-head">
+          <div class="launch-title"><span class="material-symbols-outlined">rocket_launch</span><h2>PICK2WIN <em>LAUNCH OFFER</em></h2></div>
+          <p>Limited-time introductory pricing. Every coin pack includes <b>bonus coins</b> at no extra cost, credited instantly to your PICK2WIN account.</p>
+          <div class="launch-limit"><span class="material-symbols-outlined">local_fire_department</span>Available to the first <b>10,000</b> registered PICK2WIN users</div>
+          <div class="launch-benefits">
+            <span><i class="material-symbols-outlined">featured_seasonal_and_gifts</i><b>Bonus coins</b><small>included</small></span>
+            <span><i class="material-symbols-outlined">shield</i><b>365-day</b><small>validity</small></span>
+            <span><i class="material-symbols-outlined">block</i><b>No</b><small>subscriptions</small></span>
+            <span><i class="material-symbols-outlined">autorenew</i><b>No</b><small>auto-renewal</small></span>
+          </div>
+        </div>
+        <div class="pack-state" *ngIf="packLoading">Loading current coin packs…</div>
+        <div class="pack-grid" *ngIf="!packLoading && packs.length">
+          <article class="pack-card" *ngFor="let pack of packs; let i = index" [class.featured]="pack.popular || pack.pro" [class.pack-starter]="i % 4 === 0" [class.pack-basic]="i % 4 === 1" [class.pack-standard]="i % 4 === 2" [class.pack-pro]="i % 4 === 3 || pack.pro">
+            <span class="pack-badge" *ngIf="pack.popular || pack.pro">{{ pack.pro ? 'BEST VALUE' : 'MOST POPULAR' }}</span>
+            <h3>{{ pack.name }}</h3>
+            <p class="pack-fit">{{ i === 0 ? 'Perfect to get started' : (i === 1 ? 'Great for regular users' : (i === 2 ? 'Best value for serious users' : 'Maximum value for power users')) }}</p>
+            <div class="pack-coins"><b>{{ pack.totalCoins }}</b><span>total coins</span></div>
+            <p class="pack-breakdown"><span>{{ pack.coins }} base</span><strong *ngIf="pack.bonusCoins">+{{ pack.bonusCoins }} bonus</strong></p>
+            <p class="generation-count"><b>{{ pack.totalCoins }}</b> successful UCT generations</p>
+            <div class="pack-cost-row">
+              <div class="pack-price"><sup>$</sup>{{ pack.price | number:'1.2-2' }} <small>USD</small></div>
+              <p class="per-coin"><b>≈ ${{ pack.totalCoins ? (pack.price / pack.totalCoins | number:'1.2-2') : '0.00' }}</b><span>per successful<br>generation</span></p>
+            </div>
+            <button type="button" (click)="openPricing()">Buy {{ pack.name }} <span>→</span></button>
+          </article>
+        </div>
+        <div class="pack-state" *ngIf="!packLoading && !packs.length">Current packages are temporarily unavailable. <button type="button" (click)="openPricing()">Open pricing</button></div>
+        <div class="coin-includes"><div><span><i class="material-symbols-outlined">database</i>1 coin = 1 successful generation</span><span><i class="material-symbols-outlined">groups</i>Up to 20 rule-valid combinations</span><span><i class="material-symbols-outlined">calendar_month</i>365-day validity</span><span><i class="material-symbols-outlined">public</i>One balance across supported sports</span></div></div>
+      </div>
+    </section>
+
+    <section class="promo-section sports-section" id="sports">
+      <div class="section-shell">
+        <div class="section-heading light"><span class="eyebrow"><i></i> AVAILABLE WHERE YOU PLAY</span><h2>One coin balance. <em>Multiple sports and platforms.</em></h2><p>Your existing balance works across all supported sports, fantasy platforms, and contest modes. No separate purchases.</p></div>
+        <div class="sports-grid">
+          <article class="sport-card live"><span>AVAILABLE NOW</span><div class="sport-icon">⚽</div><h3>Soccer</h3><p><b>DraftKings:</b> Classic</p><p><b>FanDuel:</b> Classic</p></article>
+          <article class="sport-card"><span>COMING SOON</span><div class="sport-icon">🏈</div><h3>NFL</h3><p>Classic • Showdown • Tiers</p><p>Classic • Single Game</p></article>
+          <article class="sport-card"><span>COMING SOON</span><div class="sport-icon">🏀</div><h3>Basketball</h3><p>Classic • Showdown • Starting 5</p><p>Classic • Single Game</p></article>
+          <article class="sport-card"><span>COMING SOON</span><div class="sport-icon">⚾</div><h3>Baseball</h3><p>Classic • Showdown • Tiers</p><p>Classic • Single Game</p></article>
+          <article class="sport-card planned"><span>PLANNED</span><div class="sport-icon"><i class="material-symbols-outlined" aria-hidden="true">sports_cricket</i></div><h3>Cricket</h3><p><b>Platforms:</b> To be announced</p><p><b>Contest modes:</b> Under evaluation</p></article>
+        </div>
+        <div class="modes"><h3>Supported contest modes</h3><div><article><b>Classic</b><p>Standard salary-cap contests with fixed roster construction.</p></article><article><b>Showdown</b><p>Single-game contests with a Captain position.</p></article><article><b>Single Game</b><p>FanDuel single-game contests with an MVP position.</p></article><article><b>Tiers</b><p>Select one player from each predefined tier.</p></article><article><b>Starting 5</b><p>Basketball format using predefined player groups.</p></article></div></div>
+        <div class="section-action"><button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free <span>→</span></button></div>
+      </div>
+    </section>
+
+    <section class="promo-section trust-section">
+      <div class="section-shell trust-grid">
+        <div><span class="eyebrow dark"><i></i> SECURITY & TRUST</span><h2>Built around transparency.</h2><p>Software should assist users—not replace them. Manual control remains with you at every stage.</p><ul><li>Secure account registration</li><li>Email verification</li><li>Encrypted communication</li><li>Transparent pricing</li><li>Secure payments</li><li>One account per user</li></ul></div>
+        <aside><span class="material-symbols-outlined">public</span><h3>Supported regions</h3><p>Currently intended for users in the <b>United States</b> and <b>Canada</b>.</p><small>Please ensure you have access to a supported fantasy platform and verify your eligibility before purchasing coins.</small></aside>
+      </div>
+    </section>
+
     <section class="promo-section signup-section" id="signup">
-      <div class="section-shell signup-layout">
-        <div class="signup-copy">
-          <span class="eyebrow"><span></span> START YOUR PICK2WIN JOURNEY</span>
-          <h2>Create your account.<br><em>Put your strategy to work.</em></h2>
-          <p>Join free, verify your email, and explore available match windows. Your information is encrypted and securely handled.</p>
-          <div class="signup-reasons">
-            <div><span class="material-symbols-outlined">shield_lock</span><b>Secure signup</b><small>Email OTP verification</small></div>
-            <div><span class="material-symbols-outlined">credit_card_off</span><b>No card required</b><small>Free to create an account</small></div>
-            <div><span class="material-symbols-outlined">manage_accounts</span><b>Stay in control</b><small>One user, one account</small></div>
-          </div>
-          <p class="existing-user">Already registered? <button type="button" (click)="openLogin()">Go directly to Login →</button></p>
-        </div>
-        <div class="signup-embed-card">
-          <app-signup [trackRedditSignupConversion]="true"></app-signup>
-        </div>
+      <div class="section-shell signup-grid">
+        <div class="signup-copy"><span class="eyebrow"><i></i> READY TO BUILD SMARTER?</span><h2>Spend less time building. <em>More time preparing.</em></h2><p>Transform your own football strategy into multiple rule-valid combinations while staying in complete control.</p><div class="no-list"><span>No AI.</span><span>No projections.</span><span>No recommendations.</span></div><p class="existing">Already registered? <button type="button" (click)="openLogin()">Go to login →</button></p></div>
+        <div class="signup-card"><app-signup [embedded]="true" [trackRedditSignupConversion]="true"></app-signup></div>
       </div>
     </section>
 
-    <section class="final-cta">
-      <div class="section-shell">
-        <img src="assets/logo1.png" alt="PICK2WIN">
-        <div><h2>Where skill matters more.</h2><p>Your knowledge. Your configuration. Your teams.</p></div>
-        <button type="button" (click)="scrollTo('signup')">Get Started Free</button>
-      </div>
-    </section>
-
-    <section class="promo-section landing-details-section" id="platforms" aria-labelledby="landing-details-title">
-      <div class="section-shell">
-        <div class="landing-uct-card">
-          <div class="landing-card-kicker"><span aria-hidden="true">&#9632;</span> Sports &middot; Platforms &middot; Contest Modes</div>
-          <h2 id="landing-details-title">One coin balance. <em>Multiple sports &amp; platforms.</em></h2>
-          <p class="landing-card-lead">Use the same PICK2WIN coin balance across all supported sports, fantasy platforms, and contest modes. <b>As new sports become available, your existing coin packs continue to work</b> &mdash; no separate purchase required.</p>
-
-          <section class="landing-data-group" aria-labelledby="landing-sports-title">
-            <h3 id="landing-sports-title" class="landing-data-title">Supported Sports, Platforms &amp; Contest Modes</h3>
-            <div class="landing-table-scroll">
-              <table class="landing-data-table landing-sports-table">
-                <thead><tr><th>Sport</th><th>Fantasy Platform</th><th>Supported Contest Modes</th></tr></thead>
-                <tbody>
-                  <tr><th rowspan="2" scope="rowgroup"><span class="landing-sport"><span class="landing-sport-emoji" aria-hidden="true">&#9917;&#65039;</span>Soccer</span><span class="landing-status now">&#9745; Available now</span></th><td>DraftKings</td><td>Classic</td></tr>
-                  <tr><td>FanDuel</td><td>Classic</td></tr>
-                  <tr><th rowspan="2" scope="rowgroup"><span class="landing-sport">🏈 NFL</span><span class="landing-status soon">&#128640; Available soon</span></th><td>DraftKings</td><td>Classic &bull; Showdown &bull; Tiers</td></tr>
-                  <tr><td>FanDuel</td><td>Classic &bull; Single Game</td></tr>
-                  <tr><th rowspan="2" scope="rowgroup"><span class="landing-sport">🏀 Basketball</span><span class="landing-status soon">&#128640; Available soon</span></th><td>DraftKings</td><td>Classic &bull; Showdown &bull; Starting 5</td></tr>
-                  <tr><td>FanDuel</td><td>Classic &bull; Single Game</td></tr>
-                  <tr><th rowspan="2" scope="rowgroup"><span class="landing-sport"><span class="landing-sport-emoji" aria-hidden="true">&#9918;&#65039;</span>Baseball</span><span class="landing-status soon">&#128640; Available soon</span></th><td>DraftKings</td><td>Classic &bull; Showdown &bull; Tiers</td></tr>
-                  <tr><td>FanDuel</td><td>Classic &bull; Single Game</td></tr>
-                  <tr><th scope="row"><span class="landing-sport">🏏 Cricket</span><span class="landing-status planned">&#128197; Planned</span></th><td>TBD</td><td>TBD</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="landing-data-group" aria-labelledby="landing-modes-title">
-            <h3 id="landing-modes-title" class="landing-data-title">Supported Contest Modes</h3>
-            <div class="landing-table-scroll">
-              <table class="landing-data-table landing-modes-table">
-                <thead><tr><th>Contest Mode</th><th>Available On</th><th>Description</th></tr></thead>
-                <tbody>
-                  <tr><th scope="row">Classic</th><td>DraftKings &amp; FanDuel</td><td>Standard salary-cap contests with fixed roster construction across one or multiple games.</td></tr>
-                  <tr><th scope="row">Showdown</th><td>DraftKings</td><td>Single-game contests featuring a Captain position.</td></tr>
-                  <tr><th scope="row">Single Game</th><td>FanDuel</td><td>Single-game contests featuring an MVP position.</td></tr>
-                  <tr><th scope="row">Tiers</th><td>DraftKings</td><td>Build lineups by selecting one player from each predefined tier.</td></tr>
-                  <tr><th scope="row">Starting 5</th><td>DraftKings (Basketball)</td><td>Basketball contest format using predefined player groups.</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="landing-data-group" aria-labelledby="landing-roadmap-title">
-            <h3 id="landing-roadmap-title" class="landing-data-title">Product Roadmap</h3>
-            <div class="landing-table-scroll">
-              <table class="landing-data-table landing-roadmap-table">
-                <thead><tr><th>Sport</th><th>Status</th></tr></thead>
-                <tbody>
-                  <tr><th scope="row"><span class="landing-sport-emoji" aria-hidden="true">&#9917;&#65039;</span>Soccer</th><td><span class="landing-roadmap-status now">&#9745;</span> Available now</td></tr>
-                  <tr><th scope="row">🏈 NFL</th><td><span class="landing-roadmap-status soon">&#128640;</span> Available soon</td></tr>
-                  <tr><th scope="row">🏀 Basketball</th><td><span class="landing-roadmap-status soon">&#128640;</span> Available soon</td></tr>
-                  <tr><th scope="row"><span class="landing-sport-emoji" aria-hidden="true">&#9918;&#65039;</span>Baseball</th><td><span class="landing-roadmap-status soon">&#128640;</span> Available soon</td></tr>
-                  <tr><th scope="row">🏏 Cricket</th><td><span class="landing-roadmap-status planned">&#128197;</span> Planned &middot; fantasy platform &amp; contest modes TBD</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <aside class="landing-coin-note">
-            <h3><span aria-hidden="true">&#9632;</span> One Coin Pack. More Value Over Time.</h3>
-            <ul>
-              <li>One coin balance across all supported sports.</li>
-              <li>No separate subscription for different sports.</li>
-              <li>No separate coin packs for different fantasy platforms.</li>
-              <li>Access newly supported sports using your existing coin balance.</li>
-              <li>Use the same PICK2WIN workflow across all supported sports and contest modes.</li>
-            </ul>
-          </aside>
-
-          <section class="landing-data-group" aria-labelledby="landing-how-title">
-            <h3 id="landing-how-title" class="landing-data-title">How PICK2WIN Works</h3>
-            <div class="landing-table-scroll">
-              <table class="landing-data-table landing-workflow-table">
-                <thead><tr><th>#</th><th>You Decide</th><th>PICK2WIN Does</th></tr></thead>
-                <tbody>
-                  <tr><td>1</td><th scope="row">Select your sport</th><td>Loads supported fantasy platforms</td></tr>
-                  <tr><td>2</td><th scope="row">Select your fantasy platform</th><td>Loads supported contest modes</td></tr>
-                  <tr><td>3</td><th scope="row">Select your contest mode</th><td>Loads contest-specific roster rules</td></tr>
-                  <tr><td>4</td><th scope="row">Build your My Squad</th><td><b>Uses only your selected player pool</b></td></tr>
-                  <tr><td>5</td><th scope="row">Select mandatory players <span>(optional)</span></th><td>Includes them in every generated team</td></tr>
-                  <tr><td>6</td><th scope="row">Select Captain/MVP candidates <span>(when required)</span></th><td>Uses only your selected Captain/MVP pool while generating teams</td></tr>
-                  <tr><td>7</td><th scope="row">Generate up to 20 valid teams</th><td>Applies contest roster rules, salary cap, and your selected configuration</td></tr>
-                  <tr><td>8</td><th scope="row">Download TXT</th><td>Provides your generated team list for manual reference</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <div class="landing-boundary-grid">
-            <section class="landing-boundary does">
-              <h3><span aria-hidden="true">&#9745;</span> What PICK2WIN Does</h3>
-              <ul>
-                <li>Supports multiple sports.</li>
-                <li>Supports multiple fantasy platforms.</li>
-                <li>Supports multiple contest modes.</li>
-                <li>Uses only your selected player pool.</li>
-                <li>Applies contest-specific roster rules and salary-cap validation.</li>
-                <li>Generates up to <b>20 valid team combinations</b> based entirely on your selections.</li>
-              </ul>
-            </section>
-            <section class="landing-boundary does-not">
-              <h3><span aria-hidden="true">&#10005;</span> What PICK2WIN Does Not Do</h3>
-              <ul>
-                <li>Does not recommend players.</li>
-                <li>Does not predict player performance.</li>
-                <li>Does not create teams without your player selections.</li>
-                <li>Does not optimize lineups using projections or AI.</li>
-                <li>Does not submit entries to any fantasy platform.</li>
-                <li>Does not connect to or synchronize with your fantasy account.</li>
-                <li>Does not automatically import or export teams to third-party fantasy platforms.</li>
-              </ul>
-            </section>
-          </div>
-
-          <section class="landing-generated-teams">
-            <h3 class="landing-data-title">Using Your Generated Teams</h3>
-            <ol>
-              <li>Review your generated lineups.</li>
-              <li>Download the TXT file.</li>
-              <li>Open your preferred fantasy platform.</li>
-              <li>Manually recreate the teams you wish to use using the downloaded TXT file.</li>
-            </ol>
-            <p><b>PICK2WIN's responsibility ends after generating valid team combinations based on your selections and providing them in a downloadable TXT format.</b></p>
-          </section>
-
-          <section class="landing-why-choose">
-            <h3 class="landing-data-title">Why Choose PICK2WIN?</h3>
-            <ul>
-              <li><b>One platform</b> for multiple sports.</li>
-              <li><b>One coin balance</b> across supported fantasy platforms.</li>
-              <li><b>Your players. Your strategy. Your decisions.</b></li>
-              <li>Generate up to <b>20 valid team combinations</b> using only your own player selections.</li>
-              <li>Download a TXT file and manually recreate your preferred teams in your chosen fantasy platform.</li>
-              <li>Consistent workflow across all supported sports and contest modes.</li>
-            </ul>
-          </section>
-
-          <aside class="landing-roadmap-note">
-            <h3><span aria-hidden="true">&#128204;</span> Roadmap Notice</h3>
-            <p><b>Soccer is available now.</b> NFL, Basketball, and Baseball are the next sports planned for availability on PICK2WIN. Cricket support is planned, with supported fantasy platforms and contest modes to be announced (TBD) following product evaluation.</p>
-          </aside>
-        </div>
-      </div>
-    </section>
+    <section class="legal-note"><div class="section-shell"><span class="material-symbols-outlined">info</span><p><b>Important notice:</b> PICK2WIN is an independent lineup-configuration platform and is not affiliated with, endorsed by, or sponsored by any third-party fantasy platform. PICK2WIN does not host contests, accept entries, process prizes, recommend players, predict performance, or submit lineups. Users remain responsible for their selections, entries, eligibility, and third-party platform compliance. <b>18+ only.</b></p></div></section>
   </main>
-
   <app-footer></app-footer>
 </div>

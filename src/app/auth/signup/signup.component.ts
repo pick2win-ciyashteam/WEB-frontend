@@ -191,6 +191,7 @@ function strictPasswordValidator(control: AbstractControl): ValidationErrors | n
 export class SignupComponent implements OnDestroy {
 
   @Input() trackRedditSignupConversion = false;
+  @Input() embedded = false;
 
   step = 1;
   showPassword = false;

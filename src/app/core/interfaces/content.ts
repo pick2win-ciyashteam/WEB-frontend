@@ -269,6 +269,8 @@ export interface Match {
   home_team_logo: string;
   away_team_logo: string;
   teams_generated?: boolean | number | string;
+  teams_generated_fanduel?: boolean | number | string;
+  teams_generated_draftkings?: boolean | number | string;
   generated_teams_count?: number;
   generated_at?: string | null;
 }

@@ -120,6 +120,35 @@ describe('LineupsComponent', () => {
     expect(component.readyAndNotGeneratedCount).toBe(0);
   });
 
+  it('uses only aggregate teams_generated for the lineups action', () => {
+    setMatches([seriesMatch({
+      start_time: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      lineupavailable: 1,
+      teams_generated: false,
+      teams_generated_fanduel: true,
+      teams_generated_draftkings: false
+    })]);
+
+    const match = component.visibleMatches[0];
+    expect(component.isGenerated(match)).toBeFalse();
+    expect(component.canRunUct(match)).toBeTrue();
+    expect(match.generatedGames).toEqual(['fanduel']);
+  });
+
+  it('shows generated state only when aggregate teams_generated is true', () => {
+    setMatches([seriesMatch({
+      start_time: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      lineupavailable: 1,
+      teams_generated: true,
+      teams_generated_fanduel: false,
+      teams_generated_draftkings: false
+    })]);
+
+    const match = component.visibleMatches[0];
+    expect(component.isGenerated(match)).toBeTrue();
+    expect(component.canRunUct(match)).toBeFalse();
+  });
+
   it('maps all active backend series matches and shows venue details', () => {
     const backendMatches = [
       seriesMatch({

@@ -3,12 +3,15 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 
 interface LandingPack {
+  id: number;
   name: string;
   coins: number;
   bonusCoins: number;
   totalCoins: number;
   price: number;
   validityDays: number;
+  popular: boolean;
+  pro: boolean;
 }
 
 @Component({
@@ -20,27 +23,24 @@ export class UctguideinfoComponent implements OnInit {
   menuOpen = false;
   scrolled = false;
   packLoading = true;
-  offerPack: LandingPack = {
-    name: 'Starter Pack',
-    coins: 3,
-    bonusCoins: 0,
-    totalCoins: 3,
-    price: 2,
-    validityDays: 365
-  };
+  packs: LandingPack[] = [];
 
   readonly processSteps = [
-    { icon: 'person_add', title: 'Sign Up', text: 'Create your secure PICK2WIN account.' },
-    { icon: 'login', title: 'Login', text: 'Sign in and open your personal workspace.' },
-    { icon: 'database', title: 'Purchase Coins', text: 'Buy coins to unlock UCT and generate teams.' },
-    { icon: 'format_list_numbered', title: 'Lineups', text: 'Choose an available match from Lineups.' },
-    { icon: 'sports_esports', title: 'Fantasy Platform', text: 'Select DraftKings or FanDuel.' },
-    { icon: 'groups', title: 'My Squad', text: 'Pick players from both teams and build your squad.' },
-    { icon: 'settings', title: 'Configuration', text: 'Set your preferences, rules, and team generation settings.' },
-    { icon: 'assignment', title: 'Review', text: 'Review your selected players and configuration.' },
-    { icon: 'auto_awesome', title: 'Generate Teams', text: 'Create up to 20 rule-valid lineups.' },
-    { icon: 'fact_check', title: 'Review Teams', text: 'Review all generated teams and validate lineups.' },
-    { icon: 'download', title: 'Download TXT', text: 'Download your generated teams in TXT format.' }
+    { icon: 'person_add', title: 'Create your free account', text: 'Register and verify your email. No payment is required to sign up.' },
+    { icon: 'database', title: 'Purchase coins', text: 'Choose the coin pack that fits your needs. No subscriptions or recurring charges.' },
+    { icon: 'sports_soccer', title: 'Choose your sport', text: 'Start with Soccer today, with more supported sports on the roadmap.' },
+    { icon: 'sports_esports', title: 'Choose a platform', text: 'Select DraftKings or FanDuel and the supported contest mode.' },
+    { icon: 'groups', title: 'Build your player pool', text: 'Select players using your own knowledge. Every lineup uses only this pool.' },
+    { icon: 'tune', title: 'Configure your strategy', text: 'Set optional mandatory players, Captain or MVP candidates, and preferences.' },
+    { icon: 'auto_awesome', title: 'Generate combinations', text: 'Apply roster rules, salary-cap validation, and your configuration.' },
+    { icon: 'download', title: 'Review and download', text: 'Inspect every result and download up to 20 rule-valid lineups as TXT.' }
+  ];
+
+  readonly benefits = [
+    { icon: 'bolt', title: 'Save time', text: 'Create multiple combinations from one configuration instead of rebuilding every lineup.' },
+    { icon: 'target', title: 'Stay in control', text: 'Every player, rule, configuration, and lineup comes from you.' },
+    { icon: 'account_tree', title: 'Explore more', text: 'Test more valid combinations while keeping your player pool and strategy intact.' },
+    { icon: 'visibility', title: 'Built on transparency', text: 'No AI picks, projections, recommendations, or hidden decision-making.' }
   ];
 
   constructor(private api: ApiService, private router: Router) {}
@@ -50,19 +50,21 @@ export class UctguideinfoComponent implements OnInit {
       next: (res: any) => {
         const plans = Array.isArray(res?.data) ? [...res.data] : [];
         plans.sort((a: any, b: any) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
-        const plan = plans[0];
-        if (plan) {
+        this.packs = plans.map((plan: any) => {
           const coins = Number(plan.coins || 0);
           const bonusCoins = Number(plan.bonus_coins || 0);
-          this.offerPack = {
+          return {
+            id: Number(plan.id || 0),
             name: plan.name || 'Starter Pack',
             coins,
             bonusCoins,
             totalCoins: Number(plan.total_coins || 0) || coins + bonusCoins,
             price: Number(plan.price || 0),
-            validityDays: Number(plan.validity_days || 365)
+            validityDays: Number(plan.validity_days || 365),
+            popular: Number(plan.is_popular || 0) === 1,
+            pro: Number(plan.is_pro || 0) === 1
           };
-        }
+        });
         this.packLoading = false;
       },
       error: () => this.packLoading = false
@@ -82,5 +84,10 @@ export class UctguideinfoComponent implements OnInit {
   openLogin(): void {
     this.menuOpen = false;
     this.router.navigate(['/auth/login']);
+  }
+
+  openPricing(): void {
+    this.menuOpen = false;
+    this.router.navigate(['/pricing'], { fragment: 'coin-packs' });
   }
 }

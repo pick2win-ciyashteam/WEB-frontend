@@ -1201,3 +1201,90 @@ small {
     line-height: 1.25;
   }
 }
+
+/* Landing-page embed: retain the complete form flow without nesting the
+   standalone two-column auth page inside another promotional layout. */
+.auth-page.embedded {
+  height: auto !important;
+  min-height: auto;
+  display: block;
+  padding: 0;
+  color: #161616;
+  background: transparent;
+  overflow: visible !important;
+}
+
+.auth-page.embedded .auth-story {
+  display: none;
+}
+
+.auth-page.embedded .auth-panel-wrap {
+  height: auto;
+  min-height: 0;
+  width: 100%;
+  max-width: none;
+  max-height: none !important;
+  display: block;
+  padding: clamp(26px, 3vw, 44px);
+  overflow: visible !important;
+  border-radius: 22px;
+  box-shadow: none;
+}
+
+.auth-page.embedded .signup-box {
+  width: 100%;
+  max-width: none;
+  max-height: none !important;
+  margin: 0;
+  overflow: visible !important;
+}
+
+@media (max-width: 680px) {
+  .auth-page.embedded .auth-panel-wrap {
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+}
+
+/* Compact landing-page registration while preserving comfortable controls. */
+@media (min-width: 901px) {
+  .auth-page.embedded .auth-panel-wrap {
+    padding: 30px 34px;
+  }
+
+  .auth-page.embedded .signup-box h2 {
+    font-size: clamp(30px, 3vw, 39px) !important;
+  }
+
+  .auth-page.embedded form {
+    gap: 10px;
+  }
+
+  .auth-page.embedded input:not([type='checkbox']),
+  .auth-page.embedded select,
+  .auth-page.embedded .dial-code-fixed {
+    height: 44px;
+  }
+
+  .auth-page.embedded .verify-progress {
+    margin-bottom: 12px;
+    padding-block: 8px;
+  }
+
+  .auth-page.embedded .terms {
+    margin-top: 2px;
+  }
+
+  .auth-page.embedded .btn-block {
+    min-height: 48px;
+    height: 48px;
+  }
+
+  .auth-page.embedded .alt-action {
+    margin-top: 12px;
+  }
+
+  .auth-page.embedded .auth-secure {
+    margin-top: 18px;
+  }
+}

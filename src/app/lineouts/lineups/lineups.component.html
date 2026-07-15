@@ -4,9 +4,6 @@
   <ng-container *ngIf="loggedIn$ | async; else guestLineouts">
     <section class="lineouts-shell">
       <div class="wrap">
-        <div class="match-action-notice" *ngIf="matchActionNotice" role="status" aria-live="polite">
-          {{ matchActionNotice }}
-        </div>
         <div class="lineouts-topbar">
           <div class="coin-stamp coin-stamp-rect" role="img" aria-label="1 coin equals 1 match, any match, any league">
             <svg viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -121,19 +118,10 @@
                     {{ isGenerated(match) ? 'âœ“ UCT Generated' : (match.lineupReady ? 'Lineup Ready' : 'â³ Waiting for Lineup') }}
                   </span>
                   <button
-                    class="tc-uct secondary-team-action"
-                    type="button"
-                    *ngIf="hasGeneratedPlatform(match) && !isGenerated(match)"
-                    [disabled]="!!openingTeamsMatchId"
-                    (click)="$event.stopPropagation(); openViewTeams(match)">
-                    {{ isOpeningTeams(match) ? 'Opening My Teams...' : 'See in My Teams →' }}
-                  </button>
-                  <button
                     class="tc-uct"
                     [class.uct-locked]="!canRunUct(match) && !isGenerated(match)"
                     type="button"
-                    [disabled]="!!openingTeamsMatchId"
-                    [attr.aria-disabled]="!canRunUct(match) && !isGenerated(match)"
+                    [disabled]="(!canRunUct(match) && !isGenerated(match)) || !!openingTeamsMatchId"
                     (pointerenter)="prefetchCreateUct(match)"
                     (focus)="prefetchCreateUct(match)"
                     (touchstart)="prefetchCreateUct(match)"
@@ -203,19 +191,10 @@
                       {{ isGenerated(match) ? '✓ UCT Generated' : (match.lineupReady ? 'Lineup Ready' : '⏳ Waiting for Lineup') }}
                     </span>
                     <button
-                      class="uc-uct secondary-team-action"
-                      type="button"
-                      *ngIf="hasGeneratedPlatform(match) && !isGenerated(match)"
-                      [disabled]="!!openingTeamsMatchId"
-                      (click)="$event.stopPropagation(); openViewTeams(match)">
-                      {{ isOpeningTeams(match) ? 'Opening My Teams...' : 'See in My Teams →' }}
-                    </button>
-                    <button
                       class="uc-uct"
                       [class.uct-locked]="!canRunUct(match) && !isGenerated(match)"
                       type="button"
-                      [disabled]="!!openingTeamsMatchId"
-                      [attr.aria-disabled]="!canRunUct(match) && !isGenerated(match)"
+                      [disabled]="(!canRunUct(match) && !isGenerated(match)) || !!openingTeamsMatchId"
                       (pointerenter)="prefetchCreateUct(match)"
                       (focus)="prefetchCreateUct(match)"
                       (touchstart)="prefetchCreateUct(match)"
