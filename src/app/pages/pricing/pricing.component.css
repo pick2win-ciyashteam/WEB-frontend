@@ -1403,6 +1403,165 @@ button.credit-pack-cta {
 
 }
 
+/* Client-approved launch pack presentation. */
+.credit-packs {
+  gap: 14px;
+}
+
+.credit-pack {
+  min-height: 390px;
+  padding: 22px 22px 20px;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 88% 5%, color-mix(in srgb, var(--pack-color) 16%, transparent), transparent 34%),
+    linear-gradient(155deg, color-mix(in srgb, var(--pack-color) 6%, #07131d 94%), #020911 72%);
+}
+
+.credit-pack-name {
+  font-size: 21px;
+  text-transform: uppercase;
+}
+
+.credit-pack-sub {
+  min-height: 26px;
+  margin: 5px 0 14px;
+  color: #d1d8df;
+  font-size: 9px;
+}
+
+.credit-pack-coins {
+  margin-bottom: 10px;
+}
+
+.credit-pack-num {
+  font-size: clamp(48px, 5vw, 62px);
+}
+
+.credit-pack-bonus {
+  width: fit-content;
+  min-height: 34px;
+  margin-bottom: 14px;
+  padding: 5px 12px;
+  border: 1px solid var(--pack-glow);
+  border-radius: 999px;
+  background: rgba(0,0,0,.24);
+}
+
+.credit-pack-bonus .cpb-base {
+  color: #edf3f7;
+}
+
+.credit-pack-bonus .cpb-plus {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--pack-color);
+}
+
+.credit-pack-matches {
+  min-height: 24px;
+  margin-bottom: 15px;
+  color: #d6dee5;
+}
+
+.credit-pack-cost-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(104px, .78fr);
+  gap: 8px;
+  align-items: stretch;
+  margin-top: auto;
+  margin-bottom: 15px;
+}
+
+.credit-pack-cost-row .credit-pack-price {
+  align-self: center;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.credit-pack-cost-row .credit-pack-cur {
+  font-size: 16px;
+}
+
+.credit-pack:nth-child(n + 3) .credit-pack-cost-row .credit-pack-amount {
+  font-size: clamp(25px, 2.15vw, 28px);
+}
+
+.credit-pack-cost-row .credit-pack-per {
+  min-height: 66px;
+  display: grid;
+  place-content: center;
+  gap: 3px;
+  margin: 0;
+  padding: 7px 8px;
+  text-align: center;
+}
+
+.credit-pack-cost-row .credit-pack-per b {
+  font-size: 16px;
+}
+
+.credit-pack-cost-row .credit-pack-per span {
+  color: #edf3f7;
+  font-size: 8px;
+  line-height: 1.25;
+  letter-spacing: .08em;
+}
+
+.credit-pack-cta,
+.pk-gold .credit-pack-cta {
+  min-height: 48px;
+  color: #fff;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pack-color) 92%, #fff 8%), color-mix(in srgb, var(--pack-color) 76%, #000 24%));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--pack-color) 24%, transparent);
+}
+
+.pk-gold .credit-pack-cta {
+  color: #241900;
+}
+
+.credit-pack-badge {
+  position: absolute;
+  top: 24px;
+  right: -42px;
+  z-index: 2;
+  width: 155px;
+  margin: 0;
+  padding: 8px 0;
+  border-radius: 0;
+  transform: rotate(45deg);
+  color: #241900;
+  background: linear-gradient(180deg, #ffe366, #f4b400);
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(244,180,0,.28);
+}
+
+@media (max-width: 640px) {
+  .credit-pack {
+    min-height: 0;
+    padding: 24px 20px 20px;
+  }
+
+  .credit-pack-cost-row {
+    grid-template-columns: minmax(0, 1fr) minmax(108px, .75fr);
+  }
+
+  .credit-pack-num {
+    font-size: 52px;
+  }
+}
+
+@media (max-width: 360px) {
+  .credit-pack-cost-row {
+    grid-template-columns: 1fr;
+  }
+
+  .credit-pack-cost-row .credit-pack-per {
+    min-height: 58px;
+  }
+}
+
 /* Payment-method explainer and responsive modal. */
 .payment-methods-note {
   max-width: 1180px;

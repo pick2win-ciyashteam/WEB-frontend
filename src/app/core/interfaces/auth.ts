@@ -18,5 +18,5 @@ export interface VerifyEmailPayload {
 }
 
 export type ResendOtpPayload = 
-  | { mobile: string; type: 'mobile' }
-  | { email: string; type: 'email' };
+  | { mobile: string }
+  | { email: string };

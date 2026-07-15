@@ -855,8 +855,8 @@ resendOtp(type: 'mobile' | 'email') {
 
   const payload =
     type === 'mobile'
-      ? { mobile: this.backendMobileNumber(), type }
-      : { email: this.form.value.email || '', type };
+      ? { mobile: this.backendMobileNumber() }
+      : { email: this.form.value.email || '' };
 
   this.api.resendOtp(payload).subscribe({
     next: (res: any) => {

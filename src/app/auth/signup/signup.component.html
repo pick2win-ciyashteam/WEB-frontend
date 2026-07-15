@@ -212,7 +212,7 @@
     <p class="alt-action step-change"><button type="button" (click)="step = 1">← Use a different email</button></p>
   </div>
 
-  <div *ngIf="step === 3" class="center-step">
+  <div *ngIf="step === 3" class="center-step signup-success-step">
     <div class="verify-progress">
       <div class="vp-step done"><span class="vp-num">✓</span><span>Details</span></div>
       <div class="vp-line done"></div>
@@ -220,19 +220,40 @@
       <div class="vp-line done"></div>
       <div class="vp-step done"><span class="vp-num">✓</span><span>Done</span></div>
     </div>
-    <!-- <div class="success-circle material-symbols-outlined" aria-hidden="true">check</div>
-    <h2>You're <em>in.</em></h2> -->
-    <p class="sub">Email verified. Your PICK2WIN account is live.</p>
+
+    <div class="success-hero">
+      <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+      <div>
+        <h2>Email verified!</h2>
+        <p>Your PICK2WIN account is now live.</p>
+      </div>
+    </div>
 
     <div class="api-msg error" *ngIf="errorMessage" tabindex="-1">{{ errorMessage }}</div>
-    <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
+
+    <div class="registration-complete" role="status">
+      <span class="material-symbols-outlined" aria-hidden="true">mark_email_read</span>
+      <div>
+        <h3>Registration Complete!</h3>
+        <p>{{ successMessage || 'Your email has been verified successfully. You can now log in to your PICK2WIN account.' }}</p>
+      </div>
+    </div>
 
     <div class="next-list">
       <div class="lbl">What's unlocked</div>
       <ul>
-        <li class="done"><span class="ind">✓</span><b>Email verified</b><span>- tied to this account</span></li>
-        <li><span class="ind">→</span>All prices shown in USD ($)</li>
-        <li><span class="ind">→</span>Browse upcoming match windows</li>
+        <li class="done">
+          <span class="unlock-icon material-symbols-outlined" aria-hidden="true">account_circle</span>
+          <div><b>Verified PICK2WIN Account</b><span>Your account is now active and ready to use.</span></div>
+        </li>
+        <li>
+          <span class="unlock-icon material-symbols-outlined" aria-hidden="true">database</span>
+          <div><b>Purchase Coin Packs</b><span>Buy coin packs whenever you're ready to use UCT.</span></div>
+        </li>
+        <li>
+          <span class="unlock-icon material-symbols-outlined" aria-hidden="true">shield</span>
+          <div><b>Access UCT for Your Interested Matches</b><span>Generate user-configured teams for supported matches using your available coins.</span></div>
+        </li>
       </ul>
     </div>
 

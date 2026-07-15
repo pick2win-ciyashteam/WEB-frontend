@@ -20,24 +20,46 @@
       <div class="section-shell hero-grid">
         <div class="hero-copy">
           <span class="eyebrow"><i></i> USER CONFIGURATION TEAMS</span>
-          <h1>Build smarter football lineups. <em>Stay in complete control.</em></h1>
-          <p class="hero-tagline">Your strategy. Your players. Your decisions.</p>
-          <p class="hero-lead">Transform your own football knowledge into multiple rule-valid lineup combinations in seconds. Reduce repetitive work while every important decision remains yours.</p>
-          <div class="hero-promise"><span class="material-symbols-outlined">verified_user</span><p><b>No AI-generated picks. No player recommendations. No performance projections.</b><br>Just your strategy, organized faster.</p></div>
+          <h1>Save Time. Gain Better Coverage. <em>Stay in Complete Control.</em></h1>
+          <p class="hero-tagline">Your Strategy. Your Players. Your Decisions.</p>
+          <p class="hero-lead">PICK2WIN helps you turn your football knowledge into multiple structured, rule-valid lineup combinations in seconds. Save valuable time, expand your lineup coverage, and stay in complete control—all at one of the industry's most affordable prices.</p>
+          <div class="hero-promise hero-assurances">
+            <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+            <div>
+              <ul>
+                <li>No AI-generated teams.</li>
+                <li>No player recommendations.</li>
+                <li>No performance projections.</li>
+              </ul>
+              <p>Just your football knowledge, organized faster.</p>
+            </div>
+          </div>
           <div class="hero-actions">
             <button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free today <span>→</span></button>
             <button class="secondary-cta" type="button" (click)="scrollTo('how')"><span class="material-symbols-outlined">play_circle</span> See how it works</button>
           </div>
-          <p class="micro-copy">Free account • No card required • No subscription</p>
+          <!-- <p class="micro-copy">Free account • No card required • No subscription</p> -->
         </div>
         <div class="hero-panel">
           <div class="hero-panel-head"><img src="assets/logo1.png" alt="PICK2WIN" loading="lazy" decoding="async"><span>CONFIGURATION SUMMARY</span></div>
-          <div class="lineup-preview">
-            <div class="pitch-line"></div>
-            <span class="player p1">FWD</span><span class="player p2">DEF</span><span class="player p3">DEF</span><span class="player p4">MID</span><span class="player p5">MID</span><span class="player p6">GK</span>
+          <div class="uct-config-preview" aria-label="Roster requirements and up to 20 rule-valid lineup combinations">
+            <div class="uct-preview-main">
+              <div class="uct-pitch">
+                <i class="pitch-box top"></i><i class="pitch-box bottom"></i><i class="pitch-circle"></i>
+                <span class="uct-player gk"><b>GK</b><small>1</small></span>
+                <span class="uct-player def one"><b>DEF</b><small>2</small></span><span class="uct-player def two"><b>DEF</b><small>2</small></span>
+                <span class="uct-player mid one"><b>MID</b><small>2</small></span><span class="uct-player mid two"><b>MID</b><small>2</small></span>
+                <span class="uct-player fwd one"><b>FWD</b><small>2</small></span><span class="uct-player fwd two"><b>FWD</b><small>2</small></span>
+                <div class="uct-count"><span class="material-symbols-outlined">groups</span><strong>Up to <em>20</em></strong><b>rule-valid lineup combinations</b><small>You stay in control. We handle the combinations.</small></div>
+              </div>
+              <div class="uct-requirements">
+                <h3>ROSTER REQUIREMENTS</h3>
+                <section class="config-card config-one"><h4>CONFIGURATION 1</h4><ul><li class="blue">Goalkeeper (GK)<b>1</b></li><li class="green">Defenders (DEF)<b>2</b></li><li class="orange">Midfielders (MID)<b>2</b></li><li class="red">Forwards (FWD)<b>2</b></li><li class="purple">Utility (UTIL)<b>1</b></li></ul><small>(DEF / MID / FWD only)</small></section>
+                <section class="config-card config-two"><h4>CONFIGURATION 2</h4><ul><li class="blue">Goalkeeper (GK)<b>1</b></li><li class="green">Defenders (DEF)<b>2</b></li><li class="orange">Forwards / Midfielders (FWD/MID)<b>4</b></li></ul><small>(Any combination)</small></section>
+              </div>
+            </div>
+            <div class="uct-feature-row"><span><i class="material-symbols-outlined blue">verified_user</i><b>Roster rules<small>Always followed</small></b></span><span><i class="material-symbols-outlined purple">attach_money</i><b>Salary cap<small>Always respected</small></b></span><span><i class="material-symbols-outlined orange">person</i><b>Your pool<small>Only selected players</small></b></span><span><i class="material-symbols-outlined lime">ads_click</i><b>No projections<small>100% skill-based</small></b></span></div>
           </div>
-          <div class="preview-result"><b>Up to 20</b><span>rule-valid lineup combinations</span></div>
-          <div class="preview-tags"><span>Roster rules ✓</span><span>Salary cap ✓</span><span>Your pool ✓</span></div>
         </div>
       </div>
     </section>
@@ -170,7 +192,13 @@
 
     <section class="promo-section signup-section" id="signup">
       <div class="section-shell signup-grid">
-        <div class="signup-copy"><span class="eyebrow"><i></i> READY TO BUILD SMARTER?</span><h2>Spend less time building. <em>More time preparing.</em></h2><p>Transform your own football strategy into multiple rule-valid combinations while staying in complete control.</p><div class="no-list"><span>No AI.</span><span>No projections.</span><span>No recommendations.</span></div><p class="existing">Already registered? <button type="button" (click)="openLogin()">Go to login →</button></p></div>
+        <div class="signup-copy">
+          <span class="eyebrow"><i></i> READY TO BUILD SMARTER?</span>
+          <h2>Spend less time building. <em>More time preparing.</em></h2>
+          <p>Transform your own football strategy into multiple rule-valid combinations while staying in complete control.</p>
+          <div class="no-list"><span>No AI.</span><span>No projections.</span><span>No recommendations.</span></div>
+          <p class="existing">Already registered? <button type="button" (click)="openLogin()">Go to login →</button></p>
+        </div>
         <div class="signup-card"><app-signup [embedded]="true" [trackRedditSignupConversion]="true"></app-signup></div>
       </div>
     </section>

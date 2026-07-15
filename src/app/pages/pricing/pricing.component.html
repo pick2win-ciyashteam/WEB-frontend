@@ -73,7 +73,7 @@
 
     <div class="credit-packs reveal" *ngIf="!loading && pricingPacks.length">
       <div class="credit-pack" *ngFor="let pack of pricingPacks; let i = index" [ngClass]="pack.tone" [class.pk-gold]="i === pricingPacks.length - 1">
-        <!-- <div class="credit-pack-badge" *ngIf="i === pricingPacks.length - 1">Lowest $/coin</div> -->
+        <div class="credit-pack-badge" *ngIf="i === pricingPacks.length - 1">Best value</div>
         <div class="credit-pack-name">{{ pack.name }}</div>
         <div class="credit-pack-sub">{{ i === 0 ? 'Perfect to get started' : i === 1 ? 'Great for regular users' : i === 2 ? 'Best value for serious users' : 'Maximum value for power users' }}</div>
         <div class="credit-pack-coins">
@@ -84,12 +84,14 @@
           <span class="cpb-base">{{ pack.coins }} base</span>
           <span class="cpb-plus" *ngIf="pack.bonusCoins > 0">+{{ pack.bonusCoins }} bonus</span>
         </div>
-        <p class="credit-pack-matches"><b>{{ pack.totalCoins }} matches</b> of UCT workflow</p>
-        <div class="credit-pack-price">
-          <span class="credit-pack-cur">{{ pack.currencySymbol }}</span>
-          <span class="credit-pack-amount">{{ pack.price }}</span>
+        <p class="credit-pack-matches"><b>{{ pack.totalCoins }}</b> successful UCT generations</p>
+        <div class="credit-pack-cost-row">
+          <div class="credit-pack-price">
+            <span class="credit-pack-cur">{{ pack.currencySymbol }}</span>
+            <span class="credit-pack-amount">{{ pack.price }}</span>
+          </div>
+          <div class="credit-pack-per"><b>≈ {{ pack.currencySymbol }}{{ pack.perCoin }}</b><span>per successful<br>generation</span></div>
         </div>
-        <div class="credit-pack-per">≈ <b>{{ pack.currencySymbol }}{{ pack.perCoin }}</b> per coin · {{ pack.validityDays }}-day validity</div>
         <button class="credit-pack-cta" type="button" [disabled]="!!purchasingPlanId || creditingCoins" (click)="buyPricingPack(pack)">
           {{ purchasingPlanId === pack.id ? 'Opening Razorpay...' : 'Buy ' + pack.name }}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
