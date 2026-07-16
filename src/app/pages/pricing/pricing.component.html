@@ -53,7 +53,7 @@
     </div>
 
     <!-- ━━━━━━━━━━━━━━━━━━━━━━━ CREDIT PACKS ━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <div class="launch-offer-banner reveal" style="flex-direction:column; align-items:stretch; text-align:left; gap:9px; padding:18px 22px;">
+    <div class="launch-offer-banner reveal legacy-launch-offer" style="flex-direction:column; align-items:stretch; text-align:left; gap:9px; padding:18px 22px;">
       <div style="text-align:center;"><span class="lob-tag">🏆 World Cup 2026 Launch Offer</span></div>
       <p style="font-size:13.5px; line-height:1.55; color:var(--paper-2); margin:0; text-align:center;">Limited-time introductory pricing. Every coin pack includes <b style="color:var(--paper);">bonus coins</b>, credited instantly to your PICK2WIN account.</p>
       <p style="font-size:13px; line-height:1.5; color:var(--gold); font-weight:700; margin:0; text-align:center;">⏳ Offer valid until the FIFA World Cup 2026 Final (19 July 2026).</p>
@@ -65,6 +65,18 @@
       </div>
       <!-- <p style="font-size:13px; line-height:1.55; color:var(--paper); margin:4px 0 0; text-align:center;"><b>Purchase during the launch offer</b> to enjoy our introductory pricing and bonus coin benefits.</p> -->
     </div>
+
+    <section class="launch-promo reveal" aria-label="PICK2WIN launch offer">
+      <div class="launch-promo-title"><span class="material-symbols-outlined">rocket_launch</span><h2>PICK2WIN <em>LAUNCH OFFER</em></h2></div>
+      <p>Limited-time introductory pricing. Every coin pack includes <b>bonus coins</b> at no extra cost, credited instantly to your PICK2WIN account.</p>
+      <div class="launch-promo-limit"><span class="material-symbols-outlined">local_fire_department</span><strong>Available to the first</strong><b>10,000</b><strong>registered PICK2WIN users</strong></div>
+      <div class="launch-promo-benefits">
+        <span><i class="material-symbols-outlined">featured_seasonal_and_gifts</i><b>BONUS COINS<small>INCLUDED</small></b></span>
+        <span><i class="material-symbols-outlined">shield</i><b>365-DAY<small>VALIDITY</small></b></span>
+        <span><i class="material-symbols-outlined">block</i><b>NO<small>SUBSCRIPTIONS</small></b></span>
+        <span><i class="material-symbols-outlined">autorenew</i><b>NO<small>AUTO-RENEWAL</small></b></span>
+      </div>
+    </section>
 
     <div class="pack-status" *ngIf="loading">Loading latest packs...</div>
     <div class="pack-status error" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>

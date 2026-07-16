@@ -19,7 +19,7 @@
   </div>
 
   <div *ngIf="step === 1">
-    <span class="age-stamp" role="img" aria-label="18 plus only"><b>18+</b><i>ONLY</i></span>
+  
     <h2>SET UP <em>your</em> ACCOUNT.</h2>
     <div class="signup-tag">
       <span class="material-symbols-outlined" aria-hidden="true">lock</span>
@@ -65,7 +65,7 @@
           <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)" (change)="clearSignupFieldError('dob')">
           <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
         </div>
-        <div class="hint">Tap to open calendar - must be 18+.</div>
+        <div class="hint">Tap to open calendar.</div>
         <div class="field-msg" [ngClass]="dobValidation.state">{{ dobValidation.message }}</div>
         <div class="field-alert error" *ngIf="signupFieldErrors.dob" data-signup-error="dob" tabindex="-1">{{ signupFieldErrors.dob }}</div>
       </div>
@@ -138,7 +138,7 @@
 
       <label class="terms">
         <input type="checkbox" formControlName="terms" (change)="clearSignupFieldError('terms')">
-        <span>I confirm I am 18 or older, this is my only PICK2WIN account, and I agree to
+        <span>I confirm that I am at least 18 years old and meet the eligibility requirements applicable to my region. and I agree to
           <a routerLink="/terms" target="_blank">Terms & Conditions</a>,
           <a routerLink="/policy" target="_blank">Privacy Policy</a>,
           and

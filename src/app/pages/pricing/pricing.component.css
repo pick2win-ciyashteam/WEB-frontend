@@ -281,6 +281,61 @@
   text-transform: uppercase;
 }
 
+/* PICK2WIN launch offer artwork */
+.legacy-launch-offer { display: none !important; }
+.launch-promo {
+  max-width:1180px;
+  margin:0 auto 24px;
+  padding:24px 34px 20px;
+  overflow:hidden;
+  border:1px solid rgba(244,180,0,.75);
+  border-radius:17px;
+  background:radial-gradient(circle at 50% 5%,rgba(20,86,72,.18),transparent 46%),linear-gradient(145deg,#071a1e,#03121b 70%,#071916);
+  box-shadow:inset 0 0 38px rgba(244,180,0,.025),0 18px 42px rgba(0,0,0,.3);
+  color:var(--paper);
+  text-align:center;
+}
+.launch-promo-title { display:flex; align-items:center; justify-content:center; gap:14px; }
+.launch-promo-title > .material-symbols-outlined { color:var(--gold); font-size:45px; font-variation-settings:"FILL" 1; transform:rotate(-8deg); }
+.launch-promo-title h2 { margin:0; color:#f6f7f8; font-size:clamp(32px,4.5vw,57px); font-weight:950; line-height:1; letter-spacing:-.035em; }
+.launch-promo-title h2 em { color:var(--gold); font-style:normal; }
+.launch-promo > p { max-width:820px; margin:13px auto 18px; color:var(--paper-2); font-size:13.5px; line-height:1.55; }
+.launch-promo > p b { color:var(--gold); }
+.launch-promo-limit { max-width:820px; min-height:60px; display:flex; align-items:center; justify-content:center; gap:11px; margin:0 auto 18px; padding:10px 18px; border:1px solid rgba(244,180,0,.43); border-radius:11px; background:linear-gradient(90deg,rgba(82,24,28,.42),rgba(104,41,38,.3),rgba(82,24,28,.42)); box-shadow:0 0 22px rgba(225,67,49,.08); }
+.launch-promo-limit .material-symbols-outlined { color:#ff654d; font-size:25px; font-variation-settings:"FILL" 1; }
+.launch-promo-limit strong { color:#f4f5f6; font-size:16px; }
+.launch-promo-limit b { color:var(--gold); font-size:31px; line-height:1; }
+.launch-promo-benefits { display:grid; grid-template-columns:repeat(4,1fr); max-width:930px; margin:auto; }
+.launch-promo-benefits > span { display:flex; align-items:center; justify-content:center; gap:13px; min-width:0; padding:3px 22px; border-right:1px solid rgba(255,255,255,.16); text-align:left; }
+.launch-promo-benefits > span:last-child { border:0; }
+.launch-promo-benefits i { flex:0 0 auto; color:var(--gold); font-size:34px; font-variation-settings:"FILL" 0; }
+.launch-promo-benefits b { color:var(--gold); font-family:var(--f-mono); font-size:10px; line-height:1.25; letter-spacing:.07em; }
+.launch-promo-benefits small { display:block; margin-top:3px; color:var(--paper-2); font-size:8px; }
+
+@media (max-width:760px) {
+  .launch-promo { padding:22px 16px 16px; }
+  .launch-promo-title { display:block; }
+  .launch-promo-title > .material-symbols-outlined { font-size:40px; }
+  .launch-promo-title h2 { margin-top:6px; font-size:34px; }
+  .launch-promo > p { font-size:12.5px; }
+  .launch-promo-limit { flex-wrap:wrap; gap:5px 8px; padding:12px; }
+  .launch-promo-limit .material-symbols-outlined { width:100%; }
+  .launch-promo-limit strong { font-size:13px; }
+  .launch-promo-limit b { font-size:27px; }
+  .launch-promo-benefits { grid-template-columns:1fr 1fr; }
+  .launch-promo-benefits > span { justify-content:flex-start; padding:12px; border-bottom:1px solid rgba(255,255,255,.13); }
+  .launch-promo-benefits > span:nth-child(2) { border-right:0; }
+  .launch-promo-benefits > span:nth-child(n+3) { border-bottom:0; }
+}
+
+@media (max-width:390px) {
+  .launch-promo-title h2 { font-size:29px; }
+  .launch-promo-limit strong { width:100%; }
+  .launch-promo-benefits { grid-template-columns:1fr; }
+  .launch-promo-benefits > span,.launch-promo-benefits > span:nth-child(n+3) { border-right:0; border-bottom:1px solid rgba(255,255,255,.13); }
+  .launch-promo-benefits > span:last-child { border-bottom:0; }
+}
+
 .credit-pack-sub {
   min-height: 28px;
   margin: 4px 0 16px;

@@ -26,21 +26,23 @@ export class UctguideinfoComponent implements OnInit {
   packs: LandingPack[] = [];
 
   readonly processSteps = [
-    { icon: 'person_add', title: 'Create your free account', text: 'Register and verify your email. No payment is required to sign up.' },
-    { icon: 'database', title: 'Purchase coins', text: 'Choose the coin pack that fits your needs. No subscriptions or recurring charges.' },
-    { icon: 'sports_soccer', title: 'Choose your sport', text: 'Start with Soccer today, with more supported sports on the roadmap.' },
-    { icon: 'sports_esports', title: 'Choose a platform', text: 'Select DraftKings or FanDuel and the supported contest mode.' },
-    { icon: 'groups', title: 'Build your player pool', text: 'Select players using your own knowledge. Every lineup uses only this pool.' },
-    { icon: 'tune', title: 'Configure your strategy', text: 'Set optional mandatory players, Captain or MVP candidates, and preferences.' },
-    { icon: 'auto_awesome', title: 'Generate combinations', text: 'Apply roster rules, salary-cap validation, and your configuration.' },
-    { icon: 'download', title: 'Review and download', text: 'Inspect every result and download up to 20 rule-valid lineups as TXT.' }
+    { icon: 'how_to_reg', title: 'Create Your Free Account', text: 'Register and verify your email. No payment is required to get started.' },
+    { icon: 'paid', title: 'Purchase Coins', text: 'Choose the coin pack that fits your needs. No monthly subscriptions or recurring charges.' },
+    { icon: 'sports_soccer', title: 'Choose Your Sport', text: 'Start with Soccer today, with more supported sports coming soon.' },
+    { icon: 'fact_check', title: 'Choose a Lineup Configuration', text: 'Select the supported lineup configuration for your chosen sport.' },
+    { icon: 'group_add', title: 'Build Your Player Pool', text: 'Select the players you want to include. Every generated lineup uses only your selected player pool.' },
+    { icon: 'tune', title: 'Configure Your Lineup', text: 'Set your preferred lineup configuration and player preferences.' },
+    { icon: 'auto_fix_high', title: 'Generate Lineup Combinations', text: 'PICK2WIN applies the selected roster rules and creates multiple rule-valid lineup combinations.' },
+    { icon: 'download_for_offline', title: 'Review & Download', text: 'Review every generated lineup before downloading up to 20 rule-valid lineup combinations as TXT.' }
   ];
 
   readonly benefits = [
-    { icon: 'bolt', title: 'Save time', text: 'Create multiple combinations from one configuration instead of rebuilding every lineup.' },
-    { icon: 'target', title: 'Stay in control', text: 'Every player, rule, configuration, and lineup comes from you.' },
-    { icon: 'account_tree', title: 'Explore more', text: 'Test more valid combinations while keeping your player pool and strategy intact.' },
-    { icon: 'visibility', title: 'Built on transparency', text: 'No AI picks, projections, recommendations, or hidden decision-making.' }
+    { icon: 'bolt', title: 'Save Time', text: 'Create multiple rule-valid lineup combinations in seconds.' },
+    { icon: 'my_location', title: 'Better Coverage', text: 'Generate multiple rule-valid lineup combinations from your selected player pool.' },
+    { icon: 'psychology', title: 'Complete Control', text: 'Every player, configuration, and lineup starts with your own selections.' },
+    { icon: 'attach_money', title: 'Affordable Pricing', text: 'Affordable coin-based pricing with no monthly subscriptions.' },
+    { icon: 'calendar_month', title: '365-Day Validity', text: 'Every purchased coin pack is valid for 365 days.' },
+    { icon: 'verified_user', title: 'Transparent', text: 'Built around your selections. No hidden decision-making.' }
   ];
 
   constructor(private api: ApiService, private router: Router) {}
