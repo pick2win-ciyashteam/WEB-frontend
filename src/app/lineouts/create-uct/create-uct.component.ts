@@ -451,6 +451,14 @@ export class CreateUctComponent implements OnInit, OnDestroy {
     return !this.squadCompositionMessage();
   }
 
+  get canConfirmSquad(): boolean {
+    return !!this.selectedPlatform
+      && this.hasValidSquadSize
+      && this.hasValidSubstituteCount
+      && this.hasRequiredPositionCoverage
+      && !this.salaryValidationMessage();
+  }
+
   get isSquadRulesReady(): boolean {
     return this.hasValidSquadSize
       && this.hasValidSubstituteCount

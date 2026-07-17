@@ -341,7 +341,7 @@
         </div>
 
         <label class="confirm-box squad-confirm">
-          <input type="checkbox" [checked]="confirmed" (change)="confirmed = !confirmed">
+          <input type="checkbox" [checked]="confirmed" [disabled]="!canConfirmSquad" (change)="confirmed = !confirmed">
           <span>I confirm that I have selected only eligible {{ activePlatformName }} players and entered accurate official salaries where required. I understand that PICK2WIN generates team combinations solely from my selected My Squad.</span>
         </label>
       </section>
@@ -736,25 +736,32 @@
 
 <div class="uct-confirm-modal match-started-modal" *ngIf="showMatchStartedModal" role="dialog" aria-modal="true" aria-labelledby="matchStartedTitle">
   <div class="uct-confirm-card compact match-started-card">
-    <div class="uct-confirm-title-row">
-      <div class="uct-confirm-icon warning">
-        <span class="material-symbols-outlined" aria-hidden="true">warning</span>
-      </div>
-      <div>
-        <span class="uct-confirm-kicker">Match Status</span>
-        <h2 id="matchStartedTitle">Match Has Started</h2>
-      </div>
+    <div class="match-started-hero" aria-hidden="true">
+      <span class="material-symbols-outlined match-started-clock">more_time</span>
     </div>
 
+    <h2 id="matchStartedTitle">Timeout</h2>
+    <div class="match-started-title-rule" aria-hidden="true"><span></span></div>
+
     <div class="match-started-copy">
-      <p>This match has already started. Team generation for this match is no longer available.</p>
-      <p>Any unsaved configuration will not be used.</p>
+      <div class="match-started-message">
+        <span class="match-started-message-icon material-symbols-outlined" aria-hidden="true">hourglass_empty</span>
+        <p>The time to generate teams for this match has expired.</p>
+      </div>
+      <div class="match-started-message">
+        <span class="match-started-message-icon material-symbols-outlined" aria-hidden="true">warning</span>
+        <p>This match has already started, so team generation is no longer available.</p>
+      </div>
+      <div class="match-started-message">
+        <span class="match-started-message-icon neutral material-symbols-outlined" aria-hidden="true">group</span>
+        <p>Continue to the <strong>Dashboard</strong> to explore and create teams for other available matches.</p>
+      </div>
     </div>
 
     <div class="uct-confirm-actions match-started-actions">
-      <button class="ghost-btn" type="button" (click)="goToLineoutsAfterMatchStarted()">OK</button>
       <button class="primary-btn" type="button" (click)="goToLineoutsAfterMatchStarted()">
-        Go to Dashboard
+        <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+        Continue to Dashboard
         <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
       </button>
     </div>

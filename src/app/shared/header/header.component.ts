@@ -14,6 +14,7 @@ export class  HeaderComponent implements OnInit, OnDestroy {
 
   isMenuOpen = false;
   isNotificationsOpen = false;
+  showSignOutConfirm = false;
   hideNotice = localStorage.getItem('p2w_region_dismiss') === '1';
   private destroy$ = new Subject<void>();
 
@@ -91,6 +92,15 @@ export class  HeaderComponent implements OnInit, OnDestroy {
 
   signOut() {
     this.closeMenu();
+    this.showSignOutConfirm = true;
+  }
+
+  closeSignOutConfirm() {
+    this.showSignOutConfirm = false;
+  }
+
+  confirmSignOut() {
+    this.showSignOutConfirm = false;
     this.authService.logout();
   }
 

@@ -510,6 +510,34 @@
   </div>
 </div>
 
+<div class="unsaved-modal" *ngIf="unsavedChangesModalOpen" role="dialog" aria-modal="true" aria-labelledby="unsavedChangesTitle" (click)="continueEditingProfile()">
+  <div class="unsaved-modal-card" (click)="$event.stopPropagation()">
+    <button class="unsaved-modal-close material-symbols-outlined" type="button" aria-label="Continue editing" (click)="continueEditingProfile()">close</button>
+
+    <div class="unsaved-modal-icon" aria-hidden="true">
+      <span class="material-symbols-outlined">warning</span>
+    </div>
+    <h2 id="unsavedChangesTitle">Unsaved Changes</h2>
+    <p class="unsaved-modal-copy">You have unsaved changes. Leaving this form will discard your current progress.</p>
+
+    <div class="unsaved-impact">
+      <span class="material-symbols-outlined" aria-hidden="true">assignment_late</span>
+      <p>Your changes will be lost and you’ll need to start again.</p>
+    </div>
+
+    <div class="unsaved-modal-actions">
+      <button class="continue-editing-btn" type="button" (click)="continueEditingProfile()">
+        <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+        Continue Editing
+      </button>
+      <button class="discard-changes-btn" type="button" (click)="discardProfileChanges()">
+        <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+        Discard Changes
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="del-modal" *ngIf="deleteModalOpen" role="dialog" aria-modal="true" aria-labelledby="delTitle" (click)="closeDeleteModal()">
   <div class="del-modal-card" (click)="$event.stopPropagation()">
     <button class="del-modal-close" type="button" aria-label="Close" (click)="closeDeleteModal()">×</button>

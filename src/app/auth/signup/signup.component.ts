@@ -30,6 +30,7 @@ interface FieldValidation {
 declare global {
   interface Window {
     rdt?: (command: string, event: string, properties?: { conversionId: string }) => void;
+    pick2winTrackingEnabled?: boolean;
   }
 }
 
@@ -833,7 +834,7 @@ verifyEmail() {
 }
 
 private trackRedditSignup(): void {
-  if (!this.trackRedditSignupConversion || typeof window.rdt !== 'function') {
+  if (!window.pick2winTrackingEnabled || !this.trackRedditSignupConversion || typeof window.rdt !== 'function') {
     return;
   }
 

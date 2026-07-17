@@ -21,6 +21,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   loading$ = this.profileService.loading$;
   error$ = this.profileService.error$;
   editModalOpen = false;
+  unsavedChangesModalOpen = false;
   editMobile = '';
   editDialCode = '';
   editCountryCode = '';
@@ -34,6 +35,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   emailChangeStep: 'details' | 'oldOtp' | 'newOtp' | 'success' = 'details';
   mobileChanging = false;
   emailChanging = false;
+  private initialEditMobile = '';
   mobileMessage = '';
   emailMessage = '';
   mobileError = '';
@@ -310,7 +312,9 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
   openEditModal(profile: UserProfile): void {
     this.editModalOpen = true;
+    this.unsavedChangesModalOpen = false;
     this.editMobile = String(profile.mobile || '').replace(/\D/g, '');
+    this.initialEditMobile = this.editMobile;
     this.editDialCode = '';
     this.editCountryCode = '';
     this.loadEditMobileCountry(profile);
@@ -333,7 +337,32 @@ export class MyProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.hasUnsavedProfileChanges()) {
+      this.unsavedChangesModalOpen = true;
+      return;
+    }
+
     this.editModalOpen = false;
+  }
+
+  continueEditingProfile(): void {
+    this.unsavedChangesModalOpen = false;
+  }
+
+  discardProfileChanges(): void {
+    this.unsavedChangesModalOpen = false;
+    this.editModalOpen = false;
+  }
+
+  private hasUnsavedProfileChanges(): boolean {
+    return this.editMobile.replace(/\D/g, '') !== this.initialEditMobile
+      || !!this.editEmail.trim()
+      || !!this.mobileOtp.trim()
+      || !!this.currentEmailOtp.trim()
+      || !!this.emailOtp.trim()
+      || this.mobileOtpSent
+      || this.emailOtpSent
+      || this.emailChangeStep !== 'details';
   }
 
   requestMobileChange(): void {
@@ -384,6 +413,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         const storedDigits = String(profile.mobile || '').replace(/\D/g, '');
         if (dialDigits && storedDigits.startsWith(dialDigits)) {
           this.editMobile = storedDigits.slice(dialDigits.length);
+          this.initialEditMobile = this.editMobile;
         }
       },
       error: () => {

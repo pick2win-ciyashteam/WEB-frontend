@@ -103,6 +103,24 @@
 
 </aside>
 
+<div class="signout-confirm-backdrop" *ngIf="showSignOutConfirm" (click)="closeSignOutConfirm()">
+  <section class="signout-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="signOutConfirmTitle" (click)="$event.stopPropagation()">
+    <button type="button" class="signout-confirm-close material-symbols-outlined" aria-label="Close sign out confirmation" (click)="closeSignOutConfirm()">close</button>
+
+    <div class="signout-confirm-icon" aria-hidden="true">
+      <span class="material-symbols-outlined">logout</span>
+    </div>
+
+    <h2 id="signOutConfirmTitle">Sign Out?</h2>
+    <p>Are you sure you want to sign out of<br>your <strong>PICK2WIN</strong> account?</p>
+
+    <div class="signout-confirm-actions">
+      <button type="button" class="signout-cancel-btn" (click)="closeSignOutConfirm()">Cancel</button>
+      <button type="button" class="signout-submit-btn" (click)="confirmSignOut()">Sign Out</button>
+    </div>
+  </section>
+</div>
+
 <div class="notification-modal-backdrop" *ngIf="isNotificationsOpen" (click)="closeNotifications()">
   <section class="notification-modal" role="dialog" aria-modal="true" aria-label="Notifications" (click)="$event.stopPropagation()">
     <header class="notification-modal-head">

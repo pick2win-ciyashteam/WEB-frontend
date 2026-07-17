@@ -1,8 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script>
+    (function (w) {
+      var hostname = w.location.hostname.toLowerCase();
+      w.pick2winTrackingEnabled = hostname !== 'localhost'
+        && !hostname.endsWith('.localhost')
+        && hostname !== '127.0.0.1'
+        && hostname !== '::1'
+        && hostname !== '[::1]';
+    })(window);
+  </script>
   <!-- Google Consent Mode v2 must be initialized before Google Tag Manager. -->
   <script>
+    if (window.pick2winTrackingEnabled) {
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
 
@@ -26,10 +37,13 @@
         wait_for_update: preference ? 0 : 500
       });
     })();
+    }
   </script>
   <!-- Google Tag Manager: admin pages are intentionally excluded from analytics. -->
   <script>
     (function(w,d,s,l,i){
+      if (!w.pick2winTrackingEnabled) return;
+
       var path = w.location.pathname;
       if (path === '/admin' || path.indexOf('/admin/') === 0) return;
 
@@ -43,6 +57,8 @@
   <!-- Reddit Pixel: admin pages are intentionally excluded. -->
   <script>
     (function(w,d){
+      if (!w.pick2winTrackingEnabled) return;
+
       var path = w.location.pathname;
       if (path === '/admin' || path.indexOf('/admin/') === 0) return;
 
@@ -76,13 +92,15 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
   <script type='text/javascript'>
-  window.smartlook||(function(d) {
-    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
-    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
-    c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
-    })(document);
-    smartlook('init', 'bf30feb2d3027b10451b73e2850cc961b4daab4e', { region: 'eu' });
-</script>
+    if (window.pick2winTrackingEnabled) {
+      window.smartlook||(function(d) {
+        var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+        var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+        c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
+      })(document);
+      smartlook('init', 'bf30feb2d3027b10451b73e2850cc961b4daab4e', { region: 'eu' });
+    }
+  </script>
   
 </head>
 <body>

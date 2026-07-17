@@ -6,6 +6,7 @@ declare global {
   interface Window {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
+    pick2winTrackingEnabled?: boolean;
   }
 }
 
@@ -46,7 +47,7 @@ export class CookieConsentService {
   }
 
   trackPageView(path: string, title: string): void {
-    if (this.isAdminPath(path)) {
+    if (!window.pick2winTrackingEnabled || this.isAdminPath(path)) {
       return;
     }
 
@@ -65,6 +66,10 @@ export class CookieConsentService {
   }
 
   private updateGoogleConsent(state: 'granted' | 'denied'): void {
+    if (!window.pick2winTrackingEnabled) {
+      return;
+    }
+
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function (...args: unknown[]): void {
       window.dataLayer!.push(args);
