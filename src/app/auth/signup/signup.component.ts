@@ -213,7 +213,7 @@ countriesLoading = false;
     country: ['', Validators.required],
     dob: ['', [Validators.required, minimumAgeValidator(18)]],
     dial: ['', Validators.required],
-    mobile: ['', [Validators.required, this.mobileNumberValidator.bind(this)]],
+    mobile: [{ value: '', disabled: true }, [Validators.required, this.mobileNumberValidator.bind(this)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8), strictPasswordValidator]],
     terms: [false, Validators.requiredTrue]
@@ -224,6 +224,8 @@ resending: 'mobile' | 'email' | null = null;
 readonly resendCooldownSeconds = 60;
 resendCooldown: Record<'mobile' | 'email', number> = { mobile: 0, email: 0 };
 private resendCooldownTimers: Partial<Record<'mobile' | 'email', ReturnType<typeof setInterval>>> = {};
+private readonly otpScreenTimeoutMs = 3 * 60 * 1000;
+private otpScreenTimer: ReturnType<typeof setTimeout> | null = null;
 private _errorMessage = '';
 signupFieldErrors: Partial<Record<SignupErrorField, string>> = {};
 successMessage = '';
@@ -264,6 +266,7 @@ set errorMessage(message: string) {
 ngOnDestroy(): void {
   this.clearResendCooldown('mobile');
   this.clearResendCooldown('email');
+  this.clearOtpScreenTimer();
 }
 
 openDatePicker(input: HTMLInputElement): void {
@@ -283,15 +286,20 @@ onCountryChange() {
   this.clearSignupFieldError('country');
   this.clearSignupFieldError('mobile');
   const country = this.selectedCountry;
+  const mobileControl = this.form.get('mobile');
 
   if (country) {
     this.form.patchValue({
       dial: country.dial_code,
       mobile: ''
     });
+    mobileControl?.enable({ emitEvent: false });
+  } else {
+    this.form.patchValue({ dial: '', mobile: '' });
+    mobileControl?.disable({ emitEvent: false });
   }
 
-  this.form.get('mobile')?.updateValueAndValidity();
+  mobileControl?.updateValueAndValidity();
 }
 
   get ageValid(): boolean {
@@ -334,6 +342,7 @@ continueStep1() {
       this.step = 2;
       this.emailOtp = ['', '', '', '', '', ''];
       this.startResendCooldown('email');
+      this.startOtpScreenTimer();
 
       setTimeout(() => this.focusOtp('email'), 100);
     },
@@ -387,6 +396,35 @@ private clearResendCooldown(type: 'mobile' | 'email'): void {
   }
 
   this.resendCooldown[type] = 0;
+}
+
+private startOtpScreenTimer(): void {
+  this.clearOtpScreenTimer();
+  this.otpScreenTimer = setTimeout(() => {
+    this.otpScreenTimer = null;
+
+    if (this.step === 2) {
+      this.returnToSignupForm();
+    }
+  }, this.otpScreenTimeoutMs);
+}
+
+private clearOtpScreenTimer(): void {
+  if (this.otpScreenTimer) {
+    clearTimeout(this.otpScreenTimer);
+    this.otpScreenTimer = null;
+  }
+}
+
+returnToSignupForm(): void {
+  this.clearOtpScreenTimer();
+  this.clearResendCooldown('email');
+  this.loading = false;
+  this.resending = null;
+  this.emailOtp = ['', '', '', '', '', ''];
+  this.errorMessage = '';
+  this.successMessage = '';
+  this.step = 1;
 }
 
 trackByIndex(index: number): number {
@@ -603,9 +641,12 @@ get mobileValidation(): FieldValidation {
 
   if (!digits) return { state: '', message: '' };
 
-  if (!country) {
-    return { state: 'invalid', message: '✗ Select your country before mobile number' };
-  }
+  // The mobile control stays disabled until a country is selected, so this
+  // duplicate validation message is intentionally not displayed.
+  // if (!country) {
+  //   return { state: 'invalid', message: '✗ Select your country before mobile number' };
+  // }
+  if (!country) return { state: '', message: '' };
 
   if (/^(\d)\1{6,}$/.test(digits)) {
     return { state: 'invalid', message: '✗ Please enter your real mobile number' };
@@ -821,12 +862,21 @@ verifyEmail() {
 
   this.api.verifyEmailOtp(payload).subscribe({
     next: (res: any) => {
+      if (this.step !== 2) {
+        return;
+      }
+
       this.loading = false;
+      this.clearOtpScreenTimer();
       this.successMessage = res?.message || 'Email verified successfully';
       this.step = 3;
       this.trackRedditSignup();
     },
     error: (err) => {
+      if (this.step !== 2) {
+        return;
+      }
+
       this.loading = false;
       this.handleOtpVerifyError(err, 'email');
     }

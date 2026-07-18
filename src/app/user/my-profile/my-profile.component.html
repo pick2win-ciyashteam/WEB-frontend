@@ -510,9 +510,9 @@
   </div>
 </div>
 
-<div class="unsaved-modal" *ngIf="unsavedChangesModalOpen" role="dialog" aria-modal="true" aria-labelledby="unsavedChangesTitle" (click)="continueEditingProfile()">
+<div class="unsaved-modal" *ngIf="unsavedChangesModalOpen" role="dialog" aria-modal="true" aria-labelledby="unsavedChangesTitle" (click)="closeUnsavedChangesModal()">
   <div class="unsaved-modal-card" (click)="$event.stopPropagation()">
-    <button class="unsaved-modal-close material-symbols-outlined" type="button" aria-label="Continue editing" (click)="continueEditingProfile()">close</button>
+    <button class="unsaved-modal-close material-symbols-outlined" type="button" aria-label="Close" (click)="closeUnsavedChangesModal()">close</button>
 
     <div class="unsaved-modal-icon" aria-hidden="true">
       <span class="material-symbols-outlined">warning</span>

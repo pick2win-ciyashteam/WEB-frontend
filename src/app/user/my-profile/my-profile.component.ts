@@ -36,6 +36,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   mobileChanging = false;
   emailChanging = false;
   private initialEditMobile = '';
+  private pendingEditProfile: UserProfile | null = null;
   mobileMessage = '';
   emailMessage = '';
   mobileError = '';
@@ -311,6 +312,11 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   }
 
   openEditModal(profile: UserProfile): void {
+    this.pendingEditProfile = profile;
+    this.unsavedChangesModalOpen = true;
+  }
+
+  private beginEditModal(profile: UserProfile): void {
     this.editModalOpen = true;
     this.unsavedChangesModalOpen = false;
     this.editMobile = String(profile.mobile || '').replace(/\D/g, '');
@@ -347,11 +353,23 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
   continueEditingProfile(): void {
     this.unsavedChangesModalOpen = false;
+
+    if (this.pendingEditProfile) {
+      const profile = this.pendingEditProfile;
+      this.pendingEditProfile = null;
+      this.beginEditModal(profile);
+    }
+  }
+
+  closeUnsavedChangesModal(): void {
+    this.unsavedChangesModalOpen = false;
+    this.pendingEditProfile = null;
   }
 
   discardProfileChanges(): void {
     this.unsavedChangesModalOpen = false;
     this.editModalOpen = false;
+    this.pendingEditProfile = null;
   }
 
   private hasUnsavedProfileChanges(): boolean {

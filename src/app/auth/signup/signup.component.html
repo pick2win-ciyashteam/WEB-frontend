@@ -55,7 +55,7 @@
             <option *ngFor="let c of group.countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
           </optgroup> -->
         </select>
-        <div class="hint">Sets your billing currency & dial code.</div>
+        <!-- <div class="hint">Sets your billing currency & dial code.</div> -->
         <div class="field-alert error" *ngIf="signupFieldErrors.country" data-signup-error="country" tabindex="-1">{{ signupFieldErrors.country }}</div>
       </div>
 
@@ -65,7 +65,7 @@
           <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)" (change)="clearSignupFieldError('dob')">
           <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
         </div>
-        <div class="hint">Tap to open calendar.</div>
+        <!-- <div class="hint">Tap to open calendar.</div> -->
         <div class="field-msg" [ngClass]="dobValidation.state">{{ dobValidation.message }}</div>
         <div class="field-alert error" *ngIf="signupFieldErrors.dob" data-signup-error="dob" tabindex="-1">{{ signupFieldErrors.dob }}</div>
       </div>
@@ -85,13 +85,16 @@
             type="tel"
             formControlName="mobile"
             placeholder="Mobile number"
+            [attr.aria-disabled]="!form.value.country"
             [attr.maxlength]="mobileLimit"
             inputmode="numeric"
             (input)="onMobileInput($event)"
             (keydown.space)="$event.preventDefault()">
         </div>
-        <div class="hint">{{ form.value.dial || '+ code' }} mobile - expected {{ mobileRangeText }} digits - VoIP / virtual numbers blocked.</div>
-        <div class="field-msg" [ngClass]="mobileValidation.state">{{ mobileValidation.message }}</div>
+        <div class="hint input-guidance">
+          {{ form.value.country ? 'Enter a valid mobile number for the selected country.' : 'Select your country to enable mobile number entry.' }}
+        </div>
+        <!-- <div class="field-msg" [ngClass]="mobileValidation.state">{{ mobileValidation.message }}</div> -->
         <div class="field-alert error" *ngIf="signupFieldErrors.mobile" data-signup-error="mobile" tabindex="-1">{{ signupFieldErrors.mobile }}</div>
       </div>
 
@@ -103,8 +106,8 @@
           placeholder="you@example.com"
           (input)="sanitizeSignupEmail()"
           (keydown.space)="$event.preventDefault()">
-        <div class="hint">No disposable, temporary, or aliased emails.</div>
-        <div class="field-msg" [ngClass]="emailValidation.state">{{ emailValidation.message }}</div>
+        <div class="hint input-guidance">Enter a valid, active email address you can access.</div>
+        <!-- <div class="field-msg" [ngClass]="emailValidation.state">{{ emailValidation.message }}</div> -->
         <div class="field-alert error" *ngIf="signupFieldErrors.email" data-signup-error="email" tabindex="-1">{{ signupFieldErrors.email }}</div>
       </div>
 
