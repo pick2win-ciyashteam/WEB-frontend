@@ -227,7 +227,7 @@
         <h3 class="squad-decide-title">You decide:</h3>
         <ul class="reference-checks squad-checks"><li>Every player</li><li>Every exclusion</li><li>Every strategy</li><li>Every configuration</li><li>Every final lineup combination</li></ul>
         <p class="squad-note">PICK2WIN never changes your selections. It simply transforms your My Squad into multiple valid lineup combinations.</p>
-        <h2 >WHY MY SQUAD IS DIFFERENT</h2>
+        <h2 class="squad-difference-title">WHY MY SQUAD IS DIFFERENT</h2>
         <div class="reference-feature-grid four">
           <article><i class="material-symbols-outlined">psychology</i><h3>Your Knowledge Comes First</h3><p>Every lineup starts with your players.</p></article>
           <article><i class="material-symbols-outlined">bolt</i><h3>Build Once</h3><p>Stop repeating the same work.</p></article>
@@ -378,27 +378,84 @@
     </section>
 
     <section class="promo-section product-preview-section" id="preview">
-      <div class="section-shell">
-        <div class="section-heading light">
-          <span class="eyebrow"><i></i> PRODUCT PREVIEW</span>
-          <h2>Designed For Speed. <em>Built For Simplicity.</em></h2>
+      <div class="">
+        <div class="preview-heading">
+          <h2>Designed For <em>Speed.</em> Built For <em>Simplicity.</em></h2>
+          <p>Everything you need. Nothing you don’t.</p>
         </div>
-        <div class="product-screens">
-          <article>
-            <div class="browser-bar"><i></i><i></i><i></i></div>
-            <span>SCREEN 01</span><h3>Build My Squad</h3><p>Choose your player pool from the official lineups.</p>
-            <div class="player-chip-preview"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </article>
-          <article>
-            <div class="browser-bar"><i></i><i></i><i></i></div>
-            <span>SCREEN 02</span><h3>Configure Your Strategy</h3><p>Adjust configuration and validation settings before generation.</p>
-            <div class="setting-preview"><i></i><i></i><i></i></div>
-          </article>
-          <article>
-            <div class="browser-bar"><i></i><i></i><i></i></div>
-            <span>SCREEN 03</span><h3>Review Generated Lineup Combinations</h3><p>Review every generated lineup combination before recreating it.</p>
-            <div class="result-preview"><i></i><i></i><i></i></div>
-          </article>
+        <div class="preview-dashboard">
+          <div class="preview-screens">
+            <article class="preview-screen squad-screen">
+              <small>SCREEN 01</small><h3>Build My Squad</h3><b class="based-user">Based on User</b>
+              <p>Choose your player pool from the official lineups.</p>
+              <div class="preview-panel"><b>Official Lineups</b><div class="fixture"><span><i class="kit blue"></i><strong>MCI</strong><small>Manchester City</small></span><em>VS</em><span><strong>ARS</strong><i class="kit red"></i><small>Arsenal</small></span></div></div>
+              <b class="preview-label">Select Players (18–22)</b>
+              <div class="position-grid"><span>GK<small>1–1</small></span><span>DEF<small>3–6</small></span><span>MID<small>2–5</small></span><span>FWD<small>1–3</small></span></div>
+              <div class="selected-head"><b>Players Selected</b><strong>20 / 22</strong></div>
+              <div class="kit-row"><i class="kit blue"></i><i class="kit green"></i><i class="kit orange"></i><i class="kit orange"></i><i class="kit pale"></i><i class="kit blue"></i><i class="kit blue"></i><i class="kit green"></i><i class="kit orange"></i><i class="kit red"></i><i class="kit pale"></i><i class="kit gray"></i></div>
+              <div class="salary-row"><span>Salary Used<b>$48.0M / $50.0M</b></span><span>Avg. Salary<b>$2.40M</b></span></div>
+              <button type="button">Save My Squad</button>
+            </article>
+
+            <i class="preview-next material-symbols-outlined">chevron_right</i>
+
+            <article class="preview-screen config-screen">
+              <small>SCREEN 02</small><h3>Configuration Strategy</h3><b class="based-user">Based on User</b>
+              <p>Adjust your configuration and validation settings before generation.</p>
+              <div class="metric-grid"><span>Max Teams<b>20</b></span><span>Salary Cap<b>$50.0M</b></span><span>Min Players/Team<b>11</b></span><span>Max Players/Team<b>11</b></span></div>
+              <div class="preview-panel range-panel"><b>Team Exposure Limits ⓘ</b><label>Team A (MCI)<i><u style="width:58%"></u></i><em>3 - 7</em></label><label>Team B (ARS)<i><u class="red-range" style="width:58%"></u></i><em>3 - 7</em></label></div>
+              <div class="preview-panel range-panel"><b>Player Exposure Limits ⓘ</b><label>Goalkeepers<i><u class="purple-range" style="width:58%"></u></i><em>0 - 2</em></label><label>Defenders<i><u class="green-range" style="width:58%"></u></i><em>3 - 7</em></label><label>Midfielders<i><u class="orange-range" style="width:68%"></u></i><em>3 - 8</em></label><label>Forwards<i><u style="width:58%"></u></i><em>1 - 4</em></label></div>
+              <div class="preview-panel rules-panel"><b>Stacking Rules</b><label>☑ Team Stack <span>2 - 4 players⌄</span></label><label>☑ Combo Stack <span>Mid + Fwd⌄</span></label><label>□ Anti-Stack <span>None⌄</span></label></div>
+              <button type="button">Save Configuration</button>
+            </article>
+
+            <i class="preview-next material-symbols-outlined">chevron_right</i>
+
+            <article class="preview-screen review-screen">
+              <small>SCREEN 03</small><h3>UCT Generation &amp; Review</h3>
+              <p>Review every generated lineup combination before finalizing.</p>
+              <div class="review-stats"><span><b>20</b>Teams Generated</span><span><b>100%</b>Valid Teams</span><span><b>$50.0M</b>Salary Cap Used</span><span><b>0</b>Rule Violations</span></div>
+              <div class="team-table">
+                <header><b>Team #</b><b>Players</b><b>Salary Used</b><b>Exposure</b><b>Status</b></header>
+                <div><b>01</b><span class="tiny-kits">👕👕👕👕👕</span><span>$49.8M</span><em>Valid</em><i>✓</i></div>
+                <div><b>02</b><span class="tiny-kits">👕👕👕👕👕</span><span>$49.7M</span><em>Valid</em><i>✓</i></div>
+                <div><b>03</b><span class="tiny-kits">👕👕👕👕👕</span><span>$49.9M</span><em>Valid</em><i>✓</i></div>
+                <div class="ellipsis"><b>…</b><span>…</span><span>…</span><em>…</em><i>…</i></div>
+                <div><b>18</b><span class="tiny-kits">👕👕👕👕👕</span><span>$49.6M</span><em>Valid</em><i>✓</i></div>
+                <div><b>19</b><span class="tiny-kits">👕👕👕👕👕</span><span>$49.7M</span><em>Valid</em><i>✓</i></div>
+                <div><b>20</b><span class="tiny-kits">👕👕👕👕👕</span><span>$49.5M</span><em>Valid</em><i>✓</i></div>
+              </div>
+              <button type="button">Download TXT File <small>(All 20 Teams)</small></button>
+            </article>
+          </div>
+
+          <aside class="preview-benefits">
+            <div><i class="material-symbols-outlined">timer</i><span><b>Your Time Saved</b><small>Automated workflows that save hours of manual work.</small></span></div>
+            <div><i class="material-symbols-outlined">ads_click</i><span><b>Your Strategy Stays Yours</b><small>You decide. You control. Every single time.</small></span></div>
+            <div><i class="material-symbols-outlined">settings</i><span><b>Your Configuration<br>Your Rules</b><small>Custom rules. Smart validations. Total control.</small></span></div>
+            <div><i class="material-symbols-outlined">group</i><span><b>Your Teams<br>In Seconds</b><small>Generate up to 20 valid teams instantly.</small></span></div>
+            <div><i class="material-symbols-outlined">sync</i><span><b>Up to 20 Valid Teams</b><small>Every team is validated against your rules and selections.</small></span></div>
+            <div><i class="material-symbols-outlined">description</i><span><b>Your Report</b><small>Complete TXT file.<br>All details, your way.</small></span></div>
+          </aside>
+        </div>
+
+        <div class="preview-value-strip">
+          <div><i class="material-symbols-outlined">groups</i><span><b>Your Players</b><small>You choose.<br>You decide.</small></span></div>
+          <div><i class="material-symbols-outlined">verified_user</i><span><b>Your Strategy</b><small>Built by you.<br>Always yours.</small></span></div>
+          <div><i class="material-symbols-outlined">settings</i><span><b>Your Configuration</b><small>Your rules.<br>Your settings.</small></span></div>
+          <div><i class="material-symbols-outlined">group</i><span><b>Your Teams</b><small>Up to 20 valid teams.<br>Based on you.</small></span></div>
+          <div><i class="material-symbols-outlined">description</i><span><b>Your Report</b><small>Complete TXT file.<br>All details, your way.</small></span></div>
+        </div>
+
+        <div class="preview-timeline">
+          <strong><i class="material-symbols-outlined">timer</i>FROM START TO<br>FINAL 20 TEAMS<small>Typical Time to Complete</small></strong>
+          <ol><li><b>1</b><span>Build My Squad<small>(Select Players)</small><em>Based on User</em></span></li><li><b>2</b><span>Configuration Strategy<small>(Apply Rules)</small><em>Based on User</em></span></li><li><b>3</b><span>UCT Generation<small>(Generate Teams)</small><em>Based on Rules</em></span></li><li><b>4</b><span>Review &amp; Download<small>(All 20 Teams)</small><em>Based on User</em></span></li></ol>
+          <strong class="total-time">TOTAL TIME<b>10 – 20<br>SECONDS</b><small>(May vary based on players selected and rules applied)</small></strong>
+        </div>
+
+        <div class="preview-final-strip">
+          <strong>◎ YOUR PLAYERS. <em>YOUR STRATEGY.</em> YOUR CONFIGURATION. <em>YOUR TEAMS.</em> YOUR CONTROL.</strong>
+          <span><b>PICK2WIN</b> simplifies the entire team configuration process—so you stay focused on <em>your strategy, your decisions, and your edge.</em></span>
         </div>
       </div>
     </section>
