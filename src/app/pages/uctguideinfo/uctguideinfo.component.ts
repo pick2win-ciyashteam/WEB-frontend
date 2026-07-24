@@ -22,9 +22,12 @@ interface LandingPack {
 export class UctguideinfoComponent implements OnInit, AfterViewInit, OnDestroy {
   menuOpen = false;
   scrolled = false;
+  exitModalOpen = false;
   packLoading = true;
   packs: LandingPack[] = [];
   private revealObserver?: IntersectionObserver;
+  private exitModalHandled = false;
+  private historyGuardActive = false;
 
   readonly processSteps = [
     { icon: 'fact_check', title: 'Official Lineups', text: 'Start with confirmed available players.' },
@@ -39,6 +42,11 @@ export class UctguideinfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      window.history.pushState({ pick2winExitGuard: true }, '', window.location.href);
+      this.historyGuardActive = true;
+    }
+
     this.api.getSubscriptionPlans().subscribe({
       next: (res: any) => {
         const plans = Array.isArray(res?.data) ? [...res.data] : [];
@@ -96,11 +104,70 @@ export class UctguideinfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.revealObserver?.disconnect();
+    document.body.style.overflow = '';
   }
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
     this.scrolled = window.scrollY > 20;
+
+    const reachedBottom =
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
+
+    if (reachedBottom) {
+      this.openExitModal();
+    }
+  }
+
+  @HostListener('document:mouseout', ['$event'])
+  onDocumentMouseOut(event: MouseEvent): void {
+    if (!event.relatedTarget && event.clientY <= 8) {
+      this.openExitModal();
+    }
+  }
+
+  @HostListener('window:popstate')
+  onBrowserBack(): void {
+    if (!this.historyGuardActive) {
+      return;
+    }
+
+    if (!this.exitModalHandled) {
+      this.openExitModal();
+      window.history.pushState({ pick2winExitGuard: true }, '', window.location.href);
+      return;
+    }
+
+    this.historyGuardActive = false;
+    window.history.back();
+  }
+
+  @HostListener('document:keydown.escape')
+  closeExitModal(): void {
+    if (!this.exitModalOpen) {
+      return;
+    }
+
+    this.exitModalOpen = false;
+    this.exitModalHandled = true;
+    document.body.style.overflow = '';
+  }
+
+  openExitModal(): void {
+    if (this.exitModalHandled || this.exitModalOpen) {
+      return;
+    }
+
+    this.exitModalOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  exitModalSignup(): void {
+    this.exitModalOpen = false;
+    this.exitModalHandled = true;
+    this.historyGuardActive = false;
+    document.body.style.overflow = '';
+    this.openSignup();
   }
 
   scrollTo(sectionId: string): void {

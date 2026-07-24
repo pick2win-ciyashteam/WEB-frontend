@@ -20,7 +20,7 @@ interface CountryRegionGroup {
 }
 
 type FieldState = '' | 'valid' | 'invalid' | 'warn';
-type SignupErrorField = 'name' | 'country' | 'dob' | 'mobile' | 'email' | 'password' | 'terms' | 'form';
+type SignupErrorField = 'name' | 'country' | 'dob' | 'mobile' | 'email' | 'password' | 'confirmPassword' | 'terms' | 'form';
 
 interface FieldValidation {
   state: FieldState;
@@ -196,6 +196,7 @@ export class SignupComponent implements OnDestroy {
 
   step = 1;
   showPassword = false;
+  showConfirmPassword = false;
   mobileOtp = ['', '', '', '', '', ''];
   emailOtp = ['', '', '', '', '', ''];
   maxDob = this.getMaxDob();
@@ -205,17 +206,14 @@ countryRegionGroups: CountryRegionGroup[] = [];
 countriesLoading = false;
 
   form = this.fb.group({
-    name: ['', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.pattern(/^[A-Za-z][A-Za-z.'’-]*(?:\s+[A-Za-z][A-Za-z.'’-]*)+$/)
-    ]],
-    country: ['', Validators.required],
-    dob: ['', [Validators.required, minimumAgeValidator(18)]],
-    dial: ['', Validators.required],
-    mobile: [{ value: '', disabled: true }, [Validators.required, this.mobileNumberValidator.bind(this)]],
+    name: [''],
+    country: [''],
+    dob: [''],
+    dial: [''],
+    mobile: [{ value: '', disabled: true }],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8), strictPasswordValidator]],
+    confirmPassword: ['', Validators.required],
     terms: [false, Validators.requiredTrue]
   });
 
@@ -249,15 +247,7 @@ set errorMessage(message: string) {
   constructor(
     private fb: FormBuilder,
     private authModal: AuthModalService, private api:ApiService
-  ) {
-    this.form.get('name')?.setValidators([
-      Validators.required,
-      Validators.minLength(3),
-      internationalNameValidator
-    ]);
-    this.form.get('name')?.updateValueAndValidity({ emitEvent: false });
-    this.loadCountries();
-  }
+  ) {}
 
   openLogin() {
     this.authModal.open('login');
@@ -313,7 +303,7 @@ continueStep1() {
   this.signupFieldErrors = {};
   this.successMessage = '';
 
-  if (this.form.invalid || !this.ageValid || !this.validateMobileByCountry()) {
+  if (this.form.invalid || !this.passwordsMatch) {
     this.collectSignupClientErrors();
     this.scrollToFirstSignupError();
     return;
@@ -325,11 +315,7 @@ continueStep1() {
   }
 
   const payload = {
-    fullname: this.form.value.name || '',
     email: this.withoutSpaces(this.form.value.email || ''),
-    mobile: this.backendMobileNumber(),
-    country: this.form.value.country || '',
-    date_of_birth: this.form.value.dob || '',
     password: this.withoutSpaces(this.form.value.password || '')
   };
 
@@ -458,6 +444,7 @@ private collectSignupClientErrors(): void {
   if (this.form.get('mobile')?.invalid || !this.validateMobileByCountry()) this.signupFieldErrors.mobile = this.mobileError;
   if (this.emailError) this.signupFieldErrors.email = this.emailError;
   if (this.passwordError) this.signupFieldErrors.password = this.passwordError;
+  if (this.confirmPasswordError) this.signupFieldErrors.confirmPassword = this.confirmPasswordError;
   if (this.form.get('terms')?.invalid) this.signupFieldErrors.terms = 'Please accept the terms and policies to continue.';
 }
 
@@ -571,7 +558,21 @@ get passwordError(): string {
   return '';
 }
 
-fieldClass(field: 'name' | 'dob' | 'mobile' | 'email' | 'password'): Record<string, boolean> {
+get confirmPasswordError(): string {
+  const control = this.form.get('confirmPassword');
+
+  if (!control?.touched) return '';
+  if (!control.value) return 'Please confirm your password.';
+  if (!this.passwordsMatch) return 'Passwords do not match.';
+  return '';
+}
+
+get passwordsMatch(): boolean {
+  return !!this.form.value.confirmPassword
+    && this.form.value.password === this.form.value.confirmPassword;
+}
+
+fieldClass(field: 'name' | 'dob' | 'mobile' | 'email' | 'password' | 'confirmPassword'): Record<string, boolean> {
   const validation = this.fieldValidation(field);
 
   return {
@@ -581,12 +582,23 @@ fieldClass(field: 'name' | 'dob' | 'mobile' | 'email' | 'password'): Record<stri
   };
 }
 
-fieldValidation(field: 'name' | 'dob' | 'mobile' | 'email' | 'password'): FieldValidation {
+fieldValidation(field: 'name' | 'dob' | 'mobile' | 'email' | 'password' | 'confirmPassword'): FieldValidation {
   if (field === 'name') return this.nameValidation;
   if (field === 'dob') return this.dobValidation;
   if (field === 'mobile') return this.mobileValidation;
   if (field === 'email') return this.emailValidation;
+  if (field === 'confirmPassword') return this.confirmPasswordValidation;
   return this.passwordValidation;
+}
+
+get confirmPasswordValidation(): FieldValidation {
+  const value = String(this.form.value.confirmPassword || '');
+
+  if (!value) return { state: '', message: '' };
+
+  return this.passwordsMatch
+    ? { state: 'valid', message: '✓ Passwords match' }
+    : { state: 'invalid', message: '✕ Passwords do not match' };
 }
 
 get nameValidation(): FieldValidation {
@@ -1007,12 +1019,9 @@ get passwordStrengthLabel(): string {
 }
 
 get allClientGatesPassed(): boolean {
-  return this.nameValidation.state === 'valid'
-    && this.dobValidation.state === 'valid'
-    && this.mobileValidation.state === 'valid'
-    && this.emailValidation.state === 'valid'
+  return this.emailValidation.state === 'valid'
     && this.passwordValidation.state === 'valid'
-    && !!this.form.value.country
+    && this.passwordsMatch
     && !!this.form.value.terms;
 }
 
@@ -1205,10 +1214,20 @@ sanitizeSignupPassword(): void {
   }
 }
 
+sanitizeSignupConfirmPassword(): void {
+  this.clearSignupFieldError('confirmPassword');
+  const confirmPasswordCtrl = this.form.get('confirmPassword');
+  const cleanPassword = this.withoutSpaces(confirmPasswordCtrl?.value || '');
+
+  if (confirmPasswordCtrl?.value !== cleanPassword) {
+    confirmPasswordCtrl?.setValue(cleanPassword, { emitEvent: false });
+  }
+}
+
 private sanitizeSignupFields(): void {
-  this.onMobileInput({ target: { value: this.form.value.mobile || '' } });
   this.sanitizeSignupEmail();
   this.sanitizeSignupPassword();
+  this.sanitizeSignupConfirmPassword();
 }
 
 private withoutSpaces(value: string): string {

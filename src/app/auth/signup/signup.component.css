@@ -434,9 +434,9 @@ small {
 }
 
 .signup-box .field .input-guidance {
-  color: #e11d48 !important;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+  color: #4f6f82 !important;
+  font-weight: 650;
+  letter-spacing: 0.035em;
 }
 
 .phone-row input:disabled {

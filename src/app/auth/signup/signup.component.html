@@ -38,66 +38,6 @@
     <div class="api-msg success" *ngIf="successMessage">{{ successMessage }}</div>
 
     <form [formGroup]="form">
-      <div [ngClass]="fieldClass('name')">
-        <label>Full name <span>*</span></label>
-        <input type="text" formControlName="name" placeholder="Your full name" (input)="clearSignupFieldError('name')">
-        <div class="field-msg" [ngClass]="nameValidation.state">{{ nameValidation.message }}</div>
-        <div class="field-alert error" *ngIf="signupFieldErrors.name" data-signup-error="name" tabindex="-1">{{ signupFieldErrors.name }}</div>
-      </div>
-
-      <div class="field-row">
-      <div class="field" [class.is-valid]="form.value.country">
-        <label>Country of residence <span>*</span></label>
-        <select class="country-select" formControlName="country" (change)="onCountryChange()" [disabled]="countriesLoading">
-          <option value="">{{ countriesLoading ? 'Loading countries...' : 'Select your country' }}</option>
-          <option *ngFor="let c of countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
-          <!-- <optgroup *ngFor="let group of countryRegionGroups; trackBy: trackByRegionLabel" [label]="group.label">
-            <option *ngFor="let c of group.countries; trackBy: trackByCountryCode" [value]="c.name">{{ c.name }}</option>
-          </optgroup> -->
-        </select>
-        <!-- <div class="hint">Sets your billing currency & dial code.</div> -->
-        <div class="field-alert error" *ngIf="signupFieldErrors.country" data-signup-error="country" tabindex="-1">{{ signupFieldErrors.country }}</div>
-      </div>
-
-      <div [ngClass]="fieldClass('dob')">
-        <label>Date of birth <span>*</span></label>
-        <div class="date-wrap" (click)="openDatePicker(dobInput)">
-          <input #dobInput type="date" formControlName="dob" [attr.max]="maxDob" (click)="openDatePicker(dobInput)" (focus)="openDatePicker(dobInput)" (change)="clearSignupFieldError('dob')">
-          <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
-        </div>
-        <!-- <div class="hint">Tap to open calendar.</div> -->
-        <div class="field-msg" [ngClass]="dobValidation.state">{{ dobValidation.message }}</div>
-        <div class="field-alert error" *ngIf="signupFieldErrors.dob" data-signup-error="dob" tabindex="-1">{{ signupFieldErrors.dob }}</div>
-      </div>
-      </div>
-
-      <div [ngClass]="fieldClass('mobile')">
-        <label>Mobile number <span>*</span></label>
-        <div class="phone-row">
-          <div class="dial-code-fixed">
-            <!-- <img *ngIf="selectedCountryFlagImage; else countryFlagEmoji" class="dial-flag-image" [src]="selectedCountryFlagImage" [alt]="selectedCountry?.name + ' flag'"> -->
-            <ng-template #countryFlagEmoji>
-              <span *ngIf="selectedCountryFlag" class="dial-flag">{{ selectedCountryFlag }}</span>
-            </ng-template>
-            {{ dialLabel || 'Code' }}
-          </div>
-          <input
-            type="tel"
-            formControlName="mobile"
-            placeholder="Mobile number"
-            [attr.aria-disabled]="!form.value.country"
-            [attr.maxlength]="mobileLimit"
-            inputmode="numeric"
-            (input)="onMobileInput($event)"
-            (keydown.space)="$event.preventDefault()">
-        </div>
-        <div class="hint input-guidance">
-          {{ form.value.country ? 'Enter a valid mobile number for the selected country.' : 'Select your country to enable mobile number entry.' }}
-        </div>
-        <!-- <div class="field-msg" [ngClass]="mobileValidation.state">{{ mobileValidation.message }}</div> -->
-        <div class="field-alert error" *ngIf="signupFieldErrors.mobile" data-signup-error="mobile" tabindex="-1">{{ signupFieldErrors.mobile }}</div>
-      </div>
-
       <div [ngClass]="fieldClass('email')">
         <label>Email address <span>*</span></label>
         <input
@@ -137,6 +77,29 @@
         <div class="hint">8+ chars - uppercase letter (A-Z), number, and one symbol.</div>
         <div class="field-msg" [ngClass]="passwordValidation.state">{{ passwordValidation.message }}</div>
         <div class="field-alert error" *ngIf="signupFieldErrors.password" data-signup-error="password" tabindex="-1">{{ signupFieldErrors.password }}</div>
+      </div>
+
+      <div [ngClass]="fieldClass('confirmPassword')">
+        <label>Confirm password <span>*</span></label>
+        <div class="password-wrap">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Re-enter your password"
+            (input)="sanitizeSignupConfirmPassword()"
+            (keydown.space)="$event.preventDefault()">
+          <button
+            type="button"
+            class="password-toggle"
+            [class.visible]="showConfirmPassword"
+            (click)="showConfirmPassword = !showConfirmPassword"
+            [attr.aria-label]="showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'">
+            <svg *ngIf="showConfirmPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.1 12s3.6-6 9.9-6 9.9 6 9.9 6-3.6 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+            <svg *ngIf="!showConfirmPassword" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 6.1A10.8 10.8 0 0 1 12 6c6.3 0 9.9 6 9.9 6a15.7 15.7 0 0 1-2.4 3.1M6.2 6.2C3.6 8 2.1 12 2.1 12s3.6 6 9.9 6a9.8 9.8 0 0 0 3.1-.5M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </div>
+        <div class="field-msg" [ngClass]="confirmPasswordValidation.state">{{ confirmPasswordValidation.message }}</div>
+        <div class="field-alert error" *ngIf="signupFieldErrors.confirmPassword" data-signup-error="confirmPassword" tabindex="-1">{{ signupFieldErrors.confirmPassword }}</div>
       </div>
 
       <label class="terms">

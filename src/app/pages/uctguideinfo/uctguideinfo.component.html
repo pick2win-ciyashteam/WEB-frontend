@@ -10,7 +10,6 @@
       <button type="button" (click)="scrollTo('why')">Why</button>
       <button type="button" (click)="scrollTo('pricing')">Pricing</button>
       <button type="button" (click)="scrollTo('faq')">FAQs</button>
-      <button type="button" class="nav-login" (click)="openLogin()">Login</button>
       <button type="button" class="nav-signup" (click)="scrollTo('signup')">Start free</button>
     </nav>
   </header>
@@ -38,7 +37,7 @@
             </div>
           </div>
           <div class="hero-actions">
-            <button class="primary-cta" type="button" (click)="scrollTo('signup')">Start Free <span>&rarr;</span></button>
+            <button class="primary-cta" type="button" (click)="scrollTo('signup')">Free Signup<span>&rarr;</span></button>
             <button class="secondary-cta" type="button" (click)="scrollTo('how')"><span class="material-symbols-outlined">play_circle</span> See how it works</button>
           </div>
           <!-- <p class="micro-copy">Free account • No card required • No subscription</p> -->
@@ -96,36 +95,66 @@
 
     <section class="promo-section audience-section" id="problem">
       <div class="section-shell">
-        <div class="section-heading">
-          <span class="eyebrow dark"><i></i> THE PROBLEM</span>
-          <h2>Great Strategies Shouldn't Be Buried Under Repetitive Work.</h2>
-          <h3>Less Repetition. More Strategy.</h3>
-          <i class="why-divider" aria-hidden="true"></i>
-          <p class="why-intro">PICK2WIN is designed to simplify lineup creation by transforming your own player selections into multiple rule-valid lineup combinations.<br>You stay in control of every decision&mdash;we simply eliminate the repetitive work.</p>
-          <p>You already know how you want to play. PICK2WIN removes repetitive work—not your decision-making.</p>
+        <div class="strategy-board-title">
+          <h2>Great Strategies<br>Shouldn’t Be Buried Under <em>Repetitive Work.</em></h2>
         </div>
-        <div class="problem-copy">
-          <p>Every slate begins with the same routine. You already know the players you trust, yet you still spend valuable time selecting the same players, rebuilding similar lineup combinations, checking roster rules, and repeating the same workflow.</p>
-          <p>That repetition doesn't improve your strategy&mdash;it simply consumes your time.</p>
-          <strong>That's why PICK2WIN exists.</strong>
-          <p>PICK2WIN was built to eliminate repetitive work while keeping every decision completely in your hands.</p>
-        </div>
-        <div class="problem-flow" aria-label="Old workflow compared with PICK2WIN">
-          <article class="old-way">
-            <span>THE OLD WAY</span>
-            <div class="old-stack"><i></i><i></i><i></i><i></i></div>
-            <div class="old-detail"><i class="old-grid"></i><p>&#8635; rebuild similar<br>lineups every slate<small>check rules &middot; repeat &middot; repeat</small></p></div>
+
+        <div class="strategy-board">
+          <aside class="old-process">
+            <header><span class="material-symbols-outlined">close</span><div><b>THE OLD WAY</b><small>Time-consuming. Repetitive. Draining.</small></div></header>
+            <ol>
+              <li><strong>1</strong><i class="material-symbols-outlined">groups</i><span><b>Select Players</b><small>Pick players from multiple teams.</small></span></li>
+              <li><strong>2</strong><i class="material-symbols-outlined">edit_document</i><span><b>Rebuild Lineups</b><small>Create lineups manually.</small></span></li>
+              <li><strong>3</strong><i class="material-symbols-outlined">fact_check</i><span><b>Check Roster Rules</b><small>Verify rules, positions and limits.</small></span></li>
+              <li><strong>4</strong><i class="material-symbols-outlined">sync</i><span><b>Repeat Again</b><small>Start over. Repeat the same process.</small></span></li>
+            </ol>
+            <p><i class="material-symbols-outlined">schedule</i> Hours spent. Same routine. Every slate.</p>
+          </aside>
+
+          <b class="strategy-vs">VS</b>
+
+          <article class="new-process">
+            <header><span class="material-symbols-outlined">check_circle</span><div><b>WITH <em>PICK2WIN</em></b><small>Smart. Organized. Built for Your Strategy.</small></div></header>
+            <div class="new-step lineup-step"><strong>1</strong><span><b>Official Lineups</b><small>We bring you the official starting lineups.</small></span><div class="mini-pitch"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="new-step players-step"><strong>2</strong><span><b>Your Players</b><small>You select the players you trust.</small></span><div class="player-tiles"><i class="jersey-red"><b>MID</b><small>$12.0M</small></i><i class="jersey-blue"><b>MID</b><small>$11.5M</small></i><i class="jersey-white"><b>FWD</b><small>$10.5M</small></i><i class="jersey-red"><b>DEF</b><small>$9.5M</small></i><strong>18–22<small>Players Selected</small></strong></div></div>
+            <div class="new-step teams-step"><strong>3</strong><span><b>Your Teams</b><small>We generate up to 20 valid lineup combinations based on your players and the rules.</small></span><div class="team-tiles"><i><b>TEAM 1</b><span><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em></span></i><i><b>TEAM 2</b><span><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em></span></i><i><b>TEAM 3</b><span><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em></span></i><i><b>TEAM 20</b><span><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em><em></em></span></i><strong>20<small>Valid Teams Generated</small></strong></div></div>
+            <div class="new-step review-step"><strong>4</strong><span><b>Review</b><small>Preview all generated teams in detail. Review content and replicate on your platform.</small></span><div class="review-list"><i>Team 1&nbsp; ◉</i><i>Team 2&nbsp; ◉</i><i>Team 3&nbsp; ◉</i><i>...</i></div><div class="review-pitch"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><ul><li>All 20 Teams</li><li>Player Details</li><li>Positions & Salaries</li><li>Team Combinations</li></ul></div>
+            <div class="new-step download-step"><strong>5</strong><span><b>Download TXT</b><small>Get a complete report with all squad and team details.</small></span><i class="material-symbols-outlined">description</i><div><b>Recreate on Platform</b><small>Use the TXT file to quickly recreate the teams.</small></div></div>
           </article>
-          <b>VS</b>
-          <article class="pick2win-way">
-            <span>WITH PICK2WIN</span>
-            <div class="new-way-head"><b>One My Squad</b><small>20 VALID<br>COMBINATIONS</small></div>
-            <i class="down-arrow">&darr;</i>
-            <div class="combination-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </article>
+
+          <aside class="strategy-results">
+            <div><i class="material-symbols-outlined">timer</i><span><b>Your Time</b><small>Saved</small></span></div>
+            <div><i class="material-symbols-outlined">ads_click</i><span><b>Your Strategy</b><small>Stays Yours</small></span></div>
+            <div><i class="material-symbols-outlined">settings</i><span><b>Your Configuration</b><small>Your Rules</small></span></div>
+            <div><i class="material-symbols-outlined">group</i><span><b>Your Teams</b><small>In Seconds</small></span></div>
+            <div><i class="material-symbols-outlined">sync</i><span><b>Up to 20</b><small>Valid Teams</small></span></div>
+          </aside>
         </div>
-        <p class="section-closing">Less Repetition. <em>More Strategy.</em></p>
-        <div class="section-action"><button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free <span>→</span></button></div>
+
+        <div class="strategy-benefits">
+          <span><i class="material-symbols-outlined">groups</i><b>Your Players<small>You choose. You decide.</small></b></span>
+          <span><i class="material-symbols-outlined">verified_user</i><b>Your Strategy<small>Built by you. Always yours.</small></b></span>
+          <span><i class="material-symbols-outlined">settings</i><b>Your Configuration<small>Your rules. Your settings.</small></b></span>
+          <span><i class="material-symbols-outlined">group</i><b>Your Teams<small>Up to 20 valid teams.</small></b></span>
+          <span><i class="material-symbols-outlined">description</i><b>Your Report<small>Complete TXT file.</small></b></span>
+        </div>
+
+        <div class="strategy-designed">
+          <h3>PICK2WIN IS DESIGNED FOR YOU</h3>
+          <div>
+            <span><i class="material-symbols-outlined">ads_click</i><b>Your Players.<small>Your foundation.</small><em>Your selected players (My Squad) are the only source used to generate your teams.</em></b></span>
+            <span><i class="material-symbols-outlined">fact_check</i><b>Your Rules.<small>Enforced.</small><em>Automatically applies roster rules, position limits, team limits and salary cap.</em></b></span>
+            <span><i class="material-symbols-outlined">bolt</i><b>Your Teams.<small>In seconds.</small><em>Creates up to 20 unique, rule-compliant lineup combinations from your selections.</em></b></span>
+            <span><i class="material-symbols-outlined">visibility</i><b>Your Review.<small>Your confidence.</small><em>Preview every team before exporting. See exactly what you’re submitting.</em></b></span>
+            <span><i class="material-symbols-outlined">description</i><b>Your Report.<small>Your record.</small><em>Get a detailed TXT file with match info, your players, configuration and all your teams.</em></b></span>
+            <span><i class="material-symbols-outlined">lock</i><b>Your Control.<small>Always.</small><em>No player suggestions. No optimizations. Every decision, 100% yours.</em></b></span>
+          </div>
+        </div>
+
+        <div class="strategy-closing">
+          <p><i class="material-symbols-outlined">ads_click</i><b>Your Players.</b> Your Strategy. <b>Your Configuration.</b> Your Teams. <b>Your Control.</b></p>
+          <p><span><strong>PICK2WIN</strong> simplifies the entire team configuration process—<br>so you stay focused on <em>your strategy, your decisions, and your edge.</em></span></p>
+        </div>
       </div>
     </section>
 
@@ -198,11 +227,11 @@
         <h3 class="squad-decide-title">You decide:</h3>
         <ul class="reference-checks squad-checks"><li>Every player</li><li>Every exclusion</li><li>Every strategy</li><li>Every configuration</li><li>Every final lineup combination</li></ul>
         <p class="squad-note">PICK2WIN never changes your selections. It simply transforms your My Squad into multiple valid lineup combinations.</p>
-        <h3 class="squad-difference-title">WHY MY SQUAD IS DIFFERENT</h3>
+        <h2 >WHY MY SQUAD IS DIFFERENT</h2>
         <div class="reference-feature-grid four">
           <article><i class="material-symbols-outlined">psychology</i><h3>Your Knowledge Comes First</h3><p>Every lineup starts with your players.</p></article>
           <article><i class="material-symbols-outlined">bolt</i><h3>Build Once</h3><p>Stop repeating the same work.</p></article>
-          <article><i class="material-symbols-outlined">sync</i><h3>Generate Up To 20</h3><p>One squad, multiple possibilities.</p></article>
+          <article><i class="material-symbols-outlined">sync</i><h3>Generate Up To 20 Teams</h3><p>One squad, multiple possibilities.</p></article>
           <article><i class="material-symbols-outlined">my_location</i><h3>Stay In Control</h3><p>Nothing changes unless you decide.</p></article>
         </div>
       </div>
@@ -215,14 +244,80 @@
 
     <section class="promo-section how-section" id="how">
       <div class="section-shell">
-        <div class="section-heading"><span class="eyebrow dark"><i></i> HOW IT WORKS</span><h2>One Simple Workflow.</h2><p>Every lineup combination starts with your selections. Every decision remains yours.</p></div>
-        <div class="workflow-chain">
-          <ng-container *ngFor="let step of processSteps; let last = last; let i = index">
-            <article [class.featured]="i === 1"><span class="material-symbols-outlined">{{ step.icon }}</span><b>{{ step.title }}</b></article>
-            <i class="workflow-arrow" *ngIf="!last">&rarr;</i>
-          </ng-container>
+        <div class="how-showcase-head">
+          <span>HOW IT WORKS</span>
+          <h2>One <em>Simple</em> Workflow.</h2>
+          <div>
+            <b><i class="material-symbols-outlined">groups</i>Your Players.</b>
+            <b><i class="material-symbols-outlined">verified_user</i>Your Strategy.</b>
+            <b><i class="material-symbols-outlined">settings</i>Your Configuration.</b>
+            <b><i class="material-symbols-outlined">group</i>Your Teams.</b>
+            <b><i class="material-symbols-outlined">schedule</i>All in seconds.</b>
+          </div>
         </div>
-        <p class="workflow-note">Every lineup combination starts with your player selections. <b>Every decision remains yours.</b></p>
+
+        <div class="how-workflow-grid">
+          <article class="how-step step-blue">
+            <strong>1</strong><i class="material-symbols-outlined">assignment</i>
+            <h3>Official Lineups</h3>
+            <p>We bring you the official starting lineups.</p>
+            <div class="how-mini-pitch"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </article>
+          <article class="how-step step-purple">
+            <strong>2</strong><i class="material-symbols-outlined">groups</i>
+            <h3>Build My Squad</h3>
+            <p>You select the players you trust.</p>
+            <div class="how-player-cards"><span><i></i><small>15</small></span><span><i></i><small>10</small></span><span><i></i><small>11</small></span></div>
+            <b class="how-total">18–22<small>Players Selected</small></b>
+          </article>
+          <article class="how-step step-blue">
+            <strong>3</strong><i class="material-symbols-outlined">verified_user</i>
+            <h3>Smart Validation</h3>
+            <p>We validate your selections against roster rules.</p>
+            <ul class="how-check-list"><li>Roster Rules</li><li>Salary Cap</li><li>Team Limits</li><li>Opposition Rules</li></ul>
+          </article>
+          <article class="how-step step-purple">
+            <strong>4</strong><i class="material-symbols-outlined">settings</i>
+            <h3>Configure Your Strategy</h3>
+            <p>Set your preferences and rules the way you want.</p>
+            <ul class="how-config-list"><li>Team Count (up to 20)</li><li>Player Limits</li><li>Formation Rules</li><li>And more...</li></ul>
+          </article>
+          <article class="how-step step-green">
+            <strong>5</strong><i class="material-symbols-outlined">bolt</i>
+            <h3>Generate Valid Lineup Combinations</h3>
+            <p>We generate up to 20 valid lineup combinations in seconds.</p>
+            <div class="how-team-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <b class="how-total">20<small>Valid Teams Generated</small></b>
+          </article>
+          <article class="how-step step-orange">
+            <strong>6</strong><i class="material-symbols-outlined">search</i>
+            <h3>Review</h3>
+            <p>Preview all generated teams in detail. Review content and replicate on your platform.</p>
+            <ul class="how-review-list"><li>Team 1</li><li>Team 2</li><li>Team 3</li><li>...</li></ul>
+          </article>
+          <article class="how-step step-green">
+            <strong>7</strong><i class="material-symbols-outlined">download</i>
+            <h3>Download TXT</h3>
+            <p>Get a complete TXT file with all details of your squads and 20 teams.</p>
+            <span class="how-txt"><i class="material-symbols-outlined">description</i>TXT</span>
+          </article>
+          <article class="how-step step-blue">
+            <strong>8</strong><i class="material-symbols-outlined">edit</i>
+            <h3>Recreate on Platform</h3>
+            <p>Use the TXT file to quickly recreate the teams on your platform.</p>
+            <span class="how-platform">Platform</span>
+          </article>
+        </div>
+
+        <div class="how-benefits">
+          <span><i class="material-symbols-outlined">groups</i><b>Your Players<small>You choose.<br>You decide.</small></b></span>
+          <span><i class="material-symbols-outlined">verified_user</i><b>Your Strategy<small>Built by you.<br>Always yours.</small></b></span>
+          <span><i class="material-symbols-outlined">settings</i><b>Your Configuration<small>Your rules.<br>Your settings.</small></b></span>
+          <span><i class="material-symbols-outlined">group</i><b>Your Teams<small>Up to 20 valid teams.<br>Based on you.</small></b></span>
+          <span><i class="material-symbols-outlined">assignment</i><b>Complete Control<small>Your workflow.<br>Your results.</small></b></span>
+        </div>
+
+        <div class="how-control-note"><i class="material-symbols-outlined">verified_user</i><b>Every lineup combination starts with your player selections.</b><strong>Every decision remains yours.</strong></div>
       </div>
     </section>
 
@@ -311,9 +406,11 @@
     <section class="promo-section pricing-section" id="pricing">
       <div class="section-shell">
         <div class="launch-offer-head">
-          <div class="launch-title"><span class="material-symbols-outlined">rocket_launch</span><h2>PICK2WIN <em>LAUNCH OFFER</em></h2></div>
-          <p>Limited-time introductory pricing. Every coin pack includes <b>bonus coins</b> at no extra cost.<br>Bonus coins are credited instantly to your PICK2WIN account.</p>
-          <div class="launch-limit"><span class="material-symbols-outlined">group</span>Available to the First <b>10,000</b> Registered Users</div>
+          <div class="launch-copy">
+            <div class="launch-title"><span class="material-symbols-outlined">rocket_launch</span><b>PICK2WIN LAUNCH OFFER</b></div>
+            <h2>Simple Pricing. <em>Powerful Preparation.</em></h2>
+          </div>
+          <div class="launch-limit"><span class="material-symbols-outlined">local_fire_department</span><small>Available to the first</small><b>500</b><strong>registered PICK2WIN users</strong></div>
           <div class="launch-benefits">
             <span><i class="material-symbols-outlined">featured_seasonal_and_gifts</i><b>Bonus coins</b><small>included</small></span>
             <span><i class="material-symbols-outlined">shield</i><b>365-day</b><small>validity</small></span>
@@ -323,22 +420,29 @@
         </div>
         <div class="pack-state" *ngIf="packLoading">Loading current coin packs…</div>
         <div class="pack-grid" *ngIf="!packLoading && packs.length">
-          <article class="pack-card" *ngFor="let pack of packs; let i = index" [class.featured]="pack.popular || pack.pro" [class.pack-starter]="i % 4 === 0" [class.pack-basic]="i % 4 === 1" [class.pack-standard]="i % 4 === 2" [class.pack-pro]="i % 4 === 3 || pack.pro">
-            <span class="pack-badge" *ngIf="pack.popular || pack.pro">{{ pack.pro ? 'BEST VALUE' : 'MOST POPULAR' }}</span>
+          <article class="pack-card" *ngFor="let pack of packs; let i = index; let last = last" [class.featured]="last" [class.pack-starter]="i % 4 === 0" [class.pack-basic]="i % 4 === 1" [class.pack-standard]="i % 4 === 2" [class.pack-pro]="i % 4 === 3 || last">
+            <span class="pack-badge" *ngIf="last">BEST VALUE</span>
+            <span class="pack-icon material-symbols-outlined">{{ i % 4 === 0 ? 'send' : (i % 4 === 1 ? 'event_available' : (i % 4 === 2 ? 'star' : 'workspace_premium')) }}</span>
             <h3>{{ pack.name }}</h3>
-            <p class="pack-fit">{{ i === 0 ? 'Perfect to get started' : (i === 1 ? 'Great for regular users' : (i === 2 ? 'Best value for serious users' : 'Maximum value for power users')) }}</p>
-            <div class="pack-coins"><i class="material-symbols-outlined">paid</i><b>{{ pack.totalCoins }}</b><span>total<br>coins</span></div>
-            <p class="pack-breakdown"><span>{{ pack.coins }} base</span><strong *ngIf="pack.bonusCoins">+{{ pack.bonusCoins }} bonus</strong></p>
-            <p class="generation-count"><b>{{ pack.totalCoins }}</b> successful UCT generations</p>
-            <div class="pack-cost-row">
-              <div class="pack-price"><sup>$</sup>{{ pack.price | number:'1.2-2' }} <small>USD</small></div>
-              <p class="per-coin"><b>≈ ${{ pack.totalCoins ? (pack.price / pack.totalCoins | number:'1.2-2') : '0.00' }}</b><span>per successful<br>generation</span></p>
+            <div class="pack-generations"><span>Up to</span><b>{{ pack.totalCoins }}</b><strong>Successful UCT Generations</strong></div>
+            <div class="per-generation"><i class="material-symbols-outlined">toll</i><span>Per Successful<br>Generation</span><b>${{ pack.totalCoins ? (pack.price / pack.totalCoins | number:'1.2-2') : '0.00' }}</b></div>
+            <div class="pack-breakdown">
+              <span><b>{{ pack.coins }}</b><small>Purchased</small></span>
+              <i class="material-symbols-outlined">add_circle</i>
+              <span><b>{{ pack.bonusCoins }}</b><small>Bonus</small></span>
             </div>
-            <button type="button" (click)="scrollTo('signup')">Buy {{ pack.name }} <span>&rarr;</span></button>
+            <div class="pack-teams"><i class="material-symbols-outlined">groups</i><span><b>Up to {{ pack.totalCoins * 20 | number }} Teams</b><small>(20 teams per generation)</small></span></div>
+            <div class="pack-price"><sup>$</sup>{{ pack.price | number:'1.0-2' }}</div>
+            <button type="button" (click)="scrollTo('signup')">Choose This Pack <span>&rarr;</span></button>
           </article>
         </div>
         <div class="pack-state" *ngIf="!packLoading && !packs.length">Current packages are temporarily unavailable. <button type="button" (click)="openPricing()">Open pricing</button></div>
-        <div class="coin-includes"><div><span><i class="material-symbols-outlined">database</i>1 coin = 1 successful generation</span><span><i class="material-symbols-outlined">groups</i>Up to 20 rule-valid combinations</span><span><i class="material-symbols-outlined">calendar_month</i>365-day validity</span><span><i class="material-symbols-outlined">public</i>One balance across supported sports</span></div></div>
+        <div class="coin-includes"><div>
+          <span><i class="material-symbols-outlined">toll</i><b>1 coin = 1 successful generation<small>A coin is deducted only after a successful UCT generation.</small></b></span>
+          <span><i class="material-symbols-outlined">public</i><b>One wallet. Every sport.<small>Use your coins across all current and future supported sports.</small></b></span>
+          <span><i class="material-symbols-outlined">calendar_month</i><b>365-day validity<small>All coins are valid for 365 days from the purchase date.</small></b></span>
+          <span><i class="material-symbols-outlined">verified_user</i><b>Secure payments<small>Secure international payment options available.</small></b></span>
+        </div></div>
       </div>
     </section>
 
@@ -393,7 +497,7 @@
       <div class="section-shell signup-grid">
         <div class="signup-copy">
           <span class="eyebrow"><i></i> READY TO BUILD SMARTER?</span>
-          <h2>Save Time. Gain Better Coverage. <em>Stay in Complete Control.</em></h2>
+          <h2 class="signup-message-title"><span>Save Time.</span><span>Gain Better Coverage.</span><em>Stay in Complete Control.</em></h2>
           <p>Turn your own player selections into multiple rule-valid lineup combinations in seconds.</p>
           <div class="no-list"><span>Free account registration.</span><span>One coin works across supported sports.</span><span>365-day coin validity.</span></div>
           <p class="existing">Already registered? <button type="button" (click)="openLogin()">Go to login →</button></p>
@@ -434,5 +538,46 @@
       </div>
     </section>
   </main>
+
+  <div class="exit-modal-backdrop" *ngIf="exitModalOpen" (click)="closeExitModal()">
+    <section class="exit-modal" role="dialog" aria-modal="true" aria-labelledby="exit-modal-title" (click)="$event.stopPropagation()">
+      <button class="exit-modal-close" type="button" aria-label="Close offer" (click)="closeExitModal()">×</button>
+
+      <div class="exit-modal-content">
+        <div class="exit-modal-copy">
+          <h2 id="exit-modal-title"><em>Wait... <span aria-hidden="true">✋</span></em>Before You Leave</h2>
+          <i class="exit-title-line"></i>
+          <ul>
+            <li><i>💬</i><p>Don’t decide about <b>PICK2WIN</b> until you’ve experienced it for yourself.</p></li>
+            <li><i>📖</i><p>Reading about <strong>PICK2WIN</strong> can only tell part of the story.</p></li>
+            <li><i>👥</i><p>Build your first <strong>My Squad</strong>, generate your lineup combinations, and discover how <strong>effortless, intuitive,</strong> and <strong>organized</strong> lineup preparation can be.</p></li>
+            <li><i>🎯</i><p>We’ve designed PICK2WIN around <strong>your workflow, your strategy,</strong> and <strong>your experience</strong>—so you spend less time on repetitive tasks and more focusing on <b>what matters.</b></p></li>
+            <li><i>⭐</i><p>The best way to understand <strong>PICK2WIN</strong> isn’t by reading about it—<b>it’s by trying it.</b></p></li>
+          </ul>
+        </div>
+
+        <div class="exit-modal-visual" aria-label="PICK2WIN available on laptop and mobile">
+          <div class="exit-stadium-lights"></div>
+          <p>Your Strategy.<br>Your Players.<br><b>Your Control.</b></p>
+          <div class="exit-laptop">
+            <div class="exit-device-screen">
+              <span>PICK2WIN</span>
+              <div class="exit-screen-steps"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i></div>
+              <div class="exit-screen-panels"><i></i><i><b>20</b><small>Valid Lineups</small></i></div>
+            </div>
+          </div>
+          <div class="exit-phone"><div><b>20</b><small>Valid Lineups</small><i></i><i></i><i></i></div></div>
+          <div class="exit-desk"></div>
+        </div>
+      </div>
+
+      <div class="exit-modal-cta">
+        <span class="material-symbols-outlined">person</span>
+        <div><h3>Ready to experience the difference?</h3><p>Create your account and start your journey with <b>PICK2WIN</b> today.</p></div>
+        <button type="button" (click)="exitModalSignup()"><span class="material-symbols-outlined">person</span>Sign Up Now</button>
+      </div>
+    </section>
+  </div>
+
   <app-footer></app-footer>
 </div>
