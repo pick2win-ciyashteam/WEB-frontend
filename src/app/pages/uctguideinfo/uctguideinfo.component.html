@@ -5,10 +5,11 @@
     </button>
     <button class="nav-toggle" type="button" [class.active]="menuOpen" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
     <nav [class.open]="menuOpen" aria-label="Landing page navigation">
-      <button type="button" (click)="scrollTo('why')">Why PICK2WIN</button>
+      <button type="button" (click)="scrollTo('squad')">My Squad</button>
       <button type="button" (click)="scrollTo('how')">How it works</button>
+      <button type="button" (click)="scrollTo('why')">Why</button>
       <button type="button" (click)="scrollTo('pricing')">Pricing</button>
-      <button type="button" (click)="scrollTo('sports')">Sports</button>
+      <button type="button" (click)="scrollTo('faq')">FAQs</button>
       <button type="button" class="nav-login" (click)="openLogin()">Login</button>
       <button type="button" class="nav-signup" (click)="scrollTo('signup')">Start free</button>
     </nav>
@@ -19,59 +20,67 @@
       <div class="hero-orb orb-one"></div><div class="hero-orb orb-two"></div>
       <div class="section-shell hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow"><i></i> USER CONFIGURATION TEAMS</span>
-          <h1>Save Time. Better Coverage. <em>Complete Control.</em></h1>
-          <p class="hero-tagline">Your Players. Your Strategy. Your Decisions.</p>
-          <p class="hero-lead">
-          PICK2WIN helps you transform your football knowledge into up to 20 rule-valid lineup combinations in seconds using your own player selections.
-          </p>
+          <span class="eyebrow"><i></i> SKILL-FIRST LINEUP BUILDER</span>
+          <h1>Prepare Smarter. <em>Stay in Control.</em></h1>
+          <p class="hero-tagline">Every Great Strategy Starts With Your My Squad.</p>
+          <p class="hero-lead">Build your My Squad from the official lineups and generate up to <b>20 valid lineup combinations</b> based entirely on your player selections and strategy.</p>
+          <p class="hero-detail">PICK2WIN never recommends players, predicts outcomes, or replaces your decisions. It simply helps you prepare faster, stay organized, and execute your strategy with confidence.</p>
           <div class="hero-promise hero-assurances">
             <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
             <div>
               <ul>
-                <li>Up to 20 lineup combinations.</li>
-                <li>Built around your own player selections.</li>
-                <li>No player recommendations.</li>
-                <li>No performance projections.</li>
-                <li>Simple, affordable coin-based pricing</li>
+                <li>Built Around Official Lineups</li>
+                <li>Your Players &bull; Your Strategy &bull; Your Decisions</li>
+                <li>Generate Up To 20 Valid Lineup Combinations</li>
+                <li>No AI Player Recommendations</li>
               </ul>
               <p>Just your football knowledge, organized faster.</p>
             </div>
           </div>
           <div class="hero-actions">
-            <button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free today <span>→</span></button>
+            <button class="primary-cta" type="button" (click)="scrollTo('signup')">Start Free <span>&rarr;</span></button>
             <button class="secondary-cta" type="button" (click)="scrollTo('how')"><span class="material-symbols-outlined">play_circle</span> See how it works</button>
           </div>
           <!-- <p class="micro-copy">Free account • No card required • No subscription</p> -->
         </div>
-        <div class="hero-panel">
-          <div class="hero-panel-head">
-            <img src="assets/logo1.png" alt="PICK2WIN - Where Skill Matters More" loading="lazy" decoding="async">
-            <strong>UCT CONFIGURATION</strong>
-            <span><i></i>One Configuration. Multiple Possibilities.<i></i></span>
-          </div>
-          <div class="uct-config-preview" aria-label="Roster requirements and up to 20 rule-valid lineup combinations">
-            <div class="uct-preview-main">
-              <div class="uct-pitch">
-                <span class="floodlight left" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-                <span class="floodlight right" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-                <div class="pitch-field">
-                  <i class="pitch-line halfway"></i><i class="pitch-box top"></i><i class="pitch-box bottom"></i><i class="pitch-circle"></i><i class="pitch-spot"></i>
-                  <span class="uct-player gk"><b>GK</b><small>&times;1</small></span>
-                  <span class="uct-player def one"><b>DEF</b><small>&times;2</small></span><span class="uct-player def two"><b>DEF</b><small>&times;2</small></span>
-                  <span class="uct-player mid one"><b>MID</b><small>&times;2</small></span><span class="uct-player mid two"><b>MID</b><small>&times;2</small></span>
-                  <span class="uct-player fwd one"><b>FWD</b><small>&times;2</small></span><span class="uct-player fwd two"><b>FWD</b><small>&times;2</small></span>
+        <div class="dashboard-stage" aria-label="PICK2WIN Build My Squad dashboard preview">
+          <div class="dashboard-laptop">
+            <div class="dashboard-screen">
+              <div class="dashboard-top">
+                <div class="dashboard-brand"><span>P2</span>PICK2WIN</div>
+                <div class="dashboard-wallet"><span class="material-symbols-outlined">paid</span>126 Coins</div>
+              </div>
+              <div class="dashboard-body">
+                <aside class="dashboard-rail" aria-hidden="true">
+                  <i class="material-symbols-outlined active">play_arrow</i>
+                  <i class="material-symbols-outlined">sports_soccer</i>
+                  <i class="material-symbols-outlined">grid_view</i>
+                  <i class="material-symbols-outlined">history</i>
+                  <i class="material-symbols-outlined">paid</i>
+                </aside>
+                <div class="dashboard-main">
+                  <h3>Build My Squad</h3>
+                  <p>Your player pool from the official lineups</p>
+                  <div class="dashboard-chips"><span class="active">Football</span><span>Basketball</span><span>NFL</span></div>
+                  <div class="dashboard-selection">
+                    <span><small>Players selected</small><b>18</b></span>
+                    <span><small>Target combinations</small><b>20</b></span>
+                  </div>
+                  <button type="button" tabindex="-1">Generate &rarr;</button>
+                  <div class="dashboard-results">
+                    <span><code>Lineup #01</code><b><i>✓</i> Rule-Valid</b></span>
+                    <span><code>Lineup #02</code><b><i>✓</i> Rule-Valid</b></span>
+                    <span><code>Lineup #03</code><b><i>✓</i> Rule-Valid</b></span>
+                  </div>
                 </div>
               </div>
-              <div class="uct-requirements">
-                <h3><span class="material-symbols-outlined">tune</span> CONFIGURATION OPTIONS</h3>
-                <section class="config-card config-one"><h4>OPTION A</h4><ul><li class="blue"><span>Goalkeeper (GK)</span><b>&times;1</b></li><li class="green"><span>Defenders (DEF)</span><b>&times;2</b></li><li class="orange"><span>Midfielders (MID)</span><b>&times;2</b></li><li class="red"><span>Forwards (FWD)</span><b>&times;2</b></li></ul></section>
-                <section class="config-card config-two"><h4>OPTION B</h4><ul><li class="blue"><span>Goalkeeper (GK)</span><b>&times;1</b></li><li class="green"><span>Defenders (DEF)</span><b>&times;2</b></li><li class="orange"><span>Midfielders /<br>Forwards (MID/FWD)</span><b>&times;4</b></li></ul></section>
-              </div>
             </div>
-            <div class="uct-count"><span class="material-symbols-outlined">groups</span><strong>UP TO <em>20</em></strong><b>RULE-VALID<br>LINEUP COMBINATIONS<small>GENERATED IN SECONDS</small></b></div>
-            <div class="uct-feature-row"><span><i class="material-symbols-outlined blue">person</i><b>YOUR PLAYERS</b></span><span><i class="material-symbols-outlined lime">ads_click</i><b>YOUR STRATEGY</b></span><span><i class="material-symbols-outlined orange">emoji_events</i><b>YOUR DECISIONS</b></span></div>
+            <div class="dashboard-base"></div>
           </div>
+          <div class="dashboard-float float-valid"><small>RULE-VALID</small><strong><i>✓</i>20 <span>Combinations</span></strong></div>
+          <div class="dashboard-float float-driven"><small>USER DRIVEN</small><strong>100%</strong></div>
+          <div class="dashboard-float float-balance"><small>MY BALANCE</small><strong><i class="material-symbols-outlined">paid</i>126 <span>Coins</span></strong></div>
+          <div class="dashboard-float float-report"><small>TXT REPORT</small><strong><i class="material-symbols-outlined">description</i>Ready</strong></div>
         </div>
       </div>
     </section>
@@ -85,19 +94,37 @@
       </div>
     </section>
 
-    <section class="promo-section audience-section" id="why">
+    <section class="promo-section audience-section" id="problem">
       <div class="section-shell">
         <div class="section-heading">
-          <span class="eyebrow dark"><i></i> WHY PICK2WIN</span>
-          <h2>Built Around Your Football Knowledge</h2>
-          <h3>Save Time. Build Smarter. Stay in Complete Control.</h3>
+          <span class="eyebrow dark"><i></i> THE PROBLEM</span>
+          <h2>Great Strategies Shouldn't Be Buried Under Repetitive Work.</h2>
+          <h3>Less Repetition. More Strategy.</h3>
           <i class="why-divider" aria-hidden="true"></i>
           <p class="why-intro">PICK2WIN is designed to simplify lineup creation by transforming your own player selections into multiple rule-valid lineup combinations.<br>You stay in control of every decision&mdash;we simply eliminate the repetitive work.</p>
           <p>You already know how you want to play. PICK2WIN removes repetitive work—not your decision-making.</p>
         </div>
-        <div class="benefit-grid">
-          <article *ngFor="let benefit of benefits"><span class="material-symbols-outlined">{{ benefit.icon }}</span><h3>{{ benefit.title }}</h3><p>{{ benefit.text }}</p></article>
+        <div class="problem-copy">
+          <p>Every slate begins with the same routine. You already know the players you trust, yet you still spend valuable time selecting the same players, rebuilding similar lineup combinations, checking roster rules, and repeating the same workflow.</p>
+          <p>That repetition doesn't improve your strategy&mdash;it simply consumes your time.</p>
+          <strong>That's why PICK2WIN exists.</strong>
+          <p>PICK2WIN was built to eliminate repetitive work while keeping every decision completely in your hands.</p>
         </div>
+        <div class="problem-flow" aria-label="Old workflow compared with PICK2WIN">
+          <article class="old-way">
+            <span>THE OLD WAY</span>
+            <div class="old-stack"><i></i><i></i><i></i><i></i></div>
+            <div class="old-detail"><i class="old-grid"></i><p>&#8635; rebuild similar<br>lineups every slate<small>check rules &middot; repeat &middot; repeat</small></p></div>
+          </article>
+          <b>VS</b>
+          <article class="pick2win-way">
+            <span>WITH PICK2WIN</span>
+            <div class="new-way-head"><b>One My Squad</b><small>20 VALID<br>COMBINATIONS</small></div>
+            <i class="down-arrow">&darr;</i>
+            <div class="combination-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </article>
+        </div>
+        <p class="section-closing">Less Repetition. <em>More Strategy.</em></p>
         <div class="section-action"><button class="primary-cta" type="button" (click)="scrollTo('signup')">Start free <span>→</span></button></div>
       </div>
     </section>
@@ -159,15 +186,127 @@
       </div>
     </section>
 
-    <section class="promo-section how-section" id="how">
+    <section class="promo-section reference-content-section squad-reference" id="squad">
       <div class="section-shell">
-        <div class="section-heading"><span class="eyebrow dark"><i></i> HOW PICK2WIN WORKS</span><h2>Simple. Transparent. Under Your Control.</h2><p>Create multiple rule-valid lineup combinations using your own player selections through a simple step-by-step workflow.</p></div>
-        <div class="process-grid"><article *ngFor="let step of processSteps; let i = index"><span class="step-no">{{ i + 1 | number:'2.0' }}</span><span class="material-symbols-outlined">{{ step.icon }}</span><h3>{{ step.title }}</h3><p>{{ step.text }}</p></article></div>
-        <div class="workflow-assurance"><span><i class="material-symbols-outlined">verified_user</i><b>You stay in control at every step.<small>PICK2WIN never makes football decisions for you.</small></b></span><span><i class="material-symbols-outlined">my_location</i><b>Your selections. Your strategy. Your decisions.<small>PICK2WIN organizes. You decide.</small></b></span></div>
+        <div class="section-heading light"><span class="eyebrow"><i></i> MEET MY SQUAD</span><h2>Everything Starts With <em>Your My Squad.</em></h2><p>My Squad is your personal player pool created from the official lineups. Every generated lineup combination comes only from the players you selected.</p></div>
+        <div class="squad-flow">
+          <article><i class="material-symbols-outlined">fact_check</i><b>Official Lineups</b></article><span>&rarr;</span>
+          <article><i class="material-symbols-outlined">groups</i><b>Build My Squad</b><small>You decide every player</small></article><span>&rarr;</span>
+          <article><i class="material-symbols-outlined">bolt</i><b>Generate</b><small>Rule validation</small></article><span>&rarr;</span>
+          <article class="result"><strong>20</strong><b>Valid Lineup Combinations</b></article>
+        </div>
+        <h3 class="squad-decide-title">You decide:</h3>
+        <ul class="reference-checks squad-checks"><li>Every player</li><li>Every exclusion</li><li>Every strategy</li><li>Every configuration</li><li>Every final lineup combination</li></ul>
+        <p class="squad-note">PICK2WIN never changes your selections. It simply transforms your My Squad into multiple valid lineup combinations.</p>
+        <h3 class="squad-difference-title">WHY MY SQUAD IS DIFFERENT</h3>
+        <div class="reference-feature-grid four">
+          <article><i class="material-symbols-outlined">psychology</i><h3>Your Knowledge Comes First</h3><p>Every lineup starts with your players.</p></article>
+          <article><i class="material-symbols-outlined">bolt</i><h3>Build Once</h3><p>Stop repeating the same work.</p></article>
+          <article><i class="material-symbols-outlined">sync</i><h3>Generate Up To 20</h3><p>One squad, multiple possibilities.</p></article>
+          <article><i class="material-symbols-outlined">my_location</i><h3>Stay In Control</h3><p>Nothing changes unless you decide.</p></article>
+        </div>
       </div>
     </section>
 
-  
+    <figure class="sports-banner" aria-label="Supported sports at PICK2WIN">
+      <img src="assets/sports-stadium-banner.png" alt="Soccer, basketball, American football, baseball and cricket balls on a stadium pitch" loading="lazy" decoding="async">
+      <figcaption>One workflow. Every sport.</figcaption>
+    </figure>
+
+    <section class="promo-section how-section" id="how">
+      <div class="section-shell">
+        <div class="section-heading"><span class="eyebrow dark"><i></i> HOW IT WORKS</span><h2>One Simple Workflow.</h2><p>Every lineup combination starts with your selections. Every decision remains yours.</p></div>
+        <div class="workflow-chain">
+          <ng-container *ngFor="let step of processSteps; let last = last; let i = index">
+            <article [class.featured]="i === 1"><span class="material-symbols-outlined">{{ step.icon }}</span><b>{{ step.title }}</b></article>
+            <i class="workflow-arrow" *ngIf="!last">&rarr;</i>
+          </ng-container>
+        </div>
+        <p class="workflow-note">Every lineup combination starts with your player selections. <b>Every decision remains yours.</b></p>
+      </div>
+    </section>
+
+    <section class="promo-section reference-content-section" id="why">
+      <div class="section-shell">
+        <div class="section-heading light"><span class="eyebrow"><i></i> WHY PICK2WIN</span><h2>Built For Skilled Users Who Want Better Tools.</h2><p>PICK2WIN isn't designed to think for you. It's designed to help you prepare more efficiently. Instead of chasing predictions or AI-generated player recommendations, PICK2WIN focuses on helping skilled users organize, validate, and execute their own strategy.</p></div>
+        <div class="reference-feature-grid">
+          <article><i class="material-symbols-outlined">schedule</i><h3>Save Time</h3><p>Stop repeating the same work every slate.</p></article>
+          <article><i class="material-symbols-outlined">ads_click</i><h3>Stay Organized</h3><p>Everything begins from one My Squad.</p></article>
+          <article><i class="material-symbols-outlined">verified</i><h3>Validate Before Generation</h3><p>Know your selections are ready before generating lineup combinations.</p></article>
+          <article><i class="material-symbols-outlined">psychology</i><h3>Keep Your Strategy</h3><p>No recommendations. No AI. No automated decisions.</p></article>
+          <article><i class="material-symbols-outlined">dashboard</i><h3>One Consistent Workflow</h3><p>Simple. Structured. Repeatable.</p></article>
+          <article><i class="material-symbols-outlined">tune</i><h3>Built Around Official Lineups</h3><p>Start with confirmed available players.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-section reference-content-section benefits-reference">
+      <div class="section-shell">
+        <div class="section-heading light"><span class="eyebrow"><i></i> KEY BENEFITS</span><h2>Why Skilled Users Choose PICK2WIN</h2></div>
+        <div class="benefit-metrics">
+          <article><i class="material-symbols-outlined">schedule</i><strong>Save Time</strong></article>
+          <article><i class="material-symbols-outlined">location_on</i><strong>Stay In Control</strong></article>
+          <article><i class="material-symbols-outlined">computer</i><strong>One Workspace</strong></article>
+          <article><b>20</b><strong>Valid Teams</strong></article>
+        </div>
+        <ul class="reference-checks"><li>Save valuable preparation time.</li><li>Stay in complete control.</li><li>Build once and generate multiple valid lineup combinations.</li><li>Keep everything organized.</li><li>Built around official lineups.</li><li>No AI player recommendations.</li><li>Designed for preparation, not prediction.</li></ul>
+      </div>
+    </section>
+
+    <section class="promo-section reference-content-section comparison-reference">
+      <div class="section-shell">
+        <div class="section-heading light"><span class="eyebrow"><i></i> WHY PICK2WIN IS DIFFERENT</span><h2>Better Preparation. Not Better Predictions.</h2></div>
+        <div class="comparison-scroll"><table>
+          <thead><tr><th>Capability</th><th>PICK2WIN</th><th>Traditional Builders</th><th>AI Optimizers</th></tr></thead>
+          <tbody>
+            <tr><td>You choose every player</td><td>✓</td><td>✓</td><td>Partial</td></tr>
+            <tr><td>AI recommendations</td><td>✕</td><td>✕</td><td>✓</td></tr>
+            <tr><td>Uses only your My Squad</td><td>✓</td><td>Partial</td><td>✕</td></tr>
+            <tr><td>Official lineup workflow</td><td>✓</td><td>Partial</td><td>Partial</td></tr>
+            <tr><td>Strategy remains yours</td><td>✓</td><td>Partial</td><td>✕</td></tr>
+            <tr><td>Smart validation</td><td>✓</td><td>Partial</td><td>Partial</td></tr>
+            <tr><td>Multiple valid combinations</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          </tbody>
+        </table></div>
+        <p class="section-closing">PICK2WIN doesn't replace your knowledge&mdash;<em>it helps you use it more efficiently.</em></p>
+      </div>
+    </section>
+
+    <section class="promo-section reference-content-section strategy-reference">
+      <div class="section-shell">
+        <div class="section-heading light"><span class="eyebrow"><i></i> WHY USERS TRUST PICK2WIN</span><h2>Your Strategy Always Comes First.</h2></div>
+        <div class="strategy-panels">
+          <article class="never"><h3>PICK2WIN will never</h3><ul><li>Recommend players.</li><li>Predict winners.</li><li>Generate AI player picks.</li><li>Replace your judgment.</li><li>Make decisions for you.</li></ul></article>
+          <article class="always"><h3>PICK2WIN will always</h3><ul><li>Respect your strategy.</li><li>Use only your selected players.</li><li>Validate your My Squad.</li><li>Generate valid combinations.</li><li>Keep you completely in control.</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-section product-preview-section" id="preview">
+      <div class="section-shell">
+        <div class="section-heading light">
+          <span class="eyebrow"><i></i> PRODUCT PREVIEW</span>
+          <h2>Designed For Speed. <em>Built For Simplicity.</em></h2>
+        </div>
+        <div class="product-screens">
+          <article>
+            <div class="browser-bar"><i></i><i></i><i></i></div>
+            <span>SCREEN 01</span><h3>Build My Squad</h3><p>Choose your player pool from the official lineups.</p>
+            <div class="player-chip-preview"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </article>
+          <article>
+            <div class="browser-bar"><i></i><i></i><i></i></div>
+            <span>SCREEN 02</span><h3>Configure Your Strategy</h3><p>Adjust configuration and validation settings before generation.</p>
+            <div class="setting-preview"><i></i><i></i><i></i></div>
+          </article>
+          <article>
+            <div class="browser-bar"><i></i><i></i><i></i></div>
+            <span>SCREEN 03</span><h3>Review Generated Lineup Combinations</h3><p>Review every generated lineup combination before recreating it.</p>
+            <div class="result-preview"><i></i><i></i><i></i></div>
+          </article>
+        </div>
+      </div>
+    </section>
 
     <section class="promo-section pricing-section" id="pricing">
       <div class="section-shell">
@@ -195,7 +334,7 @@
               <div class="pack-price"><sup>$</sup>{{ pack.price | number:'1.2-2' }} <small>USD</small></div>
               <p class="per-coin"><b>≈ ${{ pack.totalCoins ? (pack.price / pack.totalCoins | number:'1.2-2') : '0.00' }}</b><span>per successful<br>generation</span></p>
             </div>
-            <button type="button" (click)="scrollTo('signup')">Buy {{ pack.name }} <span>→</span></button>
+            <button type="button" (click)="scrollTo('signup')">Buy {{ pack.name }} <span>&rarr;</span></button>
           </article>
         </div>
         <div class="pack-state" *ngIf="!packLoading && !packs.length">Current packages are temporarily unavailable. <button type="button" (click)="openPricing()">Open pricing</button></div>
@@ -263,7 +402,37 @@
       </div>
     </section>
 
-  
+    <section class="promo-section faq-section" id="faq">
+      <div class="section-shell">
+        <div class="section-heading light">
+          <span class="eyebrow"><i></i> FAQs</span>
+          <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-list">
+          <details><summary>What is My Squad?<span>+</span></summary><p>My Squad is your personal player pool created from official lineups. Every generated lineup uses only the players you selected.</p></details>
+          <details><summary>What is a User Configuration Team (UCT)?<span>+</span></summary><p>UCT is PICK2WIN's process for organizing and validating your My Squad before generating lineup combinations.</p></details>
+          <details><summary>Does PICK2WIN recommend players?<span>+</span></summary><p>No. Every player is selected by you, and your strategy always remains under your control.</p></details>
+          <details><summary>Does PICK2WIN use AI?<span>+</span></summary><p>No. PICK2WIN never recommends players or predicts outcomes.</p></details>
+          <details><summary>Can I edit My Squad?<span>+</span></summary><p>Yes. You can update your player pool before generating lineup combinations.</p></details>
+          <details><summary>How many lineup combinations can I generate?<span>+</span></summary><p>You can generate up to 20 rule-valid lineup combinations per successful generation.</p></details>
+          <details><summary>Can I review before recreating?<span>+</span></summary><p>Yes. Every lineup combination can be reviewed before you recreate it.</p></details>
+          <details><summary>Why is PICK2WIN different?<span>+</span></summary><p>It helps you prepare efficiently without replacing your knowledge, strategy, or final decisions.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-section closing-cta">
+      <div class="section-shell closing-card">
+        <div class="stadium-mark"><span class="material-symbols-outlined">sports_soccer</span></div>
+        <span class="eyebrow"><i></i> READY WHEN YOU ARE <i></i></span>
+        <h2>Prepare Smarter. Stay In <em>Control.</em></h2>
+        <p>Every great strategy starts with your My Squad. Build once, generate valid lineup combinations, and execute with confidence.</p>
+        <div class="hero-actions">
+          <button class="primary-cta" type="button" (click)="scrollTo('signup')">Start Free Today <span>&rarr;</span></button>
+          <button class="secondary-cta" type="button" (click)="scrollTo('how')">See how it works</button>
+        </div>
+      </div>
+    </section>
   </main>
   <app-footer></app-footer>
 </div>

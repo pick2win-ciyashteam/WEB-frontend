@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 
@@ -19,30 +19,21 @@ interface LandingPack {
   templateUrl: './uctguideinfo.component.html',
   styleUrls: ['./uctguideinfo.component.css']
 })
-export class UctguideinfoComponent implements OnInit {
+export class UctguideinfoComponent implements OnInit, AfterViewInit, OnDestroy {
   menuOpen = false;
   scrolled = false;
   packLoading = true;
   packs: LandingPack[] = [];
+  private revealObserver?: IntersectionObserver;
 
   readonly processSteps = [
-    { icon: 'how_to_reg', title: 'Create Your Free Account', text: 'Register and verify your email. No payment is required to get started.' },
-    { icon: 'paid', title: 'Purchase Coins', text: 'Choose the coin pack that fits your needs. No monthly subscriptions or recurring charges.' },
-    { icon: 'sports_soccer', title: 'Choose Your Sport', text: 'Start with Soccer today, with more supported sports coming soon.' },
-    { icon: 'fact_check', title: 'Choose a Lineup Configuration', text: 'Select the supported lineup configuration for your chosen sport.' },
-    { icon: 'group_add', title: 'Build Your Player Pool', text: 'Select the players you want to include. Every generated lineup uses only your selected player pool.' },
-    { icon: 'tune', title: 'Configure Your Lineup', text: 'Set your preferred lineup configuration and player preferences.' },
-    { icon: 'auto_fix_high', title: 'Generate Lineup Combinations', text: 'PICK2WIN applies the selected roster rules and creates multiple rule-valid lineup combinations.' },
-    { icon: 'download_for_offline', title: 'Review & Download', text: 'Review every generated lineup before downloading up to 20 rule-valid lineup combinations as TXT.' }
-  ];
-
-  readonly benefits = [
-    { icon: 'bolt', title: 'Save Time', text: 'Create multiple rule-valid lineup combinations in seconds.' },
-    { icon: 'my_location', title: 'Better Coverage', text: 'Generate multiple rule-valid lineup combinations from your selected player pool.' },
-    { icon: 'psychology', title: 'Complete Control', text: 'Every player, configuration, and lineup starts with your own selections.' },
-    { icon: 'attach_money', title: 'Affordable Pricing', text: 'Affordable coin-based pricing with no monthly subscriptions.' },
-    { icon: 'calendar_month', title: '365-Day Validity', text: 'Every purchased coin pack is valid for 365 days.' },
-    { icon: 'verified_user', title: 'Transparent', text: 'Built around your selections. No hidden decision-making.' }
+    { icon: 'fact_check', title: 'Official Lineups', text: 'Start with confirmed available players.' },
+    { icon: 'groups', title: 'Build My Squad', text: 'Create your own player pool.' },
+    { icon: 'verified_user', title: 'Smart Validation', text: 'Validate your selections before generation.' },
+    { icon: 'tune', title: 'Configure Your Strategy', text: 'Set your configuration and preferences.' },
+    { icon: 'bolt', title: 'Generate Valid Lineup Combinations', text: 'Create up to 20 rule-valid combinations.' },
+    { icon: 'search', title: 'Review', text: 'Review every generated lineup combination.' },
+    { icon: 'open_in_new', title: 'Recreate', text: 'Recreate your selected lineup where you play.' }
   ];
 
   constructor(private api: ApiService, private router: Router) {}
@@ -73,6 +64,40 @@ export class UctguideinfoComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    const selector =
+      '.promo-page .section-heading, .promo-page .benefit-grid > *, .promo-page .problem-grid > *, ' +
+      '.promo-page .do-grid > *, .promo-page .process-grid > *, .promo-page .pack-card, ' +
+      '.promo-page .supported-sports-section .sport-card, .promo-page .trust-grid > *, .promo-page .signup-grid > *, ' +
+      '.promo-page .product-screens > *, .promo-page .faq-list, .promo-page .closing-card, ' +
+      '.promo-page .reference-feature-grid > *, .promo-page .strategy-panels > *, .promo-page .squad-flow > article';
+    const elements = document.querySelectorAll(selector);
+
+    if (!('IntersectionObserver' in window)) {
+      elements.forEach(element => element.classList.add('is-visible'));
+      return;
+    }
+
+    this.revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          this.revealObserver?.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+    elements.forEach((element, index) => {
+      element.classList.add('reveal');
+      (element as HTMLElement).style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 70}ms`);
+      this.revealObserver?.observe(element);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.revealObserver?.disconnect();
+  }
+
   @HostListener('window:scroll')
   onWindowScroll(): void {
     this.scrolled = window.scrollY > 20;
@@ -86,6 +111,11 @@ export class UctguideinfoComponent implements OnInit {
   openLogin(): void {
     this.menuOpen = false;
     this.router.navigate(['/auth/login']);
+  }
+
+  openSignup(): void {
+    this.menuOpen = false;
+    this.router.navigate(['/auth/signup']);
   }
 
   openPricing(): void {
